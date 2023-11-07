@@ -240,15 +240,41 @@ namespace EMS.ViewModel
                 //byte[] BCMUData = new byte[90];
                 //Array.Copy(client.AddReadRequest(11000, 45), 0, BCMUData, 0, 90);
                 byte[] BCMUData = new byte[70];
-                Array.Copy(client.AddReadRequest(11000, 35), 0, BCMUData, 0, 70);
+                var item = client.AddReadRequest(11000, 35);
+                if (item != null)
+                {
+                    Array.Copy(item, 0, BCMUData, 0, 70);
+                }
 
                 byte[] BMUIDData = new byte[48];
-                Array.Copy(client.AddReadRequest(11045, 24), 0, BMUIDData, 0, 48);
+                item = client.AddReadRequest(11045, 24);
+                if (item != null)
+                {
+                    Array.Copy(item, 0, BMUIDData, 0, 48);
+                }
+
                 byte[] BMUData = new byte[744];
-                Array.Copy(client.AddReadRequest(10000, 120), 0, BMUData, 0, 240);
-                Array.Copy(client.AddReadRequest(10120, 120), 0, BMUData, 240, 240);
-                Array.Copy(client.AddReadRequest(10240, 120), 0, BMUData, 480, 240);
-                Array.Copy(client.AddReadRequest(10360, 12), 0, BMUData, 720, 24);
+                item = client.AddReadRequest(10000, 120);
+                if (item != null)
+                {
+                    Array.Copy(client.AddReadRequest(10000, 120), 0, BMUData, 0, 240);
+                }
+
+                item = client.AddReadRequest(10120, 120);
+                if (item != null)
+                {
+                    Array.Copy(item, 0, BMUData, 240, 240);
+                }
+                item = client.AddReadRequest(10240, 120);
+                if (item != null)
+                {
+                    Array.Copy(item, 0, BMUData, 480, 240);
+                }
+                item = client.AddReadRequest(10360, 12);
+                if (item != null)
+                {
+                    Array.Copy(item, 0, BMUData, 720, 24);
+                }
                 
 
                 // 信息补全
