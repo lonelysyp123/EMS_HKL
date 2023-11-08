@@ -105,7 +105,7 @@ namespace EMS
         {
             this.Close();
         }
-
+        
         private void RadioButton_Checked(object sender,RoutedEventArgs e)
         {
             RadioButton radioButton = (RadioButton)sender;
@@ -184,7 +184,5 @@ namespace EMS
             view.ShowDialog();
 
         }
-
-        
     }
 }
