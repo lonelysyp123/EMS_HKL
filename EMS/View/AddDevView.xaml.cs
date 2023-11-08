@@ -20,15 +20,17 @@ namespace EMS.View
     /// </summary>
     public partial class AddDevView : Window
     {
-        public bool IsPCS =false ;
+        public bool IsPCS = false;
         public bool IsBCMU = true;
         public AddDevView()
         {
             InitializeComponent();
             TCPGrid.Visibility = Visibility.Visible;
             PCSGrid.Visibility = Visibility.Collapsed;
-            
+
         }
+
+
 
         private void ConfirmBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -56,6 +58,18 @@ namespace EMS.View
             TCPGrid.Visibility = Visibility.Collapsed;
             IsBCMU = false;
             IsPCS = true;
+        }
+
+        private void BCMUID_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            TextBox textBox = new TextBox();
+            bool result = int.TryParse(e.Text, out int value);
+            if (result == false || value > 6 || value < 1)
+            {
+
+                MessageBox.Show("请输入1-6");
+                e.Handled = true;
+            }
         }
     }
 }

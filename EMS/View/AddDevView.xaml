@@ -11,9 +11,9 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="6*"/>
-            <RowDefinition Height="6*"/>
 
+            <RowDefinition Height="6*"/>
+            <RowDefinition Height="6*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
             <RadioButton Content="BCMU" x:Name="BCMURaB" IsChecked="True" Margin="10 5" Click="ChooseTCP_Click"></RadioButton>
@@ -24,15 +24,26 @@
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
-
+                <RowDefinition/>
 
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
+
+                <TextBlock Text="BCMUID(1~6)" VerticalAlignment="Center" Margin="10 0 0 0" />
+
+                <TextBox  x:Name="BCMUID" Width="80" VerticalAlignment="Center" BorderThickness="1" 
+                              PreviewTextInput="BCMUID_PreviewTextInput"/>
+
+
+
+            </Grid>
+            <Grid Grid.Row="1">
+
                 <TextBlock Text="IP" VerticalAlignment="Center" Margin="10 0 0 0"></TextBlock>
 
                 <trl:IPInput x:Name="IPText" Width="150" VerticalAlignment="Center"></trl:IPInput>
             </Grid>
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="2">
                 <TextBlock Text="Port" VerticalAlignment="Center" Margin="10 0 0 0"></TextBlock>
                 <TextBox x:Name="TCPPort" Width="150" BorderThickness="1" VerticalAlignment="Center"></TextBox>
             </Grid>

@@ -9,6 +9,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.Remoting.Channels;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -43,8 +44,8 @@ namespace EMS.View
             DateTime now = DateTime.Now;
 
             DateTimeText.Text = now.ToString("yyyy年MM月dd日");
-            TimeTime.Text= now.ToString("HH:mm:ss");
-            WeekTime.Text= now.ToString("dddd");
+            TimeTime.Text = now.ToString("HH:mm:ss");
+            WeekTime.Text = now.ToString("dddd");
         }
 
         public void Test_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -68,14 +69,21 @@ namespace EMS.View
         public void AddDevIntoView(BatteryTotalBase model)
         {
             DataControl control = new DataControl(model);
+
             //control.DataContext = model;
-            control.Margin = new Thickness(30, 10, 30, 10);
-            int index = MainBody.Children.Count;
+            control.Margin = new Thickness(10, 10, 20, 10);
+            string pattern = @"\d+";
+            Match match = Regex.Match(model.TotalID, pattern);
+            int.TryParse(match.Value, out int value);
+            int index = value - 1;
+            // int index = MainBody.Children.Count;
             Grid.SetColumn(control, index % 3);
-            Grid.SetRow(control, index /3);
+            Grid.SetRow(control, index / 3);
             MainBody.Children.Add(control);
+
             SeriesBatteryView view = new SeriesBatteryView((BatteryTotalBase)control.DataContext);
             seriesBatteryViews.Add(view);
+
         }
 
         public void RemoveDevIntoView(int index)
@@ -112,4 +120,3 @@ namespace EMS.View
         }
     }
 }
- 

@@ -92,12 +92,12 @@ namespace EMS.ViewModel
             {
                 //! 判断该IP是否存在
                 var objs = BatteryTotalList.Where(dev => dev.IP == view.IPText.AddressText).ToList();
-               
-                if (objs.Count == 0 )
+                var objs2 = BatteryTotalList.Where(dev => dev.BCMUID == view.BCMUID.Text).ToList();
+                if (objs.Count == 0 && objs2.Count == 0)
                 {
                     // add Modbus TCP Dev
                     BatteryTotalBase dev = new BatteryTotalBase(view.IPText.AddressText, view.TCPPort.Text);
-                   
+                    dev.BCMUID = view.BCMUID.Text;
 
 
                     BatteryTotalList.Add(dev);
