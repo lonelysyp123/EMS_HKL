@@ -8,303 +8,562 @@ using System.Threading.Tasks;
 
 namespace EMS.ViewModel
 {
-    public  class ParameterSettingViewModel: ViewModelBase
+    public class ParameterSettingViewModel : ViewModelBase
     {
         /// <summary>
-        /// 单体过压保护阈值
+        ///组端电压上限
         /// </summary>
-        private double _singleOverVolThresh;
-        public double SingleOverVolThresh
+        private double _clusterVolUpLimitLv1;
+        public double ClusterVolUpLimitLv1
         {
-            get => _singleOverVolThresh;
+            get => _clusterVolUpLimitLv1;
             set
             {
-                SetProperty(ref  _singleOverVolThresh, value);
+                SetProperty(ref _clusterVolUpLimitLv1, value);
             }
         }
 
-        /// <summary>
-        /// 单体过压保护恢复阈值
-        /// </summary>
-        private double _singleRecoveryOverVolThresh;
-        public double SingleRecoveryOverVolThresh
+        private double _clusterVolUpLimitLv2;
+        public double ClusterVolUpLimitLv2
         {
-            get => _singleRecoveryOverVolThresh;
+            get => _clusterVolUpLimitLv2;
             set
             {
-                SetProperty(ref _singleRecoveryOverVolThresh, value);
+                SetProperty(ref _clusterVolUpLimitLv2, value);
             }
         }
 
-        /// <summary>
-        /// 单体低压保护阈值
-        /// </summary>
-        private double _singleLowVolThresh;
-        public double SingleLowVolThresh
+        private double _clusterVolUpLimitLv3;
+        public double ClusterVolUpLimitLv3
         {
-            get => _singleLowVolThresh;
+            get => _clusterVolUpLimitLv3;
             set
             {
-                SetProperty(ref _singleLowVolThresh, value);
+                SetProperty(ref _clusterVolUpLimitLv3, value);
             }
 
         }
 
         /// <summary>
-        /// 单体低压保护恢复阈值
+        /// 组端电压下限
         /// </summary>
-        private double _singleRecoveryLowVolThresh;
-        public double SingleRecoveryLowVolThresh
+        private double _clusterVolLowLimitLv1;
+        public double ClusterVolLowLimitLv1
         {
-            get => _singleRecoveryLowVolThresh; 
+            get => _clusterVolLowLimitLv1;
             set
             {
-                SetProperty(ref _singleRecoveryLowVolThresh, value);
+                SetProperty(ref _clusterVolLowLimitLv1, value);
+            }
+        }
+
+
+        private double _clusterVolLowLimitLv2;
+        public double ClusterVolLowLimitLv2
+        {
+            get => _clusterVolLowLimitLv2;
+            set
+            {
+                SetProperty(ref _clusterVolLowLimitLv2, value);
+            }
+        }
+
+
+        private double _clusterVolLowLimitLv3;
+        public double ClusterVolLowLimitLv3
+        {
+            get => _clusterVolLowLimitLv3;
+            set
+            {
+                SetProperty(ref _clusterVolLowLimitLv3, value);
             }
         }
 
         /// <summary>
-        /// 单体高温保护阈值
+        /// 单体电压上限
         /// </summary>
-        private double _singleHighTempThresh;
-        public double SingleHighTempThresh
+        private double _singleVolUpLimitLv1;
+        public double SingleVolUpLimitLv1
         {
-            get => _singleHighTempThresh;
+            get => _singleVolUpLimitLv1;
             set
             {
-                SetProperty(ref _singleHighTempThresh, value);
-            }
-        }
-        
-        /// <summary>
-        /// 单体高温保护恢复阈值
-        /// </summary>
-        private double _singleRecoveryHighTempThresh;
-        public double SingleRecoveryHighTempThresh
-        {
-            get => _singleRecoveryHighTempThresh; 
-            set
-            {
-                SetProperty(ref _singleRecoveryHighTempThresh, value);
+                SetProperty(ref _singleVolUpLimitLv1, value);
             }
         }
 
-        /// <summary>
-        /// 单体低温保护阈值
-        /// </summary>
-        private double _singleLowTempThresh;
-        public double SingleLowTempThresh
+
+        private double _singleVolUpLimitLv2;
+        public double SingleVolUpLimitLv2
         {
-            get => _singleLowTempThresh;
+            get => _singleVolUpLimitLv2;
             set
             {
-                SetProperty(ref _singleLowTempThresh, value);
+                SetProperty(ref _singleVolUpLimitLv2, value);
             }
         }
 
-        /// <summary>
-        /// 单体低温保护恢复阈值
-        /// </summary>
-        private double _singleRecoveryLowTempThresh;
-        public double SingleRecoveryLowTempThresh
+        private double _singleVolUpLimitLv3;
+        public double SingleVolUpLimitLv3
         {
-            get => _singleRecoveryLowTempThresh;
+            get => _singleVolUpLimitLv3;
             set
             {
-                SetProperty(ref _singleRecoveryLowTempThresh, value);
+                SetProperty(ref _singleVolUpLimitLv3, value);
             }
         }
         /// <summary>
-        /// 簇充电过流保护阈值
+        /// 单体电压下限
         /// </summary>
-        private double _clusterCharOverCurrentThresh;
-        public double ClusterCharOverCurrentThresh
+        private double _singleVolLowLimitLv1;
+        public double SingleVolLowLimitLv1
         {
-            get => _clusterCharOverCurrentThresh;
+            get => _singleVolLowLimitLv1;
             set
             {
-                SetProperty(ref _clusterCharOverCurrentThresh, value);
+                SetProperty(ref _singleVolLowLimitLv1, value);
             }
         }
+
+        private double _singleVolLowLimitLv2;
+        public double SingleVolLowLimitLv2
+        {
+            get => _singleVolLowLimitLv2;
+            set
+            {
+                SetProperty(ref _singleVolLowLimitLv2, value);
+            }
+        }
+
+        private double _singleVolLowLimitLv3;
+        public double SingleVolLowLimitLv3
+        {
+            get => _singleVolLowLimitLv3;
+            set
+            {
+                SetProperty(ref _singleVolLowLimitLv3, value);
+            }
+        }
+
+
         /// <summary>
-        /// 簇充电过流保护恢复阈值
+        /// 充电温度上限
         /// </summary>
-        private double _clusterRecoveryCharOverCurrentThresh;
-        public double ClusterRecoveryCharOverCurrentThresh
+        private double _tempCharUpLimitLv1;
+        public double TempCharUpLimitLv1
         {
-            get => _clusterRecoveryCharOverCurrentThresh;
+            get => _tempCharUpLimitLv1;
             set
             {
-                SetProperty(ref _clusterRecoveryCharOverCurrentThresh, value);
+                SetProperty(ref _tempCharUpLimitLv1, value);
             }
         }
+
+        private double _tempCharUpLimitLv2;
+        public double TempCharUpLimitLv2
+        {
+            get => _tempCharUpLimitLv2;
+            set
+            {
+                SetProperty(ref _tempCharUpLimitLv2, value);
+            }
+        }
+
+        private double _tempCharUpLimitLv3;
+        public double TempCharUpLimitLv3
+        {
+            get => _tempCharUpLimitLv3;
+            set
+            {
+                SetProperty(ref _tempCharUpLimitLv3, value);
+            }
+        }
+
         /// <summary>
-        /// 簇放电过流保护阈值
+        /// 充电温度下限
         /// </summary>
-        private double _clusterDisCharOverCurrentThresh;
-        public double ClusterDisCharOverCurrentThresh
+        private double _tempCharLowLimitLv1;
+        public double TempCharLowLimitLv1
         {
-            get => _clusterDisCharOverCurrentThresh;
+            get => _tempCharLowLimitLv1;
             set
             {
-                SetProperty(ref _clusterDisCharOverCurrentThresh, value);
+                SetProperty(ref _tempCharLowLimitLv1, value);
             }
         }
+
+        private double _tempCharLowLimitLv2;
+        public double TempCharLowLimitLv2
+        {
+            get => _tempCharLowLimitLv2;
+            set
+            {
+                SetProperty(ref _tempCharLowLimitLv2, value);
+            }
+        }
+
+        private double _tempCharLowLimitLv3;
+        public double TempCharLowLimitLv3
+        {
+            get => _tempCharLowLimitLv3;
+            set
+            {
+                SetProperty(ref _tempCharLowLimitLv3, value);
+            }
+        }
+
         /// <summary>
-        /// 簇放电过流保护恢复阈值
+        /// 放电温度上限
         /// </summary>
-        private double _clusterRecoveryDisCharOverCurrentThresh;
-        public double ClusterRecoveryDisCharOverCurrentThresh
+        private double _tempDischarUpLimitLv1;
+        public double TempDischarUpLimitLv1
         {
-            get => _clusterRecoveryDisCharOverCurrentThresh;
+            get => _tempDischarUpLimitLv1;
             set
             {
-                SetProperty(ref _clusterRecoveryDisCharOverCurrentThresh, value);
+                SetProperty(ref _tempDischarUpLimitLv1, value);
             }
         }
 
-
-        private int _iralarmThresh;
-        public int IralarmThresh
+        private double _tempDischarUpLimitLv2;
+        public double TempDischarUpLimitLv2
         {
-            get => _iralarmThresh;
+            get => _tempDischarUpLimitLv2;
             set
             {
-                SetProperty(ref _iralarmThresh, value);
+                SetProperty(ref _tempDischarUpLimitLv2, value);
             }
         }
 
-        private int _hboxtempalarmThresh;
-        public int HboxtempalarmThresh
+        private double _tempDischarUpLimitLv3;
+        public double TempDischarUpLimitLv3
         {
-            get => _hboxtempalarmThresh;
+            get => _tempDischarUpLimitLv3;
             set
             {
-                SetProperty(ref _hboxtempalarmThresh, value);
+                SetProperty(ref _tempDischarUpLimitLv3, value);
             }
         }
 
-        private double _lowsocalarm1;
-        public double Lowsocalarm1
+        /// <summary>
+        /// 充电电流
+        /// </summary>
+        private double _curCharLv1;
+        public double CurCharLv1
         {
-            get => _lowsocalarm1;
+            get => _curCharLv1;
             set
             {
-                SetProperty(ref _lowsocalarm1 , value);
+                SetProperty(ref _curCharLv1, value);
             }
         }
 
-        private double _lowsocalarm2;
-        public double Lowsocalarm2
+        private double _curCharLv2;
+        public double CurCharLv2
         {
-            get => _lowsocalarm2;
+            get => _curCharLv2;
             set
             {
-                SetProperty(ref _lowsocalarm2, value);
+                SetProperty(ref _curCharLv2, value);
             }
         }
 
+        private double _curCharLv3;
+        public double CurCharLv3
+        {
+            get => _curCharLv3;
+            set
+            {
+                SetProperty(ref _curCharLv3, value);
+            }
+        }
 
+        /// <summary>
+        /// 放电电流
+        /// </summary>
+        private double _curDischarLv1;
+        public double CurDischarLv1
+        {
+            get => _curDischarLv1;
+            set
+            {
+                SetProperty(ref _curDischarLv1, value);
+            }
+        }
 
+        private double _curDischarLv2;
+        public double CurDischarLv2
+        {
+            get => _curDischarLv2;
+            set
+            {
+                SetProperty(ref _curDischarLv2, value);
+            }
+        }
 
+        private double _curDischarLv3;
+        public double CurDischarLv3
+        {
+            get => _curDischarLv3;
+            set
+            {
+                SetProperty(ref _curDischarLv3, value);
+            }
+        }
 
+        /// <summary>
+        /// 单体压差
+        /// </summary>
+        private double _singleVolDiffLv1;
+        public double SingleVolDiffLv1
+        {
+            get => _singleVolDiffLv1;
+            set
+            {
+                SetProperty(ref _singleVolDiffLv1, value);
+            }
+        }
 
+        private double _singleVolDiffLv2;
+        public double SingleVolDiffLv2
+        {
+            get => _singleVolDiffLv2;
+            set
+            {
+                SetProperty(ref _singleVolDiffLv2, value);
+            }
+        }
 
+        private double _singleVolDiffLv3;
+        public double SingleVolDiffLv3
+        {
+            get => _singleVolDiffLv3;
+            set
+            {
+                SetProperty(ref _singleVolDiffLv3, value);
+            }
+        }
 
+        /// <summary>
+        /// SOC下限
+        /// </summary>
+        private double _sOCLowLimitLv1;
+        public double SOCLowLimitLv1
+        {
+            get => _sOCLowLimitLv1;
+            set
+            {
+                SetProperty(ref _sOCLowLimitLv1, value);
+            }
+        }
 
-        public RelayCommand ReadClusterThreshInfoCommand { get; set; }
-        public RelayCommand SyncClusterThreshInfofCommand { get; set; }
+        private double _sOCLowLimitLv2;
+        public double SOCLowLimitLv2
+        {
+            get => _sOCLowLimitLv2;
+            set
+            {
+                SetProperty(ref _sOCLowLimitLv2, value);
+            }
+        }
+
+        private double _sOCLowLimitLv3;
+        public double SOCLowLimitLv3
+        {
+            get => _sOCLowLimitLv3;
+            set
+            {
+                SetProperty(ref _sOCLowLimitLv3, value);
+            }
+        }
+
+        /// <summary>
+        /// 绝缘电阻下限
+        /// </summary>
+        private double _isoRLowLimitLv1;
+        public double IsoRLowLimitLv1
+        {
+            get => _isoRLowLimitLv1;
+            set
+            {
+                SetProperty(ref _isoRLowLimitLv1, value);
+            }
+        }
+
+        public RelayCommand ReadClusterVolThreshInfoCommand { get; set; }
+        public RelayCommand SyncClusterVolThreshInfoCommand { get; set; }
         public RelayCommand ReadSingleVolThreshInfoCommand { get; set; }
-        public RelayCommand SyncSingleVolThreshInofCommand { get; set; }
-        public RelayCommand ReadSingleTempThreshInfoCommand { get; set; }
-        public RelayCommand SyncSingleTempThreshInfoCommand { get; set; }
+        public RelayCommand SyncSingleVolThreshInfoCommand { get; set; }
+        public RelayCommand ReadTempThreshInfoCommand { get; set; }
+        public RelayCommand SyncTempThreshInfoCommand { get; set; }
+        public RelayCommand ReadCurrThreshInfoCommand { get; set; }
+        public RelayCommand SyncCurrThreshInfoCommand { get; set; }
+        public RelayCommand ReadSingleVolDiffAndSOCThreshInfoCommand { get; set; }
+        public RelayCommand SyncSingleVolDiffAndSOCThreshInfoCommand { get; set; }
 
-        public RelayCommand ReadOtherThreshInfoCommand { get; set; }
-        public RelayCommand SyncOtherThreshInfoCommand { get;set; }
+        public RelayCommand ReadIsoRThreshInfoCommand { get; set; }
+        public RelayCommand SyncIsrRThreshInfoCommand { get; set; }
         private ModbusClient ModbusClient;
-        public ParameterSettingViewModel(ModbusClient client) 
+        public ParameterSettingViewModel(ModbusClient client)
         {
             ModbusClient = client;
-            ReadClusterThreshInfoCommand = new RelayCommand(ReadClusterThreshInfo);
-            SyncClusterThreshInfofCommand = new RelayCommand(SyncClusterThreshInfo);
+            ReadClusterVolThreshInfoCommand = new RelayCommand(ReadClusterVolThreshInfo);
+            SyncClusterVolThreshInfoCommand = new RelayCommand(SyncClusterVolThreshInfo);
             ReadSingleVolThreshInfoCommand = new RelayCommand(ReadSingleVolThreshInfo);
-            SyncSingleVolThreshInofCommand = new RelayCommand(SyncSingleVolThreshInof);
-            ReadSingleTempThreshInfoCommand=new RelayCommand(ReadSingleTempThreshInfo);
-            SyncSingleTempThreshInfoCommand=new RelayCommand(SyncSingleTempThreshInfo);
-            ReadOtherThreshInfoCommand = new RelayCommand(ReadOtherThreshInfo);
-            SyncOtherThreshInfoCommand = new RelayCommand(SyncOtherThreshInfo);
-        }
+            SyncSingleVolThreshInfoCommand = new RelayCommand(SyncSingleVolThreshInfo);
+            ReadTempThreshInfoCommand = new RelayCommand(ReadTempThreshInfo);
+            SyncTempThreshInfoCommand = new RelayCommand(SyncTempThreshInfo);
+            ReadCurrThreshInfoCommand = new RelayCommand(ReadCurrThreshInfo);
+            SyncCurrThreshInfoCommand = new RelayCommand(SyncCurrThreshInfo);
+            ReadSingleVolDiffAndSOCThreshInfoCommand = new RelayCommand(ReadSingleVolDiffAndSOCThreshInfo);
+            SyncSingleVolDiffAndSOCThreshInfoCommand = new RelayCommand(SyncSingleVolDiffAndSOCThreshInfo);
 
-        private void SyncSingleTempThreshInfo()
-        {
-            ModbusClient.WriteFunc(40208, (ushort)(SingleHighTempThresh+2731));
-            ModbusClient.WriteFunc(40209, (ushort)(SingleRecoveryHighTempThresh +2731));
-            ModbusClient.WriteFunc(40210, (ushort)(SingleLowTempThresh +2731));
-            ModbusClient.WriteFunc(40211, (ushort)(SingleRecoveryLowTempThresh +2731));
+            ReadIsoRThreshInfoCommand = new RelayCommand(ReadIsoRThreshInfo);
+            SyncIsrRThreshInfoCommand = new RelayCommand(SyncIsoRThreshInfo);
 
-        }
 
-        private void ReadSingleTempThreshInfo()
-        {
-            byte[] data = ModbusClient.ReadFunc(40208, 4);
-            SingleHighTempThresh = BitConverter.ToUInt16(data, 0) -2731;
-            SingleRecoveryHighTempThresh = BitConverter.ToUInt16(data, 2) -2731;
-            SingleLowTempThresh = BitConverter.ToUInt16(data, 4) -2731;
-            SingleRecoveryLowTempThresh = BitConverter.ToUInt16(data, 6) -2731;
 
         }
 
-        private void SyncSingleVolThreshInof()
+        private void SyncIsoRThreshInfo()
         {
-            ModbusClient.WriteFunc(1,40200, (ushort)(SingleOverVolThresh * 1000));
-            ModbusClient.WriteFunc(1,40201, (ushort)(SingleRecoveryOverVolThresh * 1000));
-            ModbusClient.WriteFunc(1, 40202, (ushort)(SingleLowVolThresh * 1000));
-            ModbusClient.WriteFunc(1, 40203, (ushort)(SingleRecoveryLowVolThresh * 1000));
+            ModbusClient.WriteFunc(40233, (ushort)IsoRLowLimitLv1);
+        }
+
+        private void ReadIsoRThreshInfo()
+        {
+            byte[] data = ModbusClient.ReadFunc(40233, 1);
+            IsoRLowLimitLv1 = BitConverter.ToUInt16(data, 0);
+
+
+
+
+        }
+
+
+
+        private void SyncSingleVolDiffAndSOCThreshInfo()
+        {
+            ModbusClient.WriteFunc(40227, (ushort)(SingleVolDiffLv1 * 1000));
+            ModbusClient.WriteFunc(40228, (ushort)(SingleVolDiffLv2 * 1000));
+            ModbusClient.WriteFunc(40229, (ushort)(SingleVolDiffLv3 * 1000));
+            ModbusClient.WriteFunc(40230, (ushort)(SOCLowLimitLv1 * 10));
+            ModbusClient.WriteFunc(40231, (ushort)(SOCLowLimitLv2 * 10));
+            ModbusClient.WriteFunc(40232, (ushort)(SOCLowLimitLv3 * 10));
+        }
+
+        private void ReadSingleVolDiffAndSOCThreshInfo()
+        {
+            byte[] data = ModbusClient.ReadFunc(40227, 6);
+            SingleVolDiffLv1 = BitConverter.ToUInt16(data, 0) * 0.001;
+            SingleVolDiffLv2 = BitConverter.ToUInt16(data, 2) * 0.001;
+            SingleVolDiffLv3 = BitConverter.ToUInt16(data, 4) * 0.001;
+
+            SOCLowLimitLv1 = BitConverter.ToUInt16(data, 6) * 0.1;
+            SOCLowLimitLv2 = BitConverter.ToUInt16(data, 8) * 0.1;
+            SOCLowLimitLv3 = BitConverter.ToUInt16(data, 10) * 0.1;
+
+
+        }
+
+        private void ReadCurrThreshInfo()
+        {
+            byte[] data = ModbusClient.ReadFunc(40221, 6);
+            CurCharLv1 = BitConverter.ToUInt16(data, 0) * 0.1;
+            CurCharLv2 = BitConverter.ToUInt16(data, 2) * 0.1;
+            CurCharLv3 = BitConverter.ToUInt16(data, 4) * 0.1;
+            CurDischarLv1 = BitConverter.ToUInt16(data, 6) * 0.1;
+            CurDischarLv2 = BitConverter.ToUInt16(data, 8) * 0.1;
+            CurDischarLv3 = BitConverter.ToUInt16(data, 10) * 0.1;
+        }
+
+
+        private void SyncCurrThreshInfo()
+        {
+            ModbusClient.WriteFunc(40221, (ushort)(CurCharLv1 * 10));
+            ModbusClient.WriteFunc(40222, (ushort)(CurCharLv2 * 10));
+            ModbusClient.WriteFunc(40223, (ushort)(CurCharLv3 * 10));
+            ModbusClient.WriteFunc(40224, (ushort)(CurDischarLv1 * 10));
+            ModbusClient.WriteFunc(40225, (ushort)(CurDischarLv1 * 10));
+            ModbusClient.WriteFunc(40226, (ushort)(CurDischarLv1 * 10));
+        }
+
+        private void ReadTempThreshInfo()
+        {
+            byte[] data = ModbusClient.ReadFunc(40212, 9);
+            TempCharUpLimitLv1 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
+            TempCharUpLimitLv2 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
+            TempCharUpLimitLv3 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
+            TempCharLowLimitLv1 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
+            TempCharLowLimitLv2 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
+            TempCharLowLimitLv3 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
+            TempDischarUpLimitLv1 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
+            TempDischarUpLimitLv2 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
+            TempDischarUpLimitLv3 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
+
+
+        }
+
+        private void SyncTempThreshInfo()
+        {
+
+            ModbusClient.WriteFunc(40212, (ushort)(TempCharUpLimitLv1 * 10 + 2731));
+            ModbusClient.WriteFunc(40213, (ushort)(TempCharUpLimitLv2 * 10 + 2731));
+            ModbusClient.WriteFunc(40214, (ushort)(TempCharUpLimitLv3 * 10 + 2731));
+            ModbusClient.WriteFunc(40215, (ushort)(TempCharLowLimitLv1 * 10 + 2731));
+            ModbusClient.WriteFunc(40216, (ushort)(TempCharLowLimitLv2 * 10 + 2731));
+            ModbusClient.WriteFunc(40217, (ushort)(TempCharLowLimitLv3 * 10 + 2731));
+            ModbusClient.WriteFunc(40218, (ushort)(TempDischarUpLimitLv1 * 10 + 2731));
+            ModbusClient.WriteFunc(40219, (ushort)(TempDischarUpLimitLv2 * 10 + 2731));
+            ModbusClient.WriteFunc(40220, (ushort)(TempDischarUpLimitLv3 * 10 + 2731));
+
         }
 
         private void ReadSingleVolThreshInfo()
         {
-            byte[] data = ModbusClient.ReadFunc(40200, 4);
-            SingleOverVolThresh = BitConverter.ToUInt16(data, 0) * 0.001;
-            SingleRecoveryOverVolThresh =BitConverter.ToUInt16(data, 2)*0.001;
-            SingleLowVolThresh =BitConverter.ToUInt16(data,4 )*0.001;
-            SingleRecoveryLowVolThresh =BitConverter.ToUInt16(data, 6)*0.001;
+            byte[] data = ModbusClient.ReadFunc(40206, 6);
+            ClusterVolUpLimitLv1 = BitConverter.ToInt16(data, 0) * 0.001;
+            ClusterVolUpLimitLv2 = BitConverter.ToInt16(data, 2) * 0.001;
+            ClusterVolUpLimitLv3 = BitConverter.ToInt16(data, 4) * 0.001;
+            ClusterVolLowLimitLv1 = BitConverter.ToUInt16(data, 6) * 0.001;
+            ClusterVolLowLimitLv2 = BitConverter.ToUInt16(data, 8) * 0.001;
+            ClusterVolLowLimitLv3 = BitConverter.ToUInt16(data, 12) * 0.001;
         }
 
-        private void SyncClusterThreshInfo()
+        private void SyncSingleVolThreshInfo()
         {
-            ModbusClient.WriteFunc(40204, (ushort)(ClusterCharOverCurrentThresh));
-            ModbusClient.WriteFunc(40205,(ushort)(ClusterRecoveryCharOverCurrentThresh));
-            ModbusClient.WriteFunc(40206,(ushort)(ClusterDisCharOverCurrentThresh));
-            ModbusClient.WriteFunc(40207,(ushort)(ClusterRecoveryDisCharOverCurrentThresh));
-           
+            ModbusClient.WriteFunc(40206, (ushort)(SingleVolUpLimitLv1 * 1000));
+            ModbusClient.WriteFunc(40207, (ushort)(SingleVolUpLimitLv2 * 1000));
+            ModbusClient.WriteFunc(40208, (ushort)(SingleVolUpLimitLv3 * 1000));
+            ModbusClient.WriteFunc(40209, (ushort)(SingleVolLowLimitLv1 * 1000));
+            ModbusClient.WriteFunc(40210, (ushort)(SingleVolLowLimitLv2 * 1000));
+            ModbusClient.WriteFunc(40211, (ushort)(SingleVolLowLimitLv3 * 1000));
         }
 
-        private void ReadClusterThreshInfo()
+        private void ReadClusterVolThreshInfo()
         {
-            byte[] data = ModbusClient.ReadFunc(40204, 4);
-            ClusterCharOverCurrentThresh = BitConverter.ToUInt16(data, 0) ;
-            ClusterRecoveryCharOverCurrentThresh = BitConverter.ToUInt16(data, 2);
-            ClusterDisCharOverCurrentThresh = BitConverter.ToUInt16(data, 4);
-            ClusterRecoveryDisCharOverCurrentThresh = BitConverter.ToUInt16(data, 6);
+
+            byte[] data = ModbusClient.ReadFunc(40200, 6);
+            ClusterVolUpLimitLv1 = BitConverter.ToInt16(data, 0) * 0.1;
+            ClusterVolUpLimitLv2 = BitConverter.ToInt16(data, 2) * 0.1;
+            ClusterVolUpLimitLv3 = BitConverter.ToInt16(data, 4) * 01;
+            ClusterVolLowLimitLv1 = BitConverter.ToUInt16(data, 6) * 0.1;
+            ClusterVolLowLimitLv2 = BitConverter.ToUInt16(data, 8) * 0.1;
+            ClusterVolLowLimitLv3 = BitConverter.ToUInt16(data, 12) * 0.1;
+
         }
 
-        private void ReadOtherThreshInfo()
+        private void SyncClusterVolThreshInfo()
         {
-            byte[] data = ModbusClient.ReadFunc(40212, 4);
-            IralarmThresh = BitConverter.ToUInt16(data,0);
-            HboxtempalarmThresh = BitConverter.ToUInt16(data,2)-2731;
-            Lowsocalarm1 = BitConverter.ToUInt16(data,4)*0.1;
-            Lowsocalarm2 =  BitConverter.ToUInt16(data,6)*0.1;
-        }
-
-    private void SyncOtherThreshInfo()
-        {
-            ModbusClient.WriteFunc(40212, (ushort)IralarmThresh);
-            ModbusClient.WriteFunc(40213, (ushort)(HboxtempalarmThresh+2731));
-            ModbusClient.WriteFunc(40214,(ushort)(Lowsocalarm1*10) );
-            ModbusClient.WriteFunc(40215, (ushort)(Lowsocalarm2*10));
+            ModbusClient.WriteFunc(40200, (ushort)(ClusterVolUpLimitLv1 * 10));
+            ModbusClient.WriteFunc(40201, (ushort)(ClusterVolUpLimitLv2 * 10));
+            ModbusClient.WriteFunc(40202, (ushort)(ClusterVolUpLimitLv3 * 10));
+            ModbusClient.WriteFunc(40203, (ushort)(ClusterVolLowLimitLv1 * 10));
+            ModbusClient.WriteFunc(40204, (ushort)(ClusterVolLowLimitLv2 * 10));
+            ModbusClient.WriteFunc(40205, (ushort)(ClusterVolLowLimitLv3 * 10));
 
         }
+
+
     }
 }

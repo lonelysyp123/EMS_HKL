@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Windows;
 using System.Windows.Media;
 
 namespace EMS.ViewModel
@@ -44,17 +45,19 @@ namespace EMS.ViewModel
         }
 
         public RelayCommand AddDevCommand { get; set; }
-        public RelayCommand AddDevArrayCommand { get; set; }
+
         public RelayCommand DelAllDevCommand { get; set; }
+        public RelayCommand ModifyPCSTCPCommand { get; set; }
 
         //public ConcurrentQueue<TotalBatteryInfoModel> TotalBatteryInfoQueue;
         public List<ModbusClient> ClientList;
         public int DaqTimeSpan = 1;
         public bool IsStartSaveData = false;
+        public ModbusClient PCSClient;
         public DisplayContentViewModel()
         {
             AddDevCommand = new RelayCommand(AddDev);
-           
+
             DelAllDevCommand = new RelayCommand(DelAllDev);
 
             // 初始化设备列表
@@ -79,7 +82,7 @@ namespace EMS.ViewModel
             manage.DeleteAll();
         }
 
-       
+
 
         private void AddDev()
         {
@@ -89,17 +92,24 @@ namespace EMS.ViewModel
             {
                 //! 判断该IP是否存在
                 var objs = BatteryTotalList.Where(dev => dev.IP == view.IPText.AddressText).ToList();
-                if (objs.Count == 0)
+               
+                if (objs.Count == 0 )
                 {
                     // add Modbus TCP Dev
                     BatteryTotalBase dev = new BatteryTotalBase(view.IPText.AddressText, view.TCPPort.Text);
-                    dev.BCMUID = (BatteryTotalList.Count + 1).ToString();
+                   
+
+
                     BatteryTotalList.Add(dev);
 
                     //! 配置文件中新增IP
                     DevConnectInfoModel entity = new DevConnectInfoModel() { BCMUID = dev.BCMUID, IP = dev.IP, Port = dev.Port };
                     DevConnectInfoManage manage = new DevConnectInfoManage();
                     manage.Insert(entity);
+                }
+                else
+                {
+                    MessageBox.Show("重复");
                 }
             }
         }
@@ -124,7 +134,7 @@ namespace EMS.ViewModel
                         ClientList.Add(client);
                         if (IsStartDaqData)
                         {
-                            OnlineBatteryTotalList[OnlineBatteryTotalList.Count-1].IsDaqData = true;
+                            OnlineBatteryTotalList[OnlineBatteryTotalList.Count - 1].IsDaqData = true;
                             Thread thread = new Thread(ReadBatteryTotalData);
                             thread.IsBackground = true;
                             thread.Start(OnlineBatteryTotalList.Count - 1);
@@ -134,7 +144,7 @@ namespace EMS.ViewModel
                 }
                 return false;
             }
-            catch 
+            catch
             {
                 return false;
             }
@@ -225,7 +235,7 @@ namespace EMS.ViewModel
         /// <summary>
         /// 初始化电池总簇信息
         /// </summary>
-        
+
 
         /// <summary>
         /// 新版初始化电池总簇信息
@@ -237,57 +247,31 @@ namespace EMS.ViewModel
                 //** 注：应该尽可能的少次多量读取数据，多次读取数据会因为读取次数过于频繁导致丢包
 
 
-                //byte[] BCMUData = new byte[90];
-                //Array.Copy(client.AddReadRequest(11000, 45), 0, BCMUData, 0, 90);
-                byte[] BCMUData = new byte[70];
-                var item = client.AddReadRequest(11000, 35);
-                if (item != null)
-                {
-                    Array.Copy(item, 0, BCMUData, 0, 70);
-                }
+                byte[] BCMUData = new byte[90];
+                Array.Copy(client.AddReadRequest(11000, 45), 0, BCMUData, 0, 90);
+                //byte[] BCMUData = new byte[70];
+                //Array.Copy(client.AddReadRequest(11000, 35), 0, BCMUData, 0, 70);
 
                 byte[] BMUIDData = new byte[48];
-                item = client.AddReadRequest(11045, 24);
-                if (item != null)
-                {
-                    Array.Copy(item, 0, BMUIDData, 0, 48);
-                }
-
+                Array.Copy(client.AddReadRequest(11045, 24), 0, BMUIDData, 0, 48);
                 byte[] BMUData = new byte[744];
-                item = client.AddReadRequest(10000, 120);
-                if (item != null)
-                {
-                    Array.Copy(client.AddReadRequest(10000, 120), 0, BMUData, 0, 240);
-                }
+                Array.Copy(client.AddReadRequest(10000, 120), 0, BMUData, 0, 240);
+                Array.Copy(client.AddReadRequest(10120, 120), 0, BMUData, 240, 240);
+                Array.Copy(client.AddReadRequest(10240, 120), 0, BMUData, 480, 240);
+                Array.Copy(client.AddReadRequest(10360, 12), 0, BMUData, 720, 24);
 
-                item = client.AddReadRequest(10120, 120);
-                if (item != null)
-                {
-                    Array.Copy(item, 0, BMUData, 240, 240);
-                }
-                item = client.AddReadRequest(10240, 120);
-                if (item != null)
-                {
-                    Array.Copy(item, 0, BMUData, 480, 240);
-                }
-                item = client.AddReadRequest(10360, 12);
-                if (item != null)
-                {
-                    Array.Copy(item, 0, BMUData, 720, 24);
-                }
-                
 
                 // 信息补全
                 total.TotalVoltage = BitConverter.ToUInt16(BCMUData, 0) * 0.1;
                 total.TotalCurrent = BitConverter.ToInt16(BCMUData, 2) * 0.1;
                 total.TotalSOC = BitConverter.ToUInt16(BCMUData, 4) * 0.1;
                 total.TotalSOH = BitConverter.ToUInt16(BCMUData, 6) * 0.1;
-                total.AverageTemperature = (BitConverter.ToInt16(BCMUData, 8)-2731) * 0.1;
+                total.AverageTemperature = (BitConverter.ToInt16(BCMUData, 8) - 2731) * 0.1;
                 total.MinVoltage = BitConverter.ToInt16(BCMUData, 10) * 0.001;
                 total.MaxVoltage = BitConverter.ToInt16(BCMUData, 12) * 0.001;
                 total.MinVoltageIndex = BitConverter.ToUInt16(BCMUData, 14);
                 total.MaxVoltageIndex = BitConverter.ToUInt16(BCMUData, 16);
-                total.MinTemperature =( BitConverter.ToInt16(BCMUData, 18) -2731)* 0.1;
+                total.MinTemperature = (BitConverter.ToInt16(BCMUData, 18) - 2731) * 0.1;
                 total.MaxTemperature = (BitConverter.ToInt16(BCMUData, 20) - 2731) * 0.1;
                 total.MinTemperatureIndex = BitConverter.ToUInt16(BCMUData, 22);
                 total.MaxTemperatureIndex = BitConverter.ToUInt16(BCMUData, 24);
@@ -297,7 +281,7 @@ namespace EMS.ViewModel
                 total.VersionSWBCMU = BitConverter.ToInt16(BCMUData, 34);
                 total.BatteryCount = BitConverter.ToUInt16(BCMUData, 38);
                 //total.SeriesCount = BitConverter.ToUInt16(BCMUData, 40);
-                
+
                 total.SeriesCount = 3;
                 //total.BatteriesCountInSeries = BitConverter.ToUInt16(BCMUData, 42);
                 total.BatteriesCountInSeries = 14;
@@ -307,31 +291,33 @@ namespace EMS.ViewModel
                 total.IResistanceRP = BitConverter.ToInt16(BCMUData, 50);
                 total.IResistanceRN = BitConverter.ToInt16(BCMUData, 52);
                 total.DCVoltage = BitConverter.ToInt16(BCMUData, 54);
-                total.VolContainerTemperature1 = (BitConverter.ToUInt16(BCMUData, 56)-2731) * 0.1;
+                total.VolContainerTemperature1 = (BitConverter.ToUInt16(BCMUData, 56) - 2731) * 0.1;
                 total.VolContainerTemperature2 = (BitConverter.ToUInt16(BCMUData, 58) - 2731) * 0.1;
                 total.VolContainerTemperature3 = (BitConverter.ToUInt16(BCMUData, 60) - 2731) * 0.1;
                 total.VolContainerTemperature4 = (BitConverter.ToUInt16(BCMUData, 62) - 2731) * 0.1;
-                total.AlarmStateBCMUFlag = BitConverter.ToUInt16(BCMUData, 64);
-                total.ProtectStateBCMUFlag = BitConverter.ToUInt16(BCMUData, 66);
-                total.FaultyStateBCMUFlag = BitConverter.ToUInt16(BCMUData, 68);
-                //total.BatMaxChgPower = BitConverter.ToUInt16(BCMUData, 72) * 0.01;
-                //total.BatMaxDischgPower = BitConverter.ToUInt16(BCMUData, 74) * 0.01;
-                //total.OneChgCoulomb = BitConverter.ToUInt16(BCMUData, 76) * 0.01;
-                //total.OneDischgCoulomb = BitConverter.ToUInt16(BCMUData, 78) * 0.01;
-                //total.TotalChgCoulomb = BitConverter.ToUInt16(BCMUData, 80) * 0.01;
-                //total.TotalDischgCoulomb = BitConverter.ToUInt16(BCMUData, 82) * 0.01;
-                //total.RestCoulomb = BitConverter.ToUInt16(BCMUData, 84) * 0.01;
-                //total.MaxVolDiff = BitConverter.ToUInt16(BCMUData, 86) * 0.01;
-                //total.AvgVol = BitConverter.ToUInt16(BCMUData, 88) * 0.01;
+
+                total.AlarmStateBCMUFlag1 = BitConverter.ToUInt16(BCMUData, 64);
+                total.AlarmStateBCMUFlag2 = BitConverter.ToUInt16(BCMUData, 66);
+                total.AlarmStateBCMUFlag3 = BitConverter.ToUInt16(BCMUData, 68);
+                total.FaultyStateBCMUFlag = BitConverter.ToUInt16(BCMUData, 70);
+                total.BatMaxChgPower = BitConverter.ToUInt16(BCMUData, 72) * 0.01;
+                total.BatMaxDischgPower = BitConverter.ToUInt16(BCMUData, 74) * 0.01;
+                total.OneChgCoulomb = BitConverter.ToUInt16(BCMUData, 76) * 0.01;
+                total.OneDischgCoulomb = BitConverter.ToUInt16(BCMUData, 78) * 0.01;
+                total.TotalChgCoulomb = BitConverter.ToUInt16(BCMUData, 80) * 0.01;
+                total.TotalDischgCoulomb = BitConverter.ToUInt16(BCMUData, 82) * 0.01;
+                total.RestCoulomb = BitConverter.ToUInt16(BCMUData, 84) * 0.01;
+                total.MaxVolDiff = BitConverter.ToUInt16(BCMUData, 86) * 0.01;
+                total.AvgVol = BitConverter.ToUInt16(BCMUData, 88) * 0.01;
                 total.Series.Clear();
 
 
                 //转化BCMU状态及Color标志
-                
-                bool AlarmColorFlagBCMU = GetActiveAlarmBCMU(total);
+
+
                 bool FaultyColorFlagBCMU = GetActiveFaultyBCMU(total);
-                bool ProtectColorFlagBCMU = GetActiveProtectBCMU(total);
-              
+                int AlarmColorFlagBCMU = GetBCMUAlarm(total);
+
 
 
                 /// <summary>
@@ -342,23 +328,23 @@ namespace EMS.ViewModel
                 {
                     BatterySeriesBase series = new BatterySeriesBase();
                     series.SeriesId = i.ToString();
-                    series.AlarmStateFlagBMU = BitConverter.ToUInt16(BMUData, (336 + i)*2);
+                    series.AlarmStateFlagBMU = BitConverter.ToUInt16(BMUData, (336 + i) * 2);
                     series.FaultyStateFlagBMU = BitConverter.ToUInt16(BMUData, (339 + i) * 2);
                     series.ChargeChannelState = BitConverter.ToUInt16(BMUData, (342 + i) * 2);
-                    series.ChargeCapacitySum = BitConverter.ToUInt16(BMUData, (345 + i) * 2)*0.01;
+                    series.ChargeCapacitySum = BitConverter.ToUInt16(BMUData, (345 + i) * 2) * 0.01;
                     series.MinVoltage = BitConverter.ToInt16(BMUData, (348 + i * 8) * 2) * 0.001;
                     series.MaxVoltage = BitConverter.ToInt16(BMUData, (349 + i * 8) * 2) * 0.001;
                     series.MinVoltageIndex = BitConverter.ToUInt16(BMUData, (350 + i * 8) * 2);
                     series.MaxVoltageIndex = BitConverter.ToUInt16(BMUData, (351 + i * 8) * 2);
                     series.MinTemperature = (BitConverter.ToInt16(BMUData, (352 + i * 8) * 2) - 2731) * 0.1;
-                    series.MaxTemperature = (BitConverter.ToInt16(BMUData, (353 + i * 8) * 2)-2731) * 0.1;
+                    series.MaxTemperature = (BitConverter.ToInt16(BMUData, (353 + i * 8) * 2) - 2731) * 0.1;
                     series.MinTemperatureIndex = BitConverter.ToUInt16(BMUData, (354 + i * 8) * 2);
                     series.MaxTemperatureIndex = BitConverter.ToUInt16(BMUData, (355 + i * 8) * 2);
                     series.ChargeChannelStateNumber = GetSetBitPositions(series.ChargeChannelState).ToString();
                     bool FaultColorBMU = GetActiveFaultyBMU(series);
                     bool AlarmColorBMU = GetActiveAlarmBMU(series);
-                                     
-                    
+
+
                     //if (FaultColorBMU) { series.FaultyColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000")); }
                     //else { series.FaultyColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1")); }
 
@@ -382,11 +368,11 @@ namespace EMS.ViewModel
                     for (int j = 0; j < total.BatteriesCountInSeries; j++)
                     {
                         BatteryBase battery = new BatteryBase();
-                        battery.Voltage = BitConverter.ToInt16(BMUData, (j + i * 16)*2) * 0.001;
+                        battery.Voltage = BitConverter.ToInt16(BMUData, (j + i * 16) * 2) * 0.001;
                         battery.Temperature1 = (BitConverter.ToInt16(BMUData, (48 + j * 2 + i * 32) * 2) - 2731) * 0.1;
                         battery.Temperature2 = (BitConverter.ToInt16(BMUData, (48 + j * 2 + 1 + i * 32) * 2) - 2731) * 0.1;
-                        battery.SOC = BitConverter.ToUInt16(BMUData, (144 + j + i * 16)*2) * 0.1;
-                        battery.SOH = BitConverter.ToUInt16(BMUData,(192 + j + i * 16) * 2);
+                        battery.SOC = BitConverter.ToUInt16(BMUData, (144 + j + i * 16) * 2) * 0.1;
+                        battery.SOH = BitConverter.ToUInt16(BMUData, (192 + j + i * 16) * 2);
                         battery.Resistance = BitConverter.ToUInt16(BMUData, (240 + j + i * 16) * 2);
                         battery.Capacity = BitConverter.ToUInt16(BMUData, (288 + j + i * 16) * 2) * 0.1;
                         battery.VoltageColor = new SolidColorBrush(Colors.White);
@@ -420,7 +406,22 @@ namespace EMS.ViewModel
                             if (AlarmColorBMU) { series.AlarmColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000")); }
                             else { series.AlarmColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1")); }
 
-
+                            if (AlarmColorFlagBCMU == 1)
+                            {
+                                total.AlarmColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFA07A"));
+                            }
+                            else if (AlarmColorFlagBCMU == 2)
+                            {
+                                total.AlarmColorBCMU = new SolidColorBrush(Colors.Orange);
+                            }
+                            else if (AlarmColorFlagBCMU == 3)
+                            {
+                                total.AlarmColorBCMU = new SolidColorBrush(Colors.Red);
+                            }
+                            else
+                            {
+                                total.AlarmColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                            }
                             if (FaultyColorFlagBCMU == true)
                             {
                                 total.FaultyColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000"));
@@ -430,25 +431,11 @@ namespace EMS.ViewModel
                                 total.FaultyColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                             }
 
-                            if (ProtectColorFlagBCMU == true)
-                            {
-                                total.ProtectColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000"));
-                            }
-                            else
-                            {
-                                total.ProtectColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
-                            }
 
-                            if (AlarmColorFlagBCMU == true)
-                            {
-                                total.AlarmColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000"));
-                            }
-                            else
-                            {
-                                total.AlarmColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
-                            }
 
-                            if(total.StateBCMU == 1)
+
+
+                            if (total.StateBCMU == 1)
                             {
                                 total.ChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
                                 total.DisChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
@@ -462,80 +449,23 @@ namespace EMS.ViewModel
                                 total.StandStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                                 total.OffNetStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                             }
-                            else if(total.StateBCMU == 3)
+                            else if (total.StateBCMU == 3)
                             {
                                 total.ChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                                 total.DisChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                                 total.StandStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
                                 total.OffNetStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                             }
-                            else if(total.StateBCMU == 4)
+                            else if (total.StateBCMU == 4)
                             {
                                 total.ChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                                 total.DisChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                                 total.StandStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                                 total.OffNetStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
                             }
-                            
-                            ///BCMU状态变化
-                            
-
-                            
-                            //转化BCMU状态
-                            //if (FaultyColorFlagBCMU == true)
-
-                            //{
-                            //    total.FaultyColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000"));
-                            //}
-                            //else
-                            //{
-                            //    total.FaultyColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
-                            //}
-
-                            //if (ProtectColorFlagBCMU == true)
-                            //{
-                            //    total.ProtectColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000"));
-                            //}
-                            //else
-                            //{
-                            //    total.ProtectColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
-                            //}
-
-                            //if (AlarmColorFlagBCMU == true)
-                            //{
-                            //    total.AlarmColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000"));
-                            //}
-                            //else
-                            //{
-                            //    total.AlarmColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
-                            //}
-
-                            //if (FaultColorBMU) { series.FaultyColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000")); }
-                            //else { series.FaultyColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1")); }
-
-                            //if (AlarmColorBMU) { series.AlarmColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000")); }
-                            //else { series.AlarmColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1")); }
 
                         });
-                        //if (j + 1 == series.MinVoltageIndex)
-                        //{
-                        //    battery.VoltageColor = new SolidColorBrush(Colors.LightBlue);
-                        //}
 
-                        //if (j + 1 == series.MaxVoltageIndex)
-                        //{
-                        //    battery.VoltageColor = new SolidColorBrush(Colors.Red);
-                        //}
-
-                        //if (j + 1 == series.MinTemperatureIndex)
-                        //{
-                        //    battery.TemperatureColor = new SolidColorBrush(Colors.LightBlue);
-                        //}
-
-                        //if (j + 1 == series.MaxTemperatureIndex)
-                        //{
-                        //    battery.TemperatureColor = new SolidColorBrush(Colors.Red);
-                        //}
                     }
                     total.Series.Add(series);
                 }
@@ -550,48 +480,185 @@ namespace EMS.ViewModel
         /// 转化BCMU警告状态及颜色flag
         /// </summary>
         /// <param name="total"></param>
-        public bool GetActiveAlarmBCMU(BatteryTotalBase total)
+        int GetBCMUAlarm(BatteryTotalBase total)
         {
-            int Value;
-           ObservableCollection<string> INFO = new ObservableCollection<string>();
-            Value = total.AlarmStateBCMUFlag;
-            bool colorflag = false;
-
-            if ((Value & 0x0001) != 0) { INFO.Add("高压箱高温"); colorflag = true; }       //bit0
-            if ((Value & 0x0002) != 0) { INFO.Add("充电过流"); colorflag = true; }  //bit1
-            if ((Value & 0x0004) != 0) { INFO.Add("放电过流"); colorflag = true; }  //bit2
-            if ((Value & 0x0008) != 0) { INFO.Add("绝缘Rp异常"); colorflag = true; }  //bit3
-            if ((Value & 0x0010) != 0) { INFO.Add("绝缘Rn异常"); colorflag = true; }  //bit4
-            total.AlarmStateBCMU = INFO;
-
-            return colorflag;
-        }
-        
-        /// <summary>
-        /// 转化BCMU保护状态及颜色flag
-        /// </summary>
-        /// <param name="total"></param>
-        /// <returns></returns>
-        public bool GetActiveProtectBCMU(BatteryTotalBase total)
-        {
-            int Value;
-            bool colorflag = false;
+            int j1 = 0;
+            int j2 = 0;
+            int value1;
+            int value2;
+            int value3;
             ObservableCollection<string> INFO = new ObservableCollection<string>();
-            Value = total.ProtectStateBCMUFlag;
-            if ((Value & 0x0001) != 0) { INFO.Add("电池单体低压保护"); colorflag = true; }       //bit0
-            if ((Value & 0x0002) != 0) { INFO.Add("电池单体高压保护"); colorflag = true; }  //bit1`
-            if ((Value & 0x0004) != 0) { INFO.Add("电池组充电高压保护"); colorflag = true; }  //bit2
-            if ((Value & 0x0008) != 0) { INFO.Add("充电低温保护"); colorflag = true; }  //bit3
-            if ((Value & 0x0010) != 0) { INFO.Add("充电高温保护"); colorflag = true; }  //bit4
-            if ((Value & 0x0020) != 0) { INFO.Add("放电低温保护"); colorflag = true; } //bit5
-            if ((Value & 0x0040) != 0) { INFO.Add("放电高温保护"); colorflag = true; } //bit6
-            if ((Value & 0x0080) != 0) { INFO.Add("电池组充电过流保护"); colorflag = true; } //bit7
-            if ((Value & 0x0100) != 0) { INFO.Add("电池组放电过流保护"); colorflag = true; } //bit8
-            if ((Value & 0x0200) != 0) { INFO.Add("电池模块欠压保护"); colorflag = true; } //bit9
-            if ((Value & 0x0400) != 0) { INFO.Add("电池模块过压保护"); colorflag = true; } //bit10
-            total.ProtectStateBCMU = INFO;
-            return colorflag;
+            Dictionary<int, int> result2 = new Dictionary<int, int>();
+            //result2.Add(0, 0);
+
+            Dictionary<int, int> result3 = new Dictionary<int, int>();
+            //result3.Add(0, 0);
+            value1 = total.AlarmStateBCMUFlag1;
+            value2 = total.AlarmStateBCMUFlag2;
+            value3 = total.AlarmStateBCMUFlag3;
+            int colorvalue1 = 0;
+            if ((value1 & 0x0001) != 0) { INFO.Add("高压箱高温"); colorvalue1 = 3; }       //bit0
+            if ((value1 & 0x0002) != 0) { INFO.Add("充电过流"); colorvalue1 = 3; }  //bit1
+            if ((value1 & 0x0004) != 0) { INFO.Add("放电过流"); colorvalue1 = 3; }  //bit2
+            if ((value1 & 0x0008) != 0) { INFO.Add("绝缘Rp异常低"); colorvalue1 = 3; }  //bit3
+            if ((value1 & 0x0010) != 0) { INFO.Add("绝缘Rn异常低"); colorvalue1 = 3; }  //bit4
+            if ((value1 & 0x0020) != 0) { INFO.Add("绝缘HV与PE短路"); colorvalue1 = 3; }  //bit5
+            if ((value1 & 0x0040) != 0) { INFO.Add("绝缘BAT负与PE短路"); colorvalue1 = 3; }  //bit6
+            if ((value1 & 0x0060) != 0) { INFO.Add("并网压差大"); colorvalue1 = 3; }
+            for (int i = 0; i < 16; i += 2)
+            {
+                int twoBitValue = (value2 >> i) & 0x3;
+                j1 = i / 2;
+                if (twoBitValue != 0)
+                {
+
+                    result2.Add(j1, twoBitValue);
+                }
+            }
+            for (int i = 0; i < 16; i += 2)
+            {
+                int twoBitValue = (value3 >> i) & 0x3;
+                j2 = i / 2;
+                if (twoBitValue != 0)
+                {
+
+                    result3.Add(j2, twoBitValue);
+                }
+
+
+            }
+            int colorvalue2 = 0;
+            int colorvalue3 = 0;
+            int colorvalueper = 0;
+
+            if (result2.Count != 0 && result3.Count != 0)
+            {
+                colorvalue2 = result2.Max(pair => pair.Value);
+                colorvalue3 = result3.Max(pair => pair.Value);
+                colorvalueper = Math.Max(colorvalue2, colorvalue3);
+            }
+            else if (result2.Count == 0 && result3.Count != 0)
+            {
+                colorvalueper = result3.Max(pair => pair.Value);
+            }
+            else if (result3.Count == 0 && result2.Count != 0)
+            {
+                colorvalueper = result2.Max(pair => pair.Value);
+            }
+
+
+
+
+
+            int colorvalue = Math.Max(colorvalue1, colorvalueper);
+
+            foreach (var item in result2)
+            {
+
+                switch (item.Key)
+                {
+                    case 0:
+                        {
+                            if (item.Value == 1) INFO.Add("单体电池低压一级");
+                            if (item.Value == 2) INFO.Add("单体电池低压二级");
+                            if (item.Value == 3) INFO.Add("单体电池低压三级");
+                        }
+                        break;
+                    case 1:
+                        {
+                            if (item.Value == 1) INFO.Add("单体电池高压一级");
+                            if (item.Value == 2) INFO.Add("单体电池高压二级");
+                            if (item.Value == 3) INFO.Add("单体电池高压三级");
+                        }
+                        break;
+                    case 2:
+                        {
+                            if (item.Value == 1) INFO.Add("电池组放电低压一级");
+                            if (item.Value == 2) INFO.Add("电池组放电低压二级");
+                            if (item.Value == 3) INFO.Add("电池组放电低压三级");
+                        }
+                        break;
+                    case 3:
+                        {
+                            if (item.Value == 1) INFO.Add("电池组充电高压一级");
+                            if (item.Value == 2) INFO.Add("电池组充电高压二级");
+                            if (item.Value == 3) INFO.Add("电池组充电高压三级");
+                        }
+                        break;
+                    case 4:
+                        {
+                            if (item.Value == 1) INFO.Add("充电低温一级");
+                            if (item.Value == 2) INFO.Add("充电低温二级");
+                            if (item.Value == 3) INFO.Add("充电低温三级");
+                        }
+                        break;
+                    case 5:
+                        {
+                            if (item.Value == 1) INFO.Add("充电高温一级");
+                            if (item.Value == 2) INFO.Add("充电高温二级");
+                            if (item.Value == 3) INFO.Add("充电高温三级");
+                        }
+                        break;
+                    case 6:
+                        {
+                            if (item.Value == 1) INFO.Add("放电低温一级");
+                            if (item.Value == 2) INFO.Add("放电低温二级");
+                            if (item.Value == 3) INFO.Add("放电低温三级");
+                        }
+                        break;
+                    case 7:
+                        {
+                            if (item.Value == 1) INFO.Add("放电高温一级");
+                            if (item.Value == 2) INFO.Add("放电高温二级");
+                            if (item.Value == 3) INFO.Add("放电高温三级");
+                        }
+                        break;
+
+                }
+            }
+
+            foreach (var item in result3)
+            {
+                switch (item.Key)
+                {
+                    case 0:
+                        {
+                            if (item.Value == 1) INFO.Add("电池组充电过流一级");
+                            if (item.Value == 2) INFO.Add("电池组充电过流二级");
+                            if (item.Value == 3) INFO.Add("电池组充电过流三级");
+                        }
+                        break;
+                    case 1:
+                        {
+                            if (item.Value == 1) INFO.Add("电池组放电过流一级");
+                            if (item.Value == 2) INFO.Add("电池组放电过流二级");
+                            if (item.Value == 3) INFO.Add("电池组放电过流三级");
+                        }
+                        break;
+                    case 2:
+                        {
+                            if (item.Value == 1) INFO.Add("单体压差一级");
+                            if (item.Value == 2) INFO.Add("单体压差二级");
+                            if (item.Value == 3) INFO.Add("单体压差三级");
+                        }
+                        break;
+                    case 3:
+                        {
+                            if (item.Value == 1) INFO.Add("低SOC一级");
+                            if (item.Value == 2) INFO.Add("低SOC二级");
+                            if (item.Value == 3) INFO.Add("低SOC三级");
+                        }
+                        break;
+                }
+
+            }
+            total.AlarmStateBCMU = INFO;
+            return colorvalue;
         }
+
+
+
+
 
         /// <summary>
         /// 转化BCMU故障状态及颜色flag
@@ -604,9 +671,9 @@ namespace EMS.ViewModel
             ObservableCollection<string> INFO = new ObservableCollection<string>();
             Value = total.FaultyStateBCMUFlag;
             //total.FaultyStateBCMUColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1")
-            bool colorflag =false;
-            if ((Value & 0x0001) != 0) {INFO.Add("主接触开关异常"); colorflag = true; } //bit0
-            if ((Value & 0x0002) != 0) { INFO.Add("预放继电器异常");  colorflag = true; }  //bit1
+            bool colorflag = false;
+            if ((Value & 0x0001) != 0) { INFO.Add("主接触开关异常"); colorflag = true; } //bit0
+            if ((Value & 0x0002) != 0) { INFO.Add("预放继电器开关异常"); colorflag = true; }  //bit1
             if ((Value & 0x0004) != 0) { INFO.Add("断路器继电器开关异常"); colorflag = true; }  //bit2
             if ((Value & 0x0008) != 0) { INFO.Add("CAN通讯异常"); colorflag = true; }  //bit3
             if ((Value & 0x0010) != 0) { INFO.Add("485硬件异常"); colorflag = true; }  //bit4
@@ -636,7 +703,7 @@ namespace EMS.ViewModel
             int Value;
             ObservableCollection<string> INFO = new ObservableCollection<string>();
             Value = series.FaultyStateFlagBMU;
-            
+
             bool colorflag = false;
             if ((Value & 0x0001) != 0) { INFO.Add("电压传感器故障"); colorflag = true; } //bit0
             if ((Value & 0x0002) != 0) { INFO.Add("温度传感器故障"); colorflag = true; }  //bit1
@@ -816,22 +883,23 @@ namespace EMS.ViewModel
                         total.VolContainerTemperature2 = (BitConverter.ToUInt16(BCMUData, 58) - 2731) * 0.1;
                         total.VolContainerTemperature3 = (BitConverter.ToUInt16(BCMUData, 60) - 2731) * 0.1;
                         total.VolContainerTemperature4 = (BitConverter.ToUInt16(BCMUData, 62) - 2731) * 0.1;
-                        total.AlarmStateBCMUFlag = BitConverter.ToUInt16(BCMUData, 64);
-                        total.ProtectStateBCMUFlag = BitConverter.ToUInt16(BCMUData, 66);
-                        total.FaultyStateBCMUFlag = BitConverter.ToUInt16(BCMUData, 68);
+                        total.AlarmStateBCMUFlag1 = BitConverter.ToUInt16(BCMUData, 64);
+                        total.AlarmStateBCMUFlag2 = BitConverter.ToUInt16(BCMUData, 66);
+                        total.AlarmStateBCMUFlag3 = BitConverter.ToUInt16(BCMUData, 68);
+                        total.FaultyStateBCMUFlag = BitConverter.ToUInt16(BCMUData, 70);
                         total.BatMaxChgPower = BitConverter.ToUInt16(BCMUData, 72) * 0.01;
                         total.BatMaxDischgPower = BitConverter.ToUInt16(BCMUData, 74) * 0.01;
                         total.OneChgCoulomb = BitConverter.ToUInt16(BCMUData, 76) * 0.01;
-                        total.OneDischgCoulomb = BitConverter.ToUInt16(BCMUData,78)*0.01;
-                        total.TotalChgCoulomb = BitConverter.ToUInt16(BCMUData,80)*0.01;
-                        total.TotalDischgCoulomb = BitConverter.ToUInt16(BCMUData,82)*0.01;
-                        total.RestCoulomb = BitConverter.ToUInt16(BCMUData,84)*0.01;
-                        total.MaxVolDiff = BitConverter.ToUInt16(BCMUData,86)*0.01;
-                        total.AvgVol = BitConverter.ToUInt16(BCMUData,88)*0.01;
-                        bool AlarmColorFlagBCMU = GetActiveAlarmBCMU(total);
+                        total.OneDischgCoulomb = BitConverter.ToUInt16(BCMUData, 78) * 0.01;
+                        total.TotalChgCoulomb = BitConverter.ToUInt16(BCMUData, 80) * 0.01;
+                        total.TotalDischgCoulomb = BitConverter.ToUInt16(BCMUData, 82) * 0.01;
+                        total.RestCoulomb = BitConverter.ToUInt16(BCMUData, 84) * 0.01;
+                        total.MaxVolDiff = BitConverter.ToUInt16(BCMUData, 86) * 0.01;
+                        total.AvgVol = BitConverter.ToUInt16(BCMUData, 88) * 0.01;
+
                         bool FaultyColorFlagBCMU = GetActiveFaultyBCMU(total);
-                        bool ProtectColorFlagBCMU = GetActiveProtectBCMU(total);
-                        
+
+
 
 
 
@@ -877,30 +945,9 @@ namespace EMS.ViewModel
                                 battery.SOH = BitConverter.ToUInt16(BMUData, (192 + j + i * 16) * 2);
                                 battery.Resistance = BitConverter.ToUInt16(BMUData, (240 + j + i * 16) * 2);
                                 battery.Capacity = BitConverter.ToUInt16(BMUData, (288 + j + i * 16) * 2) * 0.1;
-                                //battery.VoltageColor = new SolidColorBrush(Colors.White);
-                                //battery.TemperatureColor = new SolidColorBrush(Colors.White);
+
                                 battery.BatteryNumber = j;
-                                // series.Batteries.Add(battery);
 
-                                //if (j + 1 == series.MinVoltageIndex)
-                                //{
-                                //    battery.VoltageColor = new SolidColorBrush(Colors.LightBlue);
-                                //}
-
-                                //if (j + 1 == series.MaxVoltageIndex)
-                                //{
-                                //    battery.VoltageColor = new SolidColorBrush(Colors.Red);
-                                //}
-
-                                //if (j + 1 == series.MinTemperatureIndex)
-                                //{
-                                //    battery.TemperatureColor = new SolidColorBrush(Colors.LightBlue);
-                                //}
-
-                                //if (j + 1 == series.MaxTemperatureIndex)
-                                //{
-                                //    battery.TemperatureColor = new SolidColorBrush(Colors.Red);
-                                //}
 
 
                                 App.Current.Dispatcher.Invoke(() =>
@@ -927,8 +974,7 @@ namespace EMS.ViewModel
                                     if (FaultColorBMU) { series.FaultyColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000")); }
                                     else { series.FaultyColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1")); }
 
-                                    if (AlarmColorBMU) { series.AlarmColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000")); }
-                                    else { series.AlarmColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1")); }
+
 
 
                                     if (FaultyColorFlagBCMU == true)
@@ -940,23 +986,9 @@ namespace EMS.ViewModel
                                         total.FaultyColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                                     }
 
-                                    if (ProtectColorFlagBCMU == true)
-                                    {
-                                        total.ProtectColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000"));
-                                    }
-                                    else
-                                    {
-                                        total.ProtectColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
-                                    }
 
-                                    if (AlarmColorFlagBCMU == true)
-                                    {
-                                        total.AlarmColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000"));
-                                    }
-                                    else
-                                    {
-                                        total.AlarmColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
-                                    }
+
+
 
                                     ///BCMU状态变化
                                     if (total.StateBCMU == 1)
@@ -987,40 +1019,7 @@ namespace EMS.ViewModel
                                         total.StandStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                                         total.OffNetStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
                                     }
-                                    //转化BCMU状态
-                                    //if (FaultyColorFlagBCMU == true)
 
-                                    //{
-                                    //    total.FaultyColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000"));
-                                    //}
-                                    //else
-                                    //{
-                                    //    total.FaultyColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
-                                    //}
-
-                                    //if (ProtectColorFlagBCMU == true)
-                                    //{
-                                    //    total.ProtectColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000"));
-                                    //}
-                                    //else
-                                    //{
-                                    //    total.ProtectColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
-                                    //}
-
-                                    //if (AlarmColorFlagBCMU == true)
-                                    //{
-                                    //    total.AlarmColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000"));
-                                    //}
-                                    //else
-                                    //{
-                                    //    total.AlarmColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
-                                    //}
-
-                                    //if (FaultColorBMU) { series.FaultyColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000")); }
-                                    //else { series.FaultyColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1")); }
-
-                                    //if (AlarmColorBMU) { series.AlarmColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000")); }
-                                    //else { series.AlarmColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1")); }
 
                                 });
 
@@ -1029,7 +1028,7 @@ namespace EMS.ViewModel
 
 
                             }
-                            //total.Series.Add(series);
+
                         }
 
                         if (total.IsRecordData)
@@ -1150,7 +1149,7 @@ namespace EMS.ViewModel
 
         private void SaveBatteryData()
         {
-            while(IsStartSaveData)
+            while (IsStartSaveData)
             {
                 if (BCMUDataList.TryDequeue(out TotalBatteryInfoModel BCMUData))
                 {
@@ -1158,7 +1157,7 @@ namespace EMS.ViewModel
                     TotalManage.Insert(BCMUData);
                 }
 
-                if(BMUDataList.TryDequeue(out SeriesBatteryInfoModel BMUData))
+                if (BMUDataList.TryDequeue(out SeriesBatteryInfoModel BMUData))
                 {
                     SeriesBatteryInfoManage TotalManage = new SeriesBatteryInfoManage();
                     TotalManage.Insert(BMUData);

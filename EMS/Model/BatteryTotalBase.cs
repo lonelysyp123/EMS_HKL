@@ -220,7 +220,7 @@ namespace EMS.Model
             get => _volContainerTemperature1;
             set
             {
-                SetProperty( ref _volContainerTemperature1, value);
+                SetProperty(ref _volContainerTemperature1, value);
             }
         }
 
@@ -230,7 +230,7 @@ namespace EMS.Model
             get => _volContainerTemperature2;
             set
             {
-                SetProperty(ref _volContainerTemperature2 , value);
+                SetProperty(ref _volContainerTemperature2, value);
             }
         }
 
@@ -240,22 +240,22 @@ namespace EMS.Model
             get => _volContainerTemperature3;
             set
             {
-                SetProperty (ref _volContainerTemperature3 , value);
+                SetProperty(ref _volContainerTemperature3, value);
             }
         }
-        
+
         private double _volContainerTemperature4;
         public double VolContainerTemperature4
         {
             get => _volContainerTemperature4;
             set
             {
-                SetProperty(ref _volContainerTemperature4 , value);
+                SetProperty(ref _volContainerTemperature4, value);
             }
         }
 
 
-        
+
         /// <summary>
         /// BCMU软件版本号
         /// </summary>
@@ -296,14 +296,37 @@ namespace EMS.Model
         /// BCMU告警
         /// </summary>
         /// 
-        private int _alarmStateBCMUFlag;
-        public int AlarmStateBCMUFlag
+        private int _alarmStateBCMUFlag1;
+        public int AlarmStateBCMUFlag1
         {
-            get => _alarmStateBCMUFlag;
+            get => _alarmStateBCMUFlag1;
             set
             {
 
-                SetProperty(ref _alarmStateBCMUFlag, value);
+                SetProperty(ref _alarmStateBCMUFlag1, value);
+            }
+        }
+
+        private int _alarmStateBCMUFlag2;
+        public int AlarmStateBCMUFlag2
+        {
+            get => _alarmStateBCMUFlag2;
+            set
+            {
+
+                SetProperty(ref _alarmStateBCMUFlag2, value);
+            }
+        }
+
+
+        private int _alarmStateBCMUFlag3;
+        public int AlarmStateBCMUFlag3
+        {
+            get => _alarmStateBCMUFlag3;
+            set
+            {
+
+                SetProperty(ref _alarmStateBCMUFlag3, value);
             }
         }
 
@@ -344,53 +367,8 @@ namespace EMS.Model
 
 
 
-        /// <summary>
-        /// BCMU保护
-        /// </summary>
-        /// 
-        private int _protectStateBCMUFlag;
-        public int ProtectStateBCMUFlag
-        {
-            get => _protectStateBCMUFlag;
-            set
-            {
 
-                SetProperty(ref _protectStateBCMUFlag, value);
-            }
-        }
 
-        private ObservableCollection<string> _protectStateBCMU;
-        public ObservableCollection<string> ProtectStateBCMU
-        {
-            get => _protectStateBCMU;
-            set
-            {
-                SetProperty(ref _protectStateBCMU, value);
-            }
-        }
-
-        /// <summary>
-        /// 保护颜色变化
-        /// </summary>
-        //private string _protectColorFlag;
-        //public string ProtectColorFlag
-        //{
-        //    get => _protectColorFlag;
-        //    set
-        //    {
-        //        SetProperty(ref _protectColorFlag, value);
-        //    }
-        //}
-
-        private SolidColorBrush _protectColorBCMU;
-        public SolidColorBrush ProtectColorBCMU
-        {
-            get => _protectColorBCMU;
-            set
-            {
-                SetProperty(ref _protectColorBCMU, value);
-            }
-        }
 
         /// <summary>
         /// BCMU故障
@@ -416,7 +394,7 @@ namespace EMS.Model
                 SetProperty(ref _faultyStateBCMU, value);
             }
         }
-        
+
         /// <summary>
         /// 故障颜色变化
         /// </summary>
@@ -505,7 +483,7 @@ namespace EMS.Model
             get => _batteryCycles;
             set
             {
-                SetProperty( ref _batteryCycles, value);
+                SetProperty(ref _batteryCycles, value);
             }
         }
 
@@ -531,7 +509,7 @@ namespace EMS.Model
             get => _dcVoltage;
             set
             {
-                SetProperty(ref  _dcVoltage, value);
+                SetProperty(ref _dcVoltage, value);
             }
         }
         /// <summary>
@@ -543,7 +521,7 @@ namespace EMS.Model
             get => _batMaxChgPower;
             set
             {
-                SetProperty(ref _batMaxChgPower , value);
+                SetProperty(ref _batMaxChgPower, value);
             }
         }
         /// <summary>
@@ -592,7 +570,7 @@ namespace EMS.Model
             get => _totalChgCoulomb;
             set
             {
-                SetProperty(ref _totalChgCoulomb , value);
+                SetProperty(ref _totalChgCoulomb, value);
             }
         }
         /// <summary>
@@ -613,10 +591,10 @@ namespace EMS.Model
         private double _restCoulomb;
         public double RestCoulomb
         {
-            get =>_restCoulomb;
+            get => _restCoulomb;
             set
             {
-                SetProperty (ref _restCoulomb, value);
+                SetProperty(ref _restCoulomb, value);
             }
         }
 
@@ -629,7 +607,7 @@ namespace EMS.Model
             get => _maxVolDiff;
             set
             {
-                SetProperty(ref _maxVolDiff , value);
+                SetProperty(ref _maxVolDiff, value);
             }
         }
 
@@ -639,7 +617,7 @@ namespace EMS.Model
             get => _avgVol;
             set
             {
-                SetProperty(ref _avgVol , value);
+                SetProperty(ref _avgVol, value);
             }
         }
 
@@ -727,7 +705,7 @@ namespace EMS.Model
             get => _BCMUID;
             set
             {
-                if(SetProperty(ref _BCMUID, value))
+                if (SetProperty(ref _BCMUID, value))
                 {
                     _totalID = "BCMU(" + value + ")";
                 }
@@ -836,7 +814,7 @@ namespace EMS.Model
         /// </summary>
         public bool IsRecordData
         {
-            get { return _isRecordData; } 
+            get { return _isRecordData; }
             set
             {
                 if (_isRecordData != value)
@@ -883,7 +861,7 @@ namespace EMS.Model
                 ConnectImage = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OffConnect.png"));
             }
         }
-        
+
         /// <summary>
         /// 入网图标改变
         /// </summary>
@@ -932,7 +910,7 @@ namespace EMS.Model
             }
         }
 
-        
+
 
 
 
