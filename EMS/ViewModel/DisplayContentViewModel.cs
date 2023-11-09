@@ -4,6 +4,7 @@ using EMS.Model;
 using EMS.Storage.DB.DBManage;
 using EMS.Storage.DB.Models;
 using EMS.View;
+using OxyPlot.Series;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -898,8 +899,7 @@ namespace EMS.ViewModel
                         total.AvgVol = BitConverter.ToUInt16(BCMUData, 88) * 0.01;
 
                         bool FaultyColorFlagBCMU = GetActiveFaultyBCMU(total);
-
-
+                        int AlarmColorFlagBCMU = GetBCMUAlarm(total);
 
 
 
@@ -975,7 +975,22 @@ namespace EMS.ViewModel
                                     else { series.FaultyColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1")); }
 
 
-
+                                    if (AlarmColorFlagBCMU == 1)
+                                    {
+                                        total.AlarmColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFA07A"));
+                                    }
+                                    else if (AlarmColorFlagBCMU == 2)
+                                    {
+                                        total.AlarmColorBCMU = new SolidColorBrush(Colors.Orange);
+                                    }
+                                    else if (AlarmColorFlagBCMU == 3)
+                                    {
+                                        total.AlarmColorBCMU = new SolidColorBrush(Colors.Red);
+                                    }
+                                    else
+                                    {
+                                        total.AlarmColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                                    }
 
                                     if (FaultyColorFlagBCMU == true)
                                     {
