@@ -484,22 +484,22 @@ namespace EMS.ViewModel
             ModbusClient.WriteFunc(40222, (ushort)(CurCharLv2 * 10));
             ModbusClient.WriteFunc(40223, (ushort)(CurCharLv3 * 10));
             ModbusClient.WriteFunc(40224, (ushort)(CurDischarLv1 * 10));
-            ModbusClient.WriteFunc(40225, (ushort)(CurDischarLv1 * 10));
-            ModbusClient.WriteFunc(40226, (ushort)(CurDischarLv1 * 10));
+            ModbusClient.WriteFunc(40225, (ushort)(CurDischarLv2 * 10));
+            ModbusClient.WriteFunc(40226, (ushort)(CurDischarLv3 * 10));
         }
 
         private void ReadTempThreshInfo()
         {
             byte[] data = ModbusClient.ReadFunc(40212, 9);
             TempCharUpLimitLv1 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
-            TempCharUpLimitLv2 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
-            TempCharUpLimitLv3 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
-            TempCharLowLimitLv1 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
-            TempCharLowLimitLv2 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
-            TempCharLowLimitLv3 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
-            TempDischarUpLimitLv1 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
-            TempDischarUpLimitLv2 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
-            TempDischarUpLimitLv3 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
+            TempCharUpLimitLv2 = (BitConverter.ToUInt16(data, 2) - 2731) * 0.1;
+            TempCharUpLimitLv3 = (BitConverter.ToUInt16(data, 4) - 2731) * 0.1;
+            TempCharLowLimitLv1 = (BitConverter.ToUInt16(data, 6) - 2731) * 0.1;
+            TempCharLowLimitLv2 = (BitConverter.ToUInt16(data, 8) - 2731) * 0.1;
+            TempCharLowLimitLv3 = (BitConverter.ToUInt16(data, 10) - 2731) * 0.1;
+            TempDischarUpLimitLv1 = (BitConverter.ToUInt16(data, 12) - 2731) * 0.1;
+            TempDischarUpLimitLv2 = (BitConverter.ToUInt16(data, 14) - 2731) * 0.1;
+            TempDischarUpLimitLv3 = (BitConverter.ToUInt16(data, 16) - 2731) * 0.1;
 
 
         }
@@ -522,12 +522,12 @@ namespace EMS.ViewModel
         private void ReadSingleVolThreshInfo()
         {
             byte[] data = ModbusClient.ReadFunc(40206, 6);
-            ClusterVolUpLimitLv1 = BitConverter.ToInt16(data, 0) * 0.001;
-            ClusterVolUpLimitLv2 = BitConverter.ToInt16(data, 2) * 0.001;
-            ClusterVolUpLimitLv3 = BitConverter.ToInt16(data, 4) * 0.001;
-            ClusterVolLowLimitLv1 = BitConverter.ToUInt16(data, 6) * 0.001;
-            ClusterVolLowLimitLv2 = BitConverter.ToUInt16(data, 8) * 0.001;
-            ClusterVolLowLimitLv3 = BitConverter.ToUInt16(data, 12) * 0.001;
+            SingleVolUpLimitLv1 = BitConverter.ToInt16(data, 0) * 0.001;
+            SingleVolUpLimitLv2 = BitConverter.ToInt16(data, 2) * 0.001;
+            SingleVolUpLimitLv3 = BitConverter.ToInt16(data, 4) * 0.001;
+            SingleVolLowLimitLv1 = BitConverter.ToUInt16(data, 6) * 0.001;
+            SingleVolLowLimitLv2 = BitConverter.ToUInt16(data, 8) * 0.001;
+            SingleVolLowLimitLv3 = BitConverter.ToUInt16(data, 10) * 0.001;
         }
 
         private void SyncSingleVolThreshInfo()
@@ -546,10 +546,10 @@ namespace EMS.ViewModel
             byte[] data = ModbusClient.ReadFunc(40200, 6);
             ClusterVolUpLimitLv1 = BitConverter.ToInt16(data, 0) * 0.1;
             ClusterVolUpLimitLv2 = BitConverter.ToInt16(data, 2) * 0.1;
-            ClusterVolUpLimitLv3 = BitConverter.ToInt16(data, 4) * 01;
+            ClusterVolUpLimitLv3 = BitConverter.ToInt16(data, 4) * 0.1;
             ClusterVolLowLimitLv1 = BitConverter.ToUInt16(data, 6) * 0.1;
             ClusterVolLowLimitLv2 = BitConverter.ToUInt16(data, 8) * 0.1;
-            ClusterVolLowLimitLv3 = BitConverter.ToUInt16(data, 12) * 0.1;
+            ClusterVolLowLimitLv3 = BitConverter.ToUInt16(data, 10) * 0.1;
 
         }
 
