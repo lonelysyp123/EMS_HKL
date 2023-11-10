@@ -30,7 +30,7 @@ namespace EMS.MyControl
                 "SOC",
                 typeof(double),
                 typeof(Battery),
-                new PropertyMetadata(0.0, OnSOCPropertyChangedCallback));
+                new PropertyMetadata(-1.0, OnSOCPropertyChangedCallback));
 
         private static void OnSOCPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -58,7 +58,7 @@ namespace EMS.MyControl
                 {
                     control.BatteryIcon.Source = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/Battery100.png"));
                 }
-                control.BatterySOC.Text = "SOC:" + obj + "%";
+                control.BatterySOC.Text = "SOC:" + e.NewValue + "%";
             }
         }
 
