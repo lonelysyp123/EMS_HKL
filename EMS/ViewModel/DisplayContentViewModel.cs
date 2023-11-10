@@ -145,7 +145,7 @@ namespace EMS.ViewModel
                 }
                 return false;
             }
-            catch
+            catch(Exception ex)
             {
                 return false;
             }
@@ -431,10 +431,6 @@ namespace EMS.ViewModel
                             {
                                 total.FaultyColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                             }
-
-
-
-
 
                             if (total.StateBCMU == 1)
                             {
@@ -945,10 +941,7 @@ namespace EMS.ViewModel
                                 battery.SOH = BitConverter.ToUInt16(BMUData, (192 + j + i * 16) * 2);
                                 battery.Resistance = BitConverter.ToUInt16(BMUData, (240 + j + i * 16) * 2);
                                 battery.Capacity = BitConverter.ToUInt16(BMUData, (288 + j + i * 16) * 2) * 0.1;
-
                                 battery.BatteryNumber = j;
-
-
 
                                 App.Current.Dispatcher.Invoke(() =>
                                 {
