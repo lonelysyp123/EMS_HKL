@@ -24,7 +24,6 @@
                             <RowDefinition/>
                             <RowDefinition/>
                             <RowDefinition/>
-                            
                         </Grid.RowDefinitions>
                         
                         <!--<TextBlock Grid.Row="0" x:Name="BatteryNum" Foreground="White" Text="{Binding BatteryNumber}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight ="Bold"/>-->
