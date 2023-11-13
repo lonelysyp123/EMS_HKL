@@ -249,6 +249,7 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ParameterSettingViewModel.cs" />
     <Compile Include="ViewModel\PCSSettingViewModel.cs" />
+    <Compile Include="ViewModel\StrategyManager.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
