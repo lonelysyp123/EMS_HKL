@@ -27,14 +27,8 @@ namespace EMS.View
         {
             InitializeComponent();
 
-            InitView(viewmodel);
             this.DataContext = viewmodel;
-            //Series1.DataContext = viewmodel.Series[0];
-        }
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            e.Cancel = true;  // cancels the window close    
-            this.Hide();      // Programmatically hides the window
+            InitView(viewmodel);
         }
 
         private void InitView(BatteryTotalBase item)

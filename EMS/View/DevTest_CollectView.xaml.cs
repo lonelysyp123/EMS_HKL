@@ -33,7 +33,6 @@ namespace EMS.View
         public DevTest_CollectView()
         {
             InitializeComponent();
-            seriesBatteryViews = new List<SeriesBatteryView>();
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1); // 设置定时器每秒触发一次
             timer.Tick += Timer_Tick;
@@ -80,10 +79,6 @@ namespace EMS.View
             Grid.SetColumn(control, index % 3);
             Grid.SetRow(control, index / 3);
             MainBody.Children.Add(control);
-
-            SeriesBatteryView view = new SeriesBatteryView((BatteryTotalBase)control.DataContext);
-            seriesBatteryViews.Add(view);
-
         }
 
         public void RemoveDevIntoView(int index)
@@ -94,15 +89,13 @@ namespace EMS.View
             }
         }
 
-        private List<SeriesBatteryView> seriesBatteryViews;
         private void MainBody_MouseUp(object sender, MouseButtonEventArgs e)
         {
             DataControl control = e.Source as DataControl;
             if (control != null)
             {
-                // 打开单个电池展示界面
-                int index = MainBody.Children.IndexOf(control);
-                seriesBatteryViews[index].Show();
+                SeriesBatteryView view = new SeriesBatteryView((BatteryTotalBase)control.DataContext);
+                view.ShowDialog();
             }
         }
 
