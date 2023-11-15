@@ -378,7 +378,7 @@ namespace EMS.ViewModel
                         battery.Capacity = BitConverter.ToUInt16(BMUData, (288 + j + i * 16) * 2) * 0.1;
                         battery.VoltageColor = new SolidColorBrush(Colors.White);
                         battery.TemperatureColor = new SolidColorBrush(Colors.White);
-                        battery.BatteryNumber = j;
+                        battery.BatteryNumber = j+1;
                         series.Batteries.Add(battery);
                         App.Current.Dispatcher.Invoke(() =>
                         {
@@ -867,9 +867,8 @@ namespace EMS.ViewModel
                         total.HWVersionBCMU = BitConverter.ToInt16(BCMUData, 28);
                         total.VersionSWBCMU = BitConverter.ToInt16(BCMUData, 34);
                         total.BatteryCount = BitConverter.ToUInt16(BCMUData, 38);
-                        total.SeriesCount = BitConverter.ToUInt16(BCMUData, 40);
-                        total.BatteriesCountInSeries = BitConverter.ToUInt16(BCMUData, 42);
-
+                        total.SeriesCount = 3;
+                        total.BatteriesCountInSeries = 14;
                         ///zyf
                         ///
                         total.StateBCMU = BitConverter.ToInt16(BCMUData, 48);
@@ -941,7 +940,7 @@ namespace EMS.ViewModel
                                 battery.SOH = BitConverter.ToUInt16(BMUData, (192 + j + i * 16) * 2);
                                 battery.Resistance = BitConverter.ToUInt16(BMUData, (240 + j + i * 16) * 2);
                                 battery.Capacity = BitConverter.ToUInt16(BMUData, (288 + j + i * 16) * 2) * 0.1;
-                                battery.BatteryNumber = j;
+                                battery.BatteryNumber = j+1;
 
                                 App.Current.Dispatcher.Invoke(() =>
                                 {

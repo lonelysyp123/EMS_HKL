@@ -52,6 +52,8 @@ namespace EMS.View
                 textBlock.Margin = new Thickness(5, 0, 10, 0);
                 textBlock.VerticalAlignment = VerticalAlignment.Bottom;
                 textBlock.Text = batteryTotalBases[i].TotalID;
+                textBlock.Foreground = new SolidColorBrush(Colors.White);
+
 
                 ListBox listBox = new ListBox();
                 listBox.Items.Add(image);
