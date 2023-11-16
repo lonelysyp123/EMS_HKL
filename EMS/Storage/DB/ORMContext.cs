@@ -52,6 +52,7 @@ namespace EMS.Storage.DB
         /// </summary>
         public DbSet<SeriesBatteryInfoModel> SeriesBatteryModelInfos { get; set; }
         public DbSet<PCSStrategyInfoModel> PCSStrategyInfos { get; set; }
+        public DbSet<AlarmandFaultInfoModel> AlarmandFaultInfos { get;set; }
         
     }
 }

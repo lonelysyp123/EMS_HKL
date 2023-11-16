@@ -206,7 +206,9 @@
     </Compile>
     <Compile Include="Model\PCSSettingModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
+    <Compile Include="Storage\DB\DBManage\AlarmandFaultInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSStrategyInfoManage.cs" />
+    <Compile Include="Storage\DB\Models\AlarmandFaultInfoModel.cs" />
     <Compile Include="Storage\DB\Models\PCSStrategyInfoModel.cs" />
     <Compile Include="ViewModel\DevControlViewModel.cs" />
     <Compile Include="MyControl\Battery.xaml.cs">
