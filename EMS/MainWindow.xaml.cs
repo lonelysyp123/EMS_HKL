@@ -38,11 +38,7 @@ namespace EMS
             DaqDataRaBtn.IsChecked = true;
             SelectedPage("DaqDataRaBtn");
             pcsviewmodel = new PCSSettingViewModel();
-            PCSIP.DataContext = pcsviewmodel;
-            PCSTCPModify.DataContext = pcsviewmodel;
-            PCSConncet.DataContext = pcsviewmodel;
-            ConnectStateColor.DataContext = pcsviewmodel;
-            ConncetState.DataContext = pcsviewmodel;
+            PCSView.DataContext = pcsviewmodel;
         }
 
         private void ReConnect_Click(object sender, RoutedEventArgs e)

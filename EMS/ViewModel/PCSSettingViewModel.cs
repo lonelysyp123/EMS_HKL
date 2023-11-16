@@ -175,8 +175,10 @@ namespace EMS.ViewModel
         }
         public RelayCommand ModifyPCSTCPCommand {  get; set; }
         public RelayCommand ConnectPCSTCPCommand { get; set; }
+        public RelayCommand DisconnectPCSTCPCommand { get; set; }
         public RelayCommand AddStrategyCommand { get; set; }
         public RelayCommand DeleteStrategyCommand { get; set; }
+
         public ModbusClient modbusClient;
         //public PCSSettingModel NEWStrategy;
         public PCSSettingViewModel()
@@ -185,6 +187,7 @@ namespace EMS.ViewModel
             ConnectStateColor = new SolidColorBrush(Colors.Red);
             ModifyPCSTCPCommand = new RelayCommand(ModifyPCSTCP);
             ConnectPCSTCPCommand = new RelayCommand(ConnectPCSTCP);
+            DisconnectPCSTCPCommand = new RelayCommand(DisconnectPCSTCP);
             AddStrategyCommand = new RelayCommand(AddStrategy);
             DeleteStrategyCommand = new RelayCommand(DeleteStrategy);
             StrategyStartTimeSet = "00:00:00";
@@ -196,6 +199,11 @@ namespace EMS.ViewModel
             timer.Tick += Timer_Tick;
             timer.Start();
             
+        }
+
+        private void DisconnectPCSTCP()
+        {
+            throw new NotImplementedException();
         }
 
         private void DeleteStrategy()

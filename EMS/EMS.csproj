@@ -431,9 +431,6 @@
     <Resource Include="Resource\Image\TNLOGO.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resource\Image\TitleFont.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Resource\Image\topImage.png" />
     <Resource Include="Resource\Image\MainBackground.png" />
     <Resource Include="Resource\Image\LeftListGreen.png" />
