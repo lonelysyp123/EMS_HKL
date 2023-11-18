@@ -45,6 +45,7 @@ namespace EMS.View
         private void InitDevList()
         {
             BCMUInfo.Items.Clear();
+            ViewModels.Clear();
             // 初始化BCMU列表
             for (int i = 0; i < batteryTotalBases.Count; i++)
             {
@@ -56,7 +57,7 @@ namespace EMS.View
                 textBlock.Margin = new Thickness(5, 0, 10, 0);
                 textBlock.VerticalAlignment = VerticalAlignment.Bottom;
                 textBlock.Text = batteryTotalBases[i].TotalID;
-
+                textBlock.Foreground =new SolidColorBrush(Colors.White);
                 ListBox listBox = new ListBox();
                 listBox.Items.Add(image);
                 listBox.Items.Add(textBlock);
