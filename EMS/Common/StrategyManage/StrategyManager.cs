@@ -172,6 +172,7 @@ namespace EMS.ViewModel
             if (udc >= reversePower - 10 && udc < reversePower)
             {
                 // 将储能下功率Pc设为0
+                SetPCS();
             }
             else if (udc >= reversePower)
             {
@@ -205,6 +206,8 @@ namespace EMS.ViewModel
         /// <param name="faultSource">故障源</param>
         public void ProtectStrategy(object faultType, int faultLevel, object faultSource)
         {
+            // 故障整理，取等级最高的故障，默认
+
             // 判断故障类型，分为通讯故障和设备故障
             if (true)
             {
