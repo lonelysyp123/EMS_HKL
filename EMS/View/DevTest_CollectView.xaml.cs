@@ -33,7 +33,6 @@ namespace EMS.View
         public DevTest_CollectView()
         {
             InitializeComponent();
-            seriesBatteryViews = new List<SeriesBatteryView>();
         }
 
         public void Test_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
