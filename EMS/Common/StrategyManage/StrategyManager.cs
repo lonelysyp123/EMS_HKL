@@ -59,20 +59,73 @@ namespace EMS.ViewModel
             if (items.Count() == 1)
             {
                 BatteryStrategyModel currentStrategy = items.ToArray()[0];
-                if (currentStrategy.BatteryStrategy == BatteryStrategyEnum.ConstantCurrentCharge ||
-                    currentStrategy.BatteryStrategy == BatteryStrategyEnum.ConstantCurrentDischarge)
+                if (currentStrategy.BatteryStrategy == BatteryStrategyEnum.ConstantCurrentCharge)
                 {
-                    if (ReadPCSMode() != 0 || ReadPCSCurrent() != currentStrategy.SetValue)
+                    if (ReadCurrentSOC() > 20)
                     {
-                        SetPCS();
+                        if (ReadPCSMode() != 0 || ReadPCSCurrent() != currentStrategy.SetValue)
+                        {
+                            SetPCS();
+                        }
+                    }
+                    else
+                    {
+                        if (ReadPCSMode() != 0 || ReadPCSCurrent() != 0)
+                        {
+                            SetPCS();
+                        }
                     }
                 }
-                else if (currentStrategy.BatteryStrategy == BatteryStrategyEnum.ConstantPowerCharge ||
-                    currentStrategy.BatteryStrategy == BatteryStrategyEnum.ConstantPowerDischarge)
+                else if (currentStrategy.BatteryStrategy == BatteryStrategyEnum.ConstantCurrentDischarge)
                 {
-                    if (ReadPCSMode() != 1 || ReadPCSPower() != currentStrategy.SetValue)
+                    if (ReadCurrentSOC() < 80)
                     {
-                        SetPCS();
+                        if (ReadPCSMode() != 0 || ReadPCSCurrent() != currentStrategy.SetValue)
+                        {
+                            SetPCS();
+                        }
+                    } 
+                    else
+                    {
+                        if (ReadPCSMode() != 0 || ReadPCSCurrent() != 0)
+                        {
+                            SetPCS();
+                        }
+                    }
+                }
+                else if (currentStrategy.BatteryStrategy == BatteryStrategyEnum.ConstantPowerCharge)
+                {
+                    if (ReadCurrentSOC() > 20)
+                    {
+                        if (ReadPCSMode() != 1 || ReadPCSPower() != currentStrategy.SetValue)
+                        {
+                            SetPCS();
+                        }
+                    }
+                    else
+                    {
+                        if (ReadPCSMode() != 1 || ReadPCSPower() != 0)
+                        {
+                            SetPCS();
+                        }
+                    }
+                }
+                else if (currentStrategy.BatteryStrategy == BatteryStrategyEnum.ConstantPowerDischarge)
+                {
+                    if (ReadCurrentSOC() < 80)
+                    {
+                        if (ReadPCSMode() != 1 || ReadPCSPower() != currentStrategy.SetValue)
+                        {
+                            SetPCS();
+                        }
+                    }
+                    else
+                    {
+                        // 储能系统停止充电
+                        if (ReadPCSMode() != 1 || ReadPCSPower() != 0)
+                        {
+                            SetPCS();
+                        }
                     }
                 }
             }
@@ -98,12 +151,7 @@ namespace EMS.ViewModel
             throw new NotImplementedException();
         }
 
-        private void Charge(double current, double power)
-        {
-            throw new NotImplementedException();
-        }
-
-        private double ReadCurrentSOC(ModbusClient client)
+        private double ReadCurrentSOC()
         {
             // 根据所有SOC
             return 0;

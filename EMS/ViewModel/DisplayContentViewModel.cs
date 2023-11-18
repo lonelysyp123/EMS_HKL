@@ -234,11 +234,6 @@ namespace EMS.ViewModel
         }
 
         /// <summary>
-        /// 初始化电池总簇信息
-        /// </summary>
-
-
-        /// <summary>
         /// 新版初始化电池总簇信息
         /// </summary>
         public void InitBatteryTotalNew(BatteryTotalBase total, ModbusClient client)
@@ -246,8 +241,6 @@ namespace EMS.ViewModel
             if (total.IsConnected)
             {
                 //** 注：应该尽可能的少次多量读取数据，多次读取数据会因为读取次数过于频繁导致丢包
-
-
                 byte[] BCMUData = new byte[90];
                 Array.Copy(client.AddReadRequest(11000, 45), 0, BCMUData, 0, 90);
                 //byte[] BCMUData = new byte[70];
