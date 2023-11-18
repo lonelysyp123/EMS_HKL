@@ -37,8 +37,8 @@ namespace EMS
             DevListView.DataContext = viewmodel.DisplayContent;
             DaqDataRaBtn.IsChecked = true;
             SelectedPage("DaqDataRaBtn");
-            pcsviewmodel = new PCSSettingViewModel();
-            PCSView.DataContext = pcsviewmodel;
+            //pcsviewmodel = new PCSSettingViewModel();
+            //PCSView.DataContext = pcsviewmodel;
         }
 
         private void ReConnect_Click(object sender, RoutedEventArgs e)

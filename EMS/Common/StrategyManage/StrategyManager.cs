@@ -1,7 +1,9 @@
 ﻿using EMS.Common.Modbus.ModbusTCP;
+using EMS.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +11,32 @@ namespace EMS.ViewModel
 {
     public class StrategyManager
     {
+        private static object syncRoot = new Object();
+
+        private static StrategyManager instance;
+        public static StrategyManager Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    lock(syncRoot)
+                    {
+                        if (instance == null)
+                        {
+                            instance = new StrategyManager();
+                        }
+                    }
+                }
+                return instance;
+            }
+        }
+
+        private StrategyManager()
+        {
+
+        }
+
         /// <summary>
         /// 峰谷策略
         /// 1. 储能系统充电
@@ -22,51 +50,63 @@ namespace EMS.ViewModel
         /// <param name="array1">电网端峰谷电价时段</param>
         /// <param name="array2">回收电池端充放电时段</param>
         /// <param name="client">通讯客户端</param>
-        public void PVStrategy(Array array1, Array array2, ModbusClient client)
+        public void PVStrategy(List<BatteryStrategyModel> array2, ModbusClient client)
         {
             bool b_obj = true;
             // 判断电池端充放电时段
-            if (b_obj)
-            { 
-                // 回收电池充电
-
-                // 判断峰谷电价时段
-                if (true)
-                { 
-                    // 峰值电价
-                    // 判断储能系统状态（主要是SOC）
-                    if (true)
-                    { 
-                        // SOC>xx,使用储能系统给电池充电
-
-                    }
-                    else
-                    { 
-                        // 使用电网给电池充电
-
-                    }
-                }
-                else
-                { 
-                    // 谷值电价
-                    // 使用电网给电池充电
-                }
-            }
-            else
+            DateTime now = DateTime.Now;
+            var items = array2.Where(s=> DateTime.Parse(s.StartTime) < now && DateTime.Parse(s.EndTime) >= now);
+            if (items.Count() == 1)
             {
-                // 回收电池放电
-                // 判断储能系统状态（主要是SOC）
-                if (true)
-                { 
-                    // SOC<xx,将电池放的电充入储能系统
-
+                BatteryStrategyModel currentStrategy = items.ToArray()[0];
+                if (currentStrategy.BatteryStrategy == BatteryStrategyEnum.ConstantCurrentCharge ||
+                    currentStrategy.BatteryStrategy == BatteryStrategyEnum.ConstantCurrentDischarge)
+                {
+                    if (ReadPCSMode() != 0 || ReadPCSCurrent() != currentStrategy.SetValue)
+                    {
+                        SetPCS();
+                    }
                 }
-                else
-                { 
-                    // 储能系统不接收电池放的电
-                    // 如果储能系统不接收回收电池的电该怎么处理
+                else if (currentStrategy.BatteryStrategy == BatteryStrategyEnum.ConstantPowerCharge ||
+                    currentStrategy.BatteryStrategy == BatteryStrategyEnum.ConstantPowerDischarge)
+                {
+                    if (ReadPCSMode() != 1 || ReadPCSPower() != currentStrategy.SetValue)
+                    {
+                        SetPCS();
+                    }
                 }
             }
+        }
+
+        private int ReadPCSPower()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SetPCS()
+        {
+            throw new NotImplementedException();
+        }
+
+        private int ReadPCSCurrent()
+        {
+            throw new NotImplementedException();
+        }
+
+        private int ReadPCSMode()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Charge(double current, double power)
+        {
+            throw new NotImplementedException();
+        }
+
+        private double ReadCurrentSOC(ModbusClient client)
+        {
+            // 根据所有SOC
+            return 0;
         }
 
         /// <summary>

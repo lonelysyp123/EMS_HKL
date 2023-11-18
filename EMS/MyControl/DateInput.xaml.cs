@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -13,7 +16,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace EMS.MyControl
 {
@@ -27,26 +29,50 @@ namespace EMS.MyControl
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty DateTextProperty = 
+        public static readonly DependencyProperty DateTextProperty =
             DependencyProperty.Register(
-                "DateText", 
-                typeof(string), 
+                "DateText",
+                typeof(string),
                 typeof(DateInput),
-                new PropertyMetadata(null, OnPropertyChangedCallback));
+                new FrameworkPropertyMetadata(
+                    string.Empty,
+                    OnDateTextPropertyChanged));
 
-        private static void OnPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnDateTextPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var control = d as DateInput;
-            if (e.NewValue != null)
+            var dateInput = d as DateInput;
+            if (e.NewValue is string text && !dateInput._isChangingDate)
             {
-                var items = (e.NewValue as string).Split(':');
-                if (items.Length == 3)
+                dateInput.PasteTextIPTextBox(text);
+            }
+        }
+
+        private bool _isChangingDate = false;
+
+        void PasteTextIPTextBox(string text)
+        {
+            P1.TextChanged -= P1_TextChanged;
+            P2.TextChanged -= P2_TextChanged;
+            P3.TextChanged -= P3_TextChanged;
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                P1.Text = string.Empty;
+                P2.Text = string.Empty;
+                P3.Text = string.Empty;
+            }
+            else
+            {
+                var strs = text.Split(':');
+                var _textboxBoxes = new TextBox[] { P1, P2, P3 };
+                for (short i = 0; i < _textboxBoxes.Length; i++)
                 {
-                    control.P1.Text = items[0];
-                    control.P2.Text = items[1];
-                    control.P3.Text = items[2];
+                    var str = i < strs.Length ? strs[i] : string.Empty;
+                    _textboxBoxes[i].Text = str;
                 }
             }
+            P1.TextChanged += P1_TextChanged;
+            P2.TextChanged += P2_TextChanged;
+            P3.TextChanged += P3_TextChanged;
         }
 
         public string DateText
@@ -64,37 +90,64 @@ namespace EMS.MyControl
         private void Date_TextInput(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text);
-            if ((sender as TextBox).Text.Length == 2)
+            if (!regex.IsMatch(e.Text))
             {
+                if ((sender as TextBox).Text.Length >= 2)
+                {
+                    e.Handled = true;
+                }
+                else
+                {
+                    _isChangingDate = true;
+                }
+            }
+            else
+            {
+                _isChangingDate = false;
                 e.Handled = true;
             }
         }
 
         private void P1_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var items = DateText.Split(':');
-            if (items.Length == 3)
-            {
-                DateText = (sender as TextBox).Text + ":" + items[1] + ":" + items[2];
-            }
+            UpdateDateText();
         }
 
         private void P2_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var items = DateText.Split(':');
-            if (items.Length == 3)
-            {
-                DateText = items[0] + ":" + (sender as TextBox).Text + ":" + items[2];
-            }
+            UpdateDateText();
         }
 
         private void P3_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var items = DateText.Split(':');
-            if (items.Length == 3)
+            UpdateDateText();
+        }
+
+        private void UpdateDateText()
+        {
+            var segments = new string[3]
             {
-                DateText = items[0] + ":" + items[1] + ":" + (sender as TextBox).Text;
+                P1.Text.ToString(),
+                P2.Text.ToString(),
+                P3.Text.ToString()
+            };
+            var allEmpty = segments.All(string.IsNullOrEmpty);
+            if (allEmpty)
+            {
+                SetValue(DateTextProperty, string.Empty);
+                return;
+            }
+            for (int i = 0; i < segments.Length; i++)
+            {
+                if (string.IsNullOrEmpty(segments[i]))
+                {
+                    segments[i] = "00";
+                }
+            }
+            var date = string.Join(":", segments);
+            if(date != DateText)
+            {
+                SetValue (DateTextProperty, date);
             }
         }
     }

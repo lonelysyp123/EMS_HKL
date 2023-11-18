@@ -235,10 +235,6 @@
                     </Grid>
                 </GroupBox>
             </Border>
-
-
-
-
         </Grid>
     </ScrollViewer>
 </Page>

@@ -130,7 +130,7 @@
                         <TextBlock Text="保护参数"  />
                     </RadioButton>
                     <RadioButton   Style="{StaticResource RadioButtonStyle}" x:Name="PCSSettingRaBtn" Checked="RadioButton_Checked">
-                        <TextBlock Text="充放电配置"  />
+                        <TextBlock Text="策略配置"  />
                     </RadioButton>
                 </StackPanel>
             </Border>

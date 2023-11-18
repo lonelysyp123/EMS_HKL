@@ -204,7 +204,8 @@
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\PCSSettingModel.cs" />
+    <Compile Include="Model\BatteryStrategyModel.cs" />
+    <Compile Include="Model\StateGridModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
     <Compile Include="Storage\DB\DBManage\PCSStrategyInfoManage.cs" />
     <Compile Include="Storage\DB\Models\PCSStrategyInfoModel.cs" />
@@ -249,7 +250,7 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ParameterSettingViewModel.cs" />
     <Compile Include="ViewModel\PCSSettingViewModel.cs" />
-    <Compile Include="ViewModel\StrategyManager.cs" />
+    <Compile Include="Common\StrategyManage\StrategyManager.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>

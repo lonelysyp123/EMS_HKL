@@ -71,18 +71,6 @@ namespace EMS.MyControl
             }
         }
 
-        public void SetAddressText(string ip)
-        {
-            string[] parts = ip.Split('.');
-            if (parts.Length == 4)
-            {
-                P1.Text = parts[0];
-                P2.Text = parts[1];
-                P3.Text = parts[2];
-                P4.Text = parts[3];
-            }
-        }
-
         private void P1_TextChanged(object sender, TextChangedEventArgs e)
         {
             if ((sender as TextBox).Text.Length == 3)
