@@ -62,8 +62,7 @@ namespace EMS.Model
 
         public BatteryStrategyModel()
         {
-            var i = Enum.GetValues(typeof(BatteryStrategyEnum));
-            var l = Enum.GetNames(typeof(BatteryStrategyEnum));
+
         }
     }
 
