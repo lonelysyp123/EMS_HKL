@@ -9,7 +9,7 @@
         xmlns:model="clr-namespace:EMS.Model"
         xmlns:core="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="PCSSettingView" d:DesignHeight="650" d:DesignWidth="1000">
+        Title="PCSSettingView" d:DesignHeight="650" d:DesignWidth="800">
     <Page.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="Effect">
@@ -33,98 +33,54 @@
     <Border Background="#19FFFFFF" Margin="30,10,30,30" CornerRadius="15" Grid.Row="1">
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <GroupBox Grid.Row="0" Header="国家电网电价表" Margin="10" Style="{x:Null}" Foreground="White" BorderBrush="#4CFFFFFF">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
-                    <DataGrid CanUserAddRows="False" ItemsSource="{Binding StateGridArray}" 
-                          AutoGenerateColumns="False" HeadersVisibility="Column" 
-                          VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                          SelectedItem="{Binding SelectedStateGrid}" SelectionMode="Single">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding ID}" IsReadOnly="True" Header="序号"></DataGridTextColumn>
-                            <DataGridComboBoxColumn Header="时段" Width="100" 
-                                                ItemsSource="{Binding Source={StaticResource ElectrovalenceEnumKey}}" 
-                                                SelectedItemBinding="{Binding Electrovalence}"></DataGridComboBoxColumn>
-                            <DataGridTextColumn Binding="{Binding Price}" Header="电价/元" Width="120"></DataGridTextColumn>
-                            <DataGridTemplateColumn Header="开始时间/24小时制">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <trl:DateInput DateText="{Binding StartTime, Mode=TwoWay}"></trl:DateInput>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="截至时间/24小时制">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <trl:DateInput DateText="{Binding EndTime, Mode=TwoWay}"></trl:DateInput>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Margin="40 10" Content="新增" Command="{Binding BatteryStrategyAddRowCommand}"></Button>
+                <Button Grid.Column="1" Margin="40 10" Content="删除" Command="{Binding BatteryStrategyRemoveRowCommand}"></Button>
 
-                    <Grid Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Button Width="70" Margin="10" Content="新增" Command="{Binding StateGridAddRowCommand}"></Button>
-                        <Button Width="70" Margin="10" Content="删除" Grid.Row="1" Command="{Binding StateGridRemoveRowCommand}"></Button>
-                        <Button Width="70" Margin="10" Content="执行" Grid.Row="2" Command="{Binding StateGridExecuteStrategyCommand}"></Button>
-                    </Grid>
-                </Grid>
-            </GroupBox>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="生效时间" VerticalAlignment="Center" Foreground="White" FontSize="14"/>
+                    <DatePicker Name="Test3" VerticalContentAlignment="Center" Text="{Binding EndTime1, Mode=TwoWay}" Width="60" Foreground="Black" Background="White" SelectedDateFormat="Short"></DatePicker>
+                    <trl:DateInput VerticalAlignment="Center" Width="80"></trl:DateInput>
+                </StackPanel>
+                
+                <Button Grid.Column="3" Margin="40 10" Content="执行" Command="{Binding BatteryStrategyExecuteStrategyCommand}"></Button>
+            </Grid>
             <GroupBox Grid.Row="1" Header="充放电时间表" Margin="10" Style="{x:Null}" Foreground="White" BorderBrush="#4CFFFFFF">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
-                    <DataGrid CanUserAddRows="False" ItemsSource="{Binding BatteryStrategyArray}" 
+                <DataGrid CanUserAddRows="False" ItemsSource="{Binding BatteryStrategyArray}" 
                           AutoGenerateColumns="False" HeadersVisibility="Column" 
                           VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                           SelectedItem="{Binding SelectedBatteryStrategy}" SelectionMode="Single">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding ID}" IsReadOnly="True" Header="序号"></DataGridTextColumn>
-                            <DataGridComboBoxColumn Header="操作" Width="100" 
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding ID}" IsReadOnly="True" Header="序号"></DataGridTextColumn>
+                        <DataGridComboBoxColumn Header="操作" Width="100" 
                                                 ItemsSource="{Binding Source={StaticResource BatteryStrategyEnumKey}}" 
                                                 SelectedItemBinding="{Binding BatteryStrategy}"></DataGridComboBoxColumn>
-                            <DataGridTextColumn Binding="{Binding SetValue}" Header="设定值"></DataGridTextColumn>
-                            <DataGridTemplateColumn Header="开始时间/24小时制">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <trl:DateInput DateText="{Binding StartTime, Mode=TwoWay}"></trl:DateInput>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="截至时间/24小时制">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <trl:DateInput DateText="{Binding EndTime, Mode=TwoWay}"></trl:DateInput>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-
-                    <Grid Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Button Width="70" Margin="10" Content="新增" Command="{Binding BatteryStrategyAddRowCommand}"></Button>
-                        <Button Width="70" Margin="10" Content="删除" Grid.Row="1" Command="{Binding BatteryStrategyRemoveRowCommand}"></Button>
-                        <Button Width="70" Margin="10" Content="执行" Grid.Row="2" Command="{Binding BatteryStrategyExecuteStrategyCommand}"></Button>
-                    </Grid>
-                </Grid>
+                        <DataGridTextColumn Binding="{Binding SetValue}" Header="设定值"></DataGridTextColumn>
+                        <DataGridTemplateColumn Header="开始时间/24小时制">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <trl:DateInput DateText="{Binding StartTime, Mode=TwoWay}"></trl:DateInput>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="截至时间/24小时制">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <trl:DateInput DateText="{Binding EndTime, Mode=TwoWay}"></trl:DateInput>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
             </GroupBox>
         </Grid>
     </Border>
