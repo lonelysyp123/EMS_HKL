@@ -16,6 +16,35 @@ namespace EMS.ViewModel
 {
     public class PCSMainViewModel:ObservableObject
     {
+        private string _iP;
+        public string IP
+        {
+            get => _iP;
+            set
+            {
+                SetProperty(ref _iP, value);
+            }
+        }
+
+        private SolidColorBrush _mainWindowPCSConnectColor;
+        public SolidColorBrush MainWindowPCSConnectColor
+        {
+            get => _mainWindowPCSConnectColor;
+            set
+            {
+                SetProperty(ref _mainWindowPCSConnectColor, value);
+            }
+        }
+
+        private string _mainWindowPCSConnectState;
+        public string MainWindowPCSConnectState
+        {
+            get => _mainWindowPCSConnectState;
+            set
+            {
+                SetProperty(ref _mainWindowPCSConnectState, value);
+            }
+        }
         public DCStatusViewModel dCStatusViewModel;
         public PCSFaultViewModel pCSFaultViewModel;
         public PCSMonitorViewModel pCSMonitorViewModel;
@@ -46,7 +75,8 @@ namespace EMS.ViewModel
 
             pCSMonitorViewModel.VisDCAlarm = Visibility.Hidden;
             pCSMonitorViewModel.VisPDSAlarm = Visibility.Hidden;
-
+            MainWindowPCSConnectState = "未连接";
+           MainWindowPCSConnectColor = new SolidColorBrush(Colors.Red);
         }
 
 
@@ -63,18 +93,22 @@ namespace EMS.ViewModel
                     PCSConView view = new PCSConView();
                     if (view.ShowDialog() == true)
                     {
-                        string IP = view.PCSIPText.AddressText;
+                         IP = view.PCSIPText.AddressText;
                         int port = Convert.ToInt32(view.PCSTCPPort.Text);
                         modbusClient = new ModbusClient(IP, port);
                         modbusClient.Connect();
-
+                        MainWindowPCSConnectState = "已连接";
+                        MainWindowPCSConnectColor = new SolidColorBrush(Colors.Green);
                         pCSParSettingViewModel.IsConnected = true;
                         pCSParSettingViewModel.modbusClient = modbusClient;
+
                     }
                 }
             }
             catch (Exception)
             {
+                MainWindowPCSConnectState = "未连接";
+                MainWindowPCSConnectColor = new SolidColorBrush(Colors.Red);
                 MessageBox.Show("请输入正确的IP地址。");
             }
         }
