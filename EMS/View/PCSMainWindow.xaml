@@ -382,7 +382,7 @@
                                 <TextBlock Text="V"  VerticalAlignment="Center" Grid.Column="11"/>
 
                                 <Button Content="读取信息"  Style="{StaticResource LineButton}"  Background="#3a617e" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,5,0,5" Command="{Binding ReadBUSVolInfoCommand}" Grid.Column="12"></Button>
-                                <Button Content="同步信息"  Style="{StaticResource LineButton}"  Background="#3a617e" HorizontalAlignment="Center" Margin="40,5,0,5" Command="{Binding SyncBUSVolInfoCommand}" Grid.Column="13"></Button>
+                                <Button Content="同步信息"  Style="{StaticResource LineButton}"  Background="#3a617e" HorizontalAlignment="Center" Margin="40,5,0,5" Command="{Binding SyncBUSVolInfoCommand}" Grid.Column="13" VerticalAlignment="Center"></Button>
                             </Grid>
                         </Grid>
 
@@ -509,7 +509,7 @@
                                     <ComboBoxItem Content="设置功率调节"/>
                                 </ComboBox>
 
-                                <Button Content="模式设置"   Style="{StaticResource LineButton}" Margin="10 0 0 20" Background="#3a617e" HorizontalAlignment="Center"   Command="{Binding ModeSetCommand}" Grid.Column="2"/>
+                                <Button Content="模式设置"   Style="{StaticResource LineButton}" Margin="10 0 0 20" Background="#3a617e" HorizontalAlignment="Center"   Command="{Binding ModeSetCommand}" Grid.Column="2" VerticalAlignment="Center"/>
 
 
                                 <TextBlock Text="直流电流："  VerticalAlignment="Center" Margin="10,0,0,20"  Visibility="{Binding VisDCCur}" Grid.Column="3"/>
@@ -521,7 +521,7 @@
                                 <TextBox  Text="{Binding DCPowerSet}" Style="{StaticResource UnderlineTextBoxStyle}" Visibility="{Binding VisDCPower}" Grid.Column="4" Margin="0 0 0 40"/>
                                 <TextBlock Text="kW" VerticalAlignment="Center"  Visibility="{Binding VisDCPower}"  Grid.Column="5" Margin="0 0 0 20"/>
 
-                                <Button Content="充放电"   Style="{StaticResource LineButton}"   Margin="10,0,0,20" Background="#3a617e" HorizontalAlignment="Center"  Command="{Binding ManCharCommand}" Visibility="{Binding VisDCChar}" Grid.Column="6"></Button>
+                                <Button Content="充放电"   Style="{StaticResource LineButton}"   Margin="10,0,0,20" Background="#3a617e" HorizontalAlignment="Center"  Command="{Binding ManCharCommand}" Visibility="{Binding VisDCChar}" Grid.Column="6" VerticalAlignment="Center"></Button>
                             </Grid>
                         </Grid>
                     </Grid>

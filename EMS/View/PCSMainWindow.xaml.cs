@@ -1,7 +1,9 @@
-﻿using System;
+﻿using EMS.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,9 +21,31 @@ namespace EMS.View
     /// </summary>
     public partial class PCSMainWindow : Window
     {
+        PCSMainViewModel viewModel;
         public PCSMainWindow()
         {
             InitializeComponent();
+
+            viewModel = new PCSMainViewModel();
+            this.DataContext = viewModel;
+
+            PCSMonitorView.DataContext = viewModel.pCSMonitorViewModel;
+            DCStatusView.DataContext = viewModel.dCStatusViewModel;
+            PCSSettingView.DataContext = viewModel.pCSParSettingViewModel;
+            FaultView.DataContext = viewModel.pCSFaultViewModel;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            viewModel.isRead = false;
+
+            if (viewModel.thread != null)
+            {
+                if (viewModel.thread.ThreadState == ThreadState.Stopped)
+                {
+                    viewModel.thread = null;
+                }
+            }
         }
     }
 }

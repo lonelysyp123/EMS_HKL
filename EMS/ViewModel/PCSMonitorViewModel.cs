@@ -693,7 +693,6 @@ namespace EMS.ViewModel
                 }
                 flag = flag << 1;
             }
-
             //values.TryDequeue()
         }
 
