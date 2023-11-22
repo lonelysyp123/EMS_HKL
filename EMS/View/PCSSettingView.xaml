@@ -61,7 +61,7 @@
                           SelectedItem="{Binding SelectedBatteryStrategy}" SelectionMode="Single">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding ID}" IsReadOnly="True" Header="序号"></DataGridTextColumn>
-                        <DataGridComboBoxColumn Header="操作" Width="100" 
+                        <DataGridComboBoxColumn Header="模式" Width="100" 
                                                 ItemsSource="{Binding Source={StaticResource BatteryStrategyEnumKey}}" 
                                                 SelectedItemBinding="{Binding BatteryStrategy}"></DataGridComboBoxColumn>
                         <DataGridTextColumn Binding="{Binding SetValue}" Header="设定值"></DataGridTextColumn>
@@ -69,13 +69,6 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <trl:DateInput DateText="{Binding StartTime, Mode=TwoWay}"></trl:DateInput>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="截至时间/24小时制">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <trl:DateInput DateText="{Binding EndTime, Mode=TwoWay}"></trl:DateInput>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
