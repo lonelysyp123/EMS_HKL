@@ -5,11 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EMS.View"
         mc:Ignorable="d"
-        Title="PCSMainWindow" Height="1080" Width="1920" WindowState="Maximized" Closing="Window_Closing" Background="Transparent">
+        Title="PCSMainWindow" Height="1080" Width="1920" WindowState="Maximized" Closing="Window_Closing"  >
+    <Window.Background>
+        <ImageBrush ImageSource="pack://application:,,,/EMS;component/Resource/Image/MainBackground.png"/>
+    </Window.Background>
     <Window.Resources>
         <Style  TargetType="TextBlock">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontStretch" Value="Normal"/>
+        </Style>
+        <Style TargetType="TabItem">
+            <Setter Property="Background" Value="white"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="white"/>
+            
         </Style>
     </Window.Resources>
     <Grid >
@@ -23,7 +36,7 @@
             <Button Content=" 开始采集" Command="{Binding StartDaqCommand}"/>
         </StackPanel>
 
-        <TabControl Grid.Row="1" FontSize="25">
+        <TabControl Grid.Row="1" FontSize="25" >
             <TabItem Header="主界面" Name="PCSMonitorView" >
                 <Grid>
                     
