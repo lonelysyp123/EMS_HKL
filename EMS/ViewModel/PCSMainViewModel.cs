@@ -45,6 +45,7 @@ namespace EMS.ViewModel
                 SetProperty(ref _mainWindowPCSConnectState, value);
             }
         }
+
         public DCStatusViewModel dCStatusViewModel;
         public PCSFaultViewModel pCSFaultViewModel;
         public PCSMonitorViewModel pCSMonitorViewModel;
@@ -75,8 +76,9 @@ namespace EMS.ViewModel
 
             pCSMonitorViewModel.VisDCAlarm = Visibility.Hidden;
             pCSMonitorViewModel.VisPDSAlarm = Visibility.Hidden;
+
             MainWindowPCSConnectState = "未连接";
-           MainWindowPCSConnectColor = new SolidColorBrush(Colors.Red);
+            MainWindowPCSConnectColor = new SolidColorBrush(Colors.Red);
         }
 
 
@@ -115,11 +117,19 @@ namespace EMS.ViewModel
 
         public void StartDaq()
         {
-            thread = new Thread(ReadINFO);
-            thread.IsBackground = true;
+            if (pCSParSettingViewModel.IsConnected==false)
+            {
+                MessageBox.Show("请连接");
+            }
+            else
+            {   
+                thread = new Thread(ReadINFO);
+                thread.IsBackground = true;
 
-            isRead = true;
-            thread.Start();
+                isRead = true;
+                thread.Start();
+            }
+            
         }
 
         public void ReadINFO()
@@ -199,7 +209,6 @@ namespace EMS.ViewModel
                         dCStatusViewModel.DaqDCModuleStatus();
                         pCSMonitorViewModel.GetActiveDCState();
                         pCSMonitorViewModel.GetActivePDSState();
-                        //DaqDCModuleStatus(DCStatusModel);
                     });
                     Thread.Sleep(DaqTimeSpan * 1000);
                 }

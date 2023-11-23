@@ -17,13 +17,9 @@
         <Style TargetType="TabItem">
             <Setter Property="Background" Value="white"/>
             <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-        </Style>
-        <Style TargetType="TabControl">
-            <Setter Property="Background" Value="white"/>
             
         </Style>
+        
     </Window.Resources>
     <Grid >
         <Grid.RowDefinitions>

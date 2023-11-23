@@ -393,8 +393,8 @@ namespace EMS.ViewModel
         //public RelayCommand SyncTimeInfoCommand { get; set; }
         //public RelayCommand SyncCMTimeOutCommand { get; set; }
         public RelayCommand ReadBUSVolInfoCommand { get; set; }
-        public RelayCommand ReadCMTimeOutCommand { get; set; }
-        public RelayCommand ReadTimeInfoCommand { get; set; }
+        //public RelayCommand ReadCMTimeOutCommand { get; set; }
+        //public RelayCommand ReadTimeInfoCommand { get; set; }
         public RelayCommand SyncDCBranchInfoCommand { get; set; }
         public RelayCommand ReadDCBranchInfoCommand { get; set; }
         public RelayCommand ModeSetCommand { get; set; }
@@ -408,8 +408,8 @@ namespace EMS.ViewModel
             //SyncTimeInfoCommand = new RelayCommand(SyncTimeInfo);
             //SyncCMTimeOutCommand = new RelayCommand(SyncCMTimeOut);
             ReadBUSVolInfoCommand = new RelayCommand(ReadBUSVolInfo);
-            ReadCMTimeOutCommand = new RelayCommand(ReadCMTimeOut);
-            ReadTimeInfoCommand = new RelayCommand(ReadTimeInfo);
+            //ReadCMTimeOutCommand = new RelayCommand(ReadCMTimeOut);
+            //ReadTimeInfoCommand = new RelayCommand(ReadTimeInfo);
             SyncDCBranchInfoCommand = new RelayCommand(SyncDCBranchInfo);
             ReadDCBranchInfoCommand = new RelayCommand(ReadDCBranchInfo);
             ModeSetCommand = new RelayCommand(ModeSet);
@@ -501,106 +501,40 @@ namespace EMS.ViewModel
             }
         }
 
-        //private void SyncTimeInfo()
-        //{
-        //    if (IsConnected)
-        //    {
-        //        if (Year < 2000 || Year > 2099)
-        //        {
-        //            MessageBox.Show("年：请输入2000-2099的整数");
-        //            return;
-        //        }
-
-        //        if (Month < 1 || Month > 12)
-        //        {
-        //            MessageBox.Show("月：请输入1-12的整数");
-        //            return;
-        //        }
-
-        //        if (Day < 1 || Day > 31)
-        //        {
-        //            MessageBox.Show("日：请输入1-31的整数");
-        //            return;
-        //        }
-
-        //        if (Hour < 0 || Hour > 23)
-        //        {
-        //            MessageBox.Show("小时：请输入0-23的整数");
-        //            return;
-        //        }
-
-        //        if (Minute < 0 || Minute > 59)
-        //        {
-        //            MessageBox.Show("分钟：请输入0-59的整数");
-        //            return;
-        //        }
-
-        //        if (Second < 0 || Second > 59)
-        //        {
-        //            MessageBox.Show("秒：请输入0-59的整数");
-        //            return;
-        //        }
-        //        modbusClient.WriteFunc(1, 56000, (ushort)(Year));
-        //        modbusClient.WriteFunc(1, 56001, (ushort)(Month));
-        //        modbusClient.WriteFunc(1, 56002, (ushort)(Day));
-        //        modbusClient.WriteFunc(1, 56003, (ushort)(Hour));
-        //        modbusClient.WriteFunc(1, 56004, (ushort)(Minute));
-        //        modbusClient.WriteFunc(1, 56005, (ushort)(Second));
-        //    }
-        //    else
-        //    {
-        //        MessageBox.Show("请连接");
-        //    }
-        //}
+        
 
 
-        private void ReadTimeInfo()
+        
+
+        private void SyncCMTimeOut()
         {
             if (IsConnected)
             {
-                byte[] data = modbusClient.ReadFunc(56000, 6);
-                Year = BitConverter.ToUInt16(data, 0);
-                Month = BitConverter.ToUInt16(data, 2);
-                Day = BitConverter.ToUInt16(data, 4);
-                Hour = BitConverter.ToUInt16(data, 6);
-                Minute = BitConverter.ToUInt16(data, 8);
-                Second = BitConverter.ToUInt16(data, 10);
+                if (BMSCMInterruptionTimeOut < 1 || BMSCMInterruptionTimeOut > 600)
+                {
+                    MessageBox.Show("BMS通信超时设置：请输入1-600的整数");
+                    return;
+                }
+                if (Remote485CMInterruptonTimeOut < 1 || Remote485CMInterruptonTimeOut > 600)
+                {
+                    MessageBox.Show("远程485通信超时设置：请输入1-600的整数");
+                    return;
+                }
+                if (RemoteTCPCMInterruptionTimeOut < 1 || RemoteTCPCMInterruptionTimeOut > 600)
+                {
+                    MessageBox.Show("远程TCP通信超时设置：请输入1-600的整数");
+                    return;
+                }
+                modbusClient.WriteFunc(1, 56006, (ushort)(BMSCMInterruptionTimeOut));
+                modbusClient.WriteFunc(1, 56007, (ushort)(Remote485CMInterruptonTimeOut));
+                modbusClient.WriteFunc(1, 56008, (ushort)(RemoteTCPCMInterruptionTimeOut));
             }
             else
             {
                 MessageBox.Show("请连接");
             }
+
         }
-
-        //private void SyncCMTimeOut()
-        //{
-        //    if (IsConnected)
-        //    {
-        //        if (BMSCMInterruptionTimeOut < 1 || BMSCMInterruptionTimeOut > 600)
-        //        {
-        //            MessageBox.Show("BMS通信超时设置：请输入1-600的整数");
-        //            return;
-        //        }
-        //        if (Remote485CMInterruptonTimeOut < 1 || Remote485CMInterruptonTimeOut > 600)
-        //        {
-        //            MessageBox.Show("远程485通信超时设置：请输入1-600的整数");
-        //            return;
-        //        }
-        //        if (RemoteTCPCMInterruptionTimeOut < 1 || RemoteTCPCMInterruptionTimeOut > 600)
-        //        {
-        //            MessageBox.Show("远程TCP通信超时设置：请输入1-600的整数");
-        //            return;
-        //        }
-        //        modbusClient.WriteFunc(1, 56006, (ushort)(BMSCMInterruptionTimeOut));
-        //        modbusClient.WriteFunc(1, 56007, (ushort)(Remote485CMInterruptonTimeOut));
-        //        modbusClient.WriteFunc(1, 56008, (ushort)(RemoteTCPCMInterruptionTimeOut));
-        //    }
-        //    else
-        //    {
-        //        MessageBox.Show("请连接");
-        //    }
-
-        //}
 
 
         private void ReadCMTimeOut()
@@ -623,27 +557,7 @@ namespace EMS.ViewModel
         {
             if (IsConnected)
             {
-                if (DCCurrentSet > 1500 || DCCurrentSet < -1500)
-                {
-                    MessageBox.Show("直流电流设置：请输入-1500到1500的数");
-                    return;
-                }
-                else if (!System.Text.RegularExpressions.Regex.IsMatch(DCCurrentSet.ToString(), @"^\d+\.\d$"))
-                {
-                    MessageBox.Show("直流电流设置：请输入一位小数");
-                    return;
-                }
-
-                if (DCPowerSet > 1000 || DCPowerSet < -1000)
-                {
-                    MessageBox.Show("直流功率设置：请输入-1000到1000的数");
-                    return;
-                }
-                else if (!System.Text.RegularExpressions.Regex.IsMatch(DCPowerSet.ToString(), @"^\d+\.\d$"))
-                {
-                    MessageBox.Show("直流功率设置：请输入一位小数");
-                    return;
-                }
+                
 
                 if (BTLLimitVol > 800 || BTLLimitVol < 30)
                 {
@@ -717,9 +631,7 @@ namespace EMS.ViewModel
                     return;
                 }
 
-                //switch (DCBranch)
-                //{
-                //    case 1:
+              
 
                 modbusClient.WriteFunc(1, 53653, (ushort)(BTLLimitVol * 10));
                 modbusClient.WriteFunc(1, 53655, (ushort)(DischargeSTVol * 10));
@@ -728,89 +640,7 @@ namespace EMS.ViewModel
                 modbusClient.WriteFunc(1, 53662, (ushort)(ChCutCurrent * 10));
                 modbusClient.WriteFunc(1, 53663, (ushort)(MaxChCurrent * 10));
                 modbusClient.WriteFunc(1, 53664, (ushort)(MaxDisChCurrent * 10));
-                //    break;
-                //case 2:
-                //    modbusClient.WriteFunc(1, 53681, (ushort)(DCCurrentSet * 10));
-                //    modbusClient.WriteFunc(1, 53682, (ushort)(DCPowerSet * 10));
-                //    modbusClient.WriteFunc(1, 53683, (ushort)(BTLLimitVol * 10));
-                //    modbusClient.WriteFunc(1, 53685, (ushort)(DischargeSTVol * 10));
-                //    modbusClient.WriteFunc(1, 53688, (ushort)MultiBranchCurRegPar);
-                //    modbusClient.WriteFunc(1, 53690, (ushort)(BatAveChVol * 10));
-                //    modbusClient.WriteFunc(1, 53692, (ushort)(ChCutCurrent * 10));
-                //    modbusClient.WriteFunc(1, 53693, (ushort)(MaxChCurrent * 10));
-                //    modbusClient.WriteFunc(1, 53694, (ushort)(MaxDisChCurrent * 10));
-                //    break;
-                //case 3:
-                //    modbusClient.WriteFunc(1, 53711, (ushort)(DCCurrentSet * 10));
-                //    modbusClient.WriteFunc(1, 53712, (ushort)(DCPowerSet * 10));
-                //    modbusClient.WriteFunc(1, 53713, (ushort)(BTLLimitVol * 10));
-                //    modbusClient.WriteFunc(1, 53715, (ushort)(DischargeSTVol * 10));
-                //    modbusClient.WriteFunc(1, 53718, (ushort)MultiBranchCurRegPar);
-                //    modbusClient.WriteFunc(1, 53720, (ushort)(BatAveChVol * 10));
-                //    modbusClient.WriteFunc(1, 53722, (ushort)(ChCutCurrent * 10));
-                //    modbusClient.WriteFunc(1, 53723, (ushort)(MaxChCurrent * 10));
-                //    modbusClient.WriteFunc(1, 53724, (ushort)(MaxDisChCurrent * 10));
-                //    break;
-                //case 4:
-                //    modbusClient.WriteFunc(1, 53741, (ushort)(DCCurrentSet * 10));
-                //    modbusClient.WriteFunc(1, 53742, (ushort)(DCPowerSet * 10));
-                //    modbusClient.WriteFunc(1, 53743, (ushort)(BTLLimitVol * 10));
-                //    modbusClient.WriteFunc(1, 53745, (ushort)(DischargeSTVol * 10));
-                //    modbusClient.WriteFunc(1, 53748, (ushort)MultiBranchCurRegPar);
-                //    modbusClient.WriteFunc(1, 53750, (ushort)(BatAveChVol * 10));
-                //    modbusClient.WriteFunc(1, 53752, (ushort)(ChCutCurrent * 10));
-                //    modbusClient.WriteFunc(1, 53753, (ushort)(MaxChCurrent * 10));
-                //    modbusClient.WriteFunc(1, 53754, (ushort)(MaxDisChCurrent * 10));
-                //    break;
-                //case 5:
-                //    modbusClient.WriteFunc(1, 53771, (ushort)(DCCurrentSet * 10));
-                //    modbusClient.WriteFunc(1, 53772, (ushort)(DCPowerSet * 10));
-                //    modbusClient.WriteFunc(1, 53773, (ushort)(BTLLimitVol * 10));
-                //    modbusClient.WriteFunc(1, 53775, (ushort)(DischargeSTVol * 10));
-                //    modbusClient.WriteFunc(1, 53778, (ushort)MultiBranchCurRegPar);
-                //    modbusClient.WriteFunc(1, 53780, (ushort)(BatAveChVol * 10));
-                //    modbusClient.WriteFunc(1, 53782, (ushort)(ChCutCurrent * 10));
-                //    modbusClient.WriteFunc(1, 53783, (ushort)(MaxChCurrent * 10));
-                //    modbusClient.WriteFunc(1, 53784, (ushort)(MaxDisChCurrent * 10));
-                //    break;
-                //case 6:
-                //    modbusClient.WriteFunc(1, 53801, (ushort)(DCCurrentSet * 10));
-                //    modbusClient.WriteFunc(1, 53802, (ushort)(DCPowerSet * 10));
-                //    modbusClient.WriteFunc(1, 53803, (ushort)(BTLLimitVol * 10));
-                //    modbusClient.WriteFunc(1, 53805, (ushort)(DischargeSTVol * 10));
-                //    modbusClient.WriteFunc(1, 53808, (ushort)MultiBranchCurRegPar);
-                //    modbusClient.WriteFunc(1, 53810, (ushort)(BatAveChVol * 10));
-                //    modbusClient.WriteFunc(1, 53812, (ushort)(ChCutCurrent * 10));
-                //    modbusClient.WriteFunc(1, 53813, (ushort)(MaxChCurrent * 10));
-                //    modbusClient.WriteFunc(1, 53814, (ushort)(MaxDisChCurrent * 10));
-                //    break;
-                //case 7:
-                //    modbusClient.WriteFunc(1, 53831, (ushort)(DCCurrentSet * 10));
-                //    modbusClient.WriteFunc(1, 53832, (ushort)(DCPowerSet * 10));
-                //    modbusClient.WriteFunc(1, 53833, (ushort)(BTLLimitVol * 10));
-                //    modbusClient.WriteFunc(1, 53835, (ushort)(DischargeSTVol * 10));
-                //    modbusClient.WriteFunc(1, 53838, (ushort)MultiBranchCurRegPar);
-                //    modbusClient.WriteFunc(1, 53840, (ushort)(BatAveChVol * 10));
-                //    modbusClient.WriteFunc(1, 53842, (ushort)(ChCutCurrent * 10));
-                //    modbusClient.WriteFunc(1, 53843, (ushort)(MaxChCurrent * 10));
-                //    modbusClient.WriteFunc(1, 53844, (ushort)(MaxDisChCurrent * 10));
-                //    break;
-                //case 8:
-                //    modbusClient.WriteFunc(1, 53861, (ushort)(DCCurrentSet * 10));
-                //    modbusClient.WriteFunc(1, 53862, (ushort)(DCPowerSet * 10));
-                //    modbusClient.WriteFunc(1, 53863, (ushort)(BTLLimitVol * 10));
-                //    modbusClient.WriteFunc(1, 53865, (ushort)(DischargeSTVol * 10));
-                //    modbusClient.WriteFunc(1, 53868, (ushort)MultiBranchCurRegPar);
-                //    modbusClient.WriteFunc(1, 53870, (ushort)(BatAveChVol * 10));
-                //    modbusClient.WriteFunc(1, 53872, (ushort)(ChCutCurrent * 10));
-                //    modbusClient.WriteFunc(1, 53873, (ushort)(MaxChCurrent * 10));
-                //    modbusClient.WriteFunc(1, 53874, (ushort)(MaxDisChCurrent * 10));
-                //    break;
-                //default:
-                //    {
-                //        MessageBox.Show("请选择DC支路");
-                //    }
-                //    break;
+                
 
             }
             else
@@ -824,9 +654,7 @@ namespace EMS.ViewModel
         {
             if (IsConnected)
             {
-                //switch (DCBranch)
-                //{
-                //    case 1:
+                
                 byte[] data11 = modbusClient.ReadFunc(53651, 3);
                 DCCurrentSet = Math.Round(BitConverter.ToInt16(data11, 0) * 0.1, 2);
                 DCPowerSet = Math.Round(BitConverter.ToInt16(data11, 2) * 0.1, 2);
@@ -841,125 +669,7 @@ namespace EMS.ViewModel
                 ChCutCurrent = Math.Round(BitConverter.ToInt16(data15, 0) * 0.1, 2);
                 MaxChCurrent = Math.Round(BitConverter.ToInt16(data15, 2) * 0.1, 2);
                 MaxDisChCurrent = Math.Round(BitConverter.ToInt16(data15, 4) * 0.1, 2);
-                //            break;
-                //        case 2:
-                //            byte[] data21 = modbusClient.ReadFunc(53681, 3);
-                //            DCCurrentSet = Math.Round(BitConverter.ToInt16(data21, 0) * 0.1, 2);
-                //            DCPowerSet = Math.Round(BitConverter.ToInt16(data21, 2) * 0.1, 2);
-                //            BTLLimitVol = Math.Round(BitConverter.ToInt16(data21, 4) * 0.1, 2);
-                //            byte[] data22 = modbusClient.ReadFunc(53685, 1);
-                //            DischargeSTVol = Math.Round(BitConverter.ToInt16(data22, 0) * 0.1, 2);
-                //            byte[] data23 = modbusClient.ReadFunc(53688, 1);
-                //            MultiBranchCurRegPar = BitConverter.ToInt16(data23, 0);
-                //            byte[] data24 = modbusClient.ReadFunc(53690, 1);
-                //            BatAveChVol = Math.Round(BitConverter.ToInt16(data24, 0) * 0.1, 2);
-                //            byte[] data25 = modbusClient.ReadFunc(53692, 3);
-                //            ChCutCurrent = Math.Round(BitConverter.ToInt16(data25, 0) * 0.1, 2);
-                //            MaxChCurrent = Math.Round(BitConverter.ToInt16(data25, 2) * 0.1, 2);
-                //            MaxDisChCurrent = Math.Round(BitConverter.ToInt16(data25, 4) * 0.1, 2);
-                //            break;
-                //        case 3:
-                //            byte[] data31 = modbusClient.ReadFunc(53711, 3);
-                //            DCCurrentSet = Math.Round(BitConverter.ToInt16(data31, 0) * 0.1, 2);
-                //            DCPowerSet = Math.Round(BitConverter.ToInt16(data31, 2) * 0.1, 2);
-                //            BTLLimitVol = Math.Round(BitConverter.ToInt16(data31, 4) * 0.1, 2);
-                //            byte[] data32 = modbusClient.ReadFunc(53715, 1);
-                //            DischargeSTVol = Math.Round(BitConverter.ToInt16(data32, 0) * 0.1, 2);
-                //            byte[] data33 = modbusClient.ReadFunc(53718, 1);
-                //            MultiBranchCurRegPar = BitConverter.ToInt16(data33, 0);
-                //            byte[] data34 = modbusClient.ReadFunc(53720, 1);
-                //            BatAveChVol = Math.Round(BitConverter.ToInt16(data34, 0) * 0.1, 2);
-                //            byte[] data35 = modbusClient.ReadFunc(53722, 3);
-                //            ChCutCurrent = Math.Round(BitConverter.ToInt16(data35, 0) * 0.1, 2);
-                //            MaxChCurrent = Math.Round(BitConverter.ToInt16(data35, 2) * 0.1, 2);
-                //            MaxDisChCurrent = Math.Round(BitConverter.ToInt16(data35, 4) * 0.1, 2);
-                //            break;
-                //        case 4:
-                //            byte[] data41 = modbusClient.ReadFunc(53741, 3);
-                //            DCCurrentSet = Math.Round(BitConverter.ToInt16(data41, 0) * 0.1, 2);
-                //            DCPowerSet = Math.Round(BitConverter.ToInt16(data41, 2) * 0.1, 2);
-                //            BTLLimitVol = Math.Round(BitConverter.ToInt16(data41, 4) * 0.1, 2);
-                //            byte[] data42 = modbusClient.ReadFunc(53745, 1);
-                //            DischargeSTVol = Math.Round(BitConverter.ToInt16(data42, 0) * 0.1, 2);
-                //            byte[] data43 = modbusClient.ReadFunc(53748, 1);
-                //            MultiBranchCurRegPar = BitConverter.ToInt16(data43, 0);
-                //            byte[] data44 = modbusClient.ReadFunc(53750, 1);
-                //            BatAveChVol = Math.Round(BitConverter.ToInt16(data44, 0) * 0.1, 2);
-                //            byte[] data45 = modbusClient.ReadFunc(53752, 3);
-                //            ChCutCurrent = Math.Round(BitConverter.ToInt16(data45, 0) * 0.1, 2);
-                //            MaxChCurrent = Math.Round(BitConverter.ToInt16(data45, 2) * 0.1, 2);
-                //            MaxDisChCurrent = Math.Round(BitConverter.ToInt16(data45, 4) * 0.1, 2);
-                //            break;
-                //        case 5:
-                //            byte[] data51 = modbusClient.ReadFunc(53771, 3);
-                //            DCCurrentSet = Math.Round(BitConverter.ToInt16(data51, 0) * 0.1, 2);
-                //            DCPowerSet = Math.Round(BitConverter.ToInt16(data51, 2) * 0.1, 2);
-                //            BTLLimitVol = Math.Round(BitConverter.ToInt16(data51, 4) * 0.1, 2);
-                //            byte[] data52 = modbusClient.ReadFunc(53775, 1);
-                //            DischargeSTVol = Math.Round(BitConverter.ToInt16(data52, 0) * 0.1, 2);
-                //            byte[] data53 = modbusClient.ReadFunc(53778, 1);
-                //            MultiBranchCurRegPar = BitConverter.ToInt16(data53, 0);
-                //            byte[] data54 = modbusClient.ReadFunc(53780, 1);
-                //            BatAveChVol = Math.Round(BitConverter.ToInt16(data54, 0) * 0.1, 2);
-                //            byte[] data55 = modbusClient.ReadFunc(53782, 3);
-                //            ChCutCurrent = Math.Round(BitConverter.ToInt16(data55, 0) * 0.1, 2);
-                //            MaxChCurrent = Math.Round(BitConverter.ToInt16(data55, 2) * 0.1, 2);
-                //            MaxDisChCurrent = Math.Round(BitConverter.ToInt16(data55, 4) * 0.1, 2);
-                //            break;
-                //        case 6:
-                //            byte[] data61 = modbusClient.ReadFunc(53801, 3);
-                //            DCCurrentSet = Math.Round(BitConverter.ToInt16(data61, 0) * 0.1, 2);
-                //            DCPowerSet = Math.Round(BitConverter.ToInt16(data61, 2) * 0.1, 2);
-                //            BTLLimitVol = Math.Round(BitConverter.ToInt16(data61, 4) * 0.1, 2);
-                //            byte[] data62 = modbusClient.ReadFunc(53805, 1);
-                //            DischargeSTVol = Math.Round(BitConverter.ToInt16(data62, 0) * 0.1, 2);
-                //            byte[] data63 = modbusClient.ReadFunc(53808, 1);
-                //            MultiBranchCurRegPar = BitConverter.ToInt16(data63, 0);
-                //            byte[] data64 = modbusClient.ReadFunc(53810, 1);
-                //            BatAveChVol = Math.Round(BitConverter.ToInt16(data64, 0) * 0.1, 2);
-                //            byte[] data65 = modbusClient.ReadFunc(53812, 3);
-                //            ChCutCurrent = Math.Round(BitConverter.ToInt16(data65, 0) * 0.1, 2);
-                //            MaxChCurrent = Math.Round(BitConverter.ToInt16(data65, 2) * 0.1, 2);
-                //            MaxDisChCurrent = Math.Round(BitConverter.ToInt16(data65, 4) * 0.1, 2);
-                //            break;
-                //        case 7:
-                //            byte[] data71 = modbusClient.ReadFunc(53831, 3);
-                //            DCCurrentSet = Math.Round(BitConverter.ToInt16(data71, 0) * 0.1, 2);
-                //            DCPowerSet = Math.Round(BitConverter.ToInt16(data71, 2) * 0.1, 2);
-                //            BTLLimitVol = Math.Round(BitConverter.ToInt16(data71, 4) * 0.1, 2);
-                //            byte[] data72 = modbusClient.ReadFunc(53835, 1);
-                //            DischargeSTVol = Math.Round(BitConverter.ToInt16(data72, 0) * 0.1, 2);
-                //            byte[] data73 = modbusClient.ReadFunc(53838, 1);
-                //            MultiBranchCurRegPar = BitConverter.ToInt16(data73, 0);
-                //            byte[] data74 = modbusClient.ReadFunc(53840, 1);
-                //            BatAveChVol = Math.Round(BitConverter.ToInt16(data74, 0) * 0.1, 2);
-                //            byte[] data75 = modbusClient.ReadFunc(53842, 3);
-                //            ChCutCurrent = Math.Round(BitConverter.ToInt16(data75, 0) * 0.1, 2);
-                //            MaxChCurrent = Math.Round(BitConverter.ToInt16(data75, 2) * 0.1, 2);
-                //            MaxDisChCurrent = Math.Round(BitConverter.ToInt16(data75, 4) * 0.1, 2);
-                //            break;
-                //        case 8:
-                //            byte[] data81 = modbusClient.ReadFunc(53861, 3);
-                //            DCCurrentSet = Math.Round(BitConverter.ToInt16(data81, 0) * 0.1, 2);
-                //            DCPowerSet = Math.Round(BitConverter.ToInt16(data81, 2) * 0.1, 2);
-                //            BTLLimitVol = Math.Round(BitConverter.ToInt16(data81, 4) * 0.1, 2);
-                //            byte[] data82 = modbusClient.ReadFunc(53865, 1);
-                //            DischargeSTVol = Math.Round(BitConverter.ToInt16(data82, 0) * 0.1, 2);
-                //            byte[] data83 = modbusClient.ReadFunc(53868, 1);
-                //            MultiBranchCurRegPar = BitConverter.ToInt16(data83, 0);
-                //            byte[] data84 = modbusClient.ReadFunc(53870, 1);
-                //            BatAveChVol = Math.Round(BitConverter.ToInt16(data84, 0) * 0.1, 2);
-                //            byte[] data85 = modbusClient.ReadFunc(53872, 3);
-                //            ChCutCurrent = Math.Round(BitConverter.ToInt16(data85, 0) * 0.1, 2);
-                //            MaxChCurrent = Math.Round(BitConverter.ToInt16(data85, 2) * 0.1, 2);
-                //            MaxDisChCurrent = Math.Round(BitConverter.ToInt16(data85, 4) * 0.1, 2);
-                //            break;
-                //        default:
-                //            {
-                //                MessageBox.Show("请选择DC支路");
-                //            }
-                //            break;
-                //    }
+                
             }
             else
             {
@@ -971,9 +681,7 @@ namespace EMS.ViewModel
         {
             if (IsConnected)
             {
-                //switch (DCBranch)
-                //{
-                //    case 1:
+                
                 if (ModeSet1 == "设置电流调节")
                 {
                     modbusClient.WriteFunc(1, 53650, 0);
@@ -992,86 +700,6 @@ namespace EMS.ViewModel
                 {
                     MessageBox.Show("请选择模式");
                 }
-
-
-
-                //        break;
-                //    case 2:
-                //        if (ModeSet1 == "设置电流调节")
-                //        {
-                //            modbusClient.WriteFunc(1, 53680, 0);
-                //        }
-                //        else
-                //        {
-                //            modbusClient.WriteFunc(1, 53680, 1);
-                //        }
-                //        break;
-                //    case 3:
-                //        if (ModeSet1 == "设置电流调节")
-                //        {
-                //            modbusClient.WriteFunc(1, 53710, 0);
-                //        }
-                //        else
-                //        {
-                //            modbusClient.WriteFunc(1, 53710, 1);
-                //        }
-                //        break;
-                //    case 4:
-                //        if (ModeSet1 == "设置电流调节")
-                //        {
-                //            modbusClient.WriteFunc(1, 53740, 0);
-                //        }
-                //        else
-                //        {
-                //            modbusClient.WriteFunc(1, 53740, 1);
-                //        }
-                //        break;
-                //    case 5:
-                //        if (ModeSet1 == "设置电流调节")
-                //        {
-                //            modbusClient.WriteFunc(1, 53770, 0);
-                //        }
-                //        else
-                //        {
-                //            modbusClient.WriteFunc(1, 53770, 1);
-                //        }
-                //        break;
-                //    case 6:
-                //        if (ModeSet1 == "设置电流调节")
-                //        {
-                //            modbusClient.WriteFunc(1, 53800, 0);
-                //        }
-                //        else
-                //        {
-                //            modbusClient.WriteFunc(1, 53800, 1);
-                //        }
-                //        break;
-                //    case 7:
-                //        if (ModeSet1 == "设置电流调节")
-                //        {
-                //            modbusClient.WriteFunc(1, 53830, 0);
-                //        }
-                //        else
-                //        {
-                //            modbusClient.WriteFunc(1, 53830, 1);
-                //        }
-                //        break;
-                //    case 8:
-                //        if (ModeSet1 == "设置电流调节")
-                //        {
-                //            modbusClient.WriteFunc(1, 53860, 0);
-                //        }
-                //        else
-                //        {
-                //            modbusClient.WriteFunc(1, 53860, 1);
-                //        }
-                //        break;
-                //    default:
-                //        {
-                //            MessageBox.Show("请选择DC支路");
-                //        }
-                //        break;
-                //}
             }
             else
             {
@@ -1090,7 +718,7 @@ namespace EMS.ViewModel
                         MessageBox.Show("直流电流设置：请输入-1500到1500的数");
                         return;
                     }
-                    else if (!System.Text.RegularExpressions.Regex.IsMatch(DCCurrentSet.ToString(), @"^\d+\.\d$"))
+                    else if (System.Text.RegularExpressions.Regex.IsMatch(DCCurrentSet.ToString(), @"^\d+\.\d$") == false && System.Text.RegularExpressions.Regex.IsMatch(DCCurrentSet.ToString(), @"^\-\d+\.\d$") == false)
                     {
                         MessageBox.Show("直流电流设置：请输入一位小数");
                         return;
@@ -1104,7 +732,7 @@ namespace EMS.ViewModel
                         MessageBox.Show("直流功率设置：请输入-1000到1000的数");
                         return;
                     }
-                    else if (!System.Text.RegularExpressions.Regex.IsMatch(DCPowerSet.ToString(), @"^\d+\.\d$"))
+                    else if (System.Text.RegularExpressions.Regex.IsMatch(DCPowerSet.ToString(), @"^\d+\.\d$") == false & System.Text.RegularExpressions.Regex.IsMatch(DCPowerSet.ToString(), @"^\-\d+\.\d$") == false)
                     {
                         MessageBox.Show("直流功率设置：请输入一位小数");
                         return;
