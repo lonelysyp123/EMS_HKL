@@ -27,7 +27,7 @@ namespace EMS
         DevControlView devControlView;
         ParameterSettingView parameterSettingView;
         PCSSettingView pCSSettingView;
-       PCSMainViewModel pCSMainViewModel;
+        PCSMainViewModel pCSMainViewModel;
 
         public MainWindow()
         {
@@ -36,12 +36,14 @@ namespace EMS
 
             viewmodel = new MainViewModel();
             pCSMainViewModel= new PCSMainViewModel();
+
             this.DataContext = viewmodel;
             DevListView.DataContext = viewmodel.DisplayContent;
             DaqDataRaBtn.IsChecked = true;
+
             PCS_ConncetState.DataContext = pCSMainViewModel;
-            PCS_ConnectColor.DataContext= pCSMainViewModel;
-            PCS_IP.DataContext= pCSMainViewModel;
+            PCS_ConnectColor.DataContext = pCSMainViewModel;
+            PCS_IP.DataContext = pCSMainViewModel;
             SelectedPage("DaqDataRaBtn");
             //pcsviewmodel = new PCSSettingViewModel();
             //PCSView.DataContext = pcsviewmodel;
@@ -190,7 +192,7 @@ namespace EMS
         private void OpenPCSWindow_Click(object sender, RoutedEventArgs e)
         {
             PCSMainWindow mainwindow = new PCSMainWindow();
-            mainwindow.ShowDialog();
+            mainwindow.Show();
         }
 
        

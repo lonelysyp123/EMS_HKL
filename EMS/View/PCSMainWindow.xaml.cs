@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using EMS.View;
 
 namespace EMS.View
 {
@@ -28,11 +29,10 @@ namespace EMS.View
 
             viewModel = new PCSMainViewModel();
             this.DataContext = viewModel;
-
+            
             PCSMonitorView.DataContext = viewModel.pCSMonitorViewModel;
             DCStatusView.DataContext = viewModel.dCStatusViewModel;
             PCSSettingView.DataContext = viewModel.pCSParSettingViewModel;
-            FaultView.DataContext = viewModel.pCSFaultViewModel;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

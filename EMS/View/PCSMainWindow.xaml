@@ -17,13 +17,12 @@
         <Style TargetType="TabItem">
             <Setter Property="Background" Value="white"/>
             <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-        </Style>
-        <Style TargetType="TabControl">
-            <Setter Property="Background" Value="white"/>
             
         </Style>
+        <Style TargetType="ComboBox">
+            
+        </Style>
+        
     </Window.Resources>
     <Grid >
         <Grid.RowDefinitions>
@@ -221,7 +220,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Margin="40 0 0 0">
-                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="控制状态：" />
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="PCS控制状态：" />
                         </StackPanel>
 
                         <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal" Margin="60 0 0 0">
@@ -243,7 +242,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal" Margin="40 0 0 0">
-                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="PDS状态：" />
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="PCS状态：" />
                         </StackPanel>
 
                         <StackPanel Grid.Row="6" Grid.Column="0" Orientation="Horizontal" Margin="60 0 0 20">
@@ -540,56 +539,8 @@
                     </Grid>
                 </Border>
             </TabItem>
-            <TabItem Header="故障日志" Name="FaultView">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="序号" FontSize="20"  Background="Black" TextAlignment="Center"/>
-                        <TextBlock Grid.Column="1" Text="故障" FontSize="20"  Background="Black" TextAlignment="Center"/>
-                        <TextBlock Grid.Column="2" Text="时间" FontSize="20"  Background="Black" TextAlignment="Center"/>
-                    </Grid>
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <ListView Grid.Column="0" HorizontalAlignment="Center">
-                            <ListViewItem>1</ListViewItem>
-                            <ListViewItem>2</ListViewItem>
-                            <ListViewItem>3</ListViewItem>
-                            <ListViewItem>4</ListViewItem>
-                            <ListViewItem>5</ListViewItem>
-                            <ListViewItem>6</ListViewItem>
-                            <ListViewItem>7</ListViewItem>
-                            <ListViewItem>8</ListViewItem>
-                            <ListViewItem>9</ListViewItem>
-                            <ListViewItem>10</ListViewItem>
-                        </ListView>
-                        <ListView Grid.Column="1" HorizontalAlignment="Center" Name="FaultShow" ItemsSource="{Binding FaultShow}">
-                            <ListViewItem>A ListView</ListViewItem>
-                            <ListViewItem>A ListView</ListViewItem>
-                            <ListViewItem>A ListView</ListViewItem>
-                            <ListViewItem>A ListView</ListViewItem>
-                        </ListView>
-                        <ListView Grid.Column="2" HorizontalAlignment="Center">
-                            <ListViewItem>A ListView</ListViewItem>
-                            <ListViewItem>A ListView</ListViewItem>
-                            <ListViewItem>A ListView</ListViewItem>
-                            <ListViewItem>A ListView</ListViewItem>
-                        </ListView>
-                    </Grid>
-
-                </Grid>
-            </TabItem>
+            
+            
         </TabControl>
     </Grid>
 </Window>
