@@ -368,280 +368,280 @@ namespace EMS.ViewModel
         public void DaqDCModuleStatus()
         {
 
-            int OnLineValue;
+            int onlinevalue;
             int RunValue;
             int AlarmValue;
             int FaultValue;
-            OnLineValue = ModuleOnLineFlag;
+            onlinevalue = ModuleOnLineFlag;
             RunValue = ModuleRunFlag;
             AlarmValue = ModuleAlarmFlag;
             FaultValue = ModuleFaultFlag;
 
             //DC模组1状态
-            if ((OnLineValue & 0x0001) != 0 && (RunValue & 0x0001) == 0 && (AlarmValue & 0x0001) == 0 && (FaultValue & 0x0001) == 0)
+            if ((onlinevalue & 0x0001) != 0 && (RunValue & 0x0001) == 0 && (AlarmValue & 0x0001) == 0 && (FaultValue & 0x0001) == 0)
             {
                 Module1Status1 = "在线";
                 Module1StatusColor1 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
             }
-            else if ((RunValue & 0x0001) != 0 && (AlarmValue & 0x0001) == 0 && (FaultValue & 0x0001) == 0 && (OnLineValue & 0x0001) == 0)
+            else if ((RunValue & 0x0001) != 0 && (AlarmValue & 0x0001) == 0 && (FaultValue & 0x0001) == 0 && (onlinevalue & 0x0001) == 0)
             {
                 Module1Status1 = "运行";
                 Module1StatusColor1 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
             }
-            else if ((AlarmValue & 0x0001) != 0 && (OnLineValue & 0x0001) == 0 && (RunValue & 0x0001) == 0 && (FaultValue & 0x0001) == 0)
+            else if ((AlarmValue & 0x0001) != 0 && (onlinevalue & 0x0001) == 0 && (RunValue & 0x0001) == 0 && (FaultValue & 0x0001) == 0)
             {
                 Module1Status1 = "告警";
                 Module1StatusColor1 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
             }
-            else if ((FaultValue & 0x0001) != 0 && (OnLineValue & 0x0001) == 0 && (RunValue & 0x0001) == 0 && (AlarmValue & 0x0001) == 0)
+            else if ((FaultValue & 0x0001) != 0 && (onlinevalue & 0x0001) == 0 && (RunValue & 0x0001) == 0 && (AlarmValue & 0x0001) == 0)
             {
                 Module1Status1 = "故障";
                 Module1StatusColor1 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
             }
-            else if ((OnLineValue & 0x0001) == 0 && (RunValue & 0x0001) == 0 && (AlarmValue & 0x0001) == 0 && (FaultValue & 0x0001) == 0)
+            else if ((onlinevalue & 0x0001) == 0 && (RunValue & 0x0001) == 0 && (AlarmValue & 0x0001) == 0 && (FaultValue & 0x0001) == 0)
             {
                 Module1Status1 = "离线";
                 Module1StatusColor1 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
             }
 
             //DC模组2状态
-            if ((OnLineValue & 0x0002) != 0 && (RunValue & 0x0002) == 0 && (AlarmValue & 0x0002) == 0 && (FaultValue & 0x0002) == 0)
+            if ((onlinevalue & 0x0002) != 0 && (RunValue & 0x0002) == 0 && (AlarmValue & 0x0002) == 0 && (FaultValue & 0x0002) == 0)
             {
                 Module1Status2 = "在线";
                 Module1StatusColor2 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
             }
-            else if ((RunValue & 0x0002) != 0 && (AlarmValue & 0x0002) == 0 && (FaultValue & 0x0002) == 0 && (OnLineValue & 0x0002) == 0)
+            else if ((RunValue & 0x0002) != 0 && (AlarmValue & 0x0002) == 0 && (FaultValue & 0x0002) == 0 && (onlinevalue & 0x0002) == 0)
             {
                 Module1Status2 = "运行";
                 Module1StatusColor2 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
             }
-            else if ((AlarmValue & 0x0002) != 0 && (OnLineValue & 0x0002) == 0 && (RunValue & 0x0002) == 0 && (FaultValue & 0x0002) == 0)
+            else if ((AlarmValue & 0x0002) != 0 && (onlinevalue & 0x0002) == 0 && (RunValue & 0x0002) == 0 && (FaultValue & 0x0002) == 0)
             {
                 Module1Status2 = "告警";
                 Module1StatusColor2 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
             }
-            else if ((FaultValue & 0x0002) != 0 && (OnLineValue & 0x0002) == 0 && (RunValue & 0x0002) == 0 && (AlarmValue & 0x0002) == 0)
+            else if ((FaultValue & 0x0002) != 0 && (onlinevalue & 0x0002) == 0 && (RunValue & 0x0002) == 0 && (AlarmValue & 0x0002) == 0)
             {
                 Module1Status2 = "故障";
                 Module1StatusColor2 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
             }
-            else if ((OnLineValue & 0x0002) == 0 && (RunValue & 0x0002) == 0 && (AlarmValue & 0x0002) == 0 && (FaultValue & 0x0002) == 0)
+            else if ((onlinevalue & 0x0002) == 0 && (RunValue & 0x0002) == 0 && (AlarmValue & 0x0002) == 0 && (FaultValue & 0x0002) == 0)
             {
                 Module1Status2 = "离线";
                 Module1StatusColor2 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
             }
 
             //DC模组3状态
-            if ((OnLineValue & 0x0004) != 0 && (RunValue & 0x0004) == 0 && (AlarmValue & 0x0004) == 0 && (FaultValue & 0x0004) == 0)
+            if ((onlinevalue & 0x0004) != 0 && (RunValue & 0x0004) == 0 && (AlarmValue & 0x0004) == 0 && (FaultValue & 0x0004) == 0)
             {
                 Module1Status3 = "在线";
                 Module1StatusColor3 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
             }
-            else if ((RunValue & 0x0004) != 0 && (AlarmValue & 0x0004) == 0 && (FaultValue & 0x0004) == 0 && (OnLineValue & 0x0004) == 0)
+            else if ((RunValue & 0x0004) != 0 && (AlarmValue & 0x0004) == 0 && (FaultValue & 0x0004) == 0 && (onlinevalue & 0x0004) == 0)
             {
                 Module1Status3 = "运行";
                 Module1StatusColor3 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
             }
-            else if ((AlarmValue & 0x0004) != 0 && (OnLineValue & 0x0004) == 0 && (RunValue & 0x0004) == 0 && (FaultValue & 0x0004) == 0)
+            else if ((AlarmValue & 0x0004) != 0 && (onlinevalue & 0x0004) == 0 && (RunValue & 0x0004) == 0 && (FaultValue & 0x0004) == 0)
             {
                 Module1Status3 = "告警";
                 Module1StatusColor3 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
             }
-            else if ((FaultValue & 0x0004) != 0 && (OnLineValue & 0x0004) == 0 && (RunValue & 0x0004) == 0 && (AlarmValue & 0x0004) == 0)
+            else if ((FaultValue & 0x0004) != 0 && (onlinevalue & 0x0004) == 0 && (RunValue & 0x0004) == 0 && (AlarmValue & 0x0004) == 0)
             {
                 Module1Status3 = "故障";
                 Module1StatusColor3 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
             }
-            else if ((OnLineValue & 0x0004) == 0 && (RunValue & 0x0004) == 0 && (AlarmValue & 0x0004) == 0 && (FaultValue & 0x0004) == 0)
+            else if ((onlinevalue & 0x0004) == 0 && (RunValue & 0x0004) == 0 && (AlarmValue & 0x0004) == 0 && (FaultValue & 0x0004) == 0)
             {
                 Module1Status3 = "离线";
                 Module1StatusColor3 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
             }
 
             //DC模组4状态
-            if ((OnLineValue & 0x0008) != 0 && (RunValue & 0x0008) == 0 && (AlarmValue & 0x0008) == 0 && (FaultValue & 0x0008) == 0)
+            if ((onlinevalue & 0x0008) != 0 && (RunValue & 0x0008) == 0 && (AlarmValue & 0x0008) == 0 && (FaultValue & 0x0008) == 0)
             {
                 Module1Status4 = "在线";
                 Module1StatusColor4 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
             }
-            else if ((RunValue & 0x0008) != 0 && (AlarmValue & 0x0008) == 0 && (FaultValue & 0x0008) == 0 && (OnLineValue & 0x0008) == 0)
+            else if ((RunValue & 0x0008) != 0 && (AlarmValue & 0x0008) == 0 && (FaultValue & 0x0008) == 0 && (onlinevalue & 0x0008) == 0)
             {
                 Module1Status4 = "运行";
                 Module1StatusColor4 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
             }
-            else if ((AlarmValue & 0x0008) != 0 && (OnLineValue & 0x0008) == 0 && (RunValue & 0x0008) == 0 && (FaultValue & 0x0008) == 0)
+            else if ((AlarmValue & 0x0008) != 0 && (onlinevalue & 0x0008) == 0 && (RunValue & 0x0008) == 0 && (FaultValue & 0x0008) == 0)
             {
                 Module1Status4 = "告警";
                 Module1StatusColor4 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
             }
-            else if ((FaultValue & 0x0008) != 0 && (OnLineValue & 0x0008) == 0 && (RunValue & 0x0008) == 0 && (AlarmValue & 0x0008) == 0)
+            else if ((FaultValue & 0x0008) != 0 && (onlinevalue & 0x0008) == 0 && (RunValue & 0x0008) == 0 && (AlarmValue & 0x0008) == 0)
             {
                 Module1Status4 = "故障";
                 Module1StatusColor4 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
             }
-            else if ((OnLineValue & 0x0008) == 0 && (RunValue & 0x0008) == 0 && (AlarmValue & 0x0008) == 0 && (FaultValue & 0x0008) == 0)
+            else if ((onlinevalue & 0x0008) == 0 && (RunValue & 0x0008) == 0 && (AlarmValue & 0x0008) == 0 && (FaultValue & 0x0008) == 0)
             {
                 Module1Status4 = "离线";
                 Module1StatusColor4 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
             }
 
             //DC模组5状态
-            if ((OnLineValue & 0x0010) != 0 && (RunValue & 0x0010) == 0 && (AlarmValue & 0x0010) == 0 && (FaultValue & 0x0010) == 0)
+            if ((onlinevalue & 0x0010) != 0 && (RunValue & 0x0010) == 0 && (AlarmValue & 0x0010) == 0 && (FaultValue & 0x0010) == 0)
             {
                 Module1Status5 = "在线";
                 Module1StatusColor5 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
             }
-            else if ((RunValue & 0x0010) != 0 && (AlarmValue & 0x0010) == 0 && (FaultValue & 0x0010) == 0 && (OnLineValue & 0x0010) == 0)
+            else if ((RunValue & 0x0010) != 0 && (AlarmValue & 0x0010) == 0 && (FaultValue & 0x0010) == 0 && (onlinevalue & 0x0010) == 0)
             {
                 Module1Status5 = "运行";
                 Module1StatusColor5 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
             }
-            else if ((AlarmValue & 0x0010) != 0 && (OnLineValue & 0x0010) == 0 && (RunValue & 0x0010) == 0 && (FaultValue & 0x0010) == 0)
+            else if ((AlarmValue & 0x0010) != 0 && (onlinevalue & 0x0010) == 0 && (RunValue & 0x0010) == 0 && (FaultValue & 0x0010) == 0)
             {
                 Module1Status5 = "告警";
                 Module1StatusColor5 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
             }
-            else if ((FaultValue & 0x0010) != 0 && (OnLineValue & 0x0010) == 0 && (RunValue & 0x0010) == 0 && (AlarmValue & 0x0010) == 0)
+            else if ((FaultValue & 0x0010) != 0 && (onlinevalue & 0x0010) == 0 && (RunValue & 0x0010) == 0 && (AlarmValue & 0x0010) == 0)
             {
                 Module1Status5 = "故障";
                 Module1StatusColor5 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
             }
-            else if ((OnLineValue & 0x0010) == 0 && (RunValue & 0x0010) == 0 && (AlarmValue & 0x0010) == 0 && (FaultValue & 0x0010) == 0)
+            else if ((onlinevalue & 0x0010) == 0 && (RunValue & 0x0010) == 0 && (AlarmValue & 0x0010) == 0 && (FaultValue & 0x0010) == 0)
             {
                 Module1Status5 = "离线";
                 Module1StatusColor5 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
             }
 
             //DC模组6状态
-            if ((OnLineValue & 0x0020) != 0 && (RunValue & 0x0020) == 0 && (AlarmValue & 0x0020) == 0 && (FaultValue & 0x0020) == 0)
+            if ((onlinevalue & 0x0020) != 0 && (RunValue & 0x0020) == 0 && (AlarmValue & 0x0020) == 0 && (FaultValue & 0x0020) == 0)
             {
                 Module1Status6 = "在线";
                 Module1StatusColor6 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
             }
-            else if ((RunValue & 0x0020) != 0 && (AlarmValue & 0x0020) == 0 && (FaultValue & 0x0020) == 0 && (OnLineValue & 0x0020) == 0)
+            else if ((RunValue & 0x0020) != 0 && (AlarmValue & 0x0020) == 0 && (FaultValue & 0x0020) == 0 && (onlinevalue & 0x0020) == 0)
             {
                 Module1Status6 = "运行";
                 Module1StatusColor6 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
             }
-            else if ((AlarmValue & 0x0020) != 0 && (OnLineValue & 0x0020) == 0 && (RunValue & 0x0020) == 0 && (FaultValue & 0x0020) == 0)
+            else if ((AlarmValue & 0x0020) != 0 && (onlinevalue & 0x0020) == 0 && (RunValue & 0x0020) == 0 && (FaultValue & 0x0020) == 0)
             {
                 Module1Status6 = "告警";
                 Module1StatusColor6 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
             }
-            else if ((FaultValue & 0x0020) != 0 && (OnLineValue & 0x0020) == 0 && (RunValue & 0x0020) == 0 && (AlarmValue & 0x0020) == 0)
+            else if ((FaultValue & 0x0020) != 0 && (onlinevalue & 0x0020) == 0 && (RunValue & 0x0020) == 0 && (AlarmValue & 0x0020) == 0)
             {
                 Module1Status6 = "故障";
                 Module1StatusColor6 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
             }
-            else if ((OnLineValue & 0x0020) == 0 && (RunValue & 0x0020) == 0 && (AlarmValue & 0x0020) == 0 && (FaultValue & 0x0020) == 0)
+            else if ((onlinevalue & 0x0020) == 0 && (RunValue & 0x0020) == 0 && (AlarmValue & 0x0020) == 0 && (FaultValue & 0x0020) == 0)
             {
                 Module1Status6 = "离线";
                 Module1StatusColor6 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
             }
 
             //DC模组7状态
-            if ((OnLineValue & 0x0040) != 0 && (RunValue & 0x0040) == 0 && (AlarmValue & 0x0040) == 0 && (FaultValue & 0x0040) == 0)
+            if ((onlinevalue & 0x0040) != 0 && (RunValue & 0x0040) == 0 && (AlarmValue & 0x0040) == 0 && (FaultValue & 0x0040) == 0)
             {
                 Module1Status7 = "在线";
                 Module1StatusColor7 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
             }
-            else if ((RunValue & 0x0040) != 0 && (AlarmValue & 0x0040) == 0 && (FaultValue & 0x0040) == 0 && (OnLineValue & 0x0040) == 0)
+            else if ((RunValue & 0x0040) != 0 && (AlarmValue & 0x0040) == 0 && (FaultValue & 0x0040) == 0 && (onlinevalue & 0x0040) == 0)
             {
                 Module1Status7 = "运行";
                 Module1StatusColor7 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
             }
-            else if ((AlarmValue & 0x0040) != 0 && (OnLineValue & 0x0040) == 0 && (RunValue & 0x0040) == 0 && (FaultValue & 0x0040) == 0)
+            else if ((AlarmValue & 0x0040) != 0 && (onlinevalue & 0x0040) == 0 && (RunValue & 0x0040) == 0 && (FaultValue & 0x0040) == 0)
             {
                 Module1Status7 = "告警";
                 Module1StatusColor7 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
             }
-            else if ((FaultValue & 0x0040) != 0 && (OnLineValue & 0x0040) == 0 && (RunValue & 0x0040) == 0 && (AlarmValue & 0x0040) == 0)
+            else if ((FaultValue & 0x0040) != 0 && (onlinevalue & 0x0040) == 0 && (RunValue & 0x0040) == 0 && (AlarmValue & 0x0040) == 0)
             {
                 Module1Status7 = "故障";
                 Module1StatusColor7 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
             }
-            else if ((OnLineValue & 0x0040) == 0 && (RunValue & 0x0040) == 0 && (AlarmValue & 0x0020) == 0 && (FaultValue & 0x0040) == 0)
+            else if ((onlinevalue & 0x0040) == 0 && (RunValue & 0x0040) == 0 && (AlarmValue & 0x0020) == 0 && (FaultValue & 0x0040) == 0)
             {
                 Module1Status7 = "离线";
                 Module1StatusColor7 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
             }
 
             //DC模组8状态
-            if ((OnLineValue & 0x0080) != 0 && (RunValue & 0x0080) == 0 && (AlarmValue & 0x0080) == 0 && (FaultValue & 0x0080) == 0)
+            if ((onlinevalue & 0x0080) != 0 && (RunValue & 0x0080) == 0 && (AlarmValue & 0x0080) == 0 && (FaultValue & 0x0080) == 0)
             {
                 Module1Status8 = "在线";
                 Module1StatusColor8 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
             }
-            else if ((RunValue & 0x0080) != 0 && (AlarmValue & 0x0080) == 0 && (FaultValue & 0x0080) == 0 && (OnLineValue & 0x0080) == 0)
+            else if ((RunValue & 0x0080) != 0 && (AlarmValue & 0x0080) == 0 && (FaultValue & 0x0080) == 0 && (onlinevalue & 0x0080) == 0)
             {
                 Module1Status8 = "运行";
                 Module1StatusColor8 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
             }
-            else if ((AlarmValue & 0x0080) != 0 && (OnLineValue & 0x0080) == 0 && (RunValue & 0x0080) == 0 && (FaultValue & 0x0080) == 0)
+            else if ((AlarmValue & 0x0080) != 0 && (onlinevalue & 0x0080) == 0 && (RunValue & 0x0080) == 0 && (FaultValue & 0x0080) == 0)
             {
                 Module1Status8 = "告警";
                 Module1StatusColor8 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
             }
-            else if ((FaultValue & 0x0080) != 0 && (OnLineValue & 0x0080) == 0 && (RunValue & 0x0080) == 0 && (AlarmValue & 0x0080) == 0)
+            else if ((FaultValue & 0x0080) != 0 && (onlinevalue & 0x0080) == 0 && (RunValue & 0x0080) == 0 && (AlarmValue & 0x0080) == 0)
             {
                 Module1Status8 = "故障";
                 Module1StatusColor8 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
             }
-            else if ((OnLineValue & 0x0080) == 0 && (RunValue & 0x0080) == 0 && (AlarmValue & 0x0080) == 0 && (FaultValue & 0x0080) == 0)
+            else if ((onlinevalue & 0x0080) == 0 && (RunValue & 0x0080) == 0 && (AlarmValue & 0x0080) == 0 && (FaultValue & 0x0080) == 0)
             {
                 Module1Status8 = "离线";
                 Module1StatusColor8 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
             }
 
             //DC模组9状态
-            if ((OnLineValue & 0x0100) != 0 && (RunValue & 0x0100) == 0 && (AlarmValue & 0x0100) == 0 && (FaultValue & 0x0100) == 0)
+            if ((onlinevalue & 0x0100) != 0 && (RunValue & 0x0100) == 0 && (AlarmValue & 0x0100) == 0 && (FaultValue & 0x0100) == 0)
             {
                 Module1Status9 = "在线";
                 Module1StatusColor9 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
             }
-            else if ((RunValue & 0x0100) != 0 && (AlarmValue & 0x0100) == 0 && (FaultValue & 0x0100) == 0 && (OnLineValue & 0x0100) == 0)
+            else if ((RunValue & 0x0100) != 0 && (AlarmValue & 0x0100) == 0 && (FaultValue & 0x0100) == 0 && (onlinevalue & 0x0100) == 0)
             {
                 Module1Status9 = "运行";
                 Module1StatusColor9 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
             }
-            else if ((AlarmValue & 0x0100) != 0 && (OnLineValue & 0x0100) == 0 && (RunValue & 0x0100) == 0 && (FaultValue & 0x0100) == 0)
+            else if ((AlarmValue & 0x0100) != 0 && (onlinevalue & 0x0100) == 0 && (RunValue & 0x0100) == 0 && (FaultValue & 0x0100) == 0)
             {
                 Module1Status9 = "告警";
                 Module1StatusColor9 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
             }
-            else if ((FaultValue & 0x0100) != 0 && (OnLineValue & 0x0100) == 0 && (RunValue & 0x0100) == 0 && (AlarmValue & 0x0100) == 0)
+            else if ((FaultValue & 0x0100) != 0 && (onlinevalue & 0x0100) == 0 && (RunValue & 0x0100) == 0 && (AlarmValue & 0x0100) == 0)
             {
                 Module1Status9 = "故障";
                 Module1StatusColor9 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
             }
-            else if ((OnLineValue & 0x0100) == 0 && (RunValue & 0x0100) == 0 && (AlarmValue & 0x0100) == 0 && (FaultValue & 0x0100) == 0)
+            else if ((onlinevalue & 0x0100) == 0 && (RunValue & 0x0100) == 0 && (AlarmValue & 0x0100) == 0 && (FaultValue & 0x0100) == 0)
             {
                 Module1Status9 = "离线";
                 Module1StatusColor9 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
             }
 
             // DC模组10状态
-            if ((OnLineValue & 0x0200) != 0 && (RunValue & 0x0200) == 0 && (AlarmValue & 0x0200) == 0 && (FaultValue & 0x0200) == 0)
+            if ((onlinevalue & 0x0200) != 0 && (RunValue & 0x0200) == 0 && (AlarmValue & 0x0200) == 0 && (FaultValue & 0x0200) == 0)
             {
                 Module1Status10 = "在线";
                 Module1StatusColor10 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
             }
-            else if ((RunValue & 0x0200) != 0 && (AlarmValue & 0x0200) == 0 && (FaultValue & 0x0200) == 0 && (OnLineValue & 0x0200) == 0)
+            else if ((RunValue & 0x0200) != 0 && (AlarmValue & 0x0200) == 0 && (FaultValue & 0x0200) == 0 && (onlinevalue & 0x0200) == 0)
             {
                 Module1Status10 = "运行";
                 Module1StatusColor10 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
             }
-            else if ((AlarmValue & 0x0200) != 0 && (OnLineValue & 0x0200) == 0 && (RunValue & 0x0200) == 0 && (FaultValue & 0x0200) == 0)
+            else if ((AlarmValue & 0x0200) != 0 && (onlinevalue & 0x0200) == 0 && (RunValue & 0x0200) == 0 && (FaultValue & 0x0200) == 0)
             {
                 Module1Status10 = "告警";
                 Module1StatusColor10 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
             }
-            else if ((FaultValue & 0x0200) != 0 && (OnLineValue & 0x0200) == 0 && (RunValue & 0x0200) == 0 && (AlarmValue & 0x0200) == 0)
+            else if ((FaultValue & 0x0200) != 0 && (onlinevalue & 0x0200) == 0 && (RunValue & 0x0200) == 0 && (AlarmValue & 0x0200) == 0)
             {
                 Module1Status10 = "故障";
                 Module1StatusColor10 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
             }
-            else if ((OnLineValue & 0x0200) == 0 && (RunValue & 0x0200) == 0 && (AlarmValue & 0x0200) == 0 && (FaultValue & 0x0200) == 0)
+            else if ((onlinevalue & 0x0200) == 0 && (RunValue & 0x0200) == 0 && (AlarmValue & 0x0200) == 0 && (FaultValue & 0x0200) == 0)
             {
                 Module1Status10 = "离线";
                 Module1StatusColor10 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
