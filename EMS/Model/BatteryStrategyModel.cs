@@ -68,9 +68,9 @@ namespace EMS.Model
 
     public enum BatteryStrategyEnum
     {
-        [Description("横流充电")]
+        [Description("恒电流充电")]
         ConstantCurrentCharge = 0,
-        [Description("横流放电")]
+        [Description("恒电流放电")]
         ConstantCurrentDischarge = 1,
         [Description("恒功率充电")]
         ConstantPowerCharge = 2,
