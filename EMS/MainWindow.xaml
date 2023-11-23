@@ -6,13 +6,13 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:EMS"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1000" Width="1500" WindowStartupLocation="CenterScreen"  WindowState="Maximized">
+        Title="MainWindow" Height="800" Width="1200" WindowStartupLocation="CenterScreen"  WindowState="Maximized" MinWidth="1200" MinHeight="800" >
     <Window.Resources>
         <ImageBrush x:Key="topImage" ImageSource="pack://application:,,,/EMS;component/Resource/Image/topImage.png"/>
 
         <Style x:Key="RadioButtonStyle" TargetType="{x:Type RadioButton}">
-            <Setter Property="Width" Value="180"/>
-            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="FontSize" Value="20"/>
             <Setter Property="Foreground" Value="#4B8EC4"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -170,7 +170,7 @@
                         </TextBlock>
                     </Border>
 
-                    <ListBox Name="DevList"  ItemsSource="{Binding BatteryTotalList}" BorderThickness="0" materialDesign:ListBoxItemAssist.ShowSelection="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Column="0" Grid.Row="1">
+                    <ListBox Name="DevList"  ItemsSource="{Binding BatteryTotalList}" BorderThickness="0" materialDesign:ListBoxItemAssist.ShowSelection="False" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Column="0" Grid.Row="1">
                         <ListBox.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="添加设备" Command="{Binding AddDevCommand}"></MenuItem>
