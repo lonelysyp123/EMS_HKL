@@ -287,7 +287,7 @@ namespace EMS.Common.Modbus.ModbusTCP
         /// </summary>
         /// <param name="address">寄存器地址</param>
         /// <param name="values">写入值</param>
-        private void WriteFunc(ushort address, ushort[] values)
+        public void WriteFunc(ushort address, ushort[] values)
         {
             try
             {

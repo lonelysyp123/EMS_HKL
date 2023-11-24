@@ -64,7 +64,7 @@ namespace EMS.View
                 radioButton.Content = listBox;
 
                 BCMUInfo2.Items.Add(radioButton);
-                ParameterSettingViewModel viewmodel = new ParameterSettingViewModel(Clients[i]);
+                ParameterSettingViewModel viewmodel = new ParameterSettingViewModel(Clients[i], batteryTotalBases[i].TotalID);
                 ViewModels.Add(viewmodel);
                 if (i == 0)
                 {

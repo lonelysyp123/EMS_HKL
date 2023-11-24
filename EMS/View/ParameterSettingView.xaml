@@ -94,7 +94,6 @@
                                 <TextBox VerticalAlignment="Center" Width="80"  Text="{Binding ClusterVolUpLimitLv2}" Foreground="White" Style="{StaticResource UnderlineTextBoxStyle}"></TextBox>
                                 <TextBlock Text="3级:" VerticalAlignment="Center" Margin="20,0,5,0" FontSize="18"/>
                                 <TextBox VerticalAlignment="Center" Width="80"  Text="{Binding ClusterVolUpLimitLv3}" Foreground="White" Style="{StaticResource UnderlineTextBoxStyle}"></TextBox>
-                                <Button Content="读取信息" FontSize="12" Width="80" Height="30" VerticalAlignment="Center"  Style="{StaticResource LineButton}"  Background="#3a617e" HorizontalAlignment="Center" Margin="40,5,0,5" Command="{Binding ReadClusterVolThreshInfoCommand}"></Button>
                             </StackPanel>
                             <StackPanel  Orientation="Horizontal"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,10">
                                 <TextBlock Text="组端电压下限" VerticalAlignment="Center" FontSize="18"></TextBlock>
@@ -104,7 +103,6 @@
                                 <TextBox VerticalAlignment="Center" Width="80"  Text="{Binding ClusterVolLowLimitLv2}" Foreground="White" Style="{StaticResource UnderlineTextBoxStyle}"></TextBox>
                                 <TextBlock Text="3级:" VerticalAlignment="Center" Margin="20,0,5,0" FontSize="18"/>
                                 <TextBox VerticalAlignment="Center" Width="80"  Text="{Binding ClusterVolLowLimitLv3}" Foreground="White" Style="{StaticResource UnderlineTextBoxStyle}"></TextBox>
-                                <Button Content="同步信息" Width="80" Background="#3a617e" FontSize="12" Height="30" Style="{StaticResource LineButton}"  VerticalAlignment="Center"   HorizontalAlignment="Center" Margin="40,5,0,5" Command="{Binding SyncClusterVolThreshInfoCommand}"></Button>
                             </StackPanel>
                         </StackPanel>
                     </Grid>
@@ -131,7 +129,6 @@
                                 <TextBox VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Width="80"   Text="{Binding  SingleVolUpLimitLv2}" Style="{StaticResource UnderlineTextBoxStyle}" ></TextBox>
                                 <TextBlock Text="3级:"  VerticalAlignment="Center" FontSize="18" Margin="15,0,5,0"></TextBlock>
                                 <TextBox VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Width="80"   Text="{Binding  SingleVolUpLimitLv3}" Style="{StaticResource UnderlineTextBoxStyle}" ></TextBox>
-                                <Button Content="读取信息" Style="{StaticResource LineButton}"  VerticalAlignment="Center"  HorizontalAlignment="Center" Margin="10,5" Width="80" Background="#3a617e" FontSize="12" Height="30" Command="{Binding ReadSingleVolThreshInfoCommand}"></Button>
                             </StackPanel>
                             <StackPanel  Orientation="Horizontal"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,10">
                                 <TextBlock Text="单体电压下限(V)" VerticalAlignment="Center" FontSize="18" Margin="10,0"></TextBlock>
@@ -141,7 +138,6 @@
                                 <TextBox VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Width="80"   Text="{Binding  SingleVolLowLimitLv2}" Style="{StaticResource UnderlineTextBoxStyle}" ></TextBox>
                                 <TextBlock Text="3级:"  VerticalAlignment="Center" FontSize="18" Margin="15,0,5,0"></TextBlock>
                                 <TextBox VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Width="80"   Text="{Binding  SingleVolLowLimitLv3}" Style="{StaticResource UnderlineTextBoxStyle}" ></TextBox>
-                                <Button Content="同步信息" Width="80" Background="#3a617e" FontSize="12" Height="30" Style="{StaticResource LineButton}"  VerticalAlignment="Center"   HorizontalAlignment="Center" Margin="10,5" Command="{Binding SyncSingleVolThreshInfoCommand }"></Button>
                             </StackPanel>
                         </StackPanel>
                         <Separator Grid.Row="1" ></Separator>
@@ -164,7 +160,6 @@
                                 <TextBox VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Width="80"   Text="{Binding  TempCharLowLimitLv2}" Style="{StaticResource UnderlineTextBoxStyle}" ></TextBox>
                                 <TextBlock Text="3级:"  VerticalAlignment="Center" FontSize="18" Margin="15,0,5,0"></TextBlock>
                                 <TextBox VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Width="80"   Text="{Binding  TempCharLowLimitLv3}" Style="{StaticResource UnderlineTextBoxStyle}" ></TextBox>
-                                <Button Content="读取信息" Width="80" Background="#3a617e" FontSize="12" Height="30" Style="{StaticResource LineButton}"  VerticalAlignment="Center"   HorizontalAlignment="Center" Margin="10,5" Command="{Binding ReadTempThreshInfoCommand}"></Button>
                             </StackPanel>
                             <StackPanel  Orientation="Horizontal"  VerticalAlignment="Center"   HorizontalAlignment="Left" Margin="0,0,0,10">
                                 <TextBlock Text="放电温度上限(℃)" VerticalAlignment="Center" FontSize="18" Margin="10,0"></TextBlock>
@@ -174,7 +169,6 @@
                                 <TextBox VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Width="80"   Text="{Binding  TempDischarUpLimitLv2}" Style="{StaticResource UnderlineTextBoxStyle}" ></TextBox>
                                 <TextBlock Text="3级:"  VerticalAlignment="Center" FontSize="18" Margin="15,0,5,0"></TextBlock>
                                 <TextBox VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Width="80"   Text="{Binding  TempDischarUpLimitLv3}" Style="{StaticResource UnderlineTextBoxStyle}" ></TextBox>
-                                <Button Content="同步信息" Width="80" Background="#3a617e" FontSize="12" Height="30" Style="{StaticResource LineButton}"  VerticalAlignment="Center"   HorizontalAlignment="Center" Margin="10,5" Command="{Binding SyncTempThreshInfoCommand}"></Button>
                             </StackPanel>
 
                         </StackPanel>
@@ -189,7 +183,6 @@
                                 <TextBox VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Width="80"   Text="{Binding  CurCharLv2}" Style="{StaticResource UnderlineTextBoxStyle}" ></TextBox>
                                 <TextBlock Text="3级:"  VerticalAlignment="Center" FontSize="18" Margin="15,0,5,0"></TextBlock>
                                 <TextBox VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Width="80"   Text="{Binding  CurCharLv3}" Style="{StaticResource UnderlineTextBoxStyle}" ></TextBox>
-                                <Button Content="读取信息" Width="80" Background="#3a617e" FontSize="12" Height="30" Style="{StaticResource LineButton}"  VerticalAlignment="Center"   HorizontalAlignment="Center" Margin="10,5" Command="{Binding ReadCurrThreshInfoCommand}"></Button>
                             </StackPanel>
                             <StackPanel  Orientation="Horizontal"  VerticalAlignment="Center"   HorizontalAlignment="Left" Margin="0,0,0,10">
                                 <TextBlock Text="放电电流(A)" VerticalAlignment="Center" FontSize="18" Margin="10,0"></TextBlock>
@@ -199,7 +192,6 @@
                                 <TextBox VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Width="80"   Text="{Binding  CurDischarLv2}" Style="{StaticResource UnderlineTextBoxStyle}" ></TextBox>
                                 <TextBlock Text="3级:"  VerticalAlignment="Center" FontSize="18" Margin="15,0,5,0"></TextBlock>
                                 <TextBox VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Width="80"   Text="{Binding  CurDischarLv3}" Style="{StaticResource UnderlineTextBoxStyle}" ></TextBox>
-                                <Button Content="同步信息" Width="80" Background="#3a617e" FontSize="12" Height="30" Style="{StaticResource LineButton}"  VerticalAlignment="Center"   HorizontalAlignment="Center" Margin="10,5" Command="{Binding SyncCurrThreshInfoCommand}"></Button>
                             </StackPanel>
                         </StackPanel>
                         <Separator Grid.Row="5" ></Separator>
@@ -213,7 +205,6 @@
                                 <TextBox VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Width="80"   Text="{Binding  SingleVolDiffLv2}" Style="{StaticResource UnderlineTextBoxStyle}" ></TextBox>
                                 <TextBlock Text="3级:"  VerticalAlignment="Center" FontSize="18" Margin="15,0,5,0"></TextBlock>
                                 <TextBox VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Width="80"   Text="{Binding  SingleVolDiffLv3}" Style="{StaticResource UnderlineTextBoxStyle}" ></TextBox>
-                                <Button Content="读取信息"  Width="80" Background="#3a617e" FontSize="12" Height="30" Style="{StaticResource LineButton}" VerticalAlignment="Center"   HorizontalAlignment="Center" Margin="10,5" Command="{Binding ReadSingleVolDiffAndSOCThreshInfoCommand}"></Button>
                             </StackPanel>
                             <StackPanel  Orientation="Horizontal"  VerticalAlignment="Center"   HorizontalAlignment="Left" >
                                 <TextBlock Text="SOC下限(%)" VerticalAlignment="Center" FontSize="18" Margin="10,0"></TextBlock>
@@ -223,13 +214,14 @@
                                 <TextBox VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Width="80"   Text="{Binding  SOCLowLimitLv2}" Style="{StaticResource UnderlineTextBoxStyle}" ></TextBox>
                                 <TextBlock Text="3级:"  VerticalAlignment="Center" FontSize="18" Margin="15,0,5,0"></TextBlock>
                                 <TextBox VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Width="80"   Text="{Binding  SOCLowLimitLv3}" Style="{StaticResource UnderlineTextBoxStyle}" ></TextBox>
-                                <Button Content="同步信息"  Width="80" Background="#3a617e" FontSize="12" Height="30" Style="{StaticResource LineButton}" VerticalAlignment="Center"   HorizontalAlignment="Center" Margin="10,5" Command="{Binding SyncSingleVolDiffAndSOCThreshInfoCommand}"></Button>
                             </StackPanel>
                             <StackPanel  Orientation="Horizontal"  VerticalAlignment="Center"   HorizontalAlignment="Left" Margin="0,0,0,20">
                                 <TextBlock Text="绝缘电阻下限1级" VerticalAlignment="Center" FontSize="18" Margin="10,0"></TextBlock>
                                 <TextBox  Foreground="White" Width="80" VerticalAlignment="Center" Text="{  Binding IsoRLowLimitLv1}"  Style="{StaticResource UnderlineTextBoxStyle}" ></TextBox>
-                                <Button Content="读取信息" Width="80" Background="#3a617e" FontSize="12" Height="30" Style="{StaticResource LineButton}"  VerticalAlignment="Center"   HorizontalAlignment="Center" Margin="10,5" Command="{Binding ReadIsoRThreshInfoCommand}"></Button>
-                                <Button Content="同步信息"  Width="80" Background="#3a617e" FontSize="12" Height="30" Style="{StaticResource LineButton}" VerticalAlignment="Center"   HorizontalAlignment="Center" Margin="10,5" Command="{Binding SyncIsrRThreshInfoCommand}"></Button>
+                                <Button Content="读取数据库信息" Width="100" Background="#3a617e" FontSize="12" Height="30" Style="{StaticResource LineButton}"  VerticalAlignment="Center"   HorizontalAlignment="Center" Margin="10,5" Command="{Binding ReadDBInfoCommand}"></Button>
+                                <Button Content="读取BCMU信息"  Width="100" Background="#3a617e" FontSize="12" Height="30" Style="{StaticResource LineButton}" VerticalAlignment="Center"   HorizontalAlignment="Center" Margin="10,5" Command="{Binding ReadBCMUInfoCommand}"></Button>
+                                <Button Content="同步信息"  Width="100" Background="#3a617e" FontSize="12" Height="30" Style="{StaticResource LineButton}" VerticalAlignment="Center"   HorizontalAlignment="Center" Margin="10,5" Command="{Binding SyncInfoCommand}"></Button>
+
                             </StackPanel>
                         </StackPanel>
                     </Grid>

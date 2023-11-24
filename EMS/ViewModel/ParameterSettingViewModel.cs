@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using EMS.Common.Modbus.ModbusTCP;
+using EMS.Storage.DB.DBManage;
+using EMS.Storage.DB.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -390,179 +392,208 @@ namespace EMS.ViewModel
             }
         }
 
-        public RelayCommand ReadClusterVolThreshInfoCommand { get; set; }
-        public RelayCommand SyncClusterVolThreshInfoCommand { get; set; }
-        public RelayCommand ReadSingleVolThreshInfoCommand { get; set; }
-        public RelayCommand SyncSingleVolThreshInfoCommand { get; set; }
-        public RelayCommand ReadTempThreshInfoCommand { get; set; }
-        public RelayCommand SyncTempThreshInfoCommand { get; set; }
-        public RelayCommand ReadCurrThreshInfoCommand { get; set; }
-        public RelayCommand SyncCurrThreshInfoCommand { get; set; }
-        public RelayCommand ReadSingleVolDiffAndSOCThreshInfoCommand { get; set; }
-        public RelayCommand SyncSingleVolDiffAndSOCThreshInfoCommand { get; set; }
-
-        public RelayCommand ReadIsoRThreshInfoCommand { get; set; }
-        public RelayCommand SyncIsrRThreshInfoCommand { get; set; }
+      
+        public RelayCommand ReadDBInfoCommand { get; set; }
+        public RelayCommand SyncInfoCommand { get; set; }
+        public RelayCommand ReadBCMUInfoCommand { get; set; }
         private ModbusClient ModbusClient;
-        public ParameterSettingViewModel(ModbusClient client)
+        string BCMUid;
+        public ParameterSettingViewModel(ModbusClient client,string bcmuid)
         {
             ModbusClient = client;
-            ReadClusterVolThreshInfoCommand = new RelayCommand(ReadClusterVolThreshInfo);
-            SyncClusterVolThreshInfoCommand = new RelayCommand(SyncClusterVolThreshInfo);
-            ReadSingleVolThreshInfoCommand = new RelayCommand(ReadSingleVolThreshInfo);
-            SyncSingleVolThreshInfoCommand = new RelayCommand(SyncSingleVolThreshInfo);
-            ReadTempThreshInfoCommand = new RelayCommand(ReadTempThreshInfo);
-            SyncTempThreshInfoCommand = new RelayCommand(SyncTempThreshInfo);
-            ReadCurrThreshInfoCommand = new RelayCommand(ReadCurrThreshInfo);
-            SyncCurrThreshInfoCommand = new RelayCommand(SyncCurrThreshInfo);
-            ReadSingleVolDiffAndSOCThreshInfoCommand = new RelayCommand(ReadSingleVolDiffAndSOCThreshInfo);
-            SyncSingleVolDiffAndSOCThreshInfoCommand = new RelayCommand(SyncSingleVolDiffAndSOCThreshInfo);
-
-            ReadIsoRThreshInfoCommand = new RelayCommand(ReadIsoRThreshInfo);
-            SyncIsrRThreshInfoCommand = new RelayCommand(SyncIsoRThreshInfo);
-
-
-
+            BCMUid = bcmuid;
+           
+            ReadDBInfoCommand = new RelayCommand(ReadDBInfo);
+            SyncInfoCommand = new RelayCommand(SyncInfo);
+            ReadBCMUInfoCommand = new RelayCommand(ReadBCMUInfo);
         }
 
-        private void SyncIsoRThreshInfo()
+        private void ReadBCMUInfo()
         {
-            ModbusClient.WriteFunc(40233, (ushort)IsoRLowLimitLv1);
+            byte[] data = new byte[68];
+            data = ModbusClient.ReadFunc(40200, 34);
+            ClusterVolUpLimitLv1 = BitConverter.ToUInt16(data, 0)*0.1;
+            ClusterVolUpLimitLv2 = BitConverter.ToUInt16(data, 2)*0.1;
+            ClusterVolUpLimitLv3 = BitConverter.ToUInt16(data, 4)*0.1;
+            ClusterVolLowLimitLv1 = BitConverter.ToUInt16(data, 6)*0.1;
+            ClusterVolLowLimitLv2 = BitConverter.ToUInt16(data, 8)*0.1;
+            ClusterVolLowLimitLv3 = BitConverter.ToUInt16(data, 10)*0.1;
+            SingleVolUpLimitLv1 = BitConverter.ToUInt16(data,12 ) * 0.001;
+            SingleVolUpLimitLv2 = BitConverter.ToUInt16(data, 14)*0.001;
+            SingleVolUpLimitLv3 =BitConverter.ToUInt16(data, 16)*0.001; 
+            SingleVolLowLimitLv1 = BitConverter.ToUInt16(data, 18)*0.001;
+            SingleVolLowLimitLv2 = BitConverter.ToUInt16(data, 20)*0.001;
+            SingleVolLowLimitLv3 = BitConverter.ToUInt16(data, 22)*0.001;
+            TempCharUpLimitLv1 = (BitConverter.ToUInt16(data,24 )-2731)*0.1;
+            TempCharUpLimitLv2 = (BitConverter.ToUInt16(data,26 )-2731)*0.1;
+            TempCharUpLimitLv3 = (BitConverter.ToUInt16(data,28 )-2731)*0.1;
+            TempCharLowLimitLv1 = (BitConverter.ToUInt16(data,30 )-2731)*0.1;
+            TempCharLowLimitLv2 = (BitConverter.ToUInt16(data, 32)-2731)*0.1;
+            TempCharLowLimitLv3 = (BitConverter.ToUInt16(data,34 )-2731)*0.1;
+            TempDischarUpLimitLv1 = (BitConverter.ToUInt16(data, 36)-2731)*0.1;
+            TempDischarUpLimitLv2 = (BitConverter.ToUInt16(data, 38)-2731)*0.1;
+            TempDischarUpLimitLv3 = (BitConverter.ToUInt16(data, 40)-2731)*0.1;
+            CurCharLv1 = BitConverter.ToUInt16(data, 42) * 0.1;
+            CurCharLv2 = BitConverter.ToUInt16(data, 44)*0.1;
+            CurCharLv3 = BitConverter.ToUInt16(data, 46)*0.1;
+            CurDischarLv1 = BitConverter.ToUInt16(data,48 )*0.1;
+            CurDischarLv2 = BitConverter.ToUInt16(data, 50)*0.1;
+            CurDischarLv3 = BitConverter.ToUInt16(data, 52)*0.1;
+            SingleVolDiffLv1 = BitConverter.ToUInt16(data, 54) * 0.001;
+            SingleVolDiffLv2 = BitConverter.ToUInt16(data, 56)* 0.001;
+            SingleVolDiffLv3 = BitConverter.ToUInt16(data, 58)* 0.001;
+            SOCLowLimitLv1 = BitConverter.ToUInt16(data, 60) * 0.1;
+            SOCLowLimitLv2 = BitConverter.ToUInt16(data, 62) * 0.1;
+            SOCLowLimitLv3 = BitConverter.ToUInt16(data, 64) * 0.1;
+            IsoRLowLimitLv1 = BitConverter.ToUInt16(data, 66);
+
         }
 
-        private void ReadIsoRThreshInfo()
+        private void SyncInfo()
         {
-            byte[] data = ModbusClient.ReadFunc(40233, 1);
-            IsoRLowLimitLv1 = BitConverter.ToUInt16(data, 0);
+            AlarmParameterSettingInfoManage  manage = new AlarmParameterSettingInfoManage();
+            AlarmParameterSettingModel model = new AlarmParameterSettingModel()
+            {
+                BCMUID = BCMUid,
+                DiffVol1 = SingleVolDiffLv1,
+                DiffVol2 = SingleVolDiffLv2,
+                DiffVol3 = SingleVolDiffLv3,
+                SOCLow1 = SOCLowLimitLv1,
+                SOCLow2 = SOCLowLimitLv2,
+                SOCLow3 = SOCLowLimitLv3,
+                CurChar1 = CurCharLv1,
+                CurChar2 = CurCharLv2,
+                CurChar3 = CurCharLv3,
+                CurDischar1 = CurDischarLv1,
+                CurDischar2 = CurDischarLv2,
+                CurDischar3 = CurDischarLv3,
+                TempCharUp1 = TempCharUpLimitLv1,
+                TempCharUp2 = TempCharUpLimitLv2,
+                TempCharUp3 = TempCharUpLimitLv3,
+                TempCharLow1 = TempCharLowLimitLv1,
+                TempCharLow2 = TempCharLowLimitLv2,
+                TempCharLow3 = TempCharLowLimitLv3,
+                TempDischarUp1 = TempDischarUpLimitLv1,
+                TempDischarUp2 = TempDischarUpLimitLv2,
+                TempDischarUp3 = TempDischarUpLimitLv3,
+                SingleVolUp1 = SingleVolUpLimitLv1,
+                SingleVolUp2 = SingleVolUpLimitLv2,
+                SingleVolUp3 = SingleVolUpLimitLv3,
+                SingleVolLow1 = SingleVolLowLimitLv1,
+                SingleVolLow2 = SingleVolLowLimitLv2,
+                SingleVolLow3 = SingleVolLowLimitLv3,
+                ClusterVolLow1 = ClusterVolLowLimitLv1,
+                ClusterVolLow2 = ClusterVolLowLimitLv2,
+                ClusterVolLow3 = ClusterVolLowLimitLv3,
+                ClusterVolUp1 = ClusterVolUpLimitLv1,
+                ClusterVolUp2 = ClusterVolUpLimitLv2,
+                ClusterVolUp3 = ClusterVolUpLimitLv3,
+                IsoRLow = IsoRLowLimitLv1
+            };
+            var result = manage.Find(BCMUid);
+            if ( result.Count!=0)
+            {
+                manage.Update(model);
 
+            }
+            else
+            {
+                manage.Insert(model);
+            }
 
+            
+            ushort[] values =
+            {
+                (ushort)(ClusterVolUpLimitLv1*10),
+                (ushort)(ClusterVolUpLimitLv2*10),
+                (ushort)(ClusterVolUpLimitLv3*10),
+                (ushort)(ClusterVolLowLimitLv1*10),
+                (ushort)(ClusterVolLowLimitLv2*10),
+                (ushort)(ClusterVolLowLimitLv3 *10),
+                (ushort)(SingleVolUpLimitLv1*1000),
+                (ushort)(SingleVolUpLimitLv2*1000),
+                (ushort)(SingleVolUpLimitLv3*1000),
+                (ushort)(SingleVolLowLimitLv1*1000),
+                (ushort)(SingleVolLowLimitLv2*1000),
+                (ushort)(SingleVolLowLimitLv3*1000),
+                (ushort)(TempCharUpLimitLv1*10+2731),
+                (ushort)(TempCharUpLimitLv2*10+2731),
+                (ushort)(TempCharUpLimitLv3*10+2731),
+                (ushort)(TempCharLowLimitLv1*10+2731),
+                (ushort)(TempCharLowLimitLv2*10+2731),
+                (ushort)(TempCharLowLimitLv3*10+2731),
+                (ushort)(TempDischarUpLimitLv1*10+2731),
+                (ushort)(TempDischarUpLimitLv2*10+2731),
+                (ushort)(TempDischarUpLimitLv3 *10+2731),
+                (ushort)(CurCharLv1*10),
+                (ushort)(CurCharLv2*10),
+                (ushort)(CurCharLv3*10),
+                (ushort)(CurDischarLv1 *10),
+                (ushort)(CurDischarLv2*10),
+                (ushort)(CurDischarLv3 *10),
+                (ushort)(SingleVolDiffLv1*1000),
+                (ushort)(SingleVolDiffLv2*1000),
+                (ushort)(SingleVolDiffLv3 *1000),
+                (ushort)(SOCLowLimitLv1 *10),
+                (ushort)(SOCLowLimitLv2*10),
+                (ushort)(SOCLowLimitLv3*10),
+                (ushort)IsoRLowLimitLv1
+        };
+            ModbusClient.WriteFunc(40200, values);
 
 
         }
 
-
-
-        private void SyncSingleVolDiffAndSOCThreshInfo()
+        private void ReadDBInfo()
         {
-            ModbusClient.WriteFunc(40227, (ushort)(SingleVolDiffLv1 * 1000));
-            ModbusClient.WriteFunc(40228, (ushort)(SingleVolDiffLv2 * 1000));
-            ModbusClient.WriteFunc(40229, (ushort)(SingleVolDiffLv3 * 1000));
-            ModbusClient.WriteFunc(40230, (ushort)(SOCLowLimitLv1 * 10));
-            ModbusClient.WriteFunc(40231, (ushort)(SOCLowLimitLv2 * 10));
-            ModbusClient.WriteFunc(40232, (ushort)(SOCLowLimitLv3 * 10));
-        }
-
-        private void ReadSingleVolDiffAndSOCThreshInfo()
-        {
-            byte[] data = ModbusClient.ReadFunc(40227, 6);
-            SingleVolDiffLv1 = BitConverter.ToUInt16(data, 0) * 0.001;
-            SingleVolDiffLv2 = BitConverter.ToUInt16(data, 2) * 0.001;
-            SingleVolDiffLv3 = BitConverter.ToUInt16(data, 4) * 0.001;
-
-            SOCLowLimitLv1 = BitConverter.ToUInt16(data, 6) * 0.1;
-            SOCLowLimitLv2 = BitConverter.ToUInt16(data, 8) * 0.1;
-            SOCLowLimitLv3 = BitConverter.ToUInt16(data, 10) * 0.1;
-
-
-        }
-
-        private void ReadCurrThreshInfo()
-        {
-            byte[] data = ModbusClient.ReadFunc(40221, 6);
-            CurCharLv1 = BitConverter.ToUInt16(data, 0) * 0.1;
-            CurCharLv2 = BitConverter.ToUInt16(data, 2) * 0.1;
-            CurCharLv3 = BitConverter.ToUInt16(data, 4) * 0.1;
-            CurDischarLv1 = BitConverter.ToUInt16(data, 6) * 0.1;
-            CurDischarLv2 = BitConverter.ToUInt16(data, 8) * 0.1;
-            CurDischarLv3 = BitConverter.ToUInt16(data, 10) * 0.1;
-        }
-
-
-        private void SyncCurrThreshInfo()
-        {
-            ModbusClient.WriteFunc(40221, (ushort)(CurCharLv1 * 10));
-            ModbusClient.WriteFunc(40222, (ushort)(CurCharLv2 * 10));
-            ModbusClient.WriteFunc(40223, (ushort)(CurCharLv3 * 10));
-            ModbusClient.WriteFunc(40224, (ushort)(CurDischarLv1 * 10));
-            ModbusClient.WriteFunc(40225, (ushort)(CurDischarLv2 * 10));
-            ModbusClient.WriteFunc(40226, (ushort)(CurDischarLv3 * 10));
-        }
-
-        private void ReadTempThreshInfo()
-        {
-            byte[] data = ModbusClient.ReadFunc(40212, 9);
-            TempCharUpLimitLv1 = (BitConverter.ToUInt16(data, 0) - 2731) * 0.1;
-            TempCharUpLimitLv2 = (BitConverter.ToUInt16(data, 2) - 2731) * 0.1;
-            TempCharUpLimitLv3 = (BitConverter.ToUInt16(data, 4) - 2731) * 0.1;
-            TempCharLowLimitLv1 = (BitConverter.ToUInt16(data, 6) - 2731) * 0.1;
-            TempCharLowLimitLv2 = (BitConverter.ToUInt16(data, 8) - 2731) * 0.1;
-            TempCharLowLimitLv3 = (BitConverter.ToUInt16(data, 10) - 2731) * 0.1;
-            TempDischarUpLimitLv1 = (BitConverter.ToUInt16(data, 12) - 2731) * 0.1;
-            TempDischarUpLimitLv2 = (BitConverter.ToUInt16(data, 14) - 2731) * 0.1;
-            TempDischarUpLimitLv3 = (BitConverter.ToUInt16(data, 16) - 2731) * 0.1;
+            AlarmParameterSettingInfoManage manage = new AlarmParameterSettingInfoManage();
+            
+            var entities = manage.Find(BCMUid);
+            foreach (var entity in entities)
+            {
+                if (entity != null)
+                {
+                    IsoRLowLimitLv1 = entity.IsoRLow;
+                    SingleVolDiffLv1 = entity.DiffVol1;
+                    SingleVolDiffLv2 = entity.DiffVol2;
+                    SingleVolDiffLv3 = entity.DiffVol3;
+                    SOCLowLimitLv1 = entity.SOCLow1;
+                    SOCLowLimitLv2 = entity.SOCLow2;
+                    SOCLowLimitLv3 = entity.SOCLow3;
+                    CurCharLv1 =entity.CurChar1;
+                    CurCharLv2 = entity.CurChar2;
+                    CurCharLv3 = entity.CurChar3;
+                    CurDischarLv1 = entity.CurDischar1;
+                    CurDischarLv2 = entity.CurDischar2;
+                    CurDischarLv3 = entity.CurDischar3;
+                    TempCharUpLimitLv1 = entity.TempCharUp1;
+                    TempCharUpLimitLv2 = entity.TempCharUp2;
+                    TempCharUpLimitLv3 = entity.TempCharUp3;
+                    TempCharLowLimitLv1 = entity.TempCharLow1;
+                    TempCharLowLimitLv2 = entity.TempCharLow2;
+                    TempCharLowLimitLv3 = entity.TempCharLow3;
+                    TempDischarUpLimitLv1 = entity.TempDischarUp1;
+                    TempDischarUpLimitLv2 = entity.TempDischarUp2;
+                    TempDischarUpLimitLv3 = entity.TempDischarUp3;
+                    SingleVolUpLimitLv1 = entity.SingleVolUp1;
+                    SingleVolUpLimitLv2 = entity.SingleVolUp2;
+                    SingleVolUpLimitLv3=entity.SingleVolUp3;
+                    SingleVolLowLimitLv1=entity.SingleVolLow1;
+                    SingleVolLowLimitLv2=entity.SingleVolLow2;
+                    SingleVolLowLimitLv3= entity.SingleVolLow3;
+                    ClusterVolUpLimitLv1 = entity.ClusterVolUp1;
+                    ClusterVolUpLimitLv2 = entity.ClusterVolUp2;
+                    ClusterVolUpLimitLv3 = entity.ClusterVolUp3;
+                    ClusterVolLowLimitLv1 = entity.ClusterVolLow1;
+                    ClusterVolLowLimitLv2 = entity.ClusterVolLow2;
+                    ClusterVolLowLimitLv3 = entity.ClusterVolLow3;
+                }
+            }
 
 
         }
 
-        private void SyncTempThreshInfo()
-        {
-
-            ModbusClient.WriteFunc(40212, (ushort)(TempCharUpLimitLv1 * 10 + 2731));
-            ModbusClient.WriteFunc(40213, (ushort)(TempCharUpLimitLv2 * 10 + 2731));
-            ModbusClient.WriteFunc(40214, (ushort)(TempCharUpLimitLv3 * 10 + 2731));
-            ModbusClient.WriteFunc(40215, (ushort)(TempCharLowLimitLv1 * 10 + 2731));
-            ModbusClient.WriteFunc(40216, (ushort)(TempCharLowLimitLv2 * 10 + 2731));
-            ModbusClient.WriteFunc(40217, (ushort)(TempCharLowLimitLv3 * 10 + 2731));
-            ModbusClient.WriteFunc(40218, (ushort)(TempDischarUpLimitLv1 * 10 + 2731));
-            ModbusClient.WriteFunc(40219, (ushort)(TempDischarUpLimitLv2 * 10 + 2731));
-            ModbusClient.WriteFunc(40220, (ushort)(TempDischarUpLimitLv3 * 10 + 2731));
-
-        }
-
-        private void ReadSingleVolThreshInfo()
-        {
-            byte[] data = ModbusClient.ReadFunc(40206, 6);
-            SingleVolUpLimitLv1 = BitConverter.ToInt16(data, 0) * 0.001;
-            SingleVolUpLimitLv2 = BitConverter.ToInt16(data, 2) * 0.001;
-            SingleVolUpLimitLv3 = BitConverter.ToInt16(data, 4) * 0.001;
-            SingleVolLowLimitLv1 = BitConverter.ToUInt16(data, 6) * 0.001;
-            SingleVolLowLimitLv2 = BitConverter.ToUInt16(data, 8) * 0.001;
-            SingleVolLowLimitLv3 = BitConverter.ToUInt16(data, 10) * 0.001;
-        }
-
-        private void SyncSingleVolThreshInfo()
-        {
-            ModbusClient.WriteFunc(40206, (ushort)(SingleVolUpLimitLv1 * 1000));
-            ModbusClient.WriteFunc(40207, (ushort)(SingleVolUpLimitLv2 * 1000));
-            ModbusClient.WriteFunc(40208, (ushort)(SingleVolUpLimitLv3 * 1000));
-            ModbusClient.WriteFunc(40209, (ushort)(SingleVolLowLimitLv1 * 1000));
-            ModbusClient.WriteFunc(40210, (ushort)(SingleVolLowLimitLv2 * 1000));
-            ModbusClient.WriteFunc(40211, (ushort)(SingleVolLowLimitLv3 * 1000));
-        }
-
-        private void ReadClusterVolThreshInfo()
-        {
-
-            byte[] data = ModbusClient.ReadFunc(40200, 6);
-            ClusterVolUpLimitLv1 = BitConverter.ToInt16(data, 0) * 0.1;
-            ClusterVolUpLimitLv2 = BitConverter.ToInt16(data, 2) * 0.1;
-            ClusterVolUpLimitLv3 = BitConverter.ToInt16(data, 4) * 0.1;
-            ClusterVolLowLimitLv1 = BitConverter.ToUInt16(data, 6) * 0.1;
-            ClusterVolLowLimitLv2 = BitConverter.ToUInt16(data, 8) * 0.1;
-            ClusterVolLowLimitLv3 = BitConverter.ToUInt16(data, 10) * 0.1;
-
-        }
-
-        private void SyncClusterVolThreshInfo()
-        {
-            ModbusClient.WriteFunc(40200, (ushort)(ClusterVolUpLimitLv1 * 10));
-            ModbusClient.WriteFunc(40201, (ushort)(ClusterVolUpLimitLv2 * 10));
-            ModbusClient.WriteFunc(40202, (ushort)(ClusterVolUpLimitLv3 * 10));
-            ModbusClient.WriteFunc(40203, (ushort)(ClusterVolLowLimitLv1 * 10));
-            ModbusClient.WriteFunc(40204, (ushort)(ClusterVolLowLimitLv2 * 10));
-            ModbusClient.WriteFunc(40205, (ushort)(ClusterVolLowLimitLv3 * 10));
-
-        }
+        
 
 
     }

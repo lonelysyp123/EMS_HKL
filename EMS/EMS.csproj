@@ -207,6 +207,7 @@
     <Compile Include="Model\PCSSettingModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmandFaultInfoManage.cs" />
+    <Compile Include="Storage\DB\DBManage\AlarmParameterSettingInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSControlInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSInfoManage.cs" />
     <Compile Include="Storage\DB\Models\AlarmandFaultInfoModel.cs" />
