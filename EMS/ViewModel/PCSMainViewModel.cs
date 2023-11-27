@@ -189,8 +189,6 @@ namespace EMS.ViewModel
                     bool AlarmColorFlagDC = pCSMonitorViewModel.GetActiveDCState();
                     bool AlarmColorFlagPDS = pCSMonitorViewModel.GetActivePDSState();
 
-                    dCStatusViewModel.CurrentTime = DateTime.Now;
-
                     App.Current.Dispatcher.Invoke(() =>
                     {
                         if (AlarmColorFlagDC == true)
@@ -222,7 +220,7 @@ namespace EMS.ViewModel
                 }
                 catch (Exception ex)
                 {
-
+                    throw (ex);
                 }
             }
         }
