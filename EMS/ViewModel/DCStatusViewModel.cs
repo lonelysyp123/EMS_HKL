@@ -346,25 +346,6 @@ namespace EMS.ViewModel
             }
         }
 
-        /// <summary>
-        /// 现在时间
-        /// </summary>
-        private DateTime _currentTime;
-
-        public DateTime CurrentTime
-        {
-            get => _currentTime;
-            set
-            {
-                SetProperty(ref _currentTime, value);
-            }
-        }
-
-
-
-
-
-
         public void DaqDCModuleStatus()
         {
 

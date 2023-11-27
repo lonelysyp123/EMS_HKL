@@ -498,22 +498,6 @@ namespace EMS.ViewModel
             }
         }
 
-
-        private ObservableCollection<FaultRecord>  _faultShow;
-
-        public ObservableCollection<FaultRecord> FaultShow
-        {
-            get => _faultShow;
-            set
-            {
-                SetProperty(ref _faultShow, value);
-            }
-        }
-
-
-        
-
-
         //ObservableCollection<FaultRecord> faultShow = new ObservableCollection<FaultRecord>();
         //ObservableCollection<string> faultShowMessage = new ObservableCollection<string>();
         //ObservableCollection<DateTime> faultShowTime = new ObservableCollection<DateTime>();
@@ -642,14 +626,11 @@ namespace EMS.ViewModel
             int value3;
             bool colorflag = false;
             ObservableCollection<string> INFO = new ObservableCollection<string>();
-            
             value1 = AlarmStateFlagDC1;
             value2 = AlarmStateFlagDC2;
             value3 = AlarmStateFlagDC3;
-
-
-            if ((value1 & 0x0001) != 0){INFO.Add("直流高压侧过压");colorflag = true;} //53005bit0
-            if ((value1 & 0x0002) != 0){INFO.Add("直流高压侧欠压");colorflag = true;} //bit1
+            if ((value1 & 0x0001) != 0) { INFO.Add("直流高压侧过压"); colorflag = true; FaultShow.Enqueue("直流高压侧过压"); } //53005 bit0
+            if ((value1 & 0x0002) != 0) { INFO.Add("直流高压侧欠压"); colorflag = true; FaultShow.Enqueue("直流高压侧欠压"); }  //bit1`
             if ((value1 & 0x0004) != 0) { INFO.Add("直流低压侧过压"); colorflag = true; }  //bit2
             if ((value1 & 0x0008) != 0) { INFO.Add("直流低压侧欠压"); colorflag = true; }  //bit3
             if ((value1 & 0x0010) != 0) { INFO.Add("直流低压侧过流"); colorflag = true; }  //bit4
@@ -700,10 +681,10 @@ namespace EMS.ViewModel
             //if ((value3 & 0x8000) != 0) { INFO.Add("直流高压侧软启动失败"); colorflag = true; } //bit15
             AlarmStateDC = INFO;
 
-            
-
             return colorflag;
         }
+
+        
 
         public bool GetActivePDSState()
         {

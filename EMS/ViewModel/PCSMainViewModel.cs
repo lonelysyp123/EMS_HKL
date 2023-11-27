@@ -16,6 +16,9 @@ namespace EMS.ViewModel
 {
     public class PCSMainViewModel:ObservableObject
     {
+        /// <summary>
+        /// 连接IP
+        /// </summary>
         private string _iP;
         public string IP
         {
@@ -26,6 +29,9 @@ namespace EMS.ViewModel
             }
         }
 
+        /// <summary>
+        /// 主界面PCS连接状态颜色显示
+        /// </summary>
         private SolidColorBrush _mainWindowPCSConnectColor;
         public SolidColorBrush MainWindowPCSConnectColor
         {
@@ -36,6 +42,9 @@ namespace EMS.ViewModel
             }
         }
 
+        /// <summary>
+        /// 主界面PCS连接状态显示
+        /// </summary>
         private string _mainWindowPCSConnectState;
         public string MainWindowPCSConnectState
         {
