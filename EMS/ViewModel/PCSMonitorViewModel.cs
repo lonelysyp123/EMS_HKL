@@ -12,12 +12,6 @@ using System.Collections.Concurrent;
 namespace EMS.ViewModel
 {
     
-    public class FaultRecord
-    {
-        public string FaultDes { get; set; }
-        public DateTime Timestamp { get; set; }
-    }
-
     public class PCSMonitorViewModel:ObservableObject
     {
         /// <summary>
@@ -389,9 +383,9 @@ namespace EMS.ViewModel
         /// <summary>
         /// DC侧支路1：直流累计充电电量高两字节
         /// </summary>
-        private int _dcBranch1CharHigh;
+        private ushort _dcBranch1CharHigh;
 
-        public int DcBranch1CharHigh
+        public ushort DcBranch1CharHigh
         {
             get => _dcBranch1CharHigh;
             set
@@ -403,9 +397,9 @@ namespace EMS.ViewModel
         /// <summary>
         /// DC侧支路1：直流累计充电电量低两字节
         /// </summary>
-        private int _dcBranch1CharLow;
+        private ushort _dcBranch1CharLow;
 
-        public int DcBranch1CharLow
+        public ushort DcBranch1CharLow
         {
             get => _dcBranch1CharLow;
             set
@@ -417,9 +411,9 @@ namespace EMS.ViewModel
         /// <summary>
         /// DC侧支路1：直流累计充电电量
         /// </summary>
-        private double _dcBranch1Char;
+        private uint _dcBranch1Char;
 
-        public double DcBranch1Char
+        public uint DcBranch1Char
         {
             get => _dcBranch1Char;
             set
@@ -431,9 +425,9 @@ namespace EMS.ViewModel
         /// <summary>
         /// DC侧支路1：直流累计放电电量高两字节
         /// </summary>
-        private int _dcBranch1DisCharHigh;
+        private ushort _dcBranch1DisCharHigh;
 
-        public int DcBranch1DisCharHigh
+        public ushort DcBranch1DisCharHigh
         {
             get => _dcBranch1DisCharHigh;
             set
@@ -445,9 +439,9 @@ namespace EMS.ViewModel
         /// <summary>
         /// DC侧支路1：直流累计放电电量低两字节
         /// </summary>
-        private int _dcBranch1DisCharLow;
+        private ushort _dcBranch1DisCharLow;
 
-        public int DcBranch1DisCharLow
+        public ushort DcBranch1DisCharLow
         {
             get => _dcBranch1DisCharLow;
             set
@@ -459,9 +453,9 @@ namespace EMS.ViewModel
         /// <summary>
         /// DC侧支路1：直流累计放电电量
         /// </summary>
-        private double _dcBranch1DisChar;
+        private uint _dcBranch1DisChar;
 
-        public double DcBranch1DisChar
+        public uint DcBranch1DisChar
         {
             get => _dcBranch1DisChar;
             set
@@ -509,27 +503,27 @@ namespace EMS.ViewModel
             value = ControlStateFlagPCS;
             if ((value & 0x0100) != 0)
             {
-                PCSStateColorRemoteControl = new SolidColorBrush(Colors.Transparent);
-                PCSStateColorAutoControl = new SolidColorBrush(Colors.Transparent);
+                PCSStateColorRemoteControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                PCSStateColorAutoControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
                 PCSStateColorManControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#98FB98"));
             }
             else if ((value & 0x0200) != 0)
             {
-                PCSStateColorManControl = new SolidColorBrush(Colors.Transparent);
-                PCSStateColorRemoteControl = new SolidColorBrush(Colors.Transparent);
+                PCSStateColorManControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                PCSStateColorRemoteControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
                 PCSStateColorAutoControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#98FB98"));
             }
             else if ((value & 0x0400) != 0)
             {
-                PCSStateColorAutoControl = new SolidColorBrush(Colors.Transparent);
-                PCSStateColorManControl = new SolidColorBrush(Colors.Transparent);
+                PCSStateColorAutoControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                PCSStateColorManControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
                 PCSStateColorRemoteControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#98FB98"));
             }
             else
             {
-                PCSStateColorAutoControl = new SolidColorBrush(Colors.Transparent);
-                PCSStateColorManControl = new SolidColorBrush(Colors.Transparent);
-                PCSStateColorRemoteControl = new SolidColorBrush(Colors.Transparent);
+                PCSStateColorAutoControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                PCSStateColorManControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                PCSStateColorRemoteControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
             }
         }
 
@@ -539,27 +533,27 @@ namespace EMS.ViewModel
             value = StateFlagPCS;
             if ((value & 0x0200) != 0)
             {
-                FaultStateColorPCS = new SolidColorBrush(Colors.Transparent);
-                PowerOnInitStateColorPCS = new SolidColorBrush(Colors.Transparent);
+                FaultStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                PowerOnInitStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
                 AlarmStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#98FB98"));
             }
             else if ((value & 0x0400) != 0)
             {
-                PowerOnInitStateColorPCS = new SolidColorBrush(Colors.Transparent);
-                AlarmStateColorPCS = new SolidColorBrush(Colors.Transparent);
+                PowerOnInitStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                AlarmStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
                 FaultStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#98FB98"));
             }
             else if ((value & 0x1000) != 0)
             {
-                AlarmStateColorPCS = new SolidColorBrush(Colors.Transparent);
-                FaultStateColorPCS = new SolidColorBrush(Colors.Transparent);
+                AlarmStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                FaultStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
                 PowerOnInitStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#98FB98"));
             }
             else
             {
-                AlarmStateColorPCS = new SolidColorBrush(Colors.Transparent);
-                FaultStateColorPCS = new SolidColorBrush(Colors.Transparent);
-                PowerOnInitStateColorPCS = new SolidColorBrush(Colors.Transparent);
+                AlarmStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                FaultStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                PowerOnInitStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
             }
         }
 
@@ -607,10 +601,10 @@ namespace EMS.ViewModel
         /// </summary>
         public void EnergyCal()
         {
-            int value1;
-            int value2;
-            int value3;
-            int value4;
+            uint value1;
+            uint value2;
+            uint value3;
+            uint value4;
             value1 = DcBranch1CharHigh;
             value2 = DcBranch1CharLow;
             value3 = DcBranch1DisCharHigh;

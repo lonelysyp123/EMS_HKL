@@ -153,20 +153,20 @@ namespace EMS.ViewModel
                     }
 
                     byte[] DCstate = modbusClient.ReadFunc(53026, 7);
-                    dCStatusViewModel.ModuleOnLineFlag = BitConverter.ToUInt16(DCstate, 0);
-                    dCStatusViewModel.ModuleRunFlag = BitConverter.ToUInt16(DCstate, 4);
-                    dCStatusViewModel.ModuleAlarmFlag = BitConverter.ToUInt16(DCstate, 8);
-                    dCStatusViewModel.ModuleFaultFlag = BitConverter.ToUInt16(DCstate, 12);
+                    dCStatusViewModel.ModuleOnLineFlag = BitConverter.ToInt32(DCstate, 0);
+                    dCStatusViewModel.ModuleRunFlag = BitConverter.ToInt32(DCstate, 4);
+                    dCStatusViewModel.ModuleAlarmFlag = BitConverter.ToInt32(DCstate, 8);
+                    dCStatusViewModel.ModuleFaultFlag = BitConverter.ToInt32(DCstate, 12);
 
                     byte[] PCSData = modbusClient.ReadFunc(53005, 10);
-                    pCSMonitorViewModel.AlarmStateFlagDC1 = BitConverter.ToUInt16(PCSData, 0);
-                    pCSMonitorViewModel.AlarmStateFlagDC2 = BitConverter.ToUInt16(PCSData, 4);
-                    pCSMonitorViewModel.AlarmStateFlagDC3 = BitConverter.ToUInt16(PCSData, 6);
-                    pCSMonitorViewModel.AlarmStateFlagPDS = BitConverter.ToUInt16(PCSData, 8);
-                    pCSMonitorViewModel.ControlStateFlagPCS = BitConverter.ToUInt16(PCSData, 10);
-                    pCSMonitorViewModel.StateFlagPCS = BitConverter.ToUInt16(PCSData, 12);
-                    pCSMonitorViewModel.DcBranch1StateFlag1 = BitConverter.ToUInt16(PCSData, 16);
-                    pCSMonitorViewModel.DcBranch1StateFlag2 = BitConverter.ToUInt16(PCSData, 18);
+                    pCSMonitorViewModel.AlarmStateFlagDC1 = BitConverter.ToInt32(PCSData, 0);
+                    pCSMonitorViewModel.AlarmStateFlagDC2 = BitConverter.ToInt32(PCSData, 4);
+                    pCSMonitorViewModel.AlarmStateFlagDC3 = BitConverter.ToInt32(PCSData, 6);
+                    pCSMonitorViewModel.AlarmStateFlagPDS = BitConverter.ToInt32(PCSData, 8);
+                    pCSMonitorViewModel.ControlStateFlagPCS = BitConverter.ToInt32(PCSData, 10);
+                    pCSMonitorViewModel.StateFlagPCS = BitConverter.ToInt32(PCSData, 12);
+                    pCSMonitorViewModel.DcBranch1StateFlag1 = BitConverter.ToInt32(PCSData, 16);
+                    pCSMonitorViewModel.DcBranch1StateFlag2 = BitConverter.ToInt32(PCSData, 18);
 
                     pCSMonitorViewModel.GetDCBranchINFO();
 
