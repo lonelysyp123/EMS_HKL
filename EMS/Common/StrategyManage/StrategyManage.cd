@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="EMS.Common.StrategyManage.EmsController">
+    <Position X="1.25" Y="1.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AABAQAAAACAAAAAAQAABADAAAAAAAEIAAAKAARAAAAA=</HashCode>
+      <FileName>Common\StrategyManage\EmsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EMS.Model.EnergyManagementSystem">
+    <Position X="4.75" Y="1.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAIAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Common\StrategyManage\EnergyManagementSystem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EMS.Common.StrategyManage.IntraDayScheduler">
+    <Position X="4.75" Y="3.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAIAABAAEAAAAAAAAAAAAAAAAAAAAEBAAAAAA=</HashCode>
+      <FileName>Common\StrategyManage\IntraDayScheduler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EMS.ViewModel.StrategyManager">
+    <Position X="7.5" Y="1.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAIAAAQAAQCAAAAABAAABQAAAARAAAFAIEAAA=</HashCode>
+      <FileName>Common\StrategyManage\StrategyManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EMS.Model.BatteryStrategyModel" BaseTypeListCollapsed="true">
+    <Position X="4.75" Y="6.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AgQACAAAIAAAggAAgABABAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\BatteryStrategyModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="EMS.Model.BessCommand">
+    <Position X="7.5" Y="5.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AhQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Model\BatteryStrategyModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="EMS.Common.StrategyManage.ContingencyStatusEnum">
+    <Position X="1.25" Y="5.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAIAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Common\StrategyManage\EmsController.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="EMS.Model.BatteryStrategyEnum">
+    <Position X="1.25" Y="6.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAQAAAAAgAAAAAAAgAAAQAAAAAA=</HashCode>
+      <FileName>Model\BatteryStrategyModel.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
