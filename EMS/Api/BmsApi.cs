@@ -92,7 +92,7 @@ namespace EMS.Api
             return sOCTotalList.Max();
         }
         public static double GetAvgSOC()
-        {
+    {
             List<double> sOCTotalList = GetTotalSOC();
             return sOCTotalList.Average();
         }
