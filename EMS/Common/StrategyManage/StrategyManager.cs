@@ -87,6 +87,8 @@ namespace EMS.ViewModel
         public int GetSystemSamplePeriod() { return 500; } //系统采样频率
 
         public double GetTransformerCapacity() { return 4000; } //总变压器容量
-
+        public List<string> GetBMSAlarmandFaultInfo() { return null ; }
+        public List<string>GetPCSFaultInfo() { return null ; }
+        public bool SetPCSHalt() { return true; }
     }
 }

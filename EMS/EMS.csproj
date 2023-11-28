@@ -208,6 +208,7 @@
     </Compile>
     <Compile Include="Model\BatteryStrategyModel.cs" />
     <Compile Include="Common\StrategyManage\EnergyManagementSystem.cs" />
+    <Compile Include="Model\BMSParameterSettingModel.cs" />
     <Compile Include="Model\StateGridModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
     <Compile Include="Storage\DB\DBManage\PCSStrategyInfoManage.cs" />
