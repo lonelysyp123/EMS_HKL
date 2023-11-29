@@ -16,7 +16,7 @@ namespace EMS.Common.StrategyManage
         private bool _isFaultMode;
         private bool _hasDailyPatternEnabled;
         private bool _hasMaxDemandControlEnabled;
-        private bool _hasReversePowerProtectionEnabled;
+        private bool _hasReversePowerflowProtectionEnabled;
         private bool _hasContigencyCheckEnabled;
         private BessCommand _currentCommand;
         private IntraDayScheduler _scheduler;
@@ -29,7 +29,7 @@ namespace EMS.Common.StrategyManage
             _isAutomaticMode = false;
             _hasDailyPatternEnabled = false;
             _hasMaxDemandControlEnabled = false;
-            _hasReversePowerProtectionEnabled = false;
+            _hasReversePowerflowProtectionEnabled = false;
             _hasContigencyCheckEnabled = true;
             _currentCommand = null;
             _scheduler = new IntraDayScheduler();

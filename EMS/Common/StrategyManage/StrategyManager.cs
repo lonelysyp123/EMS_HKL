@@ -70,7 +70,7 @@ namespace EMS.ViewModel
         public double GetACSmartMeterPower() { return 0; }
 
 
-        public double GetReversePowerThreshold() { return 0; } // 逆功率保护用户设置的阈值
+        public double GetReversePowerflowProtectionThreshold() { return 0; } // 逆功率保护用户设置的阈值
 
         /// <summary>
         ///  对负载放电为正，对电池充电为负
@@ -91,5 +91,7 @@ namespace EMS.ViewModel
         public List<string>GetPCSFaultInfo() { return null ; }
         public bool SetPCSHalt() { return true; }
         public List<string>GetSystemErrors() { return null ; }
+        public double GetDemandControlCapacity() { return 4000; } //总变压器容量
+
     }
 }
