@@ -20,7 +20,7 @@ namespace EMS.ViewModel
             {
                 if (instance == null)
                 {
-                    lock(syncRoot)
+                    lock (syncRoot)
                     {
                         if (instance == null)
                         {
@@ -38,206 +38,55 @@ namespace EMS.ViewModel
         }
 
         /// <summary>
-        /// 峰谷策略
-        /// 1. 储能系统充电
-        /// 当回收电池开始放电时，将放电电流充到储能系统中
-        /// 2. 储能系统放电
-        /// 判断时段，在峰时段且需要向回收电池充电的时候开始放电
-        /// 
-        /// 使用场景
-        /// 在PCS实时监控线程中运行
+        ///  得到用户预设的日内储能充放电曲线
         /// </summary>
-        /// <param name="array1">电网端峰谷电价时段</param>
-        /// <param name="array2">回收电池端充放电时段</param>
-        /// <param name="client">通讯客户端</param>
-        public void PVStrategy(List<BatteryStrategyModel> array2, ModbusClient client)
+        /// <returns>每个时间节点的充放电出力</returns>
+        public List<BatteryStrategyModel> GetDailyPattern()
         {
-            bool b_obj = true;
-            // 判断电池端充放电时段
-            DateTime now = DateTime.Now;
-            var items = array2.Where(s=> DateTime.Parse(s.StartTime) < now && DateTime.Parse(s.EndTime) >= now);
-            if (items.Count() == 1)
-            {
-                BatteryStrategyModel currentStrategy = items.ToArray()[0];
-                if (currentStrategy.BatteryStrategy == BatteryStrategyEnum.ConstantCurrentCharge)
-                {
-                    if (ReadCurrentSOC() > 20)
-                    {
-                        if (ReadPCSMode() != 0 || ReadPCSCurrent() != currentStrategy.SetValue)
-                        {
-                            SetPCS();
-                        }
-                    }
-                    else
-                    {
-                        if (ReadPCSMode() != 0 || ReadPCSCurrent() != 0)
-                        {
-                            SetPCS();
-                        }
-                    }
-                }
-                else if (currentStrategy.BatteryStrategy == BatteryStrategyEnum.ConstantCurrentDischarge)
-                {
-                    if (ReadCurrentSOC() < 80)
-                    {
-                        if (ReadPCSMode() != 0 || ReadPCSCurrent() != currentStrategy.SetValue)
-                        {
-                            SetPCS();
-                        }
-                    } 
-                    else
-                    {
-                        if (ReadPCSMode() != 0 || ReadPCSCurrent() != 0)
-                        {
-                            SetPCS();
-                        }
-                    }
-                }
-                else if (currentStrategy.BatteryStrategy == BatteryStrategyEnum.ConstantPowerCharge)
-                {
-                    if (ReadCurrentSOC() > 20)
-                    {
-                        if (ReadPCSMode() != 1 || ReadPCSPower() != currentStrategy.SetValue)
-                        {
-                            SetPCS();
-                        }
-                    }
-                    else
-                    {
-                        if (ReadPCSMode() != 1 || ReadPCSPower() != 0)
-                        {
-                            SetPCS();
-                        }
-                    }
-                }
-                else if (currentStrategy.BatteryStrategy == BatteryStrategyEnum.ConstantPowerDischarge)
-                {
-                    if (ReadCurrentSOC() < 80)
-                    {
-                        if (ReadPCSMode() != 1 || ReadPCSPower() != currentStrategy.SetValue)
-                        {
-                            SetPCS();
-                        }
-                    }
-                    else
-                    {
-                        // 储能系统停止充电
-                        if (ReadPCSMode() != 1 || ReadPCSPower() != 0)
-                        {
-                            SetPCS();
-                        }
-                    }
-                }
-            }
-        }
-
-        private int ReadPCSPower()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void SetPCS()
-        {
-            throw new NotImplementedException();
-        }
-
-        private int ReadPCSCurrent()
-        {
-            throw new NotImplementedException();
-        }
-
-        private int ReadPCSMode()
-        {
-            throw new NotImplementedException();
-        }
-
-        private double ReadCurrentSOC()
-        {
-            // 根据所有SOC
-            return 0;
+            // 输出需要排序，用户输入时需要检查设定值上下限
+            return new List<BatteryStrategyModel>();
         }
 
         /// <summary>
-        /// 逆功率保护策略
-        /// 
-        /// 使用场景
-        /// 在PCS实时监控线程中运行
+        ///  得到手动模式下用户设定的控制指令
         /// </summary>
-        /// <param name="udc">直流母线电压</param>
-        /// <param name="reversePower">逆电设定值</param>
-        /// <param name="reverseRate">逆功率设定值</param>
-        /// <param name="client">通讯客户端</param>
-        public void VoltageBalanceStrategy(double udc, double reversePower, double reverseRate, ModbusClient client)
+        /// <returns>手动模式下用户设定的控制指令</returns>
+        public BessCommand GetManualCommand() { return new BessCommand(); }
+
+        /// <summary>
+        ///  对PCS发送控制指令，需要包含一定的验证，检查下发指令是否合理，否则报错，该API不能是阻塞函数，需要立刻返回。如遇到异常，需要抛出异常。
+        ///  如果下发指令和当前PCS正在执行的指令一直，可以避免重复下发。
+        /// </summary>
+        /// <returns>指令下发是否成功</returns>
+        public bool SendPcsCommand(BessCommand command)
         {
-            if (udc >= reversePower - 10 && udc < reversePower)
-            {
-                // 将储能下功率Pc设为0
-                SetPCS();
-            }
-            else if (udc >= reversePower)
-            {
-                // 判断DCDC为充电或者未操作
-                if (true)
-                {
-                    // 储能下功率Pc设为reverseRate*400kW进行充电
-                }
-                else
-                {
-                    // 将储能下功率Pc设为0
-                }
-            }
+            return true;
         }
 
         /// <summary>
-        /// 保护策略
-        /// 1. 通讯故障
-        /// PCS停机
-        /// 2. 设备故障
-        ///     a. PCS故障
-        ///     PCS停机
-        ///     b. BMS故障
-        ///     根据故障等级处理
-        /// 
-        /// 使用场景
-        /// 出现故障时运行
+        ///  得到智能电表的注入有功功率，需要是三相总功率，找丁冠文讨论转换事宜
         /// </summary>
-        /// <param name="faultType">故障类型</param>
-        /// <param name="faultLevel">故障等级</param>
-        /// <param name="faultSource">故障源</param>
-        public void ProtectStrategy(object faultType, int faultLevel, object faultSource)
-        {
-            // 故障整理，取等级最高的故障，默认
+        /// <returns>当前AC交流侧电表的三相总功率</returns>
+        public double GetACSmartMeterPower() { return 0; }
 
-            // 判断故障类型，分为通讯故障和设备故障
-            if (true)
-            {
-                // 通讯故障
-                // 只要出现故障就停机
-            }
-            else
-            {
-                // 判断故障源
-                if (true)
-                {
-                    // 源自PCS，只要是故障就停机
-                }
-                else
-                {
-                    // 源自BMS，根据故障等级来规划处理方案
-                    switch (faultLevel)
-                    {
-                        case 1:
-                            // 一级故障需要怎么处理
-                            break;
-                        case 2:
-                            // 二级故障需要怎么处理
-                            break;
-                        case 3:
-                            // 三级故障需要怎么处理
-                            break;
-                    }
-                }
-            }
-        }
+
+        public double GetReversePowerThreshold() { return 0; } // 逆功率保护用户设置的阈值
+
+        /// <summary>
+        ///  对负载放电为正，对电池充电为负
+        /// </summary>
+        /// <returns>当前PCS的直流总功率</returns>
+        public double GetPcsPower() { return 0; }
+
+        public double GetAutomaticControlTolerance() { return 0.1; } //自动模式下的公差
+
+        public double GetChargingDiscount() { return 0.6; } //充电模式中的降功率因数
+
+        public double GetDischargingDiscount() { return 0.6; } //放电模式中的降功率因数
+
+        public int GetSystemSamplePeriod() { return 500; } //系统采样频率
+
+        public double GetTransformerCapacity() { return 4000; } //总变压器容量
+
     }
 }

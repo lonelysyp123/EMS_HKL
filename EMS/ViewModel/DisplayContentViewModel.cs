@@ -46,7 +46,6 @@ namespace EMS.ViewModel
         }
 
         public RelayCommand AddDevCommand { get; set; }
-
         public RelayCommand DelAllDevCommand { get; set; }
         public RelayCommand ModifyPCSTCPCommand { get; set; }
 
@@ -58,7 +57,6 @@ namespace EMS.ViewModel
         public DisplayContentViewModel()
         {
             AddDevCommand = new RelayCommand(AddDev);
-
             DelAllDevCommand = new RelayCommand(DelAllDev);
 
             // 初始化设备列表
@@ -83,8 +81,6 @@ namespace EMS.ViewModel
             manage.DeleteAll();
         }
 
-
-
         private void AddDev()
         {
             AddDevView view = new AddDevView();
@@ -99,8 +95,6 @@ namespace EMS.ViewModel
                     // add Modbus TCP Dev
                     BatteryTotalBase dev = new BatteryTotalBase(view.IPText.AddressText, view.TCPPort.Text);
                     dev.BCMUID = view.BCMUID.Text;
-
-
                     BatteryTotalList.Add(dev);
 
                     //! 配置文件中新增IP
@@ -195,9 +189,9 @@ namespace EMS.ViewModel
                     item.IsInternet = false;
                 }
             }
-            catch
+            catch(Exception ex)
             {
-
+                throw ex;
             }
         }
 
@@ -254,7 +248,6 @@ namespace EMS.ViewModel
                 Array.Copy(client.AddReadRequest(10240, 120), 0, BMUData, 480, 240);
                 Array.Copy(client.AddReadRequest(10360, 12), 0, BMUData, 720, 24);
 
-
                 // 信息补全
                 total.TotalVoltage = BitConverter.ToUInt16(BCMUData, 0) * 0.1;
                 total.TotalCurrent = BitConverter.ToInt16(BCMUData, 2) * 0.1;
@@ -280,7 +273,6 @@ namespace EMS.ViewModel
                 //total.BatteriesCountInSeries = BitConverter.ToUInt16(BCMUData, 42);
                 total.BatteriesCountInSeries = 14;
                 ///zyf
-                ///
                 total.StateBCMU = BitConverter.ToInt16(BCMUData, 48);
                 total.IResistanceRP = BitConverter.ToInt16(BCMUData, 50);
                 total.IResistanceRN = BitConverter.ToInt16(BCMUData, 52);
@@ -305,19 +297,10 @@ namespace EMS.ViewModel
                 total.AvgVol = BitConverter.ToUInt16(BCMUData, 88) * 0.01;
                 total.Series.Clear();
 
-
                 //转化BCMU状态及Color标志
-
-
                 bool FaultyColorFlagBCMU = GetActiveFaultyBCMU(total);
                 int AlarmColorFlagBCMU = GetBCMUAlarm(total);
-
-
-
-                /// <summary>
-                /// BMU信息
-                /// </summary>
-
+                // BMU信息
                 for (int i = 0; i < total.SeriesCount; i++)
                 {
                     BatterySeriesBase series = new BatterySeriesBase();
@@ -337,28 +320,21 @@ namespace EMS.ViewModel
                     series.ChargeChannelStateNumber = GetSetBitPositions(series.ChargeChannelState).ToString();
                     bool FaultColorBMU = GetActiveFaultyBMU(series);
                     bool AlarmColorBMU = GetActiveAlarmBMU(series);
-
-
                     //if (FaultColorBMU) { series.FaultyColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000")); }
-                    //else { series.FaultyColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1")); }
-
+                    //else { series.FaultyColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1")); 
                     //if (AlarmColorBMU) { series.AlarmColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000")); }
                     //else { series.AlarmColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1")); }
-
                     series.Batteries.Clear();
-
                     byte[] BMUIDArray = new byte[16];
                     Array.Copy(BMUIDData, 16 * i, BMUIDArray, 0, 16);
                     int ID1 = BitConverter.ToInt16(BMUIDArray, 0);
                     StringBuilder BMUNameBuilder = new StringBuilder();
-
                     for (int k = 0; k < 16; k++)
                     {
                         char BMUIDChar = Convert.ToChar(BMUIDArray[k]);
                         BMUNameBuilder.Append(BMUIDChar);
                     }
                     series.BMUID = BMUNameBuilder.ToString();
-
                     for (int j = 0; j < total.BatteriesCountInSeries; j++)
                     {
                         BatteryBase battery = new BatteryBase();
@@ -453,7 +429,6 @@ namespace EMS.ViewModel
                                 total.StandStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                                 total.OffNetStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
                             }
-
                         });
 
                     }
@@ -461,10 +436,6 @@ namespace EMS.ViewModel
                 }
             }
         }
-
-
-
-
 
         /// <summary>
         /// 转化BCMU警告状态及颜色flag
@@ -501,7 +472,6 @@ namespace EMS.ViewModel
                 j1 = i / 2;
                 if (twoBitValue != 0)
                 {
-
                     result2.Add(j1, twoBitValue);
                 }
             }
@@ -511,11 +481,8 @@ namespace EMS.ViewModel
                 j2 = i / 2;
                 if (twoBitValue != 0)
                 {
-
                     result3.Add(j2, twoBitValue);
                 }
-
-
             }
             int colorvalue2 = 0;
             int colorvalue3 = 0;
@@ -536,15 +503,9 @@ namespace EMS.ViewModel
                 colorvalueper = result2.Max(pair => pair.Value);
             }
 
-
-
-
-
             int colorvalue = Math.Max(colorvalue1, colorvalueper);
-
             foreach (var item in result2)
             {
-
                 switch (item.Key)
                 {
                     case 0:
@@ -603,7 +564,6 @@ namespace EMS.ViewModel
                             if (item.Value == 3) INFO.Add("放电高温三级");
                         }
                         break;
-
                 }
             }
 
@@ -645,10 +605,6 @@ namespace EMS.ViewModel
             total.AlarmStateBCMU = INFO;
             return colorvalue;
         }
-
-
-
-
 
         /// <summary>
         /// 转化BCMU故障状态及颜色flag
@@ -745,8 +701,6 @@ namespace EMS.ViewModel
             return colorflag;
         }
 
-
-
         /// <summary>
         /// 解析BCMU的均衡状态
         /// </summary>
@@ -771,9 +725,6 @@ namespace EMS.ViewModel
 
             return bitPosition;
         }
-
-
-
 
         /// <summary>
         /// 展示实时数据
@@ -863,7 +814,6 @@ namespace EMS.ViewModel
                         total.SeriesCount = 3;
                         total.BatteriesCountInSeries = 14;
                         ///zyf
-                        ///
                         total.StateBCMU = BitConverter.ToInt16(BCMUData, 48);
                         total.IResistanceRP = BitConverter.ToInt16(BCMUData, 50);
                         total.IResistanceRN = BitConverter.ToInt16(BCMUData, 52);
@@ -885,13 +835,8 @@ namespace EMS.ViewModel
                         total.RestCoulomb = BitConverter.ToUInt16(BCMUData, 84) * 0.01;
                         total.MaxVolDiff = BitConverter.ToUInt16(BCMUData, 86) * 0.01;
                         total.AvgVol = BitConverter.ToUInt16(BCMUData, 88) * 0.01;
-
                         bool FaultyColorFlagBCMU = GetActiveFaultyBCMU(total);
                         int AlarmColorFlagBCMU = GetBCMUAlarm(total);
-
-
-
-
                         for (int i = 0; i < total.Series.Count; i++)
                         {
                             BatterySeriesBase series = total.Series[i];
@@ -959,7 +904,6 @@ namespace EMS.ViewModel
                                     if (FaultColorBMU) { series.FaultyColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000")); }
                                     else { series.FaultyColorBMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1")); }
 
-
                                     if (AlarmColorFlagBCMU == 1)
                                     {
                                         total.AlarmColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFA07A"));
@@ -985,10 +929,6 @@ namespace EMS.ViewModel
                                     {
                                         total.FaultyColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                                     }
-
-
-
-
 
                                     ///BCMU状态变化
                                     if (total.StateBCMU == 1)
@@ -1019,16 +959,11 @@ namespace EMS.ViewModel
                                         total.StandStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                                         total.OffNetStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
                                     }
-
-
                                 });
 
-                                ///取BMU故障码
-
-
-
+                                //取BMU故障码
+                                
                             }
-
                         }
 
                         if (total.IsRecordData)
@@ -1143,7 +1078,6 @@ namespace EMS.ViewModel
             Thread thread = new Thread(SaveBatteryData);
             thread.IsBackground = true;
             thread.Start();
-
             IsStartSaveData = true;
         }
 
