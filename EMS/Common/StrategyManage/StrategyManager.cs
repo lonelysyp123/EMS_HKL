@@ -91,5 +91,7 @@ namespace EMS.ViewModel
         public List<string>GetPCSFaultInfo() { return null ; }
         public bool SetPCSHalt() { return true; }
         public List<string>GetSystemErrors() { return null ; }
+        public double GetDemandControlCapacity() { return 4000; } //总变压器容量
+
     }
 }
