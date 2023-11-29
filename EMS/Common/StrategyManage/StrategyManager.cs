@@ -90,5 +90,6 @@ namespace EMS.ViewModel
         public List<string> GetBMSAlarmandFaultInfo() { return null ; }
         public List<string>GetPCSFaultInfo() { return null ; }
         public bool SetPCSHalt() { return true; }
+        public List<string>GetSystemErrors() { return null ; }
     }
 }
