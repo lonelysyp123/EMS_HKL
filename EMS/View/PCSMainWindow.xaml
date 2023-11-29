@@ -72,8 +72,8 @@
                                 </TextBlock.Effect>
                             </TextBlock>
 
-                            <Border Grid.Column="1" Grid.Row="1"  CornerRadius="10" Background="{Binding AlarmColorDC}" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding VisDCAlarm}">
-                                <TextBlock Text="DC模块故障" TextAlignment="Center"  >
+                            <Border Grid.Column="1" Grid.Row="1"  CornerRadius="10" Background="{Binding AlarmColorDC}" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding VisDCAlarm}" Width="200" Height="50">
+                                <TextBlock Text="DC模块故障" TextAlignment="Center"  VerticalAlignment="Center">
                                     <TextBlock.ToolTip>
                                         <ToolTip Height="auto" Width="auto" Background="White" >
                                             <StackPanel>
@@ -90,8 +90,8 @@
                             </TextBlock>
                             </Border>
 
-                            <Border Grid.Column="1" Grid.Row="2"  CornerRadius="10" Background="{Binding AlarmColorPDS}" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding VisPDSAlarm}">
-                                <TextBlock Text="PDS故障" HorizontalAlignment="Center" >
+                            <Border Grid.Column="1" Grid.Row="2"  CornerRadius="10" Background="{Binding AlarmColorPDS}" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding VisPDSAlarm}" Width="200" Height="50">
+                                <TextBlock Text="PDS故障" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <TextBlock.ToolTip>
                                         <ToolTip Height="auto" Width="auto" Background="White">
                                             <StackPanel>
@@ -148,36 +148,36 @@
 
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="50 20 0 0" Foreground="White" Text="直流功率："  Grid.Row="2"/>
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="{Binding DcBranch1DCPower}" Grid.Row="2" Grid.Column="1" Margin="0 20 0 0"/>
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="kW"  Grid.Row="2" Grid.Column="2" Margin="0 20 0 0"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="kW"  Grid.Row="2" Grid.Column="2" Margin="0 20 0 0" FontSize="30"/>
 
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="White" Text="直流电压："   Grid.Row="2" Grid.Column="3" Margin="0 20 0 0"/>
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="{Binding DcBranch1DCVol}" Grid.Row="2" Grid.Column="4" Margin="0 20 0 0"/>
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="V"  Grid.Row="2" Grid.Column="5" Margin="0 20 0 0"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="V"  Grid.Row="2" Grid.Column="5" Margin="0 20 0 0" FontSize="30"/>
 
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" Text="直流电流："  Grid.Row="3" Grid.Column="0" Margin="50 20 0 0"/>
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="{Binding DcBranch1DCCur}" Grid.Row="3" Grid.Column="1" Margin="0 20 0 0"/>
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="A"  Grid.Row="3" Grid.Column="2" Margin="0 20 0 0"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="A"  Grid.Row="3" Grid.Column="2" Margin="0 20 0 0" FontSize="30" />
 
 
 
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="50 20 0 0" Foreground="White" Text="累计充电电量：" Grid.Row="4" Grid.Column="0"/>
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="{Binding DcBranch1Char}" Grid.Row="4" Grid.Column="1" Margin="0 20 0 0"/>
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="kWh" Grid.Row="4" Grid.Column="2" Margin="0 20 0 0"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="kWh" Grid.Row="4" Grid.Column="2" Margin="0 20 0 0" FontSize="30"/>
 
 
 
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="50 20 0 20" Foreground="White" Text="累计放电电量：" Grid.Row="5" Grid.Column="0"/>
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="{Binding DcBranch1DisChar}" Grid.Row="5" Grid.Column="1" Margin="0 20 0 20"/>
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="kWh" Grid.Row="5" Grid.Column="2" Margin="0 20 0 20"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="kWh" Grid.Row="5" Grid.Column="2" Margin="0 20 0 20" FontSize="30"/>
 
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="White" Text="BUS侧电压：" Grid.Row="5" Grid.Column="3" Margin="0 20 0 20"/>
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="{Binding DcBranch1BUSVol}" Grid.Row="5" Grid.Column="4" Margin="0 20 0 20"/>
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="V" Grid.Row="5" Grid.Column="5" Margin="0 20 0 20"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="V" Grid.Row="5" Grid.Column="5" Margin="0 20 0 20" FontSize="30"/>
                         </Grid>
                     </Grid>
 
                     <!--  总体概览  -->
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="1" Margin="0 10 0 0">
                         <Grid.Background>
                             <ImageBrush ImageSource="pack://application:,,,/EMS;component/Resource/Image/ListBorder.png" />
                         </Grid.Background>
@@ -210,13 +210,13 @@
                         <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Margin="60 0 0 0">
                             <TextBlock VerticalAlignment="Center" Foreground="White" Text="模块温度：" />
                             <TextBlock VerticalAlignment="Center" Foreground="White" Text="{Binding ModuleTemperature}" Width="60"/>
-                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="℃" />
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="℃" FontSize="30"/>
                         </StackPanel>
 
                         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" >
                             <TextBlock VerticalAlignment="Center" Foreground="White" Text="环境温度：" />
                             <TextBlock VerticalAlignment="Center" Foreground="White" Text="{Binding AmbientTemperature}" Width="60" />
-                            <TextBlock Width="50" VerticalAlignment="Center" Foreground="White" Text="℃" />
+                            <TextBlock Width="50" VerticalAlignment="Center" Foreground="White" Text="℃" FontSize="30"/>
                         </StackPanel>
 
                         <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Margin="40 0 0 0">
@@ -479,10 +479,10 @@
                                 <TextBox  Text="{Binding ChCutCurrent}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="4"  Margin="0 0 0 20"/>
                                 <TextBlock Text="A" VerticalAlignment="Center" Grid.Column="5"/>
                                 <TextBlock Text="最大充电电流："  VerticalAlignment="Center" Margin="20,0,0,0" Grid.Column="6"/>
-                                <TextBox  Text="{Binding MaxChCurrent}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="7"  Margin="0 0 0 20"/>
+                                <TextBox  Text="{Binding MaxChCurrent}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="7"  Margin="0 0 0 20" Width="100"/>
                                 <TextBlock Text="A" VerticalAlignment="Center" Grid.Column="8"  />
                                 <TextBlock Text="最大放电电流："  VerticalAlignment="Center" Margin="10,0,0,0" Grid.Column="9"/>
-                                <TextBox  Text="{Binding MaxDisChCurrent}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="10"  Margin="0 0 0 20"/>
+                                <TextBox  Text="{Binding MaxDisChCurrent}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="10"  Margin="0 0 0 20" Width="100"/>
                                 <TextBlock Text="A" VerticalAlignment="Center" Grid.Column="11"/>
 
 
