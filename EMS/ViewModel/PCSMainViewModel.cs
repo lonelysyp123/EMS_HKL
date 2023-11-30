@@ -73,6 +73,7 @@ namespace EMS.ViewModel
 
         public RelayCommand StartDaqCommand { get; set; }
         public RelayCommand StopDaqCommand { get; set; }
+        public RelayCommand DisConnectCommand { get; set; }
 
 
         public PCSMainViewModel()
@@ -83,6 +84,7 @@ namespace EMS.ViewModel
             pCSParSettingViewModel = new PCSParSettingViewModel();
 
             ConnectCommand = new RelayCommand(Connect);
+            DisConnectCommand = new RelayCommand(DisConnect);
             StartDaqCommand = new RelayCommand(StartDaq);
             StopDaqCommand = new RelayCommand(StopDaq);
 
@@ -125,6 +127,30 @@ namespace EMS.ViewModel
                 MainWindowPCSConnectState = "未连接";
                 MainWindowPCSConnectColor = new SolidColorBrush(Colors.Red);
                 MessageBox.Show("请输入正确的IP地址。");
+            }
+        }
+
+        public void DisConnect()
+        {
+            try
+            {
+                if (pCSParSettingViewModel.IsConnected == false)
+                {
+                    MessageBox.Show("请连接");
+                }
+                if (pCSParSettingViewModel.IsConnected == true& isRead == false)
+                {
+                    modbusClient.Disconnect(); 
+                    pCSParSettingViewModel.IsConnected = false;
+                }
+                else if (pCSParSettingViewModel.IsConnected == true & isRead == true)
+                {
+                    MessageBox.Show("请停止采集");
+                }
+            }
+            catch(Exception ex)
+            {
+                throw (ex);
             }
         }
 

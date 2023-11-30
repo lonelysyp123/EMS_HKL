@@ -32,6 +32,7 @@
 
         <StackPanel Orientation="Horizontal"  Background="LightBlue">
             <Button Content=" 连接" Command="{Binding ConnectCommand}"/>
+            <Button Content=" 断开连接" Command="{Binding DisConnectCommand}"/>
             <Button Content=" 开始采集" Command="{Binding StartDaqCommand}"/>
             <Button Content=" 停止采集" Command="{Binding StopDaqCommand}"/>
         </StackPanel>
