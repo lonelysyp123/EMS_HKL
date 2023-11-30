@@ -33,6 +33,7 @@
         <StackPanel Orientation="Horizontal"  Background="LightBlue">
             <Button Content=" 连接" Command="{Binding ConnectCommand}"/>
             <Button Content=" 开始采集" Command="{Binding StartDaqCommand}"/>
+            <Button Content=" 停止采集" Command="{Binding StopDaqCommand}"/>
         </StackPanel>
 
         <TabControl Grid.Row="1" FontSize="25" >

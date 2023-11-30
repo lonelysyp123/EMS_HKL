@@ -61,6 +61,7 @@ namespace EMS.ViewModel
         public PCSParSettingViewModel pCSParSettingViewModel;
 
         public ModbusClient modbusClient;
+
         public bool isRead = false;
 
         public Thread thread;
@@ -71,6 +72,7 @@ namespace EMS.ViewModel
         public RelayCommand ConnectCommand { get; set; }
 
         public RelayCommand StartDaqCommand { get; set; }
+        public RelayCommand StopDaqCommand { get; set; }
 
 
         public PCSMainViewModel()
@@ -82,6 +84,7 @@ namespace EMS.ViewModel
 
             ConnectCommand = new RelayCommand(Connect);
             StartDaqCommand = new RelayCommand(StartDaq);
+            StopDaqCommand = new RelayCommand(StopDaq);
 
             pCSMonitorViewModel.VisDCAlarm = Visibility.Hidden;
             pCSMonitorViewModel.VisPDSAlarm = Visibility.Hidden;
@@ -141,17 +144,21 @@ namespace EMS.ViewModel
             }
         }
 
+        public void StopDaq()
+        {
+            isRead=false;
+        }
+
         public void ReadINFO()
         {
             while (true)
             {
+                if (!isRead)
+                {
+                    break;
+                }
                 try
                 {
-                    if (!isRead)
-                    {
-                        break;
-                    }
-
                     byte[] DCstate = modbusClient.ReadFunc(53026, 7);
                     dCStatusViewModel.ModuleOnLineFlag = BitConverter.ToUInt16(DCstate, 0);
                     dCStatusViewModel.ModuleRunFlag = BitConverter.ToUInt16(DCstate, 4);
