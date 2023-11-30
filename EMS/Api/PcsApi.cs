@@ -49,7 +49,7 @@ namespace EMS.Api
             ///1、获取到pcs管理对象，pcs管理对象应该是单例的
             ///2、管理对象查询对应pcsid的实例对象
             ///3、如果实例pcs对像所处状态可以下发动作指令,执行动作，并且返回动作执行结果，否则返回动作执行失败
-
+            var abc = EnergyManagementSystem.GlobalInstance.PcsManager;
             return true;
         }
         /// <summary>
