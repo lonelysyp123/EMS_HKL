@@ -37,6 +37,8 @@ namespace EMS
             DevListView.DataContext = viewmodel.DisplayContent;
             DaqDataRaBtn.IsChecked = true;
             SelectedPage("DaqDataRaBtn");
+
+            EnergyManagementSystem.GlobalInstance.Initialization(null, null, null, null, null);
             //pcsviewmodel = new PCSSettingViewModel();
             //PCSView.DataContext = pcsviewmodel;
         }
