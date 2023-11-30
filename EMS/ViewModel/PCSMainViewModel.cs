@@ -218,6 +218,30 @@ namespace EMS.ViewModel
             }
         }
 
+        public void DisConnect()
+        {
+            try
+            {
+                if (pCSParSettingViewModel.IsConnected == false)
+                {
+                    MessageBox.Show("请连接");
+                }
+                if (pCSParSettingViewModel.IsConnected == true& isRead == false)
+                {
+                    modbusClient.Disconnect(); 
+                    pCSParSettingViewModel.IsConnected = false;
+                }
+                else if (pCSParSettingViewModel.IsConnected == true & isRead == true)
+                {
+                    MessageBox.Show("请停止采集");
+                }
+            }
+            catch(Exception ex)
+            {
+                throw (ex);
+            }
+        }
+
         public void StartDaq()
         {
             if (pCSParSettingViewModel.IsConnected==false)
