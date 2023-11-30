@@ -11,6 +11,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EMS.Common.Modbus.ModbusTCP;
 using EMS.View;
+using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace EMS.ViewModel
 {
@@ -55,6 +57,39 @@ namespace EMS.ViewModel
             }
         }
 
+        /// <summary>
+        /// 采集状态图片
+        /// </summary>
+        private ImageSource  _daqImageSource;
+
+        public ImageSource DaqImageSource
+        {
+            get => _daqImageSource;
+            set
+            {
+                SetProperty(ref _daqImageSource, value);
+            }
+        }
+
+        /// <summary>
+        /// 连接状态图片
+        /// </summary>
+        private ImageSource _connectImageSource;
+
+        public ImageSource ConnectImageSource
+        {
+            get => _connectImageSource;
+            set
+            {
+                SetProperty(ref _connectImageSource, value);
+            }
+        }
+
+
+
+
+
+
         public DCStatusViewModel dCStatusViewModel;
         public PCSFaultViewModel pCSFaultViewModel;
         public PCSMonitorViewModel pCSMonitorViewModel;
@@ -73,6 +108,7 @@ namespace EMS.ViewModel
 
         public RelayCommand StartDaqCommand { get; set; }
         public RelayCommand StopDaqCommand { get; set; }
+        public RelayCommand DisConnectCommand { get; set; }
 
 
         public PCSMainViewModel()
@@ -83,6 +119,7 @@ namespace EMS.ViewModel
             pCSParSettingViewModel = new PCSParSettingViewModel();
 
             ConnectCommand = new RelayCommand(Connect);
+            DisConnectCommand = new RelayCommand(DisConnect);
             StartDaqCommand = new RelayCommand(StartDaq);
             StopDaqCommand = new RelayCommand(StopDaq);
 
@@ -91,8 +128,19 @@ namespace EMS.ViewModel
 
             MainWindowPCSConnectState = "未连接";
             MainWindowPCSConnectColor = new SolidColorBrush(Colors.Red);
+
+            //BitmapImage bi;
+            //DirectoryInfo directory = new DirectoryInfo("./Resource/Image");
+            //FileInfo[] files = directory.GetFiles("pause.png");
+            //bi = new BitmapImage();
+            //bi.BeginInit();
+            //bi.UriSource = new Uri(files[0].FullName, UriKind.Absolute);
+            //bi.EndInit();
+            //DaqImageSource = bi;
         }
 
+
+        
 
         public void Connect()
         {
@@ -117,6 +165,15 @@ namespace EMS.ViewModel
 
                         pCSParSettingViewModel.IsConnected = true;
                         pCSParSettingViewModel.modbusClient = modbusClient;
+
+                        BitmapImage bi;
+                        DirectoryInfo directory = new DirectoryInfo("./Resource/Image");
+                        FileInfo[] files = directory.GetFiles("OnConnect.png");
+                        bi = new BitmapImage();
+                        bi.BeginInit();
+                        bi.UriSource = new Uri(files[0].FullName, UriKind.Absolute);
+                        bi.EndInit();
+                        ConnectImageSource = bi;
                     }
                 }
             }
@@ -124,7 +181,40 @@ namespace EMS.ViewModel
             {
                 MainWindowPCSConnectState = "未连接";
                 MainWindowPCSConnectColor = new SolidColorBrush(Colors.Red);
-                MessageBox.Show("请输入正确的IP地址。");
+                MessageBox.Show("请输入正确的IP地址");
+            }
+        }
+
+        public void DisConnect()
+        {
+            try
+            {
+                if (pCSParSettingViewModel.IsConnected == false)
+                {
+                    MessageBox.Show("请连接");
+                }
+                if (pCSParSettingViewModel.IsConnected == true& isRead == false)
+                {
+                    modbusClient.Disconnect(); 
+                    pCSParSettingViewModel.IsConnected = false;
+
+                    BitmapImage bi;
+                    DirectoryInfo directory = new DirectoryInfo("./Resource/Image");
+                    FileInfo[] files = directory.GetFiles("OffConnect.png");
+                    bi = new BitmapImage();
+                    bi.BeginInit();
+                    bi.UriSource = new Uri(files[0].FullName, UriKind.Absolute);
+                    bi.EndInit();
+                    ConnectImageSource = bi;
+                }
+                else if (pCSParSettingViewModel.IsConnected == true & isRead == true)
+                {
+                    MessageBox.Show("请停止采集");
+                }
+            }
+            catch(Exception ex)
+            {
+                throw (ex);
             }
         }
 
@@ -141,12 +231,30 @@ namespace EMS.ViewModel
 
                 isRead = true;
                 thread.Start();
+
+                BitmapImage bi;
+                DirectoryInfo directory = new DirectoryInfo("./Resource/Image");
+                FileInfo[] files = directory.GetFiles("play.png");
+                bi = new BitmapImage();
+                bi.BeginInit();
+                bi.UriSource = new Uri(files[0].FullName, UriKind.Absolute);
+                bi.EndInit();
+                DaqImageSource = bi;
             }
         }
 
         public void StopDaq()
         {
-            isRead=false;
+            isRead = false;
+
+            BitmapImage bi;
+            DirectoryInfo directory = new DirectoryInfo("./Resource/Image");
+            FileInfo[] files = directory.GetFiles("pause.png");
+            bi = new BitmapImage();
+            bi.BeginInit();
+            bi.UriSource = new Uri(files[0].FullName, UriKind.Absolute);
+            bi.EndInit();
+            DaqImageSource = bi;
         }
 
         public void ReadINFO()
