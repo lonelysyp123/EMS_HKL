@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -48,7 +49,8 @@ namespace EMS.Api
             ///1、获取到pcs管理对象，pcs管理对象应该是单例的
             ///2、管理对象查询对应pcsid的实例对象
             ///3、如果实例pcs对像所处状态可以下发动作指令,执行动作，并且返回动作执行结果，否则返回动作执行失败
-
+            //var log = LogManager.GetLogger(typeof(PcsApi));
+            //log.Debug("log Pcs test");
             return true;
         }
         /// <summary>
