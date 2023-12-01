@@ -16,7 +16,7 @@ namespace EMS.Common.StrategyManage
         private bool _isFaultMode;
         private bool _hasDailyPatternEnabled;
         private bool _hasMaxDemandControlEnabled;
-        private bool _hasReversePowerProtectionEnabled;
+        private bool _hasReversePowerflowProtectionEnabled;
         private bool _hasContigencyCheckEnabled;
         private BessCommand _currentCommand;
         private IntraDayScheduler _scheduler;
@@ -29,7 +29,7 @@ namespace EMS.Common.StrategyManage
             _isFaultMode = false;
             _hasDailyPatternEnabled = false;
             _hasMaxDemandControlEnabled = false;
-            _hasReversePowerProtectionEnabled = false;
+            _hasReversePowerflowProtectionEnabled = false;
             _hasContigencyCheckEnabled = true;
             _currentCommand = null;
             _scheduler = new IntraDayScheduler();
@@ -62,15 +62,15 @@ namespace EMS.Common.StrategyManage
                         strategy = newCommand.BatteryStrategy;
                     }
                     double netPowerInjection = StrategyManager.Instance.GetACSmartMeterPower();
-                    double reversePowerThreshold = StrategyManager.Instance.GetReversePowerThreshold();
+                    double reversePowerflowProtectionThreshold = StrategyManager.Instance.GetReversePowerflowProtectionThreshold();
                     double pcsPower = StrategyManager.Instance.GetPcsPower();
                     double load = netPowerInjection + pcsPower;
                     double tolerance = StrategyManager.Instance.GetAutomaticControlTolerance();
-                    double capacity = StrategyManager.Instance.GetTransformerCapacity();
+                    double capacity = StrategyManager.Instance.GetDemandControlCapacity();
 
-                    if (_hasReversePowerProtectionEnabled && (strategy == BatteryStrategyEnum.ConstantCurrentDischarge || strategy == BatteryStrategyEnum.ConstantPowerDischarge))
+                    if (_hasReversePowerflowProtectionEnabled && (strategy == BatteryStrategyEnum.ConstantCurrentDischarge || strategy == BatteryStrategyEnum.ConstantPowerDischarge))
                     {
-                        maxPowerOutput = load - reversePowerThreshold * (1 + tolerance);
+                        maxPowerOutput = load - reversePowerflowProtectionThreshold * (1 + tolerance);
                         controlValue = Math.Min(controlValue, maxPowerOutput);
                         if (controlValue < 0)
                         {
