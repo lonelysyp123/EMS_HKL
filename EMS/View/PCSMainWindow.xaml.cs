@@ -23,27 +23,41 @@ namespace EMS.View
     public partial class PCSMainWindow : Window
     {
         PCSMainViewModel viewModel;
-        public PCSMainWindow()
+        public PCSMainWindow(PCSMainViewModel viewmodel)
         {
             InitializeComponent();
 
-            viewModel = new PCSMainViewModel();
+            viewModel=viewmodel;
             this.DataContext = viewModel;
             
             PCSMonitorView.DataContext = viewModel.pCSMonitorViewModel;
             DCStatusView.DataContext = viewModel.dCStatusViewModel;
             PCSSettingView.DataContext = viewModel.pCSParSettingViewModel;
+            
+            //viewModel = new PCSMainViewModel();
+            //viewModel = viewModel1;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            viewModel.isRead = false;
-
-            if (viewModel.thread != null)
+            if (viewModel.isRead)
             {
-                if (viewModel.thread.ThreadState == ThreadState.Stopped)
+                MessageBox.Show("请停止采集");
+                e.Cancel = true;
+            }
+            else if (viewModel.pCSParSettingViewModel.IsConnected)
+            {
+                MessageBox.Show("请断开连接");
+                e.Cancel = true;
+            }
+            else if(viewModel.pCSParSettingViewModel.IsConnected==false& viewModel.isRead==false)
+            {
+                if (viewModel.thread != null)
                 {
-                    viewModel.thread = null;
+                    if (viewModel.thread.ThreadState == ThreadState.Stopped)
+                    {
+                        viewModel.thread = null;
+                    }
                 }
             }
         }

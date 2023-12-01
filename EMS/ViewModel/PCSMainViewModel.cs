@@ -91,7 +91,6 @@ namespace EMS.ViewModel
 
 
         public DCStatusViewModel dCStatusViewModel;
-        public PCSFaultViewModel pCSFaultViewModel;
         public PCSMonitorViewModel pCSMonitorViewModel;
         public PCSParSettingViewModel pCSParSettingViewModel;
 
@@ -114,7 +113,6 @@ namespace EMS.ViewModel
         public PCSMainViewModel()
         {
             dCStatusViewModel = new DCStatusViewModel();
-            pCSFaultViewModel = new PCSFaultViewModel();
             pCSMonitorViewModel = new PCSMonitorViewModel();
             pCSParSettingViewModel = new PCSParSettingViewModel();
 
@@ -197,6 +195,8 @@ namespace EMS.ViewModel
                 {
                     modbusClient.Disconnect(); 
                     pCSParSettingViewModel.IsConnected = false;
+                    MainWindowPCSConnectState = "未连接";
+                    MainWindowPCSConnectColor = new SolidColorBrush(Colors.Red);
 
                     BitmapImage bi;
                     DirectoryInfo directory = new DirectoryInfo("./Resource/Image");

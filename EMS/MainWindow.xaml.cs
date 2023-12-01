@@ -191,7 +191,7 @@ namespace EMS
 
         private void OpenPCSWindow_Click(object sender, RoutedEventArgs e)
         {
-            PCSMainWindow mainwindow = new PCSMainWindow();
+            PCSMainWindow mainwindow = new PCSMainWindow(pCSMainViewModel);
             mainwindow.Show();
         }
 

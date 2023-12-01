@@ -259,7 +259,6 @@
     <Compile Include="ViewModel\DisplayContentViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ParameterSettingViewModel.cs" />
-    <Compile Include="ViewModel\PCSFaultViewModel.cs" />
     <Compile Include="ViewModel\PCSMainViewModel.cs" />
     <Compile Include="ViewModel\PCSMonitorViewModel.cs" />
     <Compile Include="ViewModel\PCSParSettingViewModel.cs" />
