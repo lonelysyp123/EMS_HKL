@@ -10,7 +10,7 @@ namespace EMS.Common.StrategyManage
 {
     public class IntraDayScheduler
     {
-        private List<BatteryStrategyModel> _dailyPattern;
+        private List<BatteryStrategyModel> _dailyPattern = new List<BatteryStrategyModel>();
         private int _currentOverridePointer;
         private bool _hasCrossing12AM;
 
