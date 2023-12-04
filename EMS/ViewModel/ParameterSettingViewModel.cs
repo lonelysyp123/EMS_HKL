@@ -1,5 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using EMS.Api;
 using EMS.Common.Modbus.ModbusTCP;
+using EMS.Model;
+using EMS.MyControl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -552,9 +555,12 @@ namespace EMS.ViewModel
             ClusterVolLowLimitLv3 = BitConverter.ToUInt16(data, 10) * 0.1;
 
         }
-
+        
         private void SyncClusterVolThreshInfo()
         {
+            
+
+
             ModbusClient.WriteFunc(40200, (ushort)(ClusterVolUpLimitLv1 * 10));
             ModbusClient.WriteFunc(40201, (ushort)(ClusterVolUpLimitLv2 * 10));
             ModbusClient.WriteFunc(40202, (ushort)(ClusterVolUpLimitLv3 * 10));
