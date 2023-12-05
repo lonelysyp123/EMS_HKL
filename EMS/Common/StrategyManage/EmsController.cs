@@ -23,10 +23,10 @@ namespace EMS.Common.StrategyManage
         private ContingencyStatusEnum _contingencyStatus;
         private DateTime _lastActiveTimestamp; // used to indicate the system operation thread is still alive.
 
+        public bool IsFaultMode { get {return this._contingencyStatus == ContingencyStatusEnum.Level2 || this._contingencyStatus == ContingencyStatusEnum.Level3; } }
         public EmsController()
         {
             _isAutomaticMode = false;
-           
             _hasDailyPatternEnabled = false;
             _hasMaxDemandControlEnabled = false;
             _hasReversePowerProtectionEnabled = false;
@@ -40,14 +40,14 @@ namespace EMS.Common.StrategyManage
         public void ContinueOperation()
         {
             ContingencyCheck();
-            if (!_isFaultMode) { NormalOperation(); }
+            NormalOperation();
             
             _lastActiveTimestamp = DateTime.Now;
             Thread.Sleep(StrategyManager.Instance.GetSystemSamplePeriod());
         }
         private void NormalOperation()
         {
-            if(_contingencyStatus!=ContingencyStatusEnum.Level3&& _contingencyStatus != ContingencyStatusEnum.Level2)
+            if(!IsFaultMode)
             {
                 BessCommand newCommand;
                 double controlValue = 0;
@@ -138,17 +138,17 @@ namespace EMS.Common.StrategyManage
         {
             if (!_hasContigencyCheckEnabled) return; //未启用则直接return
             ///获取全部故障告警
-            List<string>bMSerrors = StrategyManager.Instance.GetBMSAlarmandFaultInfo();
-            List<string>pCSerrors = StrategyManager.Instance.GetPCSFaultInfo();
-            List<string>systemerrors=StrategyManager.Instance.GetSystemErrors();
+            List<string>bmsErrors = StrategyManager.Instance.GetBMSAlarmandFaultInfo();
+            List<string>pcsErrors = StrategyManager.Instance.GetPCSFaultInfo();
+            List<string>systemErrors=StrategyManager.Instance.GetSystemErrors();
             
             List<int> levels = new List<int>();//等级数组
                 ///如果PCS没故障
-                if (pCSerrors.Count == 0&&systemerrors.Count==0)
+                if (pcsErrors.Count == 0&&systemErrors.Count==0)
                 {
-                    if (bMSerrors.Count > 0)
+                    if (bmsErrors.Count > 0)
                     {                 
-                        foreach (var error in bMSerrors)
+                        foreach (var error in bmsErrors)
                         {
                             if (error.Contains("异常") && (error.Contains("三级保护")))
                             {
