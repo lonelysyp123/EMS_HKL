@@ -64,11 +64,11 @@ namespace EMS.Common.StrategyManage
                             strategy = newCommand.BatteryStrategy;
                         }
                         double netPowerInjection = StrategyManager.Instance.GetACSmartMeterPower();
-                        double reversePowerThreshold = StrategyManager.Instance.GetReversePowerThreshold();
+                        double reversePowerflowProtectionThreshold = StrategyManager.Instance.GetReversePowerflowProtectionThreshold();
                         double pcsPower = StrategyManager.Instance.GetPcsPower();
                         double load = netPowerInjection + pcsPower;
                         double tolerance = StrategyManager.Instance.GetAutomaticControlTolerance();
-                        double capacity = StrategyManager.Instance.GetTransformerCapacity();
+                        double capacity = StrategyManager.Instance.GetDemandControlCapacity();
 
                     if (_hasReversePowerflowProtectionEnabled && (strategy == BatteryStrategyEnum.ConstantCurrentDischarge || strategy == BatteryStrategyEnum.ConstantPowerDischarge))
                     {
