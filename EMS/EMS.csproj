@@ -198,13 +198,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Api\BmsApi.cs" />
+    <Compile Include="Api\PcsApi.cs" />
     <Compile Include="Common\Modbus\ModbusRequest.cs" />
     <Compile Include="Common\Mqtt\MqttClientService.cs" />
     <Compile Include="Common\Mqtt\MqttConnectOption.cs" />
+    <Compile Include="Common\StrategyManage\EmsController.cs" />
+    <Compile Include="Common\StrategyManage\IntraDayScheduler.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\BatteryStrategyModel.cs" />
+    <Compile Include="Common\StrategyManage\EnergyManagementSystem.cs" />
+    <Compile Include="Model\BMSParameterSettingModel.cs" />
     <Compile Include="Model\StateGridModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
     <Compile Include="Storage\DB\DBManage\PCSStrategyInfoManage.cs" />
@@ -488,6 +494,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Common\StrategyManage\StrategyManage.cd" />
+    <None Include="Api\Api.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
