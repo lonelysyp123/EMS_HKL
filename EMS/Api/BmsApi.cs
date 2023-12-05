@@ -19,7 +19,7 @@ namespace EMS.Api
             return EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList;
         }
         public static BatteryTotalBase GetBMSTotalInfo(string bcmuid)//得到单簇信息
-        {
+        {// 这个函数如果经常被调用，可以考虑重构成Dictionary
             List<BatteryTotalBase>totallist= EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList;
             foreach(var total in totallist)
             {
@@ -82,25 +82,19 @@ namespace EMS.Api
 
         public static double GetMinSOC()
         {
-            List<double> sOCTotalList = new List<double>();
-            sOCTotalList = GetTotalSOC();
-            double minSOC = sOCTotalList.Min();
-            return minSOC;
+            List<double> sOCTotalList = GetTotalSOC();
+            return sOCTotalList.Min();
         }
 
         public static double GetMaxSOC()
         {      
-            List<double> sOCTotalList = new List<double>();
-            sOCTotalList = GetTotalSOC();
-            double maxSOC = sOCTotalList.Max();
-            return maxSOC;
+            List<double> sOCTotalList = GetTotalSOC();
+            return sOCTotalList.Max();
         }
         public static double GetAvgSOC()
         {
-            List<double> sOCTotalList = new List<double>();
-            sOCTotalList = GetTotalSOC();
-            double avgSOC = sOCTotalList.Average();
-            return avgSOC;
+            List<double> sOCTotalList = GetTotalSOC();
+            return sOCTotalList.Average();
         }
 
       
