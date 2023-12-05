@@ -38,6 +38,10 @@ namespace EMS.Model
 
         public static EnergyManagementSystem GlobalInstance { get { return _globalInstance; } }
 
+        public static void Initialization()
+        {
+            _globalInstance = new EnergyManagementSystem();
+        }
         public object PcsManager {  get { return _pcs_manager; } }
         public EnergyManagementSystem()
         {
