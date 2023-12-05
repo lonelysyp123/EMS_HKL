@@ -32,7 +32,6 @@ namespace EMS
         public MainWindow()
         {
             InitializeComponent();
-            EnergyManagementSystem.SetGlobalInstance(new EnergyManagementSystem());
             
             viewmodel = new MainViewModel();
             pCSMainViewModel = new PCSMainViewModel();
@@ -46,7 +45,7 @@ namespace EMS
             PCS_IP.DataContext = pCSMainViewModel;
             SelectedPage("DaqDataRaBtn");
             EnergyManagementSystem.Initialization();
-            EnergyManagementSystem.GlobalInstance.Initialization(null, null, null, null, null);
+            EnergyManagementSystem.GlobalInstance.Initialization(null, null, null, null);
             //pcsviewmodel = new PCSSettingViewModel();
             //PCSView.DataContext = pcsviewmodel;
         }
