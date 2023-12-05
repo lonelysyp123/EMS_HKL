@@ -62,10 +62,12 @@ namespace EMS.Model
         private static EnergyManagementSystem _globalInstance;
 
         public static EnergyManagementSystem GlobalInstance { get { return _globalInstance; } }
-        public static void SetGlobalInstance(EnergyManagementSystem globalInstance)
+
+        public static void Initialization()
         {
-            _globalInstance=globalInstance;
+            _globalInstance = new EnergyManagementSystem();
         }
+
        public BmsManager BmsManager { get { return _bms_manager; } }
         public object PcsManager {  get { return _pcs_manager; } }
         public EnergyManagementSystem()
