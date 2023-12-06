@@ -127,5 +127,6 @@ namespace EMS.Model
         ConstantPowerCharge = 3,
         [Description("恒功率放电")]
         ConstantPowerDischarge = 4,
+       
     }
 }

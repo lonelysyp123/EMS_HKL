@@ -13,21 +13,23 @@ namespace EMS.Common.StrategyManage
     public class EmsController
     {
         private bool _isAutomaticMode;
+        private bool _isFaultMode;
         private bool _hasDailyPatternEnabled;
         private bool _hasMaxDemandControlEnabled;
-        private bool _hasReversePowerProtectionEnabled;
+        private bool _hasReversePowerflowProtectionEnabled;
         private bool _hasContigencyCheckEnabled;
         private BessCommand _currentCommand;
         private IntraDayScheduler _scheduler;
         private ContingencyStatusEnum _contingencyStatus;
         private DateTime _lastActiveTimestamp; // used to indicate the system operation thread is still alive.
 
+        public bool IsFaultMode { get {return this._contingencyStatus == ContingencyStatusEnum.Level2 || this._contingencyStatus == ContingencyStatusEnum.Level3; } }
         public EmsController()
         {
             _isAutomaticMode = false;
             _hasDailyPatternEnabled = false;
             _hasMaxDemandControlEnabled = false;
-            _hasReversePowerProtectionEnabled = false;
+            _hasReversePowerflowProtectionEnabled = false;
             _hasContigencyCheckEnabled = true;
             _currentCommand = null;
             _scheduler = new IntraDayScheduler();
@@ -39,35 +41,38 @@ namespace EMS.Common.StrategyManage
         {
             ContingencyCheck();
             NormalOperation();
+            
             _lastActiveTimestamp = DateTime.Now;
             Thread.Sleep(StrategyManager.Instance.GetSystemSamplePeriod());
         }
         private void NormalOperation()
         {
-            BessCommand newCommand;
-            double controlValue = 0;
-            double maxPowerOutput = 0;
-            BatteryStrategyEnum strategy = BatteryStrategyEnum.Standby;
-            if (_isAutomaticMode)
+            if(!IsFaultMode)
             {
-                if (_hasDailyPatternEnabled)
+                BessCommand newCommand;
+                double controlValue = 0;
+                double maxPowerOutput = 0;
+                BatteryStrategyEnum strategy = BatteryStrategyEnum.Standby;
+                if (_isAutomaticMode)
                 {
-                    if (_scheduler.NeedUpdate())
+                    if (_hasDailyPatternEnabled)
                     {
-                        newCommand = _scheduler.GetNextOverride().Command;
-                        controlValue = newCommand.Value;
-                        strategy = newCommand.BatteryStrategy;
-                    }
-                    double netPowerInjection = StrategyManager.Instance.GetACSmartMeterPower();
-                    double reversePowerThreshold = StrategyManager.Instance.GetReversePowerThreshold();
-                    double pcsPower = StrategyManager.Instance.GetPcsPower();
-                    double load = netPowerInjection + pcsPower;
-                    double tolerance = StrategyManager.Instance.GetAutomaticControlTolerance();
-                    double capacity = StrategyManager.Instance.GetTransformerCapacity();
+                        if (_scheduler.NeedUpdate())
+                        {
+                            newCommand = _scheduler.GetNextOverride().Command;
+                            controlValue = newCommand.Value;
+                            strategy = newCommand.BatteryStrategy;
+                        }
+                        double netPowerInjection = StrategyManager.Instance.GetACSmartMeterPower();
+                        double reversePowerflowProtectionThreshold = StrategyManager.Instance.GetReversePowerflowProtectionThreshold();
+                        double pcsPower = StrategyManager.Instance.GetPcsPower();
+                        double load = netPowerInjection + pcsPower;
+                        double tolerance = StrategyManager.Instance.GetAutomaticControlTolerance();
+                        double capacity = StrategyManager.Instance.GetDemandControlCapacity();
 
-                    if (_hasReversePowerProtectionEnabled && (strategy == BatteryStrategyEnum.ConstantCurrentDischarge || strategy == BatteryStrategyEnum.ConstantPowerDischarge))
+                    if (_hasReversePowerflowProtectionEnabled && (strategy == BatteryStrategyEnum.ConstantCurrentDischarge || strategy == BatteryStrategyEnum.ConstantPowerDischarge))
                     {
-                        maxPowerOutput = load - reversePowerThreshold * (1 + tolerance);
+                        maxPowerOutput = load - reversePowerflowProtectionThreshold * (1 + tolerance);
                         controlValue = Math.Min(controlValue, maxPowerOutput);
                         if (controlValue < 0)
                         {
@@ -89,15 +94,15 @@ namespace EMS.Common.StrategyManage
                     else maxPowerOutput = controlValue;
 
 
-                    controlValue = Math.Min(controlValue, maxPowerOutput);
-                    newCommand = ContingencyAdjustment(new BessCommand(controlValue, strategy));
-                    if (newCommand != _currentCommand)
-                    {
-                        _currentCommand = newCommand;
-                        StrategyManager.Instance.SendPcsCommand(newCommand);
+                        controlValue = Math.Min(controlValue, maxPowerOutput);
+                        newCommand = ContingencyAdjustment(new BessCommand(controlValue, strategy));
+                        if (newCommand != _currentCommand)
+                        {
+                            _currentCommand = newCommand;
+                            StrategyManager.Instance.SendPcsCommand(newCommand);
+                        }
                     }
                 }
-
             }
             else
             {
@@ -131,10 +136,55 @@ namespace EMS.Common.StrategyManage
 
         private void ContingencyCheck()
         {
-            /// 检查所有的数值越限和异常状态然后更新_contingencyStatus
-            /// 一级告警更新状态后留给NormalOperation()处理，二级三级告警直接处理。
-            /// 故障之后还要有机制将系统恢复成正常运行状态
-            if (!_hasContigencyCheckEnabled) return;
+            if (!_hasContigencyCheckEnabled) return; //未启用则直接return
+            ///获取全部故障告警
+            List<string>bmsErrors = StrategyManager.Instance.GetBMSAlarmandFaultInfo();
+            List<string>pcsErrors = StrategyManager.Instance.GetPCSFaultInfo();
+            List<string>systemErrors=StrategyManager.Instance.GetSystemErrors();
+            
+            List<int> levels = new List<int>();//等级数组
+                ///如果PCS没故障
+                if (pcsErrors.Count == 0&&systemErrors.Count==0)
+                {
+                    if (bmsErrors.Count > 0)
+                    {                 
+                        foreach (var error in bmsErrors)
+                        {
+                            if (error.Contains("异常") && (error.Contains("三级保护")))
+                            {
+                                levels.Add(3);
+                                StrategyManager.Instance.SetPCSHalt();
+                            }
+                            else if (error.Contains("二级保护"))
+                            { 
+                                BessCommand bessCommand = new BessCommand(0, BatteryStrategyEnum.Standby);
+                                StrategyManager.Instance.SendPcsCommand(bessCommand);
+                                levels.Add(2);
+                            }
+                            else if (error.Contains("一级保护"))
+                            {
+                                levels.Add(1);
+                            }
+                        }
+                    }                   
+                }
+                else //如果pcs有故障
+                {
+                    levels.Add(3);
+                }
+            _contingencyStatus = (ContingencyStatusEnum)(levels.Max());
+            BessCommand command = new BessCommand(0, BatteryStrategyEnum.Standby);
+            switch (_contingencyStatus)
+            {
+                case ContingencyStatusEnum.Level2:
+                    StrategyManager.Instance.SendPcsCommand(command);//待机
+                    break;
+                case ContingencyStatusEnum.Level3:
+                    StrategyManager.Instance.SendPcsCommand(command);//待机
+                    StrategyManager.Instance.SetPCSHalt();//停机
+                    break;
+            }
+
         }
     }
     public enum ContingencyStatusEnum

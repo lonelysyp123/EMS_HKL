@@ -70,7 +70,7 @@ namespace EMS.ViewModel
         public double GetACSmartMeterPower() { return 0; }
 
 
-        public double GetReversePowerThreshold() { return 0; } // 逆功率保护用户设置的阈值
+        public double GetReversePowerflowProtectionThreshold() { return 0; } // 逆功率保护用户设置的阈值
 
         /// <summary>
         ///  对负载放电为正，对电池充电为负
@@ -85,8 +85,10 @@ namespace EMS.ViewModel
         public double GetDischargingDiscount() { return 0.6; } //放电模式中的降功率因数
 
         public int GetSystemSamplePeriod() { return 500; } //系统采样频率
-
-        public double GetTransformerCapacity() { return 4000; } //总变压器容量
-
+        public List<string> GetBMSAlarmandFaultInfo() { return null ; }
+        public List<string>GetPCSFaultInfo() { return null ; }
+        public bool SetPCSHalt() { return true; }
+        public List<string>GetSystemErrors() { return null ; }
+        public double GetDemandControlCapacity() { return 4000; } //总变压器容量
     }
 }
