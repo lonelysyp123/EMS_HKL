@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using EMS.View;
+using System.Web.UI.WebControls;
 
 namespace EMS.View
 {
@@ -23,17 +24,23 @@ namespace EMS.View
     public partial class PCSMainWindow : Window
     {
         PCSMainViewModel viewModel;
-        public PCSMainWindow(PCSMainViewModel viewmodel)
+        public PCSMainWindow()
         {
             InitializeComponent();
 
-            viewModel=viewmodel;
+            viewModel=new PCSMainViewModel();
             this.DataContext = viewModel;
-            
-            PCSMonitorView.DataContext = viewModel.pCSMonitorViewModel;
-            DCStatusView.DataContext = viewModel.dCStatusViewModel;
-            PCSSettingView.DataContext = viewModel.pCSParSettingViewModel;
-            
+
+            PCSMonitorView.DataContext = viewModel.pCSModel.MonitorModel;
+            DCStatusView.DataContext = viewModel.pCSModel.MonitorModel;
+            PCSSettingView.DataContext = viewModel.pCSModel.ParSettingModel;
+            button1.DataContext = viewModel;
+            button2.DataContext = viewModel;
+            button3.DataContext = viewModel;
+            button4.DataContext = viewModel;
+            button5.DataContext = viewModel;
+            button6.DataContext = viewModel;
+
             //viewModel = new PCSMainViewModel();
             //viewModel = viewModel1;
         }
@@ -45,12 +52,12 @@ namespace EMS.View
                 MessageBox.Show("请停止采集");
                 e.Cancel = true;
             }
-            else if (viewModel.pCSParSettingViewModel.IsConnected)
+            else if (viewModel.IsConnected)
             {
                 MessageBox.Show("请断开连接");
                 e.Cancel = true;
             }
-            else if(viewModel.pCSParSettingViewModel.IsConnected==false& viewModel.isRead==false)
+            else if(viewModel.IsConnected==false& viewModel.isRead==false)
             {
                 if (viewModel.thread != null)
                 {
