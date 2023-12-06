@@ -67,7 +67,5 @@ namespace EMS.ViewModel
                 SetProperty(ref _moduleFaultFlag, value);
             }
         }
-
-
     }
 }
