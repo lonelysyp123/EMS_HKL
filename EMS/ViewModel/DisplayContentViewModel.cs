@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
+using EMS.Common;
 
 namespace EMS.ViewModel
 {
@@ -132,6 +133,7 @@ namespace EMS.ViewModel
                         ModbusClient client = new ModbusClient(battery.IP, port);
                         Connect(battery, client);
                         OnlineBatteryTotalList.Add(battery);
+                        EnergyManagementSystem.GlobalInstance.BmsManager.SetBMSList(OnlineBatteryTotalList.ToList());
                         ClientList.Add(client);
                         if (IsStartDaqData)
                         {
@@ -282,6 +284,10 @@ namespace EMS.ViewModel
                 total.VersionSWBCMU = BitConverter.ToInt16(BCMUData, 34);
                 total.BatteryCount = BitConverter.ToUInt16(BCMUData, 38);
                 //total.SeriesCount = BitConverter.ToUInt16(BCMUData, 40);
+
+                // 访问 BMS1
+               
+                   
 
                 total.SeriesCount = 3;
                 //total.BatteriesCountInSeries = BitConverter.ToUInt16(BCMUData, 42);
@@ -465,6 +471,7 @@ namespace EMS.ViewModel
 
                     }
                     total.Series.Add(series);
+                    
                 }
             }
         }
@@ -895,10 +902,7 @@ namespace EMS.ViewModel
 
                         bool FaultyColorFlagBCMU = GetActiveFaultyBCMU(total);
                         int AlarmColorFlagBCMU = GetBCMUAlarm(total);
-
-
-
-
+                     
                         for (int i = 0; i < total.Series.Count; i++)
                         {
                             BatterySeriesBase series = total.Series[i];
