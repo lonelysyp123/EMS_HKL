@@ -218,6 +218,9 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\BatteryStrategyModel.cs" />
+    <Compile Include="Model\PCSModel.cs" />
+    <Compile Include="Model\PCSMonitorModel.cs" />
+    <Compile Include="Model\PCSParSettingModel.cs" />
     <Compile Include="Common\StrategyManage\EnergyManagementSystem.cs" />
     <Compile Include="Model\BMSParameterSettingModel.cs" />
     <Compile Include="Model\StateGridModel.cs" />
@@ -267,7 +270,6 @@
     <Compile Include="ViewModel\ParameterSettingViewModel.cs" />
     <Compile Include="ViewModel\PCSMainViewModel.cs" />
     <Compile Include="ViewModel\PCSMonitorViewModel.cs" />
-    <Compile Include="ViewModel\PCSParSettingViewModel.cs" />
     <Compile Include="ViewModel\PCSSettingViewModel.cs" />
     <Compile Include="Common\StrategyManage\StrategyManager.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
