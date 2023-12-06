@@ -130,7 +130,7 @@ namespace EMS.ViewModel
 
 
             pCSModel = new PCSModel();
-            
+
 
             ConnectCommand = new RelayCommand(Connect);
             DisConnectCommand = new RelayCommand(DisConnect);

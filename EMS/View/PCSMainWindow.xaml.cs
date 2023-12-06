@@ -24,11 +24,11 @@ namespace EMS.View
     public partial class PCSMainWindow : Window
     {
         PCSMainViewModel viewModel;
-        public PCSMainWindow()
+        public PCSMainWindow(PCSMainViewModel viewmodel)
         {
             InitializeComponent();
 
-            viewModel=new PCSMainViewModel();
+            viewModel = viewmodel;
             this.DataContext = viewModel;
 
             PCSMonitorView.DataContext = viewModel.pCSModel.MonitorModel;
