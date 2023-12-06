@@ -129,7 +129,7 @@
                     <RadioButton   Style="{StaticResource RadioButtonStyle}" x:Name="ValueSettingRaBtn" Checked="RadioButton_Checked">
                         <TextBlock Text="保护参数"  />
                     </RadioButton>
-                    <RadioButton   Style="{StaticResource RadioButtonStyle}" x:Name="PCSSettingRaBtn" Checked="RadioButton_Checked">
+                    <RadioButton   Style="{StaticResource RadioButtonStyle}" x:Name="StrategyControlRaBtn" Checked="RadioButton_Checked">
                         <TextBlock Text="策略配置"  />
                     </RadioButton>
                 </StackPanel>

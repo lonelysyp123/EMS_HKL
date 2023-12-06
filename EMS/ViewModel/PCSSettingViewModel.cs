@@ -19,28 +19,52 @@ namespace EMS.ViewModel
 {
     public class PCSSettingViewModel:ObservableObject
     {
-        private ObservableCollection<StateGridModel> _stateGridArray;
-        public ObservableCollection<StateGridModel> StateGridArray
+        /// <summary>
+        /// 单条出力策略的model
+        /// </summary>
+        public class PCSSettingModel : ObservableObject
         {
-            get => _stateGridArray;
-            set
+
+
+           
+            private string _strategyMode;
+            public string StrategyMode
+
             {
-                SetProperty(ref _stateGridArray, value);
+                get => _strategyMode;
+                set
+                {
+                    SetProperty(ref _strategyMode, value);
+                }
+            }
+
+            private double _strategyValue;
+            public double StrategyValue
+            {
+                get => _strategyValue;
+                set
+                {
+                    SetProperty(ref _strategyValue, value);
+                }
+            }
+
+            private string _strategyStartTime;
+            public string StrategyStartTime
+            {
+                get => _strategyStartTime;
+                set
+                {
+                    SetProperty(ref _strategyStartTime, value);
+                }
             }
         }
 
-        private StateGridModel _selectedStateGrid;
-        public StateGridModel SelectedStateGrid
-        {
-            get => _selectedStateGrid;
-            set
-            {
-                SetProperty(ref _selectedStateGrid, value);
-            }
-        }
-
-        private ObservableCollection<BatteryStrategyModel> _batteryStrategyArray;
-        public ObservableCollection<BatteryStrategyModel> BatteryStrategyArray
+        
+        /// <summary>
+        /// 需要传给EMSController的策略list
+        /// </summary>
+        private List<BatteryStrategyModel> _batteryStrategyArray;
+        public List<BatteryStrategyModel> BatteryStrategyArray
         {
             get => _batteryStrategyArray;
             set
@@ -49,6 +73,30 @@ namespace EMS.ViewModel
             }
         }
 
+        private bool _isDailyPatternBtnOpen;
+        public bool IsDailyPatternBtnOpen
+        {
+            get => _isDailyPatternBtnOpen;
+            set
+            {
+                SetProperty(ref _isDailyPatternBtnOpen, value);
+            }
+        }
+        /// <summary>
+        /// 界面显示的list
+        /// </summary>
+        public ObservableCollection<PCSSettingModel> _totalStrategies =new ObservableCollection<PCSSettingModel>();
+        public ObservableCollection<PCSSettingModel> TotalStrategies
+        {
+            get=> _totalStrategies;
+            set
+            {
+                SetProperty(ref _totalStrategies, value);
+            }
+        }
+        /// <summary>
+        /// 界面被选中的策略
+        /// </summary>
         private BatteryStrategyModel _selectedBatteryStrategy;
         public BatteryStrategyModel SelectedBatteryStrategy
         {
@@ -59,57 +107,165 @@ namespace EMS.ViewModel
             }
         }
 
-        public RelayCommand StateGridAddRowCommand { get; private set; }
-        public RelayCommand StateGridRemoveRowCommand { get; private set; }
-        public RelayCommand StateGridExecuteStrategyCommand { get; private set; }
+        /// <summary>
+        /// 策略设置
+        /// </summary>
+        private List<string> _strategyModeSet;
+        public List<string> StrategyModeSet
+        {
+            get => _strategyModeSet;
+            set
+            {
+                SetProperty(ref _strategyModeSet, value);
+            }
+        }
+
+        private string _selectedStrategyMode;
+        public string SelectedStrategyMode
+        {
+            get => _selectedStrategyMode;
+            set
+            {
+                SetProperty(ref _selectedStrategyMode, value);
+            }
+        }
+
+
+        private string _strategyStartTimeSet;
+        public string StrategyStartTimeSet
+        {
+            get => _strategyStartTimeSet;
+            set
+            { 
+                SetProperty(ref _strategyStartTimeSet, value); 
+            }
+        }
+        private double _strategyValueSet;
+        public double StrategyValueSet
+        {
+            get => _strategyValueSet;
+            set
+            {
+                SetProperty(ref _strategyValueSet,value);
+            }
+        }
+        private PCSSettingModel _selectedStrategy;
+        public PCSSettingModel SelectedStrategy
+        {
+            get => _selectedStrategy;
+            set
+            {
+                SetProperty(ref _selectedStrategy, value);
+            }
+        }
+
         public RelayCommand BatteryStrategyAddRowCommand { get; private set; }
         public RelayCommand BatteryStrategyRemoveRowCommand { get; private set; }
-        public RelayCommand BatteryStrategyExecuteStrategyCommand { get; private set; }
+      
         private int index = 1;
         //public PCSSettingModel NEWStrategy;
         public PCSSettingViewModel()
         {
-            StateGridAddRowCommand = new RelayCommand(StateGridAddRow);
-            StateGridRemoveRowCommand = new RelayCommand(StateGridRemoveRow);
-            StateGridExecuteStrategyCommand = new RelayCommand(StateGridExecuteStrategy);
+            StrategyStartTimeSet = "00:00:00";
             BatteryStrategyAddRowCommand = new RelayCommand(BatteryStrategyAddRow);
             BatteryStrategyRemoveRowCommand = new RelayCommand(BatteryStrategyRemoveRow);
-            BatteryStrategyExecuteStrategyCommand = new RelayCommand(BatteryStrategyExecuteStrategy);
-
-            BatteryStrategyArray = new ObservableCollection<BatteryStrategyModel>();
-            StateGridArray = new ObservableCollection<StateGridModel>();
+            BatteryStrategyArray = new List<BatteryStrategyModel>();
+            StrategyModeSet = new List<string>()
+            {
+                "待机",
+                "恒电流充电",
+                "恒电流放电",
+                "恒功率充电",
+                "恒功率放电"
+            };
+          
         }
 
-        private void BatteryStrategyExecuteStrategy()
+        private void updateBatteryStrategyArray()
         {
-            // 执行策略 1. 存到数据库，2. 通知采集线程按照逻辑执行
+            BatteryStrategyArray.Clear();
+            foreach (var strategy in TotalStrategies)
+            {
+                int mode = 0;
+               switch(strategy.StrategyMode)
+                {
+                    case "待机":
+                    {
+                            mode = 0;
+                     }break;
+                    case "恒电流充电":
+                        {
+                            mode = 1;
+                        }
+                        break;
+                    case "恒电流放电":
+                        {
+                            mode = 2;
+                        }
+                        break;
+                    case "恒功率充电":
+                        {
+                            mode = 3;
+                        }
+                        break;
+                    case "恒功率放电":
+                        {
+                            mode = 4;
+                        }
+                        break;    
+                }
+                TimeSpan timeSpan = TimeSpan.Parse(strategy.StrategyStartTime);
+                BatteryStrategyModel model = new BatteryStrategyModel()
+                {
+                    StartTime = timeSpan,
+                    SetValue = strategy.StrategyValue,
+                    BatteryStrategy = (BatteryStrategyEnum)mode
+                };
+                
+                BatteryStrategyArray.Add(model);
+
+            }
         }
+
+
 
         private void BatteryStrategyRemoveRow()
         {
-            BatteryStrategyArray.Remove(SelectedBatteryStrategy);
+            TotalStrategies.Remove(SelectedStrategy);
+            updateBatteryStrategyArray();
         }
 
         private void BatteryStrategyAddRow()
         {
-            BatteryStrategyArray.Add(new BatteryStrategyModel() { ID = index });
-            index++;
+           if(SelectedStrategyMode!="待机"&&StrategyValueSet!=0) 
+            {
+                PCSSettingModel newStrategy = new PCSSettingModel
+                {
+                    StrategyStartTime = StrategyStartTimeSet,
+                    StrategyMode = SelectedStrategyMode,
+                    StrategyValue = StrategyValueSet
+                };
+                TotalStrategies.Add(newStrategy);
+                updateBatteryStrategyArray();
+            }
+            else if(SelectedStrategyMode == "待机")
+           {
+                PCSSettingModel newStrategy = new PCSSettingModel
+                {
+                    StrategyStartTime = StrategyStartTimeSet,
+                    StrategyMode = SelectedStrategyMode,
+                    StrategyValue = 0
+                };
+                TotalStrategies.Add(newStrategy);
+                updateBatteryStrategyArray();
+            }
+            else
+            {
+                MessageBox.Show("请正确输入");
+            }
+            
         }
 
-        private void StateGridExecuteStrategy()
-        {
-            // 执行策略 1. 存到数据库，2. 通知采集线程按照逻辑执行
-        }
-
-        private void StateGridRemoveRow()
-        {
-            StateGridArray.Remove(SelectedStateGrid);
-        }
-
-        private void StateGridAddRow()
-        {
-            StateGridArray.Add(new StateGridModel() { ID = index });
-            index++;
-        }
+        
     }
 }
