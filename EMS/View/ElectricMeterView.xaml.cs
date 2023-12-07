@@ -31,5 +31,10 @@ namespace EMS.View
             RealTimeData.DataContext = viewmodel.electricityMeterModel;
             CommConfiguaration.DataContext = viewmodel.electricityMeterModel.Configuaration;
         }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            viewmodel.electricityMeterModel.Close();
+        }
     }
 }

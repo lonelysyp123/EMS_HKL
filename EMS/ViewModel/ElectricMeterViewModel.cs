@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using EMS.Model;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,6 +22,7 @@ namespace EMS.ViewModel
         public RelayCommand StopDaqDataCommand { get; set; }
 
         public ElectricityMeterModel electricityMeterModel;
+        private ILog Logger;
 
         public ElectricMeterViewModel()
         {
@@ -30,6 +32,8 @@ namespace EMS.ViewModel
             CloseSerialPortCommand = new RelayCommand(CloseSerialPort);
             StartDaqDataCommand = new RelayCommand(StartDaqData);
             StopDaqDataCommand = new RelayCommand(StopDaqData);
+
+            Logger = LogManager.GetLogger(typeof(ElectricityMeterModel));
         }
 
         private void StopDaqData()
@@ -46,11 +50,11 @@ namespace EMS.ViewModel
         {
             if (electricityMeterModel.Close())
             {
-                Debug.WriteLine("关闭串口");
+                Logger.Info("Close Serial Port("+ electricityMeterModel.Configuaration.SelectedCommPort + ")");
             }
             else
             {
-                Debug.WriteLine("关闭串口失败");
+                Logger.Info("Close Serial Port(" + electricityMeterModel.Configuaration.SelectedCommPort + ") Failed");
             }
         }
 
@@ -58,11 +62,11 @@ namespace EMS.ViewModel
         {
             if (electricityMeterModel.Open())
             {
-                Debug.WriteLine("打开串口");
+                Logger.Info("Open Serial Port(" + electricityMeterModel.Configuaration.SelectedCommPort + ")");
             }
             else
             {
-                Debug.WriteLine("打开串口失败");
+                Logger.Info("Open Serial Port(" + electricityMeterModel.Configuaration.SelectedCommPort + ") Failed");
             }
         }
     }

@@ -1,4 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using EMS.Api;
+using log4net;
+using log4net.Core;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
@@ -154,10 +157,12 @@ namespace EMS.Model
         }
 
         public Configuaration Configuaration { get; set; }
+        private ILog Logger;
 
         public ElectricityMeterModel()
         {
             Configuaration = new Configuaration();
+            Logger = LogManager.GetLogger(typeof(ElectricityMeterModel));
         }
 
         private SerialPort serialPort;
@@ -190,6 +195,7 @@ namespace EMS.Model
                 {
                     if (serialPort.IsOpen)
                     {
+                        StopDaqTh();
                         serialPort.Close();
                     }
                 }
@@ -224,12 +230,13 @@ namespace EMS.Model
                 while (isStartDaqData)
                 {
                     Thread.Sleep(500);
-                    Voltage_A = ReadVoltage_A(serialPort);
+                    Voltage_A = ReadDataForCmd(serialPort, Request_GetVoltage_A, Response_GetVoltage_A);
                 }
             }
             catch (Exception ex)
             {
                 // 记录报错
+                Logger.Error(ex.ToString());
                 Close();
             }
         }
@@ -237,6 +244,9 @@ namespace EMS.Model
         // CS校验不计算0xFE, 0xFE, 0xFE, 0xFE
         byte[] Request_GetVoltage_A = new byte[] { 0x68, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x68, 0x11, 0x04, 0x02, 0x01, 0x01, 0x00, 0xA4, 0x16 };
         byte[] Response_GetVoltage_A = new byte[] { 0xFE, 0xFE, 0xFE, 0xFE, 0x68, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x68, 0x91, 0x08, 0x33, 0x33, 0x33, 0x33, 0x00, 0x00, 0x00, 0x00, 0x44, 0x16 };
+        byte[] Request_GetVoltage_B = new byte[0];
+        byte[] Response_GetVoltage_B = new byte[0];
+
         private int ReadVoltage_A(SerialPort serialPort)
         {
             if (serialPort != null)
@@ -281,10 +291,65 @@ namespace EMS.Model
                     else
                     {
                         // 日志记录
+                        Logger.Warn("Data Validation Failed");
                     }
                 }
             }
             return 0;
+        }
+
+        private int ReadDataForCmd(SerialPort serialPort, byte[] Request, byte[] Response)
+        {
+            try
+            {
+                if (serialPort != null)
+                {
+                    if (serialPort.IsOpen)
+                    {
+                        serialPort.Write(Request, 0, Request.Length);
+                        // 读取返回值
+                        int count = 0;
+                        byte[] readByte = new byte[Response.Length];
+                        while (true)
+                        {
+                            count++;
+                            if (serialPort.BytesToRead >= Response.Length)
+                            {
+                                serialPort.Read(readByte, 0, readByte.Length);
+                            }
+                            else
+                            {
+                                if (count > 5)
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    Thread.Sleep(100);
+                                    continue;
+                                }
+                            }
+                        }
+                        // 验证数据
+                        if (CheckData(Response, readByte))
+                        {
+                            // 解析数据
+                            byte[] bf = new byte[] { readByte[18], readByte[19], readByte[20], readByte[21] };
+                            return BitConverter.ToInt32(bf, 0);
+                        }
+                        else
+                        {
+                            // 日志记录
+                            Logger.Warn("Data Validation Failed");
+                        }
+                    }
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         private bool CheckData(byte[] standardVBytes, byte[] readBytes)

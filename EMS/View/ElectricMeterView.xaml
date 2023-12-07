@@ -7,7 +7,7 @@
         xmlns:core="clr-namespace:System;assembly=mscorlib"
         xmlns:s="clr-namespace:System.IO.Ports;assembly=System"
         mc:Ignorable="d"
-        Title="电表" Height="450" Width="600">
+        Title="电表" Height="450" Width="600" Closed="Window_Closed">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
