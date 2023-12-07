@@ -304,12 +304,6 @@
     <Compile Include="View\SeriesBatteryView.xaml.cs">
       <DependentUpon>SeriesBatteryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\StrategyControlView\ManualRunningView.xaml.cs">
-      <DependentUpon>ManualRunningView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\StrategyControlView\ModeChangeView.xaml.cs">
-      <DependentUpon>ModeChangeView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\StrategyControlView\StrategyControlMainView.xaml.cs">
       <DependentUpon>StrategyControlMainView.xaml</DependentUpon>
     </Compile>
@@ -403,14 +397,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SeriesBatteryView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\StrategyControlView\ManualRunningView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\StrategyControlView\ModeChangeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

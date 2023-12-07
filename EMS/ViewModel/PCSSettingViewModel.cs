@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,7 +26,7 @@ namespace EMS.ViewModel
         public class PCSSettingModel : ObservableObject
         {
 
-
+            
            
             private string _strategyMode;
             public string StrategyMode
@@ -73,6 +74,52 @@ namespace EMS.ViewModel
             }
         }
 
+        /// <summary>
+        /// 手动自动切换开关
+        /// </summary>
+        private bool _isAutoStrategy;
+        public bool IsAutoStrategy
+        {
+            get=> _isAutoStrategy;
+            set
+            {
+                SetProperty(ref _isAutoStrategy, value);
+            }
+        }
+
+        private string _totalStrategyState;
+        public string TotalStrategyState
+        {
+            get => _totalStrategyState;
+            set
+            {
+                SetProperty(ref _totalStrategyState, value);
+            }
+        }
+
+        private bool _isAutoStrategyBtnEnabled;
+        public bool IsAutoStrategyBtnEnabled
+        {
+            get => _isAutoStrategyBtnEnabled;
+            set
+            {
+                SetProperty(ref _isAutoStrategyBtnEnabled, value);
+            }
+        }
+
+
+        private bool _isManualSendBtnEnabled;
+        public bool IsManualSendBtnEnabled
+        {
+            get => _isManualSendBtnEnabled;
+            set
+            {
+                SetProperty(ref _isManualSendBtnEnabled, value);
+            }
+        }
+        /// <summary>
+        /// Daillypattern open开关
+        /// </summary>
         private bool _isDailyPatternBtnOpen;
         public bool IsDailyPatternBtnOpen
         {
@@ -82,6 +129,79 @@ namespace EMS.ViewModel
                 SetProperty(ref _isDailyPatternBtnOpen, value);
             }
         }
+
+        
+
+        /// <summary>
+        /// 需量控制
+        /// </summary>
+        private bool _isMaxDemandControlBtnOpen;
+        public bool IsMaxDemandControlBtnOpen
+        {
+            get => _isMaxDemandControlBtnOpen;
+            set
+            {
+                SetProperty(ref _isMaxDemandControlBtnOpen,value);
+            }
+        }
+
+        private double _demandControlCapacity;
+        public double DemandControlCapacity
+        {
+            get => _demandControlCapacity;
+            set
+            {
+                SetProperty(ref _demandControlCapacity, value);
+            }
+        }
+
+        /// <summary>
+        /// 逆功率控制
+        /// </summary>
+        private bool _isReversePowerBtnOpen;
+        public bool IsReversePowerBtnOpen
+        {
+            get => _isReversePowerBtnOpen;
+            set
+            {
+                SetProperty(ref _isReversePowerBtnOpen, value);
+            }
+        }
+
+
+        private double _reversepowerThreshold;
+        public double ReversePowerThreshold
+        {
+            get => _reversepowerThreshold;
+            set
+            {
+                SetProperty(ref _reversepowerThreshold, value);
+            }
+        }
+
+        /// <summary>
+        /// 手动参数设置
+        /// </summary>
+        private string _selectedManualStrategyMode;
+        public string SelectedManualStrategyMode
+        {
+            get => _selectedManualStrategyMode;
+            set
+            {
+                SetProperty(ref _selectedManualStrategyMode, value);
+            }
+        }
+        private double _strategyManualValueSet;
+        public double StrategyManualValueSet
+        {
+            get => _strategyManualValueSet;
+            set
+            {
+                SetProperty(ref _strategyManualValueSet, value);
+            }
+        }
+
+
         /// <summary>
         /// 界面显示的list
         /// </summary>
@@ -161,15 +281,25 @@ namespace EMS.ViewModel
 
         public RelayCommand BatteryStrategyAddRowCommand { get; private set; }
         public RelayCommand BatteryStrategyRemoveRowCommand { get; private set; }
-      
+        public RelayCommand SwitchAutoManualCommand {  get; private set; }
         private int index = 1;
         //public PCSSettingModel NEWStrategy;
         public PCSSettingViewModel()
         {
+           
             StrategyStartTimeSet = "00:00:00";
+            IsDailyPatternBtnOpen = false;
+            IsReversePowerBtnOpen = false;
+            IsMaxDemandControlBtnOpen = false;
+            IsAutoStrategy = false;
+            IsAutoStrategyBtnEnabled = false;
+            IsManualSendBtnEnabled = true;
+            TotalStrategyState = "手动运行";
             BatteryStrategyAddRowCommand = new RelayCommand(BatteryStrategyAddRow);
             BatteryStrategyRemoveRowCommand = new RelayCommand(BatteryStrategyRemoveRow);
-            BatteryStrategyArray = new List<BatteryStrategyModel>();
+            SwitchAutoManualCommand = new RelayCommand(SwitchAutoManual);
+
+        BatteryStrategyArray = new List<BatteryStrategyModel>();
             StrategyModeSet = new List<string>()
             {
                 "待机",
@@ -179,6 +309,29 @@ namespace EMS.ViewModel
                 "恒功率放电"
             };
           
+        }
+
+        private void SwitchAutoManual()
+        {
+            if(IsAutoStrategy)
+            {
+                IsAutoStrategy = false;
+                TotalStrategyState = "手动运行";
+                IsAutoStrategyBtnEnabled = false;
+                IsManualSendBtnEnabled = true;
+                IsDailyPatternBtnOpen = false;
+                IsReversePowerBtnOpen = false;
+                IsMaxDemandControlBtnOpen = false;
+
+            }
+            else
+            {
+                IsAutoStrategy = true;
+                TotalStrategyState = "自动运行";
+                IsAutoStrategyBtnEnabled = true;
+                IsManualSendBtnEnabled = false;
+               
+            }
         }
 
         private void updateBatteryStrategyArray()

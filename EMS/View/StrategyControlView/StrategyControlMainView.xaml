@@ -114,14 +114,14 @@
         </Grid.RowDefinitions>
         <!--执行策略-->
         <StackPanel Grid.Row="0" Orientation="Horizontal"
-                    VerticalAlignment="Bottom" Margin="10">
+                     Margin="10">
             <TextBlock Text="当前执行策略: "
                        VerticalAlignment="Center"
                        Margin="20,0,15,0"
                        Foreground="White"
                        FontSize="18" />
             <TextBlock VerticalAlignment="Center"
-                       Text="自动运行"
+                       Text="{Binding TotalStrategyState}"
                        Foreground="#FF02D802"
                        FontSize="18"></TextBlock>
             <Button x:Name="ChangeModel"
@@ -129,7 +129,16 @@
                     Margin="20,0,0,0"
                     Content="切换模式"
                     VerticalAlignment="Center"
-                    Width="60">
+                    Width="100" Command="{Binding SwitchAutoManualCommand}" >
+            </Button>
+            <TextBlock Text="模式:" VerticalAlignment="Center" Margin="60,0,5,0"/>
+            <ComboBox    Width="100"
+                Background="White"  Foreground="Black" FontSize="10" Margin="5,0"  ItemsSource="{Binding StrategyModeSet}" 
+                         SelectedItem="{Binding SelectedManualStrategyMode}" RenderTransformOrigin="0.5,0.5">
+            </ComboBox>
+            <TextBlock Text="设置值:" VerticalAlignment="Center" Margin="20,0,5,0"/>
+            <TextBox Text="{Binding StrategyManualValueSet}" VerticalAlignment="Center" HorizontalAlignment="Right" Width="90" Height="25" Background="White" Foreground="Black" />
+            <Button Background="#1890FF" Margin="20,0,60,0" Content="下发" VerticalAlignment="Center" HorizontalAlignment="Right" Width="60" IsEnabled="{Binding IsManualSendBtnEnabled}">
             </Button>
         </StackPanel>
         <!--峰谷套利模式-->
@@ -152,11 +161,8 @@
                         <TextBlock Text="峰谷套利模式启停"
                                    VerticalAlignment="Center"
                                    Margin="15 0 3 0" />
-                        <ToggleButton Width="90"
-                                      Height="30"
-                                      Margin="10 0 0 0"
-                                      Style="{DynamicResource ToggleButtonStyle}"
-                                      Cursor="Hand">
+                        <ToggleButton Width="90" Height="30" Margin="10 0 0 0" Style="{DynamicResource ToggleButtonStyle}"
+                                      Cursor="Hand" IsChecked="{Binding IsDailyPatternBtnOpen}" IsEnabled="{Binding IsAutoStrategyBtnEnabled}">
                         </ToggleButton>
                     </StackPanel>
                 </Grid>
@@ -292,10 +298,8 @@
                     <TextBlock Text="需量控制模式启停"
                                VerticalAlignment="Center"
                                Margin="15 0 3 0" />
-                    <ToggleButton Width="90"
-                                  Height="30"
-                                  Margin="10 0 0 0"
-                                  Style="{DynamicResource ToggleButtonStyle}">
+                    <ToggleButton Width="90" Height="30" Margin="10 0 0 0" Style="{DynamicResource ToggleButtonStyle}" IsChecked="{Binding IsMaxDemandControlBtnOpen}"
+                                  IsEnabled="{Binding IsAutoStrategyBtnEnabled}">
                     </ToggleButton>
                 </StackPanel>
                 <StackPanel Grid.Column="1"
@@ -305,14 +309,8 @@
                         <TextBlock Text="需量控制容量（kW）"
                                    VerticalAlignment="Center"
                                    Margin="15 0 3 0"></TextBlock>
-                        <TextBox VerticalAlignment="Center"
-                                 Width="100"
-                                 BorderThickness="1"
-                                 Margin="2"
-                                 Foreground="Black"
-                                 Background="White"
-                                 Text="{Binding Param1_1}"
-                                 ></TextBox>
+                        <TextBox VerticalAlignment="Center" Width="100" BorderThickness="1" Margin="2" Foreground="Black"
+                                 Background="White"  Text="{Binding DemandControlCapacity}"></TextBox>
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -331,10 +329,8 @@
                     <TextBlock Text="逆功率保护模式启停"
                                VerticalAlignment="Center"
                                Margin="15 0 3 0" />
-                    <ToggleButton Width="90"
-                                  Height="30"
-                                  Margin="10 0 0 0"
-                                  Style="{DynamicResource ToggleButtonStyle}">
+                    <ToggleButton Width="90" Height="30" Margin="10 0 0 0" Style="{DynamicResource ToggleButtonStyle}" 
+                                  IsChecked="{Binding IsReversePowerBtnOpen}" IsEnabled="{Binding IsAutoStrategyBtnEnabled}">
                     </ToggleButton>
                 </StackPanel>
                 <StackPanel Grid.Column="1"
@@ -344,14 +340,8 @@
                         <TextBlock Text="逆功率保护阈值（kW）"
                                    VerticalAlignment="Center"
                                    Margin="15 0 3 0"></TextBlock>
-                        <TextBox VerticalAlignment="Center"
-                                 Width="100"
-                                 BorderThickness="1"
-                                 Margin="2"
-                                 Text="{Binding Param2_1}"
-                                 Foreground="Black"
-                                 Background="White"
-                                ></TextBox>
+                        <TextBox VerticalAlignment="Center" Width="100" BorderThickness="1" Margin="2"  Text="{Binding ReversePowerThreshold}"  Foreground="Black"
+                                 Background="White"  ></TextBox>
                     </StackPanel>
                 </StackPanel>
             </Grid>
