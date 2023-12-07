@@ -387,10 +387,11 @@ namespace EMS.ViewModel
                     
                     Thread.Sleep(DaqTimeSpan * 1000);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    throw (ex);
+
                 }
+                
             }
         }
 
