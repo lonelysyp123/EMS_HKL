@@ -13,21 +13,49 @@ namespace EMS.Model
     public class PCSMonitorModel:ViewModelBase
     {
         /// <summary>
-        /// DC模块异常状态
+        /// DC模块故障信息
         /// </summary>
-        private ObservableCollection<string> _alarmStateDC;
+        private ObservableCollection<string> _faultInfoDC;
 
-        public ObservableCollection<string> AlarmStateDC
+        public ObservableCollection<string> FaultInfoDC
         {
-            get => _alarmStateDC;
+            get => _faultInfoDC;
             set
             {
-                SetProperty(ref _alarmStateDC, value);
+                SetProperty(ref _faultInfoDC, value);
             }
         }
 
         /// <summary>
-        /// DC模块异常颜色
+        /// DC模块故障颜色
+        /// </summary>
+        private SolidColorBrush _faultColorDC;
+
+        public SolidColorBrush FaultColorDC
+        {
+            get => _faultColorDC;
+            set
+            {
+                SetProperty(ref _faultColorDC, value);
+            }
+        }
+
+        /// <summary>
+        /// DC模块告警信息
+        /// </summary>
+        private ObservableCollection<string> _alarmInfoDC;
+
+        public ObservableCollection<string> AlarmInfoDC
+        {
+            get => _alarmInfoDC;
+            set
+            {
+                SetProperty(ref _alarmInfoDC, value);
+            }
+        }
+
+        /// <summary>
+        /// DC模块告警颜色
         /// </summary>
         private SolidColorBrush _alarmColorDC;
 
@@ -40,22 +68,55 @@ namespace EMS.Model
             }
         }
 
-        /// <summary>
-        /// PDS异常状态
-        /// </summary>
-        private ObservableCollection<string> _alarmStatePDS;
 
-        public ObservableCollection<string> AlarmStatePDS
+
+
+
+        /// <summary>
+        /// PDS故障信息
+        /// </summary>
+        private ObservableCollection<string> _faultInfoPDS;
+
+        public ObservableCollection<string> FaultInfoPDS
         {
-            get => _alarmStatePDS;
+            get => _faultInfoPDS;
             set
             {
-                SetProperty(ref _alarmStatePDS, value);
+                SetProperty(ref _faultInfoPDS, value);
             }
         }
 
         /// <summary>
-        /// PDS异常颜色
+        /// PDS故障颜色
+        /// </summary>
+        private SolidColorBrush _faultColorPDS;
+
+        public SolidColorBrush FaultColorPDS
+        {
+            get => _faultColorPDS;
+            set
+            {
+                SetProperty(ref _faultColorPDS, value);
+            }
+        }
+
+
+        /// <summary>
+        /// PDS告警信息
+        /// </summary>
+        private ObservableCollection<string> _alarmInfoPDS;
+
+        public ObservableCollection<string> AlarmInfoPDS
+        {
+            get => _alarmInfoPDS;
+            set
+            {
+                SetProperty(ref _alarmInfoPDS, value);
+            }
+        }
+
+        /// <summary>
+        /// PDS告警颜色
         /// </summary>
         private SolidColorBrush _alarmColorPDS;
 
@@ -67,6 +128,8 @@ namespace EMS.Model
                 SetProperty(ref _alarmColorPDS, value);
             }
         }
+
+
 
 
         /// <summary>
@@ -579,6 +642,34 @@ namespace EMS.Model
         /// <summary>
         /// DC故障可见度
         /// </summary>
+        private Visibility _visDCFault;
+
+        public Visibility VisDCFault
+        {
+            get => _visDCFault;
+            set
+            {
+                SetProperty(ref _visDCFault, value);
+            }
+        }
+
+        /// <summary>
+        /// PDS故障可见度
+        /// </summary>
+        private Visibility _visPDSFault;
+
+        public Visibility VisPDSFault
+        {
+            get => _visPDSFault;
+            set
+            {
+                SetProperty(ref _visPDSFault, value);
+            }
+        }
+
+        /// <summary>
+        /// DC告警可见度
+        /// </summary>
         private Visibility _visDCAlarm;
 
         public Visibility VisDCAlarm
@@ -591,7 +682,7 @@ namespace EMS.Model
         }
 
         /// <summary>
-        /// PDS故障可见度
+        /// PDS告警可见度
         /// </summary>
         private Visibility _visPDSAlarm;
 
@@ -603,5 +694,7 @@ namespace EMS.Model
                 SetProperty(ref _visPDSAlarm, value);
             }
         }
+
+
     }
 }

@@ -80,12 +80,12 @@
                                 </TextBlock.Effect>
                             </TextBlock>
 
-                            <Border Grid.Column="1" Grid.Row="1"  CornerRadius="10" Background="{Binding AlarmColorDC}" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding VisDCAlarm}" Width="200" Height="50">
+                            <Border Grid.Column="1" Grid.Row="1"  CornerRadius="10" Background="{Binding FaultColorDC}" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding VisDCFault}" Width="200" Height="50">
                                 <TextBlock Text="DC模块故障" TextAlignment="Center"  VerticalAlignment="Center">
                                     <TextBlock.ToolTip>
                                         <ToolTip Height="auto" Width="auto" Background="White" >
                                             <StackPanel>
-                                                <ListBox ItemsSource="{Binding AlarmStateDC}">
+                                                <ListBox ItemsSource="{Binding FaultInfoDC}">
                                                     <ListBox.ItemTemplate>
                                                         <DataTemplate>
                                                             <TextBlock Text="{Binding }" />
@@ -103,7 +103,7 @@
                                     <TextBlock.ToolTip>
                                         <ToolTip Height="auto" Width="auto" Background="White" >
                                             <StackPanel>
-                                                <ListBox ItemsSource="{Binding AlarmStateDC}">
+                                                <ListBox ItemsSource="{Binding AlarmInfoDC}">
                                                     <ListBox.ItemTemplate>
                                                         <DataTemplate>
                                                             <TextBlock Text="{Binding }" />
@@ -116,12 +116,12 @@
                                 </TextBlock>
                             </Border>
 
-                            <Border Grid.Column="1" Grid.Row="3"  CornerRadius="10" Background="{Binding AlarmColorPDS}" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding VisPDSAlarm}" Width="200" Height="50">
+                            <Border Grid.Column="1" Grid.Row="3"  CornerRadius="10" Background="{Binding FaultColorPDS}" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding VisPDSFault}" Width="200" Height="50">
                                 <TextBlock Text="PDS故障" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <TextBlock.ToolTip>
                                         <ToolTip Height="auto" Width="auto" Background="White">
                                             <StackPanel>
-                                                <ListBox ItemsSource="{Binding AlarmStatePDS}">
+                                                <ListBox ItemsSource="{Binding FaultInfoPDS}">
                                                     <ListBox.ItemTemplate>
                                                         <DataTemplate>
                                                             <TextBlock Text="{Binding}" />
@@ -134,12 +134,12 @@
                             </TextBlock>
                             </Border>
 
-                            <Border Grid.Column="1" Grid.Row="4"  CornerRadius="10" Background="{Binding AlarmColorDC}" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding VisDCAlarm}" Width="200" Height="50">
+                            <Border Grid.Column="1" Grid.Row="4"  CornerRadius="10" Background="{Binding AlarmColorPDS}" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding VisPDSAlarm}" Width="200" Height="50">
                                 <TextBlock Text="PDS告警" TextAlignment="Center"  VerticalAlignment="Center">
                                     <TextBlock.ToolTip>
                                         <ToolTip Height="auto" Width="auto" Background="White" >
                                             <StackPanel>
-                                                <ListBox ItemsSource="{Binding AlarmStateDC}">
+                                                <ListBox ItemsSource="{Binding AlarmInfoPDS}">
                                                     <ListBox.ItemTemplate>
                                                         <DataTemplate>
                                                             <TextBlock Text="{Binding }" />
@@ -422,19 +422,19 @@
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="上限电压:"  VerticalAlignment="Center" Grid.Column="0" Margin="70 0 0 0 "/>
-                                <TextBox   Text="{Binding BUSUpperLimitVolThresh}" VerticalContentAlignment="Center" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="1" Margin="0 0 0 20"/>
+                                <TextBox   Text="{Binding BUSUpperLimitVolThresh,StringFormat=N1}" VerticalContentAlignment="Center" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="1" Margin="0 0 0 20" />
                                 <TextBlock Text="V"  VerticalAlignment="Center" Grid.Column="2"/>
 
                                 <TextBlock Text="下限电压:"  VerticalAlignment="Center" Margin="20,0,0,0" Grid.Column="3"/>
-                                <TextBox  Text="{Binding BUSLowerLimitVolThresh}" VerticalContentAlignment="Center" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="4" Margin="0 0 0 20"/>
+                                <TextBox  Text="{Binding BUSLowerLimitVolThresh,StringFormat=N1}" VerticalContentAlignment="Center" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="4" Margin="0 0 0 20"/>
                                 <TextBlock Text="V"  VerticalAlignment="Center" Grid.Column="5"/>
 
                                 <TextBlock Text="高压设置:"  VerticalAlignment="Center" Margin="20,0,0,0" Grid.Column="6"/>
-                                <TextBox  Text="{Binding BUSHVolSetting}" VerticalContentAlignment="Center" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="7" Margin="0 0 0 20"/>
+                                <TextBox  Text="{Binding BUSHVolSetting,StringFormat=N1}" VerticalContentAlignment="Center" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="7" Margin="0 0 0 20"/>
                                 <TextBlock Text="V"  VerticalAlignment="Center" Grid.Column="8"/>
 
                                 <TextBlock Text="低压设置:"  VerticalAlignment="Center" Margin="20,0,0,0" Grid.Column="9"/>
-                                <TextBox  Text="{Binding BUSLVolSetting}" VerticalContentAlignment="Center" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="10" Margin="0 0 0 20"/>
+                                <TextBox  Text="{Binding BUSLVolSetting,StringFormat=N1}" VerticalContentAlignment="Center" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="10" Margin="0 0 0 20"/>
                                 <TextBlock Text="V"  VerticalAlignment="Center" Grid.Column="11"/>
 
                                 <Button x:Name="button1" Content="读取信息"  Style="{StaticResource LineButton}"  Background="#3a617e" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,5,0,5" Command="{Binding ReadBUSVolInfoCommand}" Grid.Column="12"></Button>
@@ -486,10 +486,10 @@
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="电池下限电压："  VerticalAlignment="Center" Grid.Column="0" Margin="60 0 0 10"/>
-                                <TextBox  Text="{Binding BTLLimitVol}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="1" Margin="0 0 0 20"/>
+                                <TextBox  Text="{Binding BTLLimitVol,StringFormat=N1}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="1" Margin="0 0 0 20"/>
                                 <TextBlock Text="V" VerticalAlignment="Center" Grid.Column="2" Margin="0 0 0 10"/>
                                 <TextBlock Text="放电终止电压："  VerticalAlignment="Center" Margin="20,0,0,10" Grid.Column="3" />
-                                <TextBox  Text="{Binding DischargeSTVol}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="4" Margin="0 0 0 20"/>
+                                <TextBox  Text="{Binding DischargeSTVol,StringFormat=N1}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="4" Margin="0 0 0 20"/>
                                 <TextBlock Text="V" VerticalAlignment="Center" Grid.Column="5" Margin="0 0 0 10"/>
                                 <TextBlock Text="多支路电流调节参数："  VerticalAlignment="Center" Margin="20,0,0,10" Grid.Column="6" />
                                 <TextBox  Text="{Binding MultiBranchCurRegPar}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="7" Margin="0 0 0 20"/>
@@ -517,16 +517,16 @@
                                     <ColumnDefinition Width="157*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="电池均充电压："  VerticalAlignment="Center" Grid.Column="0" Margin="60 0 0 10"/>
-                                <TextBox  Text="{Binding BatAveChVol}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="1" Margin="0 0 0 20"/>
+                                <TextBox  Text="{Binding BatAveChVol,StringFormat=N1}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="1" Margin="0 0 0 20"/>
                                 <TextBlock Text="V" VerticalAlignment="Center" Grid.Column="2"  />
                                 <TextBlock Text="充电截止电流："  VerticalAlignment="Center"  Grid.Column="3" Margin="20 0 0 0"/>
-                                <TextBox  Text="{Binding ChCutCurrent}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="4"  Margin="0 0 0 20"/>
+                                <TextBox  Text="{Binding ChCutCurrent,StringFormat=N1}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="4"  Margin="0 0 0 20"/>
                                 <TextBlock Text="A" VerticalAlignment="Center" Grid.Column="5"/>
                                 <TextBlock Text="最大充电电流："  VerticalAlignment="Center" Margin="20,0,0,0" Grid.Column="6"/>
-                                <TextBox  Text="{Binding MaxChCurrent}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="7"  Margin="0 0 0 20" Width="100"/>
+                                <TextBox  Text="{Binding MaxChCurrent,StringFormat=N1}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="7"  Margin="0 0 0 20" Width="100"/>
                                 <TextBlock Text="A" VerticalAlignment="Center" Grid.Column="8"  />
                                 <TextBlock Text="最大放电电流："  VerticalAlignment="Center" Margin="10,0,0,0" Grid.Column="9"/>
-                                <TextBox  Text="{Binding MaxDisChCurrent}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="10"  Margin="0 0 0 20" Width="100"/>
+                                <TextBox  Text="{Binding MaxDisChCurrent,StringFormat=N1}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="10"  Margin="0 0 0 20" Width="100"/>
                                 <TextBlock Text="A" VerticalAlignment="Center" Grid.Column="11"/>
 
 
@@ -569,12 +569,12 @@
 
 
                                 <TextBlock Text="直流电流："  VerticalAlignment="Center" Margin="10,0,0,20"  Visibility="{Binding VisDCCur}" Grid.Column="3"/>
-                                <TextBox  Text="{Binding DCCurrentSet}" Style="{StaticResource UnderlineTextBoxStyle}" Visibility="{Binding VisDCCur}" Grid.Column="4" Margin="0 0 0 40" Width="100"/>
+                                <TextBox  Text="{Binding DCCurrentSet,StringFormat=N1}" Style="{StaticResource UnderlineTextBoxStyle}" Visibility="{Binding VisDCCur}" Grid.Column="4" Margin="0 0 0 40" Width="100"/>
                                 <TextBlock Text="A"  VerticalAlignment="Center"  Visibility="{Binding VisDCCur}" Grid.Column="5" Margin="0 0 0 20"/>
 
 
                                 <TextBlock Text="直流功率："  VerticalAlignment="Center"  Visibility="{Binding VisDCPower}" Grid.Column="3" Margin="10,0,0,20"/>
-                                <TextBox  Text="{Binding DCPowerSet}" Style="{StaticResource UnderlineTextBoxStyle}" Visibility="{Binding VisDCPower}" Grid.Column="4" Margin="0 0 0 40" Width="100"/>
+                                <TextBox  Text="{Binding DCPowerSet, StringFormat=N1}" Style="{StaticResource UnderlineTextBoxStyle}" Visibility="{Binding VisDCPower}" Grid.Column="4" Margin="0 0 0 40" Width="100"/>
                                 <TextBlock Text="kW" VerticalAlignment="Center"  Visibility="{Binding VisDCPower}"  Grid.Column="5" Margin="0 0 0 20"/>
 
                                 <Button x:Name="button6" Content="充放电"   Style="{StaticResource LineButton}"   Margin="10,0,0,20" Background="#3a617e" HorizontalAlignment="Center"  Command="{Binding ManCharCommand}" Visibility="{Binding VisDCChar}" Grid.Column="6" VerticalAlignment="Center"></Button>
