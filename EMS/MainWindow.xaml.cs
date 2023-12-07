@@ -30,6 +30,8 @@ namespace EMS
         DevControlView devControlView;
         ParameterSettingView parameterSettingView;
         PCSSettingView pCSSettingView;
+        PCSMainViewModel pCSMainViewModel;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -38,10 +40,18 @@ namespace EMS
 
 
             viewmodel = new MainViewModel();
+            pCSMainViewModel = new PCSMainViewModel();
+
             this.DataContext = viewmodel;
             DevListView.DataContext = viewmodel.DisplayContent;
             DaqDataRaBtn.IsChecked = true;
+
+            PCS_ConncetState.DataContext = pCSMainViewModel;
+            PCS_ConnectColor.DataContext = pCSMainViewModel;
+            PCS_IP.DataContext = pCSMainViewModel;
             SelectedPage("DaqDataRaBtn");
+            EnergyManagementSystem.Initialization();
+            EnergyManagementSystem.GlobalInstance.Initialization(null, null, null, null);
             //pcsviewmodel = new PCSSettingViewModel();
             //PCSView.DataContext = pcsviewmodel;
         }
@@ -106,14 +116,14 @@ namespace EMS
         {
             this.Close();
         }
-        
-        private void RadioButton_Checked(object sender,RoutedEventArgs e)
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             RadioButton radioButton = (RadioButton)sender;
             SelectedPage(radioButton.Name);
         }
 
-        
+
 
         private void SelectedPage(string PageName)
         {
@@ -139,8 +149,8 @@ namespace EMS
                     if (devControlView == null)
                     {
                         devControlView = new DevControlView();
-                        
-                    } 
+
+                    }
                     devControlView.SyncContent(viewmodel.DisplayContent.OnlineBatteryTotalList.ToList(), viewmodel.DisplayContent.ClientList);
                     Mainbody.Content = new Frame() { Content = devControlView };
                     break;
@@ -155,10 +165,10 @@ namespace EMS
                     break;
 
                 case "PCSSettingRaBtn":
-                    if(pCSSettingView == null)
+                    if (pCSSettingView == null)
                     {
                         pCSSettingView = new PCSSettingView();
-                        
+
                     }
                     //simulationSettingView.SyncContent(viewmodel.DisplayContent.OnlineBatteryTotalList.ToList(), viewmodel.DisplayContent.ClientList);
                     Mainbody.Content = new Frame() { Content = pCSSettingView };
@@ -185,5 +195,13 @@ namespace EMS
             view.ShowDialog();
 
         }
+
+        private void OpenPCSWindow_Click(object sender, RoutedEventArgs e)
+        {
+            PCSMainWindow mainwindow = new PCSMainWindow(pCSMainViewModel);
+            mainwindow.Show();
+        }
+
+
     }
 }

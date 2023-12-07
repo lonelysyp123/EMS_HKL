@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using EMS.Model;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
