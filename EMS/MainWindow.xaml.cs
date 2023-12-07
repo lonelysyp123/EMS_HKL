@@ -4,6 +4,9 @@ using EMS.Storage.DB.DBManage;
 using EMS.Storage.DB.Models;
 using EMS.View;
 using EMS.ViewModel;
+using log4net;
+using log4net.Config;
+using log4net.Repository.Hierarchy;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -32,7 +35,10 @@ namespace EMS
         public MainWindow()
         {
             InitializeComponent();
-            
+            //初始化log配置文件
+            XmlConfigurator.Configure();
+
+
             viewmodel = new MainViewModel();
             pCSMainViewModel = new PCSMainViewModel();
 

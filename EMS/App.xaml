@@ -12,7 +12,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.BlueGrey.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/EMS;component/Style/Button.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/EMS;component/Style/GroupBoxStyle.xaml"/>
+                
                 <ResourceDictionary Source="pack://application:,,,/EMS;component/Style/TextBoxStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
