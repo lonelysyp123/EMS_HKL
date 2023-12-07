@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using EMS.Api;
 using EMS.Common.Modbus.ModbusTCP;
 using EMS.Model;
 using EMS.View;
@@ -26,8 +27,17 @@ namespace EMS.ViewModel
         public class PCSSettingModel : ObservableObject
         {
 
-            
-           
+
+            private int _strategyNumber;
+            public int StrategyNumber
+
+            {
+                get => _strategyNumber;
+                set
+                {
+                    SetProperty(ref _strategyNumber, value);
+                }
+            }
             private string _strategyMode;
             public string StrategyMode
 
@@ -83,7 +93,12 @@ namespace EMS.ViewModel
             get=> _isAutoStrategy;
             set
             {
-                SetProperty(ref _isAutoStrategy, value);
+                if(SetProperty(ref _isAutoStrategy, value))
+                {
+                    StrategyApi.SetMode(IsAutoStrategy, IsDailyPatternBtnOpen,
+                    IsMaxDemandControlBtnOpen, IsReversePowerBtnOpen);
+
+                }
             }
         }
 
@@ -104,6 +119,7 @@ namespace EMS.ViewModel
             set
             {
                 SetProperty(ref _isAutoStrategyBtnEnabled, value);
+                
             }
         }
 
@@ -115,6 +131,7 @@ namespace EMS.ViewModel
             set
             {
                 SetProperty(ref _isManualSendBtnEnabled, value);
+               
             }
         }
         /// <summary>
@@ -126,14 +143,18 @@ namespace EMS.ViewModel
             get => _isDailyPatternBtnOpen;
             set
             {
-                SetProperty(ref _isDailyPatternBtnOpen, value);
+                if(SetProperty(ref _isDailyPatternBtnOpen, value))
+                {
+                    StrategyApi.SetMode(IsAutoStrategy, IsDailyPatternBtnOpen, 
+                        IsMaxDemandControlBtnOpen, IsReversePowerBtnOpen);
+                }
             }
         }
 
         
 
         /// <summary>
-        /// 需量控制
+        /// 需量控制开关
         /// </summary>
         private bool _isMaxDemandControlBtnOpen;
         public bool IsMaxDemandControlBtnOpen
@@ -141,7 +162,11 @@ namespace EMS.ViewModel
             get => _isMaxDemandControlBtnOpen;
             set
             {
-                SetProperty(ref _isMaxDemandControlBtnOpen,value);
+                if(SetProperty(ref _isMaxDemandControlBtnOpen, value))
+                {
+                    StrategyApi.SetMode(IsAutoStrategy, IsDailyPatternBtnOpen, 
+                        IsMaxDemandControlBtnOpen, IsReversePowerBtnOpen);
+                }
             }
         }
 
@@ -155,6 +180,16 @@ namespace EMS.ViewModel
             }
         }
 
+        private double _maxDemandDescendRate;
+        public double MaxDemandDescendRate
+        {
+            get => _maxDemandDescendRate;
+            set
+            {
+                SetProperty(ref _maxDemandDescendRate, value);
+            }
+        }
+
         /// <summary>
         /// 逆功率控制
         /// </summary>
@@ -164,18 +199,43 @@ namespace EMS.ViewModel
             get => _isReversePowerBtnOpen;
             set
             {
-                SetProperty(ref _isReversePowerBtnOpen, value);
+               if( SetProperty(ref _isReversePowerBtnOpen, value))
+                {
+                    StrategyApi.SetMode(IsAutoStrategy, IsDailyPatternBtnOpen,
+                    IsMaxDemandControlBtnOpen, IsReversePowerBtnOpen);
+
+                }
             }
         }
 
 
-        private double _reversepowerThreshold;
+        private double _reversePowerThreshold;
         public double ReversePowerThreshold
         {
-            get => _reversepowerThreshold;
+            get => _reversePowerThreshold;
             set
             {
-                SetProperty(ref _reversepowerThreshold, value);
+                SetProperty(ref _reversePowerThreshold, value);
+            }
+        }
+
+        private double _reversePowerLowestThreshold;
+        public double ReversePowerLowestThreshold
+        {
+            get => _reversePowerLowestThreshold;
+            set
+            {
+                SetProperty(ref _reversePowerLowestThreshold, value);
+            }
+        }
+
+        private double _reversePowerDescendRate;
+        public double ReversePowerDescendRate
+        {
+            get => _reversePowerDescendRate;
+            set
+            {
+                SetProperty(ref _reversePowerDescendRate, value);
             }
         }
 
@@ -282,6 +342,9 @@ namespace EMS.ViewModel
         public RelayCommand BatteryStrategyAddRowCommand { get; private set; }
         public RelayCommand BatteryStrategyRemoveRowCommand { get; private set; }
         public RelayCommand SwitchAutoManualCommand {  get; private set; }
+        public RelayCommand MaxDemandSendCommand { get; private set; }
+        public RelayCommand ReversePowerSendCommand { get; private set; }
+
         private int index = 1;
         //public PCSSettingModel NEWStrategy;
         public PCSSettingViewModel()
@@ -298,7 +361,9 @@ namespace EMS.ViewModel
             BatteryStrategyAddRowCommand = new RelayCommand(BatteryStrategyAddRow);
             BatteryStrategyRemoveRowCommand = new RelayCommand(BatteryStrategyRemoveRow);
             SwitchAutoManualCommand = new RelayCommand(SwitchAutoManual);
-
+            MaxDemandSendCommand = new RelayCommand(SendMaxDemandPara);
+            ReversePowerSendCommand = new RelayCommand(SendReversePowerPara);
+            StrategyApi.SetMode(IsAutoStrategy, IsDailyPatternBtnOpen, IsMaxDemandControlBtnOpen, IsReversePowerBtnOpen);
         BatteryStrategyArray = new List<BatteryStrategyModel>();
             StrategyModeSet = new List<string>()
             {
@@ -309,6 +374,18 @@ namespace EMS.ViewModel
                 "恒功率放电"
             };
           
+        }
+
+        private void SendReversePowerPara()
+        {
+            StrategyApi.SetReversePowerThreshold(ReversePowerThreshold, 
+                ReversePowerLowestThreshold, ReversePowerDescendRate);
+        }
+
+        private void SendMaxDemandPara()
+        {
+            StrategyApi.SetMaxDemandThreshold(DemandControlCapacity, 
+                MaxDemandDescendRate);
         }
 
         private void SwitchAutoManual()
@@ -336,10 +413,18 @@ namespace EMS.ViewModel
 
         private void updateBatteryStrategyArray()
         {
+            var total= TotalStrategies.OrderBy(TotalStrategies=>TotalStrategies.StrategyStartTime).ToList();
+            for (int i = 0; i < total.Count; i++)
+            {
+                total[i].StrategyNumber = i+1;
+            }
+            TotalStrategies.Clear();
             BatteryStrategyArray.Clear();
-            foreach (var strategy in TotalStrategies)
+
+            foreach (var strategy in total)
             {
                 int mode = 0;
+                TotalStrategies.Add(strategy);
                switch(strategy.StrategyMode)
                 {
                     case "待机":
@@ -376,8 +461,9 @@ namespace EMS.ViewModel
                 };
                 
                 BatteryStrategyArray.Add(model);
-
             }
+                BatteryStrategyArray = BatteryStrategyArray.OrderBy(batteryStrategy => batteryStrategy.StartTime).ToList();
+            StrategyApi.SetDailyPattern(BatteryStrategyArray);
         }
 
 
@@ -392,6 +478,7 @@ namespace EMS.ViewModel
         {
            if(SelectedStrategyMode!="待机"&&StrategyValueSet!=0) 
             {
+                
                 PCSSettingModel newStrategy = new PCSSettingModel
                 {
                     StrategyStartTime = StrategyStartTimeSet,
@@ -412,7 +499,7 @@ namespace EMS.ViewModel
                 TotalStrategies.Add(newStrategy);
                 updateBatteryStrategyArray();
             }
-            else
+            else 
             {
                 MessageBox.Show("请正确输入");
             }

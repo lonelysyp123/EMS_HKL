@@ -1,4 +1,5 @@
-﻿using EMS.Model;
+﻿using EMS.Api;
+using EMS.Model;
 using EMS.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -11,19 +12,32 @@ using System.Threading.Tasks;
 namespace EMS.Common.StrategyManage
 {
     public class EmsController
-    {
-        private bool _isAutomaticMode;
-        private bool _isFaultMode;
-        private bool _hasDailyPatternEnabled;
-        private bool _hasMaxDemandControlEnabled;
-        private bool _hasReversePowerflowProtectionEnabled;
+    {   
+        /// <summary>
+        /// 策略是否开启
+        /// </summary>
+        public bool _isAutomaticMode { get; set; }
+        public bool _hasDailyPatternEnabled { get; set; }
+        public bool _hasMaxDemandControlEnabled { get; set; }
+        public bool _hasReversePowerflowProtectionEnabled { get; set; }
         private bool _hasContigencyCheckEnabled;
+        private bool _isFaultMode;
+
+        public double _maxDemandPower { get;set; }
+        public double _maxDemandPowerDescendRate { get; set; }
+        public double _reversePowerThreshold {  get; set; }
+        public double _reversePowerLowestThreshold {  get; set; }
+        public double _reversePowerDescendRate { get; set; }
+
         private BessCommand _currentCommand;
         private IntraDayScheduler _scheduler;
         private ContingencyStatusEnum _contingencyStatus;
         private DateTime _lastActiveTimestamp; // used to indicate the system operation thread is still alive.
-
-        public bool IsFaultMode { get {return this._contingencyStatus == ContingencyStatusEnum.Level2 || this._contingencyStatus == ContingencyStatusEnum.Level3; } }
+        public List<BatteryStrategyModel> DailyPattern { get; set; }
+       
+        
+        public Dictionary<int, List<BatteryStrategyModel>> DailyPatterns { get; set; }
+        public bool IsFaultMode { get {return _contingencyStatus == ContingencyStatusEnum.Level2 || _contingencyStatus == ContingencyStatusEnum.Level3; } }
         public EmsController()
         {
             _isAutomaticMode = false;
@@ -37,9 +51,12 @@ namespace EMS.Common.StrategyManage
 
         }
 
+        public IntraDayScheduler Scheduler { get { return _scheduler; } }
+
         public void ContinueOperation()
         {
             ContingencyCheck();
+            UpdateMode();
             NormalOperation();
             
             _lastActiveTimestamp = DateTime.Now;
@@ -51,6 +68,7 @@ namespace EMS.Common.StrategyManage
             {
                 BessCommand newCommand;
                 double controlValue = 0;
+                
                 double maxPowerOutput = 0;
                 BatteryStrategyEnum strategy = BatteryStrategyEnum.Standby;
                 if (_isAutomaticMode)
@@ -64,12 +82,16 @@ namespace EMS.Common.StrategyManage
                             strategy = newCommand.BatteryStrategy;
                         }
                         double netPowerInjection = StrategyManager.Instance.GetACSmartMeterPower();
-                        double reversePowerflowProtectionThreshold = StrategyManager.Instance.GetReversePowerflowProtectionThreshold();
+           
                         double pcsPower = StrategyManager.Instance.GetPcsPower();
                         double load = netPowerInjection + pcsPower;
                         double tolerance = StrategyManager.Instance.GetAutomaticControlTolerance();
-                        double capacity = StrategyManager.Instance.GetDemandControlCapacity();
 
+                        //获取需量控制参数
+                        StrategyApi.GetMaxDemandThreshhold(out double capacity, out double demanddescendrate);
+                        //获取逆转保护参数
+                        StrategyApi.GetReversePowerThreshold(out double reversePowerflowProtectionThreshold,
+                            out double reversePowerLowestThreshold, out double reversePowerDescendRate);
                     if (_hasReversePowerflowProtectionEnabled && (strategy == BatteryStrategyEnum.ConstantCurrentDischarge || strategy == BatteryStrategyEnum.ConstantPowerDischarge))
                     {
                         maxPowerOutput = load - reversePowerflowProtectionThreshold * (1 + tolerance);
@@ -185,6 +207,16 @@ namespace EMS.Common.StrategyManage
                     break;
             }
 
+        }
+
+        private void UpdateMode()
+        {
+            List<bool> modeArray = new List<bool>();
+            modeArray = StrategyApi.GetMode();
+            _isAutomaticMode = modeArray[0];
+            _hasDailyPatternEnabled = modeArray[1];
+            _hasMaxDemandControlEnabled = modeArray[2];
+            _hasReversePowerflowProtectionEnabled = modeArray[3];
         }
     }
     public enum ContingencyStatusEnum

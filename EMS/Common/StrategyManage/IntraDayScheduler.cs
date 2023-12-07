@@ -1,4 +1,5 @@
-﻿using EMS.Model;
+﻿using EMS.Api;
+using EMS.Model;
 using EMS.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,6 @@ namespace EMS.Common.StrategyManage
         {
             _currentOverridePointer = 0;
             _hasCrossing12AM = false;
-            ResetPattern();
         }
         public BatteryStrategyModel GetNextOverride()
         {
@@ -46,9 +46,9 @@ namespace EMS.Common.StrategyManage
             return false;
         }
 
-        private void ResetPattern()
+        public void ResetPattern()
         {
-            List<BatteryStrategyModel> userDailyPattern = StrategyManager.Instance.GetDailyPattern();
+            List<BatteryStrategyModel> userDailyPattern = StrategyApi.GetDailyPattern();
             BatteryStrategyModel overrideAt12AM = userDailyPattern.Count == 0 ? new BatteryStrategyModel() : userDailyPattern.Last();
             overrideAt12AM.StartTime = TimeSpan.Zero;
             _dailyPattern.Clear();

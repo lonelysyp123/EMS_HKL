@@ -215,6 +215,7 @@
     </ApplicationDefinition>
     <Compile Include="Api\BmsApi.cs" />
     <Compile Include="Api\PcsApi.cs" />
+    <Compile Include="Api\StrategyApi.cs" />
     <Compile Include="Common\Modbus\ModbusRequest.cs" />
     <Compile Include="Common\Mqtt\MqttClientService.cs" />
     <Compile Include="Common\Mqtt\MqttConnectOption.cs" />
@@ -232,7 +233,6 @@
     <Compile Include="Model\BMSParameterSettingModel.cs" />
     <Compile Include="Model\ElectricityMeterModel.cs" />
     <Compile Include="Model\SerialPortSettingsModel.cs" />
-    <Compile Include="Model\StateGridModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
     <Compile Include="Storage\DB\DBManage\PCSStrategyInfoManage.cs" />
     <Compile Include="Storage\DB\Models\PCSStrategyInfoModel.cs" />

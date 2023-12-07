@@ -41,11 +41,16 @@ namespace EMS.ViewModel
         ///  得到用户预设的日内储能充放电曲线
         /// </summary>
         /// <returns>每个时间节点的充放电出力</returns>
-        public List<BatteryStrategyModel> GetDailyPattern()
-        {
-            // 输出需要排序，用户输入时需要检查设定值上下限
-            return new List<BatteryStrategyModel>();
-        }
+        //public List<BatteryStrategyModel> GetDailyPattern()
+        //{
+        //    return null;
+        //    // 输出需要排序，用户输入时需要检查设定值上下限
+        //    //return EnergyManagementSystem.GlobalInstance.Controller.DailyPattern;
+        //}
+
+        //public void SetDailyPattern(List<BatteryStrategyModel> dailyPattern) {
+        //    EnergyManagementSystem.GlobalInstance.Controller.DailyPattern = dailyPattern;
+        //}
 
         /// <summary>
         ///  得到手动模式下用户设定的控制指令

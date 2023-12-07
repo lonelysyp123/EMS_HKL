@@ -198,7 +198,7 @@
                             <trl:DateInput Width="90"
                             Height="20"
                             Margin="10,0,0,0" Foreground="Black"
-                            DateText="{Binding StrategyStartTimeSet}"
+                            DateText="{Binding StrategyStartTimeSet,Mode=TwoWay}"
                             FontSize="10"></trl:DateInput>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal"
@@ -266,6 +266,8 @@
                         </DataGrid.CellStyle>
 
                         <DataGrid.Columns >
+                            <DataGridTextColumn Width="*" Binding="{Binding StrategyNumber}" Header="序号" Foreground= "White"/>
+
                             <DataGridTextColumn Width="*" Binding="{Binding StrategyMode}" Header="控制类型" Foreground= "White"/>
                             <DataGridTextColumn Width="*" Binding="{Binding StrategyValue}" Header="数值" Foreground= "White"/>
                             <DataGridTextColumn Width="*" Binding="{Binding StrategyStartTime}" Header="起始时间" Foreground= "White"/>
@@ -311,6 +313,9 @@
                                    Margin="15 0 3 0"></TextBlock>
                         <TextBox VerticalAlignment="Center" Width="100" BorderThickness="1" Margin="2" Foreground="Black"
                                  Background="White"  Text="{Binding DemandControlCapacity}"></TextBox>
+                        <TextBlock Text="下设比例(%)" Margin="40,0,10,0" VerticalAlignment="Center" />
+                        <TextBox Text="{Binding MaxDemandDescendRate}" Width="40" VerticalAlignment="Center" Background="White"/>
+                        <Button Content="应用" Command="{Binding MaxDemandSendCommand}" Margin="20,0" Height="30"></Button>
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -321,7 +326,7 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0"
                             Orientation="Horizontal"
@@ -337,11 +342,17 @@
                             Orientation="Horizontal">
                     <StackPanel Grid.Column="1"
                                 Orientation="Horizontal">
-                        <TextBlock Text="逆功率保护阈值（kW）"
+                        <TextBlock Text="逆功率保护限制值（kW）"
                                    VerticalAlignment="Center"
                                    Margin="15 0 3 0"></TextBlock>
                         <TextBox VerticalAlignment="Center" Width="100" BorderThickness="1" Margin="2"  Text="{Binding ReversePowerThreshold}"  Foreground="Black"
                                  Background="White"  ></TextBox>
+                        <TextBlock Text="逆功率保护动作限制值（KW)" VerticalAlignment="Center" Margin="10,0"/>
+                        <TextBox Text="{Binding ReversePowerLowestThreshold}" Width="80" VerticalAlignment="Center" Background="White"/>
+                        <TextBlock Text="下设比例(%)" VerticalAlignment="Center" Margin="20,0,10,0"/>
+                        <TextBox Text="{Binding ReversePowerDescendRate}" Width="40"  VerticalAlignment="Center" Background="White" />
+                        <Button Content="应用" Margin="20,0" Height="30" Command="{Binding ReversePowerSendCommand}"></Button>
+
                     </StackPanel>
                 </StackPanel>
             </Grid>
