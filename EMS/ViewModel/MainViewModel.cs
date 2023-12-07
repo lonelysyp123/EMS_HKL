@@ -81,6 +81,7 @@ namespace EMS.ViewModel
 
 
         public RelayCommand OpenSystemSetViewCommand { set; get; }
+        public RelayCommand OpenElectricMeterViewCommand { get; set; }
         public RelayCommand OpenDataAnalysisViewCommand { set; get; }
         public RelayCommand OpenAboutCommand { set; get; }
         public RelayCommand StartOrStopDaqCommand { set; get; }
@@ -97,12 +98,19 @@ namespace EMS.ViewModel
             OpenAboutCommand = new RelayCommand(OpenAboutView);
             StartOrStopDaqCommand = new RelayCommand(StartOrStopDaq);
             StartOrStopSaveDataCommand = new RelayCommand(StartOrStopSaveData);
+            OpenElectricMeterViewCommand = new RelayCommand(OpenElectricMeterView);
             //StateContent = new StateContentViewModel();
             DisplayContent = new DisplayContentViewModel();
             SystemConfiguration = InitSystemConfiguration();
             DisplayContent.DaqTimeSpan = SystemConfiguration.daqConfiguration.DaqTimeSpan;
             DaqImageButtonChange();
             SaveImageButtonChange();
+        }
+
+        private void OpenElectricMeterView()
+        {
+            ElectricMeterView view = new ElectricMeterView();
+            view.ShowDialog();
         }
 
         public SystemConfigurationBase InitSystemConfiguration()

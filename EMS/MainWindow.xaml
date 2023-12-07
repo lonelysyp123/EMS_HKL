@@ -85,6 +85,7 @@
             </MenuItem>
             <MenuItem Header="选项"  FontSize="12" VerticalAlignment="Center">
                 <MenuItem Header="系统设置" Command="{Binding OpenSystemSetViewCommand}"></MenuItem>
+                <MenuItem Header="电表配置" Command="{Binding OpenElectricMeterViewCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="帮助"  FontSize="12" VerticalAlignment="Center">
                 <MenuItem Header="用户手册" Click="OperationManual_Click"></MenuItem>

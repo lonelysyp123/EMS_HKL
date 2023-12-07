@@ -163,6 +163,7 @@
     <Reference Include="System.Data.SQLite.Linq, Version=1.0.118.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.118.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="System.Management" />
     <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
     </Reference>
@@ -219,6 +220,7 @@
     <Compile Include="Common\Mqtt\MqttConnectOption.cs" />
     <Compile Include="Common\StrategyManage\EmsController.cs" />
     <Compile Include="Common\StrategyManage\IntraDayScheduler.cs" />
+    <Compile Include="Common\SingletonBase.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -228,6 +230,8 @@
     <Compile Include="Model\PCSParSettingModel.cs" />
     <Compile Include="Common\StrategyManage\EnergyManagementSystem.cs" />
     <Compile Include="Model\BMSParameterSettingModel.cs" />
+    <Compile Include="Model\ElectricityMeterModel.cs" />
+    <Compile Include="Model\SerialPortSettingsModel.cs" />
     <Compile Include="Model\StateGridModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
     <Compile Include="Storage\DB\DBManage\PCSStrategyInfoManage.cs" />
@@ -271,6 +275,7 @@
       <DependentUpon>IPInput.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\DisplayContentViewModel.cs" />
+    <Compile Include="ViewModel\ElectricMeterViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ParameterSettingViewModel.cs" />
     <Compile Include="ViewModel\PCSMainViewModel.cs" />
@@ -298,6 +303,9 @@
     </Compile>
     <Compile Include="View\DevTest_CollectView.xaml.cs">
       <DependentUpon>DevTest_CollectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ElectricMeterView.xaml.cs">
+      <DependentUpon>ElectricMeterView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ParameterSettingView.xaml.cs">
       <DependentUpon>ParameterSettingView.xaml</DependentUpon>
@@ -384,6 +392,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\DevTest_CollectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ElectricMeterView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
