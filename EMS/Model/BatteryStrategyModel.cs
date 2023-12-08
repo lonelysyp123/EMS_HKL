@@ -19,6 +19,14 @@ namespace EMS.Model
             _startTime = TimeSpan.Zero;
         }
 
+        public BatteryStrategyModel(BatteryStrategyModel batteryStrategyModel)
+        {
+            _id= batteryStrategyModel._id;
+            _setValue = batteryStrategyModel._setValue;
+            _batteryStrategy = batteryStrategyModel._batteryStrategy;
+            _startTime = batteryStrategyModel._startTime;
+        }
+
         public BatteryStrategyModel(BatteryStrategyEnum batteryStrategy, double setValue)
         {
             _id = 0;

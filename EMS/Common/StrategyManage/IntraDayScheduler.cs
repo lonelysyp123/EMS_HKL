@@ -49,10 +49,10 @@ namespace EMS.Common.StrategyManage
         public void ResetPattern()
         {
             List<BatteryStrategyModel> userDailyPattern = StrategyApi.GetDailyPattern();
-            BatteryStrategyModel overrideAt12AM = userDailyPattern.Count == 0 ? new BatteryStrategyModel() : userDailyPattern.Last();
+            BatteryStrategyModel overrideAt12AM = userDailyPattern.Count == 0 ? new BatteryStrategyModel() : new BatteryStrategyModel(userDailyPattern.Last());
             overrideAt12AM.StartTime = TimeSpan.Zero;
             _dailyPattern.Clear();
-            _dailyPattern.Append(overrideAt12AM);
+            _dailyPattern.Add(overrideAt12AM);
             _dailyPattern.AddRange(userDailyPattern);
 
             for (int i = 0; i < _dailyPattern.Count - 1; i++) // check to make sure _dailyPattern is sorted.
