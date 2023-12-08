@@ -23,7 +23,7 @@ namespace EMS.Api
         }
         public static List<BatteryStrategyModel> GetDailyPattern()
         {
-            EnergyManagementSystem.GlobalInstance.Controller.DailyPattern = new List<BatteryStrategyModel>();
+            
             if (EnergyManagementSystem.GlobalInstance.Controller.DailyPattern.Count !=0)
             {
                 return EnergyManagementSystem.GlobalInstance.Controller.DailyPattern;

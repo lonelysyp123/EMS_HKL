@@ -161,9 +161,15 @@
                         <TextBlock Text="峰谷套利模式启停"
                                    VerticalAlignment="Center"
                                    Margin="15 0 3 0" />
+                        
                         <ToggleButton Width="90" Height="30" Margin="10 0 0 0" Style="{DynamicResource ToggleButtonStyle}"
                                       Cursor="Hand" IsChecked="{Binding IsDailyPatternBtnOpen}" IsEnabled="{Binding IsAutoStrategyBtnEnabled}">
                         </ToggleButton>
+                        <TextBlock Text="策略选择" VerticalAlignment="Center" Margin="40,0,10,0"/>
+                        
+                        <ComboBox  VerticalAlignment="Top" Height="25" Width="90"
+Background="White"  Foreground="Black" FontSize="10" Margin="20,10"  ItemsSource="{Binding StrategySeriesNumber}" SelectedItem="{Binding SelectedStrategySeries}">
+                        </ComboBox>
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="1">
@@ -219,19 +225,17 @@
                      VerticalAlignment="Center"
                      Grid.Column="2">
                             <TextBlock Text="值" VerticalAlignment="Center" Margin="20,0"/>
-                            
-                            <TextBox  Text="{Binding StrategyValueSet}" Width="90" Height="25"  Style="{StaticResource MaterialDesignTextBox}" Background="White"  Margin="0,5" />
+                            <TextBox  Text="{Binding StrategyValueSet}" Width="60" Height="25"  Style="{StaticResource MaterialDesignTextBox}"
+                                      Foreground="Black" Background="White"  Margin="0,5" />
+                            <TextBlock Text="{Binding ParaUnits}" Foreground="White" Width="20" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            <Button VerticalAlignment="Center" HorizontalAlignment="Center" Content="+" FontSize="14"
+                                    Command="{Binding BatteryStrategyAddRowCommand}" Margin="50,0,0,0" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal"
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center"
                      Grid.Column="3">
-                            <Button VerticalAlignment="Center"
-                     HorizontalAlignment="Center"
-                     Content="+"
-                     FontSize="14"
-                     Command="{Binding BatteryStrategyAddRowCommand}" />
-                          
+                            <Button  Content="下发" Width="80" Command="{Binding BatteryStrategySendCommand}" IsEnabled="{Binding IsAutoStrategyBtnEnabled}"/>
                         </StackPanel>
                     </Grid>
                     <DataGrid Grid.Row="1"   x:Name="DataGrid1"  Margin="60,0,60,00" Background="Transparent" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False"
@@ -315,7 +319,7 @@
                                  Background="White"  Text="{Binding DemandControlCapacity}"></TextBox>
                         <TextBlock Text="下设比例(%)" Margin="40,0,10,0" VerticalAlignment="Center" />
                         <TextBox Text="{Binding MaxDemandDescendRate}" Width="40" VerticalAlignment="Center" Background="White"/>
-                        <Button Content="应用" Command="{Binding MaxDemandSendCommand}" Margin="20,0" Height="30"></Button>
+                        <Button Content="应用" IsEnabled="{Binding IsAutoStrategyBtnEnabled}" Command="{Binding MaxDemandSendCommand}" Margin="20,0" Height="30"></Button>
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -351,7 +355,7 @@
                         <TextBox Text="{Binding ReversePowerLowestThreshold}" Width="80" VerticalAlignment="Center" Background="White"/>
                         <TextBlock Text="下设比例(%)" VerticalAlignment="Center" Margin="20,0,10,0"/>
                         <TextBox Text="{Binding ReversePowerDescendRate}" Width="40"  VerticalAlignment="Center" Background="White" />
-                        <Button Content="应用" Margin="20,0" Height="30" Command="{Binding ReversePowerSendCommand}"></Button>
+                        <Button Content="应用" IsEnabled="{Binding IsAutoStrategyBtnEnabled}" Margin="20,0" Height="30" Command="{Binding ReversePowerSendCommand}"></Button>
 
                     </StackPanel>
                 </StackPanel>

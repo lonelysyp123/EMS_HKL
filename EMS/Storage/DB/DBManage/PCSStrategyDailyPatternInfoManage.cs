@@ -35,7 +35,7 @@ namespace EMS.Storage.DB.DBManage
                 {
                     using (var db = new ORMContext())
                     {
-                        var result = db.pCSStrategyDailyPatternInfos.Where(p => p.ID == entity.ID).ToList();
+                        var result = db.pCSStrategyDailyPatternInfos.Where(p => p.Series == entity.Series).ToList();
                         for (int i = 0; i < result.Count; i++)
                         {
                             db.pCSStrategyDailyPatternInfos.Remove(result[i]);
@@ -46,6 +46,27 @@ namespace EMS.Storage.DB.DBManage
                 catch
                 { 
                     return false; 
+                }
+                return true;
+            }
+
+            public bool Delete(int series)
+            {
+                try
+                {
+                    using (var db = new ORMContext())
+                    {
+                        var result = db.pCSStrategyDailyPatternInfos.Where(p => p.Series == series).ToList();
+                        for (int i = 0; i < result.Count; i++)
+                        {
+                            db.pCSStrategyDailyPatternInfos.Remove(result[i]);
+                        }
+                        db.SaveChanges();
+                    }
+                }
+                catch
+                {
+                    return false;
                 }
                 return true;
             }
@@ -64,6 +85,7 @@ namespace EMS.Storage.DB.DBManage
                         var result = db.pCSStrategyDailyPatternInfos.Attach(entity);
                         db.Entry(entity).State = EntityState.Modified;
                         db.SaveChanges();
+
                     }
                 }
                 catch
@@ -79,7 +101,23 @@ namespace EMS.Storage.DB.DBManage
                 {
                     using (var db = new ORMContext())
                     {
-                        var result = db.pCSStrategyDailyPatternInfos    .ToList();
+                        var result = db.pCSStrategyDailyPatternInfos.ToList();
+                        return result;
+                    }
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+
+            public List<PCSStrategyDailyPatternInfoModel> Find(int seriesnumber)
+            {
+                try
+                {
+                    using (var db = new ORMContext())
+                    {
+                        var result = db.pCSStrategyDailyPatternInfos.Where(p => p.Series ==seriesnumber).ToList();
                         return result;
                     }
                 }

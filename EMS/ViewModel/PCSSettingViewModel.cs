@@ -3,6 +3,8 @@ using CommunityToolkit.Mvvm.Input;
 using EMS.Api;
 using EMS.Common.Modbus.ModbusTCP;
 using EMS.Model;
+using EMS.Storage.DB.DBManage.EMS.Storage.DB.DBManage;
+using EMS.Storage.DB.Models;
 using EMS.View;
 using System;
 using System.Collections.Generic;
@@ -26,7 +28,6 @@ namespace EMS.ViewModel
         /// </summary>
         public class PCSSettingModel : ObservableObject
         {
-
 
             private int _strategyNumber;
             public int StrategyNumber
@@ -70,7 +71,60 @@ namespace EMS.ViewModel
             }
         }
 
-        
+        /// <summary>
+        /// 方案序号（共5套）
+        /// </summary>
+        private Dictionary<int, List<PCSSettingModel>> _strategySeries;
+        public Dictionary<int, List<PCSSettingModel>> StrategySeries
+        {
+            get => _strategySeries;
+            set
+            {
+                SetProperty(ref _strategySeries, value);
+            }
+        }
+        /// <summary>
+        /// 选择方案的Combobox
+        /// </summary>
+        private List<string> _strategySeriesNumber;
+        public List<string> StrategySeriesNumber
+        {
+            get => _strategySeriesNumber;
+            set
+            {
+                SetProperty(ref _strategySeriesNumber, value);
+            }
+        }
+       /// <summary>
+       /// 被选中的方案
+       /// </summary>
+        private string _selectedStrategySeries;
+        public string SelectedStrategySeries
+        {
+            get => _selectedStrategySeries;
+            set
+            {
+                //SetProperty(ref _selectedStrategySeries, value);
+
+                if (SetProperty(ref _selectedStrategySeries, value))
+                {
+                    GetSeriesInfo();
+                }
+            } 
+        }
+        /// <summary>
+        /// 发送策略键是否有效
+        /// </summary>
+        private bool _isStrateySendBtnEnabled;
+        public bool IsStrateySendBtnEnabled
+        {
+            get => _isStrateySendBtnEnabled;
+            set
+            {
+                SetProperty(ref _isStrateySendBtnEnabled, value);
+            }
+        }
+
         /// <summary>
         /// 需要传给EMSController的策略list
         /// </summary>
@@ -101,7 +155,9 @@ namespace EMS.ViewModel
                 }
             }
         }
-
+        /// <summary>
+        /// 手动自动运行字符串
+        /// </summary>
         private string _totalStrategyState;
         public string TotalStrategyState
         {
@@ -112,6 +168,9 @@ namespace EMS.ViewModel
             }
         }
 
+        /// <summary>
+        /// 是否启用自动策略标志位
+        /// </summary>
         private bool _isAutoStrategyBtnEnabled;
         public bool IsAutoStrategyBtnEnabled
         {
@@ -123,7 +182,9 @@ namespace EMS.ViewModel
             }
         }
 
-
+        /// <summary>
+        /// 手动发送按钮是否启用
+        /// </summary>
         private bool _isManualSendBtnEnabled;
         public bool IsManualSendBtnEnabled
         {
@@ -274,21 +335,11 @@ namespace EMS.ViewModel
                 SetProperty(ref _totalStrategies, value);
             }
         }
-        /// <summary>
-        /// 界面被选中的策略
-        /// </summary>
-        private BatteryStrategyModel _selectedBatteryStrategy;
-        public BatteryStrategyModel SelectedBatteryStrategy
-        {
-            get => _selectedBatteryStrategy;
-            set
-            {
-                SetProperty(ref _selectedBatteryStrategy, value);
-            }
-        }
+        
+        
 
         /// <summary>
-        /// 策略设置
+        /// 策略模式Combobox，5种模式
         /// </summary>
         private List<string> _strategyModeSet;
         public List<string> StrategyModeSet
@@ -299,17 +350,33 @@ namespace EMS.ViewModel
                 SetProperty(ref _strategyModeSet, value);
             }
         }
-
+        /// <summary>
+        /// 被选中的设置的模式，5种模式之一
+        /// </summary>
         private string _selectedStrategyMode;
         public string SelectedStrategyMode
         {
             get => _selectedStrategyMode;
             set
             {
-                SetProperty(ref _selectedStrategyMode, value);
+                if(SetProperty(ref _selectedStrategyMode, value))
+                {
+                    ChangeUnit();
+                }
             }
         }
-
+        /// <summary>
+        /// 参数单位
+        /// </summary>
+        private string _paraUnits;
+        public string ParaUnits
+        {
+            get => _paraUnits;
+            set
+            {
+                SetProperty(ref _paraUnits, value);
+            }
+        }
 
         private string _strategyStartTimeSet;
         public string StrategyStartTimeSet
@@ -329,6 +396,9 @@ namespace EMS.ViewModel
                 SetProperty(ref _strategyValueSet,value);
             }
         }
+       /// <summary>
+       /// 被选中的策略
+       /// </summary>
         private PCSSettingModel _selectedStrategy;
         public PCSSettingModel SelectedStrategy
         {
@@ -338,18 +408,18 @@ namespace EMS.ViewModel
                 SetProperty(ref _selectedStrategy, value);
             }
         }
+        
 
         public RelayCommand BatteryStrategyAddRowCommand { get; private set; }
         public RelayCommand BatteryStrategyRemoveRowCommand { get; private set; }
+        public RelayCommand BatteryStrategySendCommand { get; private set; }
         public RelayCommand SwitchAutoManualCommand {  get; private set; }
         public RelayCommand MaxDemandSendCommand { get; private set; }
         public RelayCommand ReversePowerSendCommand { get; private set; }
-
-        private int index = 1;
-        //public PCSSettingModel NEWStrategy;
+        
+    //public PCSSettingModel NEWStrategy;
         public PCSSettingViewModel()
         {
-           
             StrategyStartTimeSet = "00:00:00";
             IsDailyPatternBtnOpen = false;
             IsReversePowerBtnOpen = false;
@@ -357,14 +427,17 @@ namespace EMS.ViewModel
             IsAutoStrategy = false;
             IsAutoStrategyBtnEnabled = false;
             IsManualSendBtnEnabled = true;
+            IsStrateySendBtnEnabled = false;
             TotalStrategyState = "手动运行";
             BatteryStrategyAddRowCommand = new RelayCommand(BatteryStrategyAddRow);
             BatteryStrategyRemoveRowCommand = new RelayCommand(BatteryStrategyRemoveRow);
             SwitchAutoManualCommand = new RelayCommand(SwitchAutoManual);
             MaxDemandSendCommand = new RelayCommand(SendMaxDemandPara);
             ReversePowerSendCommand = new RelayCommand(SendReversePowerPara);
-            StrategyApi.SetMode(IsAutoStrategy, IsDailyPatternBtnOpen, IsMaxDemandControlBtnOpen, IsReversePowerBtnOpen);
-        BatteryStrategyArray = new List<BatteryStrategyModel>();
+            BatteryStrategySendCommand = new RelayCommand(SendDailyPatern);
+            StrategyApi.SetMode(IsAutoStrategy, IsDailyPatternBtnOpen, 
+                IsMaxDemandControlBtnOpen, IsReversePowerBtnOpen);//获取现在的策略控制状态
+            BatteryStrategyArray = new List<BatteryStrategyModel>();          
             StrategyModeSet = new List<string>()
             {
                 "待机",
@@ -373,21 +446,119 @@ namespace EMS.ViewModel
                 "恒功率充电",
                 "恒功率放电"
             };
-          
+
+            StrategySeriesNumber = new List<string> { "1", "2", "3", "4", "5"};
+            
+            StrategySeries = new Dictionary<int, List<PCSSettingModel>>();
+            //SelectedStrategySeries = "1";
+            GetStrategySeries();
+           
         }
 
+        /// <summary>
+        /// 下发DailyPattern
+        /// </summary>
+        private void SendDailyPatern()
+        {
+            int.TryParse(SelectedStrategySeries, out int number);
+            BatteryStrategyArray.Clear();
+            PCSStrategyDailyPatternInfoManage manage = new PCSStrategyDailyPatternInfoManage();
+            if (TotalStrategies.Count >= 2)
+            {
+                manage.Delete(number);
+                foreach (var strategy in TotalStrategies)
+                {
+                    int strategymode = 0;
+
+                    //List<PCSStrategyDailyPatternInfoModel> b = manage.Find(number);
+
+                    switch (strategy.StrategyMode)
+                    {
+                        case "待机":
+                            {
+                                strategymode = 0;
+                            }
+                            break;
+
+                        case "恒电流充电":
+                            {
+                                strategymode = 1;
+                            }
+                            break;
+
+                        case "恒电流放电":
+                            {
+                                strategymode = 2;
+                            }
+                            break;
+
+                        case "恒功率充电":
+                            {
+                                strategymode = 3;
+                            }
+                            break;
+
+                        case "恒功率放电":
+                            {
+                                strategymode = 4;
+                            }
+                            break;
+                    }
+                    TimeSpan timeSpan = TimeSpan.Parse(strategy.StrategyStartTime);
+
+                    PCSStrategyDailyPatternInfoModel storageModel = new PCSStrategyDailyPatternInfoModel()
+                    {
+
+                        Series = number,
+                        Number = strategy.StrategyNumber,
+                        Value = strategy.StrategyValue,
+                        StrategyName = strategy.StrategyMode,
+                        StartTime = strategy.StrategyStartTime
+                    };
+
+                    manage.Insert(storageModel);
+
+                    BatteryStrategyModel strategymodel = new BatteryStrategyModel()
+                    {
+                        StartTime = timeSpan,
+                        SetValue = strategy.StrategyValue,
+                        BatteryStrategy = (BatteryStrategyEnum)strategymode
+                    };
+                    BatteryStrategyArray.Add(strategymodel);
+                    int.TryParse(SelectedStrategySeries, out int a);
+                    StrategySeries[a] = TotalStrategies.ToList();
+
+                }
+                // BatteryStrategyArray.Reverse();
+                StrategyApi.SetDailyPattern(BatteryStrategyArray);
+                EnergyManagementSystem.GlobalInstance.RestartOperationThread();
+
+            }
+            else
+            {
+                MessageBox.Show("请重新输入");
+            }
+
+        }
+        /// <summary>
+        /// 下发reversepower
+        /// </summary>
         private void SendReversePowerPara()
         {
-            StrategyApi.SetReversePowerThreshold(ReversePowerThreshold, 
+                StrategyApi.SetReversePowerThreshold(ReversePowerThreshold, 
                 ReversePowerLowestThreshold, ReversePowerDescendRate);
         }
-
+        /// <summary>
+        /// 下发maxdemand
+        /// </summary>
         private void SendMaxDemandPara()
         {
             StrategyApi.SetMaxDemandThreshold(DemandControlCapacity, 
-                MaxDemandDescendRate);
+            MaxDemandDescendRate);
         }
-
+        /// <summary>
+        /// 切换自动手动模式
+        /// </summary>
         private void SwitchAutoManual()
         {
             if(IsAutoStrategy)
@@ -399,7 +570,7 @@ namespace EMS.ViewModel
                 IsDailyPatternBtnOpen = false;
                 IsReversePowerBtnOpen = false;
                 IsMaxDemandControlBtnOpen = false;
-
+                IsStrateySendBtnEnabled = false;
             }
             else
             {
@@ -407,105 +578,153 @@ namespace EMS.ViewModel
                 TotalStrategyState = "自动运行";
                 IsAutoStrategyBtnEnabled = true;
                 IsManualSendBtnEnabled = false;
-               
+                IsStrateySendBtnEnabled = true;
             }
         }
 
-        private void updateBatteryStrategyArray()
+        private void ChangeUnit()
         {
-            var total= TotalStrategies.OrderBy(TotalStrategies=>TotalStrategies.StrategyStartTime).ToList();
+            if (SelectedStrategyMode == "待机")
+            {
+                ParaUnits = "";
+            }else if(SelectedStrategyMode == "恒电流充电" || SelectedStrategyMode == "恒电流放电")
+            {
+                ParaUnits = "A";
+            }else if(SelectedStrategyMode == "恒功率充电"||SelectedStrategyMode== "恒功率放电")
+            {
+                ParaUnits = "kW";
+            }
+        }
+        /// <summary>
+        /// 排序
+        /// </summary>
+        private void SortStrategy()
+        {
+            var total = TotalStrategies.OrderBy(TotalStrategies => TotalStrategies.StrategyStartTime).ToList();
+            TotalStrategies.Clear();
             for (int i = 0; i < total.Count; i++)
             {
-                total[i].StrategyNumber = i+1;
+                total[i].StrategyNumber = i + 1;
             }
-            TotalStrategies.Clear();
-            BatteryStrategyArray.Clear();
-
             foreach (var strategy in total)
             {
-                int mode = 0;
                 TotalStrategies.Add(strategy);
-               switch(strategy.StrategyMode)
-                {
-                    case "待机":
-                    {
-                            mode = 0;
-                     }break;
-                    case "恒电流充电":
-                        {
-                            mode = 1;
-                        }
-                        break;
-                    case "恒电流放电":
-                        {
-                            mode = 2;
-                        }
-                        break;
-                    case "恒功率充电":
-                        {
-                            mode = 3;
-                        }
-                        break;
-                    case "恒功率放电":
-                        {
-                            mode = 4;
-                        }
-                        break;    
-                }
-                TimeSpan timeSpan = TimeSpan.Parse(strategy.StrategyStartTime);
-                BatteryStrategyModel model = new BatteryStrategyModel()
-                {
-                    StartTime = timeSpan,
-                    SetValue = strategy.StrategyValue,
-                    BatteryStrategy = (BatteryStrategyEnum)mode
-                };
-                
-                BatteryStrategyArray.Add(model);
             }
-                BatteryStrategyArray = BatteryStrategyArray.OrderBy(batteryStrategy => batteryStrategy.StartTime).ToList();
-            StrategyApi.SetDailyPattern(BatteryStrategyArray);
         }
 
-
-
+        /// <summary>
+        /// 删除dailypattern行
+        /// </summary>
         private void BatteryStrategyRemoveRow()
         {
             TotalStrategies.Remove(SelectedStrategy);
-            updateBatteryStrategyArray();
+            SortStrategy();
+            //updateBatteryStrategyArray();
         }
-
+        /// <summary>
+        /// 添加行
+        /// </summary>
         private void BatteryStrategyAddRow()
-        {
-           if(SelectedStrategyMode!="待机"&&StrategyValueSet!=0) 
-            {
-                
-                PCSSettingModel newStrategy = new PCSSettingModel
-                {
-                    StrategyStartTime = StrategyStartTimeSet,
-                    StrategyMode = SelectedStrategyMode,
-                    StrategyValue = StrategyValueSet
-                };
-                TotalStrategies.Add(newStrategy);
-                updateBatteryStrategyArray();
-            }
-            else if(SelectedStrategyMode == "待机")
-           {
-                PCSSettingModel newStrategy = new PCSSettingModel
-                {
-                    StrategyStartTime = StrategyStartTimeSet,
-                    StrategyMode = SelectedStrategyMode,
-                    StrategyValue = 0
-                };
-                TotalStrategies.Add(newStrategy);
-                updateBatteryStrategyArray();
-            }
-            else 
-            {
-                MessageBox.Show("请正确输入");
-            }
+        { 
+            PCSSettingModel newStrategy = new PCSSettingModel();
+            newStrategy.StrategyStartTime = StrategyStartTimeSet;
+            newStrategy.StrategyMode = SelectedStrategyMode;
+            newStrategy.StrategyValue = StrategyValueSet;
+           bool sameTimeCheck= TotalStrategies.ToList().Any(Item => Item.StrategyStartTime == StrategyStartTimeSet);
+            bool stringValidityCheck = CheckTimeStringValidity(newStrategy.StrategyStartTime);
+            bool otherCheck = true;
             
+            if (SelectedStrategyMode == "待机")
+            {
+                newStrategy.StrategyValue = 0;
+                StrategyValueSet = 0;
+            }else if (SelectedStrategyMode !="待机"&& StrategyValueSet == 0)
+            {
+                otherCheck = false;
+            }
+            if((!sameTimeCheck)&& stringValidityCheck&otherCheck) 
+            {
+                TotalStrategies.Add(newStrategy);
+                SortStrategy();
+            }
+            else
+            {
+                MessageBox.Show("请重新输入");
+            }
         }
+        /// <summary>
+        /// 获取当前选中的方案
+        /// </summary>
+        private void GetSeriesInfo()
+        {
+            TotalStrategies.Clear();
+            int.TryParse(SelectedStrategySeries, out int number);
+                foreach (var strategy in StrategySeries[number])
+                {
+                    TotalStrategies.Add(strategy);
+                }
+                  
+        }
+        /// <summary>
+        /// 从数据库获取所有方案
+        /// </summary>
+        private void GetStrategySeries()
+        {
+            
+            TotalStrategies.Clear();          
+            PCSStrategyDailyPatternInfoManage manage = new PCSStrategyDailyPatternInfoManage();
+            for(int i = 1;i <= 5; i++)
+            {
+                var entities = manage.Find(i);
+                if (entities.Count!=0)
+                {
+                    foreach (var entity in entities)
+                    {
+                        PCSSettingModel strategy = new PCSSettingModel();
+                        strategy.StrategyNumber = entity.Number;
+                        strategy.StrategyValue = entity.Value;
+                        strategy.StrategyStartTime = entity.StartTime;
+                        strategy.StrategyMode = entity.StrategyName;
+                        TotalStrategies.Add(strategy);
+                    }
+                    StrategySeries.Add(i, TotalStrategies.ToList());
+                    TotalStrategies.Clear();
+                }
+                else
+                {
+                    StrategySeries.Add(i, new List<PCSSettingModel>());
+                }
 
-        
+            }
+ 
+        }
+        /// <summary>
+        /// 检查方案中时间是否重复
+        /// </summary>
+        /// <param name="timeString"></param>
+        /// <returns></returns>
+        private bool CheckTimeStringValidity(string timeString)
+        {
+            string timestring = timeString;
+            string[] timepart = timestring.Split(':');
+            if(timepart.Length ==3) 
+            {
+                int.TryParse(timepart[0], out int hourstring);
+                int.TryParse(timepart[1],out int minutestring);
+                int.TryParse(timepart[2], out int secondstring);
+                if(hourstring >=0 && minutestring >= 0 && secondstring >= 0 && hourstring < 24 && minutestring < 60 && secondstring < 60)
+                {
+                    return true;
+                }else 
+                { 
+                    return false; 
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+      
     }
 }
