@@ -1,5 +1,6 @@
 ﻿using EMS.Api;
 using EMS.Common.StrategyManage;
+using EMS.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,7 +23,23 @@ namespace EMS.Model
         public double GetVoltage() { return _voltage; }
     }
   
+    public class PCSManager
+    {
+        private PCSModel _pcsmodel;
+        public PCSModel PCSModel { get { return _pcsmodel; } }
+        public void SetPCS(PCSModel pcsModel)
+        {
+            _pcsmodel = pcsModel;
+        }
 
+        private PCSMainViewModel _pcsmainViewModel;
+        public PCSMainViewModel PCSMainViewModel { get { return _pcsmainViewModel; } }
+
+        public void SetCommand(PCSMainViewModel pcsMainViewModel)
+        {
+            _pcsmainViewModel = pcsMainViewModel;
+        }
+    }
        
 
 
@@ -34,16 +51,11 @@ namespace EMS.Model
         //
         private List<BatteryTotalBase> _bmsTotalList;
         public List<BatteryTotalBase> BmsTotalList { get { return _bmsTotalList; } } //封装，不能set
-
-
         
-       public void SetBMSList(List<BatteryTotalBase> totallist)
+        public void SetBMSList(List<BatteryTotalBase> totallist)
         {
             _bmsTotalList = totallist;
         }
-        
-       
-        
     }
 
 
@@ -51,7 +63,7 @@ namespace EMS.Model
     {
         private Thread _operationThread;
         private EmsController _controller;
-        private object _pcs_manager;
+        private PCSManager _pcs_manager;
         private object _smart_meter_manager;
         private BmsManager _bms_manager;
         private object _database_manager;
@@ -63,19 +75,21 @@ namespace EMS.Model
 
         public static EnergyManagementSystem GlobalInstance { get { return _globalInstance; } }
 
-        public static void Initialization()
+        public static void Initialization(EnergyManagementSystem globalInstance)
         {
-            _globalInstance = new EnergyManagementSystem();
-        }
+            _globalInstance = globalInstance;
+    }
+
+        
 
        public BmsManager BmsManager { get { return _bms_manager; } }
-        public object PcsManager {  get { return _pcs_manager; } }
+        public PCSManager PcsManager {  get { return _pcs_manager; } }
         public EnergyManagementSystem()
         {
             _controller = new EmsController();
             _operationThread = null;
             _bms_manager = new BmsManager();
-
+            _pcs_manager =new PCSManager();
         }
        
         public void Initialization(object _pcs_manager, object _smart_meter_manager,  object _database_manager, object _cloud_manager) 
