@@ -244,6 +244,7 @@
     <Compile Include="Storage\DB\Models\PCSControlSettingModel.cs" />
     <Compile Include="Storage\DB\Models\PCSInfoModel.cs" />
     <Compile Include="Storage\DB\Models\PCSStrategyDailyPatternInfoModel.cs" />
+    <Compile Include="ViewModel\DCStatusViewModel.cs" />
     <Compile Include="ViewModel\DevControlViewModel.cs" />
     <Compile Include="MyControl\Battery.xaml.cs">
       <DependentUpon>Battery.xaml</DependentUpon>

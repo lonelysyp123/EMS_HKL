@@ -8,7 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace EMS.ViewModel
 {
-    public class DCStatusViewModel:ObservableObject
+    public class DCStatusViewModel : ObservableObject
     {
 
 
