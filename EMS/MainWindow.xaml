@@ -6,13 +6,13 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:EMS"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1000" Width="1500" WindowStartupLocation="CenterScreen"  WindowState="Maximized">
+        Title="MainWindow" Height="800" Width="1200" WindowStartupLocation="CenterScreen"  WindowState="Maximized" MinWidth="1200" MinHeight="800" >
     <Window.Resources>
         <ImageBrush x:Key="topImage" ImageSource="pack://application:,,,/EMS;component/Resource/Image/topImage.png"/>
 
         <Style x:Key="RadioButtonStyle" TargetType="{x:Type RadioButton}">
-            <Setter Property="Width" Value="180"/>
-            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="FontSize" Value="20"/>
             <Setter Property="Foreground" Value="#4B8EC4"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -78,23 +78,20 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
-
         </Grid.RowDefinitions>
         <Menu Grid.Row="0" Grid.ColumnSpan="3" BorderThickness="1" BorderBrush="#FF4D4D4D" Height="25" Background="#FFd2e7f4">
-
-
             <MenuItem Header="文件" FontSize="12" VerticalAlignment="Center">
                 <MenuItem Header="退出" Click="Exit_Click"></MenuItem>
             </MenuItem>
             <MenuItem Header="选项"  FontSize="12" VerticalAlignment="Center">
                 <MenuItem Header="系统设置" Command="{Binding OpenSystemSetViewCommand}"></MenuItem>
+                <MenuItem Header="电表配置" Command="{Binding OpenElectricMeterViewCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="帮助"  FontSize="12" VerticalAlignment="Center">
                 <MenuItem Header="用户手册" Click="OperationManual_Click"></MenuItem>
                 <MenuItem Header="关于" Click="AboutMenuItem_Click"></MenuItem>
             </MenuItem>
         </Menu>
-
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
@@ -102,14 +99,43 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="80"/>
-
                 <RowDefinition/>
             </Grid.RowDefinitions>
+
+            <!-- 公司标志 -->
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Margin="10,0,0,0">
+                <Image Source="pack://application:,,,/EMS;component/Resource/Image/TNLOGO.png" Width="22" Stretch="Fill" Cursor="" Height="23"/>
+                <TextBlock Text="TN-BMS" Foreground="White" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock.Effect>
+                        <DropShadowEffect Color="#7EFFFF"  Direction="0" ShadowDepth="0"/>
+                    </TextBlock.Effect>
+                </TextBlock>
+            </StackPanel>
+
             <Border Grid.Column="1" Grid.ColumnSpan="2" BorderBrush="#121F40" BorderThickness="1 0 1 1">
                 <Border.Background>
                     <ImageBrush ImageSource="pack://application:,,,/EMS;component/Resource/Image/topback.png"/>
                 </Border.Background>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <RadioButton  Style="{StaticResource RadioButtonStyle}" Checked="RadioButton_Checked" x:Name="DaqDataRaBtn"  >
+                        <TextBlock Text="监控面板"  />
+                    </RadioButton>
+                    <RadioButton  Style="{StaticResource RadioButtonStyle}" x:Name="AnalysisDataRaBtn" Checked="RadioButton_Checked">
+                        <TextBlock Text="数据分析与保存"  />
+                    </RadioButton>
+                    <RadioButton   Style="{StaticResource RadioButtonStyle}" x:Name="ControlRaBtn" Checked="RadioButton_Checked">
+                        <TextBlock Text="设备配置"  />
+                    </RadioButton>
+                    <RadioButton   Style="{StaticResource RadioButtonStyle}" x:Name="ValueSettingRaBtn" Checked="RadioButton_Checked">
+                        <TextBlock Text="保护参数"  />
+                    </RadioButton>
+                    <RadioButton   Style="{StaticResource RadioButtonStyle}" x:Name="PCSSettingRaBtn" Checked="RadioButton_Checked">
+                        <TextBlock Text="策略配置"  />
+                    </RadioButton>
+                </StackPanel>
             </Border>
+
             <Border Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" Width="150" >
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Margin="5,0,5,0">
                     <Button Background="Transparent" BorderThickness="0" Command="{Binding StartOrStopDaqCommand}" Style="{x:Null}" ToolTip ="{Binding ToolTipText_Daq}">
@@ -120,184 +146,138 @@
                     </Button>
                 </StackPanel>
             </Border>
+            
             <Border Grid.Column="0" Grid.Row="1" BorderBrush="#121F40" BorderThickness="0 1 1 0">
                 <Border.Background>
                     <ImageBrush ImageSource="pack://application:,,,/EMS;component/Resource/Image/LeftImage.png"/>
                 </Border.Background>
-            </Border>
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center"
-                    Margin="10,0,0,0">
-                <Image Source="pack://application:,,,/EMS;component/Resource/Image/TNLOGO.png" Width="22" Stretch="Fill" Cursor="" Height="23"/>
-                <TextBlock Text="TN-EMS" Foreground="White" 
-                   FontFamily="{StaticResource TitleFont}"
-                   FontSize="26" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock.Effect>
-                        <DropShadowEffect Color="#7EFFFF"  Direction="0" ShadowDepth="0"/>
-                    </TextBlock.Effect>
-                </TextBlock>
-            </StackPanel>
+                <Grid Grid.Row="1" Grid.Column="0" Margin="0,0,0,10" x:Name="DevListView">
+                    <Grid.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/EMS;component/Resource/Image/DevList1.png"/>
+                    </Grid.Background>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Border VerticalAlignment="Top" Height="50" Margin="0,8">
+                        <Border.Background>
+                            <ImageBrush ImageSource="pack://application:,,,/EMS;component/Resource/Image/DevList2.png"/>
+                        </Border.Background>
+                        <TextBlock Text="设备列表" Foreground="White" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock.Effect>
+                                <DropShadowEffect Color="#7EFFFF"  Direction="0" ShadowDepth="0"/>
+                            </TextBlock.Effect>
+                        </TextBlock>
+                    </Border>
 
-            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left">
-                <RadioButton  Style="{StaticResource RadioButtonStyle}" Checked="RadioButton_Checked" x:Name="DaqDataRaBtn"  >
-                    <TextBlock Text="监控面板"  />
-                </RadioButton>
-                <RadioButton  Style="{StaticResource RadioButtonStyle}" x:Name="AnalysisDataRaBtn" Checked="RadioButton_Checked">
-                    <TextBlock Text="数据分析与保存"  />
-                </RadioButton>
-                <RadioButton   Style="{StaticResource RadioButtonStyle}" x:Name="ControlRaBtn" Checked="RadioButton_Checked">
-                    <TextBlock Text="设备配置"  />
-                </RadioButton>
-                <RadioButton   Style="{StaticResource RadioButtonStyle}" x:Name="ValueSettingRaBtn" Checked="RadioButton_Checked">
-                    <TextBlock Text="保护参数"  />
-                </RadioButton>
-                <RadioButton   Style="{StaticResource RadioButtonStyle}" x:Name="PCSSettingRaBtn" Checked="RadioButton_Checked">
-                    <TextBlock Text="充放电配置"  />
-                </RadioButton>
-            </StackPanel>
-
-
-            <Frame  x:Name="Mainbody" NavigationUIVisibility="Hidden" Grid.Row="1" Grid.Column="1"></Frame>
-
-
-            <Grid Grid.Row="1" Grid.Column="0" Margin="0,0,0,10" x:Name="DevListView">
-
-                <Grid.Background>
-                    <ImageBrush ImageSource="pack://application:,,,/EMS;component/Resource/Image/DevList1.png"/>
-                </Grid.Background>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="60"/>
-                    <RowDefinition/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-                <Border VerticalAlignment="Top" Height="50" Margin="0,8">
-                    <Border.Background>
-                        <ImageBrush ImageSource="pack://application:,,,/EMS;component/Resource/Image/DevList2.png"/>
-                    </Border.Background>
-                    <TextBlock Text="设备列表" Foreground="White" 
-                   FontFamily="{StaticResource TitleFont}"
-                   FontSize="26" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock.Effect>
-                            <DropShadowEffect Color="#7EFFFF"  Direction="0" ShadowDepth="0"/>
-                        </TextBlock.Effect>
-                    </TextBlock>
-                </Border>
-
-                <ListBox Name="DevList"  ItemsSource="{Binding BatteryTotalList}" SelectedIndex="{Binding CurrentBatterySort}" BorderThickness="0" materialDesign:ListBoxItemAssist.ShowSelection="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Column="0" Grid.Row="1">
-                    <ListBox.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="添加设备" Command="{Binding AddDevCommand}"></MenuItem>
-
-                            <MenuItem Header="删除所有设备" Command="{Binding DelAllDevCommand}"></MenuItem>
-                        </ContextMenu>
-                    </ListBox.ContextMenu>
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="{x:Type ListBoxItem}">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                        <Border x:Name="b1" BorderThickness="1" Margin="2">
-                                            <ContentPresenter></ContentPresenter>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsSelected" Value="True">
-                                                <Setter Property="BorderThickness" Value="2" TargetName="b1"></Setter>
-                                                <Setter Property="BorderBrush" Value="Green" TargetName="b1"></Setter>
-                                            </Trigger>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="BorderThickness" Value="1" TargetName="b1"></Setter>
-                                                <Setter Property="BorderBrush" Value="LightGreen"  TargetName="b1"></Setter>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Border Height="90" Width="160" CornerRadius="5" Opacity="0.6">
-                                <Border.Background >
-                                    <ImageBrush ImageSource="pack://application:,,,/EMS;component/Resource/Image/BCMUList.png" AlignmentX="Center" AlignmentY="Center"/>
-
-                                </Border.Background>
-                                <Border.ContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem Header="重新连接" Click="ReConnect_Click"></MenuItem>
-                                        <MenuItem Header="断开连接" Click="DisConnect_Click"></MenuItem>
-                                        <MenuItem Header="删除设备" Click="DelDev_Click"></MenuItem>
-                                    </ContextMenu>
-                                </Border.ContextMenu>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
+                    <ListBox Name="DevList"  ItemsSource="{Binding BatteryTotalList}" BorderThickness="0" materialDesign:ListBoxItemAssist.ShowSelection="False" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Column="0" Grid.Row="1">
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="添加设备" Command="{Binding AddDevCommand}"></MenuItem>
+                                <MenuItem Header="删除所有设备" Command="{Binding DelAllDevCommand}"></MenuItem>
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                            <Border x:Name="b1" BorderThickness="1" Margin="2">
+                                                <ContentPresenter></ContentPresenter>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter Property="BorderThickness" Value="2" TargetName="b1"></Setter>
+                                                    <Setter Property="BorderBrush" Value="Green" TargetName="b1"></Setter>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="BorderThickness" Value="1" TargetName="b1"></Setter>
+                                                    <Setter Property="BorderBrush" Value="LightGreen"  TargetName="b1"></Setter>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Height="90" Width="160" CornerRadius="5" Opacity="0.6">
+                                    <Border.Background >
+                                        <ImageBrush ImageSource="pack://application:,,,/EMS;component/Resource/Image/BCMUList.png" AlignmentX="Center" AlignmentY="Center"/>
+                                    </Border.Background>
+                                    <Border.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="重新连接" Click="ReConnect_Click"></MenuItem>
+                                            <MenuItem Header="断开连接" Click="DisConnect_Click"></MenuItem>
+                                            <MenuItem Header="删除设备" Click="DelDev_Click"></MenuItem>
+                                        </ContextMenu>
+                                    </Border.ContextMenu>
                                     <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="auto"/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-                                        <Image Grid.Column="0" Source="{Binding DevImage}" Width="70"/>
-                                        <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding TotalID}" FontSize="14" VerticalAlignment="Center" Foreground="White"  FontFamily="{StaticResource TitleFont}" Opacity="1">
-                                                <TextBlock.Effect>
-                                                    <DropShadowEffect Color="#7EFFFF"  Direction="0" ShadowDepth="0"/>
-                                                </TextBlock.Effect>
-                                            </TextBlock>
-                                            <TextBlock Grid.Row="1" Text="{Binding IP}" FontSize="12" Foreground="White"  FontFamily="{StaticResource TitleFont}">
-                                                <TextBlock.Effect>
-                                                    <DropShadowEffect Color="#7EFFFF"  Direction="0" ShadowDepth="1"/>
-                                                </TextBlock.Effect>
-                                            </TextBlock>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition Height="auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Image Grid.Column="0" Source="{Binding DevImage}" Width="70"/>
+                                            <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding TotalID}" FontSize="12" VerticalAlignment="Center" Foreground="White" Opacity="1">
+                                                    <TextBlock.Effect>
+                                                        <DropShadowEffect Color="#7EFFFF"  Direction="0" ShadowDepth="0"/>
+                                                    </TextBlock.Effect>
+                                                </TextBlock>
+                                                <TextBlock Grid.Row="1" Text="{Binding IP}" FontSize="10" Foreground="White">
+                                                    <TextBlock.Effect>
+                                                        <DropShadowEffect Color="#7EFFFF"  Direction="0" ShadowDepth="1"/>
+                                                    </TextBlock.Effect>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Grid>
+                                        <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                            <Image Grid.Column="0" Source="{Binding ConnectImage}" Height="17" Margin="8 0"/>
+                                            <!--<Image Grid.Column="0" Source="{Binding InternetImage}" Height="20" Margin="8 0"/>-->
+                                            <Image Grid.Column="0" Source="{Binding DaqDataImage}" Height="20" Margin="8 0"/>
+                                            <Image Grid.Column="0" Source="{Binding RecordDataImage}" Height="20" Margin="8 0"/>
                                         </StackPanel>
                                     </Grid>
-                                    <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                        <Image Grid.Column="0" Source="{Binding ConnectImage}" Height="17" Margin="8 0"/>
-                                        <!--<Image Grid.Column="0" Source="{Binding InternetImage}" Height="20" Margin="8 0"/>-->
-                                        <Image Grid.Column="0" Source="{Binding DaqDataImage}" Height="20" Margin="8 0"/>
-                                        <Image Grid.Column="0" Source="{Binding RecordDataImage}" Height="20" Margin="8 0"/>
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
 
-                <Grid Grid.Row="2" >
-                    <Grid.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="PCS网络设置" x:Name="PCSTCPModify" Command="{Binding ModifyPCSTCPCommand}"/>
-                            <MenuItem Header="连接" x:Name="PCSConncet" Command="{Binding ConnectPCSTCPCommand}"/>
-                            <MenuItem Header="断开连接"/>
-
-                        </ContextMenu>
-                    </Grid.ContextMenu>
-
-                    <Grid>
+                    <Grid Grid.Row="2" x:Name="PCSView">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-
-                        <Image Source="pack://application:,,,/EMS;component/Resource/Image/PCSMachine.png" Width="70" Margin="0,10"  Opacity="0.5"/>
+                        
+                        <Button Width="70" Height="80" Margin="0,10"  Opacity="0.5" Click="OpenPCSWindow_Click">
+                            <Button.Background>
+                                <ImageBrush ImageSource="pack://application:,,,/EMS;component/Resource/Image/PCSMachine.png" />
+                            </Button.Background>
+                        </Button>
+                       
+                        <!--<Image Source="pack://application:,,,/EMS;component/Resource/Image/PCSMachine.png" Width="70" Margin="0,10"  Opacity="0.5"/>-->
                         <Grid Grid.Column="1" Margin="0,10,0,10" >
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="PCS" Foreground="white" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18"/>
-                                <TextBlock x:Name="PCSIP" Text="{Binding IP}" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" Margin="0,5"/>
+                                <TextBlock x:Name="PCS_IP" Text="{Binding IP}" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" Margin="0,5"/>
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <Border x:Name="ConnectStateColor" Grid.Column="0" Height="20"  Width="20" CornerRadius="5" Background="{Binding ConnectStateColor}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                                    <TextBlock x:Name="ConncetState" Text="{Binding ConncetState}"  FontSize="15" Margin="10,0,0,0" Foreground="White"/>
+                                    <Border x:Name="PCS_ConnectColor" Grid.Column="0" Height="20"  Width="20" CornerRadius="5" Background="{Binding MainWindowPCSConnectColor}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="PCS_ConncetState" Text="{Binding MainWindowPCSConnectState}"  FontSize="15" Margin="10,0,0,0" Foreground="White"/>
                                 </StackPanel>
                             </StackPanel>
-
-
                         </Grid>
                     </Grid>
                 </Grid>
-
-            </Grid>
-
+            </Border>
+            
+            <Frame x:Name="Mainbody" NavigationUIVisibility="Hidden" Grid.Row="1" Grid.Column="1"></Frame>
         </Grid>
     </Grid>
-
 </Window>

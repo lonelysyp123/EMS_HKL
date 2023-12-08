@@ -33,18 +33,6 @@ namespace EMS.View
         public DevTest_CollectView()
         {
             InitializeComponent();
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1); // 设置定时器每秒触发一次
-            timer.Tick += Timer_Tick;
-            timer.Start();
-        }
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            DateTime now = DateTime.Now;
-
-            DateTimeText.Text = now.ToString("yyyy年MM月dd日");
-            TimeTime.Text = now.ToString("HH:mm:ss");
-            WeekTime.Text = now.ToString("dddd");
         }
 
         public void Test_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

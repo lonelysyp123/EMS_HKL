@@ -45,6 +45,7 @@ namespace EMS.View
         private void InitDevList()
         {
             BCMUInfo.Items.Clear();
+            ViewModels.Clear();
             // 初始化BCMU列表
             for (int i = 0; i < batteryTotalBases.Count; i++)
             {

@@ -62,12 +62,6 @@
                     </Border.BorderBrush>
                 </Border>
             </Grid>
-            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,20,0,0"
-         Foreground="White" Name="txt_time" Grid.ColumnSpan="2" >
- <Run  FontFamily="{StaticResource DigitalDisplay}" FontSize="30" x:Name="TimeTime"/>
- <Run Text="   "/>
- <Run x:Name="WeekTime" FontSize="13"/>
-            </TextBlock>
         </Grid>
         <Grid x:Name="MainBody" MouseUp="MainBody_MouseUp" Grid.Row="1">
 
