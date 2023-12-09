@@ -15,6 +15,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 using EMS.Common;
+using EMS.Api;
 
 namespace EMS.ViewModel
 {

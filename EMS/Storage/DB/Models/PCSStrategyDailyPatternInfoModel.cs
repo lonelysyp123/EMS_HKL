@@ -11,8 +11,12 @@ namespace EMS.Storage.DB.Models
     {
         [Key]
         public int ID { get; set; }
+     
+        public int Series {  get; set; }
+       
+        public int Number { get; set; }
         public string StrategyName {  get; set; }
-        public string Value {  get; set; }
-        public DateTime StartTime { get; set; }
+        public double Value {  get; set; }
+        public string StartTime { get; set; }
     }
 }

@@ -215,6 +215,7 @@
     </ApplicationDefinition>
     <Compile Include="Api\BmsApi.cs" />
     <Compile Include="Api\PcsApi.cs" />
+    <Compile Include="Api\StrategyApi.cs" />
     <Compile Include="Common\Modbus\ModbusRequest.cs" />
     <Compile Include="Common\Mqtt\MqttClientService.cs" />
     <Compile Include="Common\Mqtt\MqttConnectOption.cs" />
@@ -232,7 +233,6 @@
     <Compile Include="Model\BMSParameterSettingModel.cs" />
     <Compile Include="Model\ElectricityMeterModel.cs" />
     <Compile Include="Model\SerialPortSettingsModel.cs" />
-    <Compile Include="Model\StateGridModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmandFaultInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmParameterSettingInfoManage.cs" />
@@ -279,7 +279,6 @@
     <Compile Include="Storage\File\BatteryModelForFile.cs" />
     <Compile Include="Storage\File\FileHelper.cs" />
     <Compile Include="ViewModel\DataAnalysisViewModel.cs" />
-    <Compile Include="Model\StateContentModel.cs" />
     <Compile Include="MyControl\IPInput.xaml.cs">
       <DependentUpon>IPInput.xaml</DependentUpon>
     </Compile>
@@ -325,11 +324,11 @@
     <Compile Include="View\PCSMainWindow.xaml.cs">
       <DependentUpon>PCSMainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\PCSSettingView.xaml.cs">
-      <DependentUpon>PCSSettingView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\SeriesBatteryView.xaml.cs">
       <DependentUpon>SeriesBatteryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\StrategyControlView\StrategyControlMainView.xaml.cs">
+      <DependentUpon>StrategyControlMainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SystemSetView.xaml.cs">
       <DependentUpon>SystemSetView.xaml</DependentUpon>
@@ -420,11 +419,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\PCSSettingView.xaml">
+    <Page Include="View\SeriesBatteryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\SeriesBatteryView.xaml">
+    <Page Include="View\StrategyControlView\StrategyControlMainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -603,7 +602,9 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Themes\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\CommunityToolkit.Mvvm.8.0.0\build\netstandard2.0\CommunityToolkit.Mvvm.targets" Condition="Exists('..\packages\CommunityToolkit.Mvvm.8.0.0\build\netstandard2.0\CommunityToolkit.Mvvm.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -21,9 +21,10 @@ namespace EMS.Api
         public static BatteryTotalBase GetBMSTotalInfo(string bcmuid)//得到单簇信息
         {// 这个函数如果经常被调用，可以考虑重构成Dictionary
             List<BatteryTotalBase>totallist= EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList;
+            
             foreach(var total in totallist)
             {
-                if(total.BCMUID == bcmuid)
+                if(total.TotalID == bcmuid)
                 {
                     return total;
                   
