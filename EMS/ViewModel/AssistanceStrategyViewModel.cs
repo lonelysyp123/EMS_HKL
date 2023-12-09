@@ -62,7 +62,7 @@ namespace EMS.ViewModel
                 }
             }
             double maxSingleVolValue1 = singleVoltages1.Max();
-            double minSingleVolValue1 = singleVoltages1.Max();
+            double minSingleVolValue1 = singleVoltages1.Min();
             double voltagesDiff1 = maxSingleVolValue1 - minSingleVolValue1;
             AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff1);
             if (batteryTotalBases1.StateBCMU == 1)
@@ -104,7 +104,7 @@ namespace EMS.ViewModel
                 }
             }
             double maxSingleVolValue2 = singleVoltages2.Max();
-            double minSingleVolValue2 = singleVoltages2.Max();
+            double minSingleVolValue2 = singleVoltages2.Min();
             double voltagesDiff2 = maxSingleVolValue2 - minSingleVolValue2;
             AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff2);
             if (batteryTotalBases2.StateBCMU == 1)
@@ -146,7 +146,7 @@ namespace EMS.ViewModel
                 }
             }
             double maxSingleVolValue3 = singleVoltages3.Max();
-            double minSingleVolValue3 = singleVoltages3.Max();
+            double minSingleVolValue3 = singleVoltages3.Min();
             double voltagesDiff3 = maxSingleVolValue3 - minSingleVolValue3;
             AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff3);
             if (batteryTotalBases3.StateBCMU == 1)
@@ -188,7 +188,7 @@ namespace EMS.ViewModel
                 }
             }
             double maxSingleVolValue4 = singleVoltages4.Max();
-            double minSingleVolValue4 = singleVoltages4.Max();
+            double minSingleVolValue4 = singleVoltages4.Min();
             double voltagesDiff4 = maxSingleVolValue4 - minSingleVolValue4;
             AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff4);
             if (batteryTotalBases4.StateBCMU == 1)
@@ -230,7 +230,7 @@ namespace EMS.ViewModel
                 }
             }
             double maxSingleVolValue5 = singleVoltages5.Max();
-            double minSingleVolValue5 = singleVoltages5.Max();
+            double minSingleVolValue5 = singleVoltages5.Min();
             double voltagesDiff5 = maxSingleVolValue5 - minSingleVolValue5;
             AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff5);
             if (batteryTotalBases5.StateBCMU == 1)
@@ -272,7 +272,7 @@ namespace EMS.ViewModel
                 }
             }
             double maxSingleVolValue6 = singleVoltages6.Max();
-            double minSingleVolValue6 = singleVoltages6.Max();
+            double minSingleVolValue6 = singleVoltages6.Min();
             double voltagesDiff6 = maxSingleVolValue6 - minSingleVolValue6;
             AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff6);
             if (batteryTotalBases6.StateBCMU == 1)
