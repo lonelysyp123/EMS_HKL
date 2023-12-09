@@ -166,6 +166,10 @@ namespace EMS.Model
         }
 
         private SerialPort serialPort;
+        /// <summary>
+        /// 打开串口
+        /// </summary>
+        /// <returns>操作是否成功</returns>
         public bool Open()
         {
             try
@@ -187,6 +191,10 @@ namespace EMS.Model
             }
         }
 
+        /// <summary>
+        /// 关闭串口
+        /// </summary>
+        /// <returns>操作是否成功</returns>
         public bool Close()
         {
             try
@@ -209,6 +217,9 @@ namespace EMS.Model
         }
 
         private bool isStartDaqData = false;
+        /// <summary>
+        /// 启动采集线程
+        /// </summary>
         public void StartDaqTh()
         {
             if (serialPort != null && serialPort.IsOpen)
@@ -223,6 +234,9 @@ namespace EMS.Model
             }
         }
 
+        /// <summary>
+        /// 采集线程
+        /// </summary>
         private void DaqTh()
         {
             try
@@ -247,6 +261,11 @@ namespace EMS.Model
         byte[] Request_GetVoltage_B = new byte[0];
         byte[] Response_GetVoltage_B = new byte[0];
 
+        /// <summary>
+        /// 读取A相电压
+        /// </summary>
+        /// <param name="serialPort">串口实例</param>
+        /// <returns>电压值</returns>
         private int ReadVoltage_A(SerialPort serialPort)
         {
             if (serialPort != null)
@@ -298,6 +317,13 @@ namespace EMS.Model
             return 0;
         }
 
+        /// <summary>
+        /// 用指定的命令去读取数据
+        /// </summary>
+        /// <param name="serialPort">串口实例</param>
+        /// <param name="Request">请求数据包</param>
+        /// <param name="Response">响应数据包模板</param>
+        /// <returns>读数</returns>
         private int ReadDataForCmd(SerialPort serialPort, byte[] Request, byte[] Response)
         {
             try
@@ -352,13 +378,19 @@ namespace EMS.Model
             }
         }
 
-        private bool CheckData(byte[] standardVBytes, byte[] readBytes)
+        /// <summary>
+        /// 校验数据
+        /// </summary>
+        /// <param name="standardVBytes">标准模板</param>
+        /// <param name="readBytes">读取到的数据</param>
+        /// <returns>校验结果</returns>
+        private bool CheckData(byte[] standardBytes, byte[] readBytes)
         {
-            if (standardVBytes.Length == readBytes.Length)
+            if (standardBytes.Length == readBytes.Length)
             {
-                for (int i = 0; i < standardVBytes.Length - 4; i++)
+                for (int i = 0; i < standardBytes.Length - 4; i++)
                 {
-                    if (standardVBytes[i] != readBytes[i])
+                    if (standardBytes[i] != readBytes[i])
                     {
                         return false;
                     }
@@ -371,6 +403,9 @@ namespace EMS.Model
             return true;
         }
 
+        /// <summary>
+        /// 停止采集线程
+        /// </summary>
         public void StopDaqTh()
         {
             if (serialPort != null && serialPort.IsOpen)

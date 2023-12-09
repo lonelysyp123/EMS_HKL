@@ -14,6 +14,10 @@ namespace EMS.Model
         public string DeviceID { get; set; }
         public string Description { get; set;}
 
+        /// <summary>
+        /// 获取当前串口信息
+        /// </summary>
+        /// <returns>所有能检测到的串口</returns>
         public List<SerialPortSettingsModel> getCommPorts()
         {
             List<SerialPortSettingsModel> devices = new List<SerialPortSettingsModel>();
@@ -40,6 +44,10 @@ namespace EMS.Model
         public string BaudRateName { get; set; }
         public int BaudRateValue { get; set; }
 
+        /// <summary>
+        /// 初始化波特率
+        /// </summary>
+        /// <returns>常用波特率集合</returns>
         public List<SerialPortSettingsModel> getBaudRates()
         {
             List<SerialPortSettingsModel> returnBaudRates = new List<SerialPortSettingsModel>();
@@ -58,6 +66,10 @@ namespace EMS.Model
         public string ParityName { get; set; }
         public Parity ParityValue { get; set;}
 
+        /// <summary>
+        /// 初始化校验位
+        /// </summary>
+        /// <returns>常用校验集合</returns>
         public List<SerialPortSettingsModel> getParities()
         {
             List<SerialPortSettingsModel> returnParities = new List<SerialPortSettingsModel>();
@@ -78,6 +90,10 @@ namespace EMS.Model
         public string StopBitsName { get; set; }
         public StopBits StopBitsValue { get; set; }
 
+        /// <summary>
+        /// 初始化停止位
+        /// </summary>
+        /// <returns>常用停止位集合</returns>
         public List<SerialPortSettingsModel> getStopBits()
         {
             List<SerialPortSettingsModel> returnStopBits = new List<SerialPortSettingsModel>();
