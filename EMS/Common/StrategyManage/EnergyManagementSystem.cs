@@ -14,11 +14,12 @@ using System.Threading.Tasks;
 namespace EMS.Model
 {
 
-    public class SmartMeter {
+    public class SmartMeter
+    {
         private double _voltage;
         public double Voltage { get; set; }
 
-        public void readVoltage() {}
+        public void readVoltage() { }
 
         public double GetVoltage() { return _voltage; }
     }
@@ -43,7 +44,8 @@ namespace EMS.Model
        
 
 
-    public class SmartMeterManager {
+    public class SmartMeterManager
+    {
         private List<object> smart_meters;
     }
     public class BmsManager
@@ -68,8 +70,10 @@ namespace EMS.Model
         private BmsManager _bms_manager;
         private object _database_manager;
         private object _cloud_manager;
-
         
+
+
+
 
         private static EnergyManagementSystem _globalInstance;
 
@@ -80,26 +84,28 @@ namespace EMS.Model
             _globalInstance = globalInstance;
     }
 
-        
-
-       public BmsManager BmsManager { get { return _bms_manager; } }
-        public PCSManager PcsManager {  get { return _pcs_manager; } }
+        public EmsController Controller { get { return _controller; } }
+        public BmsManager BmsManager { get { return _bms_manager; } }
+        public object PcsManager { get { return _pcs_manager; } }
         public EnergyManagementSystem()
         {
-            _controller = new EmsController();
+           
             _operationThread = null;
             _bms_manager = new BmsManager();
+            _controller = new EmsController();
+
             _pcs_manager =new PCSManager();
         }
-       
-        public void Initialization(object _pcs_manager, object _smart_meter_manager,  object _database_manager, object _cloud_manager) 
+
+        public void Initialization(object _pcs_manager, object _smart_meter_manager, object _database_manager, object _cloud_manager)
         {
-            
+
             //return;
         }
 
         public void RestartOperationThread()
         {
+            _controller.Scheduler.ResetPattern();
             if (_operationThread != null) _operationThread.Abort();
             _operationThread = new Thread(_controller.ContinueOperation);
 

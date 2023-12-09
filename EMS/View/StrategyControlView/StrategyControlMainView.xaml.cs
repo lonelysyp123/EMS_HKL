@@ -1,4 +1,5 @@
-﻿using EMS.ViewModel;
+﻿using EMS.Properties;
+using EMS.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,17 +17,24 @@ using System.Windows.Shapes;
 namespace EMS.View
 {
     /// <summary>
-    /// PCSSettingView.xaml 的交互逻辑
+    /// StrategyControl.xaml 的交互逻辑
     /// </summary>
-    public partial class PCSSettingView : Page
+    public partial class StrategyControl : Page
     {
-        public PCSSettingViewModel viewModel;
-        public PCSSettingView()
+
+        public PCSSettingViewModel pCSSettingViewModel;
+        public StrategyControl()
         {
             InitializeComponent();
+            pCSSettingViewModel = new PCSSettingViewModel();
+            this.DataContext = pCSSettingViewModel;
 
-            viewModel = new PCSSettingViewModel();
-            this.DataContext = viewModel;
-        }
+        }          
+
+       
+
+        
+
+        
     }
 }
