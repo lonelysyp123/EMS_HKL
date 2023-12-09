@@ -96,11 +96,8 @@ namespace EMS.ViewModel
 
         public PCSModel pCSModel;
 
-
-        public ModbusClient modbusClient;
-
         public bool isRead = false;
-        public bool IsConnected = false;
+        public bool IsConnected { get { return pCSModel.IsConnected; } }
         public Thread thread;
 
 
@@ -189,13 +186,10 @@ namespace EMS.ViewModel
                     {
                         IP = view.PCSIPText.AddressText;
                         int port = Convert.ToInt32(view.PCSTCPPort.Text);
-                        modbusClient = new ModbusClient(IP, port);
-                        modbusClient.Connect();
+                        pCSModel.Connect(IP, port);
 
                         MainWindowPCSConnectState = "已连接";
                         MainWindowPCSConnectColor = new SolidColorBrush(Colors.Green);
-
-                        IsConnected = true;
 
                         BitmapImage bi;
                         DirectoryInfo directory = new DirectoryInfo("./Resource/Image");
@@ -226,8 +220,7 @@ namespace EMS.ViewModel
                 }
                 if (IsConnected == true & isRead == false)
                 {
-                    modbusClient.Disconnect();
-                    IsConnected = false;
+                    pCSModel.Disconnect();
                     MainWindowPCSConnectState = "未连接";
                     MainWindowPCSConnectColor = new SolidColorBrush(Colors.Red);
 
@@ -300,13 +293,13 @@ namespace EMS.ViewModel
                 }
                 try
                 {
-                    byte[] DCstate = modbusClient.ReadFunc(53026, 7);
+                    byte[] DCstate = pCSModel.ModbusClient.ReadFunc(53026, 7);
                     dCStatusViewModel.ModuleOnLineFlag = BitConverter.ToUInt16(DCstate, 0);
                     dCStatusViewModel.ModuleRunFlag = BitConverter.ToUInt16(DCstate, 4);
                     dCStatusViewModel.ModuleAlarmFlag = BitConverter.ToUInt16(DCstate, 8);
                     dCStatusViewModel.ModuleFaultFlag = BitConverter.ToUInt16(DCstate, 12);
 
-                    byte[] PCSData = modbusClient.ReadFunc(53005, 10);
+                    byte[] PCSData = pCSModel.ModbusClient.ReadFunc(53005, 10);
                     pCSMonitorViewModel.AlarmStateFlagDC1 = BitConverter.ToUInt16(PCSData, 0);
                     pCSMonitorViewModel.AlarmStateFlagDC2 = BitConverter.ToUInt16(PCSData, 4);
                     pCSMonitorViewModel.AlarmStateFlagDC3 = BitConverter.ToUInt16(PCSData, 6);
@@ -318,11 +311,11 @@ namespace EMS.ViewModel
 
                     GetDCBranchINFO();
 
-                    byte[] Temp = modbusClient.ReadFunc(53221, 3);
+                    byte[] Temp = pCSModel.ModbusClient.ReadFunc(53221, 3);
                     pCSModel.MonitorModel.ModuleTemperature = Math.Round(BitConverter.ToUInt16(Temp, 0) * 0.1 - 20, 2);
                     pCSModel.MonitorModel.AmbientTemperature = Math.Round(BitConverter.ToUInt16(Temp, 4) * 0.1 - 20, 2);
 
-                    byte[] DCBranch1INFO = modbusClient.ReadFunc(53250, 10);
+                    byte[] DCBranch1INFO = pCSModel.ModbusClient.ReadFunc(53250, 10);
                     pCSModel.MonitorModel.DcBranch1DCPower = Math.Round(BitConverter.ToUInt16(DCBranch1INFO, 0) * 0.1 - 1500, 2);
                     pCSModel.MonitorModel.DcBranch1DCVol = Math.Round(BitConverter.ToUInt16(DCBranch1INFO, 2) * 0.1, 2);
                     pCSModel.MonitorModel.DcBranch1DCCur = Math.Round(BitConverter.ToUInt16(DCBranch1INFO, 4) * 0.1 - 2000, 2);
@@ -673,10 +666,10 @@ namespace EMS.ViewModel
                     MessageBox.Show("低压设置：请输入一位小数");
                     return;
                 }
-                modbusClient.WriteFunc(1, 53640, (ushort)(pCSModel.ParSettingModel.BUSUpperLimitVolThresh * 10));
-                modbusClient.WriteFunc(1, 53641, (ushort)(pCSModel.ParSettingModel.BUSLowerLimitVolThresh * 10));
-                modbusClient.WriteFunc(1, 53642, (ushort)(pCSModel.ParSettingModel.BUSHVolSetting * 10));
-                modbusClient.WriteFunc(1, 53643, (ushort)(pCSModel.ParSettingModel.BUSLVolSetting * 10));
+                pCSModel.ModbusClient.WriteFunc(1, 53640, (ushort)(pCSModel.ParSettingModel.BUSUpperLimitVolThresh * 10));
+                pCSModel.ModbusClient.WriteFunc(1, 53641, (ushort)(pCSModel.ParSettingModel.BUSLowerLimitVolThresh * 10));
+                pCSModel.ModbusClient.WriteFunc(1, 53642, (ushort)(pCSModel.ParSettingModel.BUSHVolSetting * 10));
+                pCSModel.ModbusClient.WriteFunc(1, 53643, (ushort)(pCSModel.ParSettingModel.BUSLVolSetting * 10));
             }
             else
             {
@@ -692,7 +685,7 @@ namespace EMS.ViewModel
         {
             if (IsConnected)
             {
-                byte[] data = modbusClient.ReadFunc(53640, 4);
+                byte[] data = pCSModel.ModbusClient.ReadFunc(53640, 4);
                 pCSModel.ParSettingModel.BUSUpperLimitVolThresh = Math.Round(BitConverter.ToInt16(data, 0) * 0.1, 2);
                 pCSModel.ParSettingModel.BUSLowerLimitVolThresh = Math.Round(BitConverter.ToInt16(data, 2) * 0.1, 2);
                 pCSModel.ParSettingModel.BUSHVolSetting = Math.Round(BitConverter.ToInt16(data, 4) * 0.1, 2);
@@ -723,9 +716,9 @@ namespace EMS.ViewModel
                     MessageBox.Show("远程TCP通信超时设置：请输入1-600的整数");
                     return;
                 }
-                modbusClient.WriteFunc(1, 56006, (ushort)(pCSModel.ParSettingModel.BMSCMInterruptionTimeOut));
-                modbusClient.WriteFunc(1, 56007, (ushort)(pCSModel.ParSettingModel.Remote485CMInterruptonTimeOut));
-                modbusClient.WriteFunc(1, 56008, (ushort)(pCSModel.ParSettingModel.RemoteTCPCMInterruptionTimeOut));
+                pCSModel.ModbusClient.WriteFunc(1, 56006, (ushort)(pCSModel.ParSettingModel.BMSCMInterruptionTimeOut));
+                pCSModel.ModbusClient.WriteFunc(1, 56007, (ushort)(pCSModel.ParSettingModel.Remote485CMInterruptonTimeOut));
+                pCSModel.ModbusClient.WriteFunc(1, 56008, (ushort)(pCSModel.ParSettingModel.RemoteTCPCMInterruptionTimeOut));
             }
             else
             {
@@ -738,7 +731,7 @@ namespace EMS.ViewModel
         {
             if (IsConnected)
             {
-                byte[] data = modbusClient.ReadFunc(56006, 3);
+                byte[] data = pCSModel.ModbusClient.ReadFunc(56006, 3);
                 pCSModel.ParSettingModel.BMSCMInterruptionTimeOut = BitConverter.ToUInt16(data, 0);
                 pCSModel.ParSettingModel.Remote485CMInterruptonTimeOut = BitConverter.ToUInt16(data, 2);
                 pCSModel.ParSettingModel.RemoteTCPCMInterruptionTimeOut = BitConverter.ToUInt16(data, 4);
@@ -830,13 +823,13 @@ namespace EMS.ViewModel
 
 
 
-                modbusClient.WriteFunc(1, 53653, (ushort)(pCSModel.ParSettingModel.BTLLimitVol * 10));
-                modbusClient.WriteFunc(1, 53655, (ushort)(pCSModel.ParSettingModel.DischargeSTVol * 10));
-                modbusClient.WriteFunc(1, 53658, (ushort)pCSModel.ParSettingModel.MultiBranchCurRegPar);
-                modbusClient.WriteFunc(1, 53660, (ushort)(pCSModel.ParSettingModel.BatAveChVol * 10));
-                modbusClient.WriteFunc(1, 53662, (ushort)(pCSModel.ParSettingModel.ChCutCurrent * 10));
-                modbusClient.WriteFunc(1, 53663, (ushort)(pCSModel.ParSettingModel.MaxChCurrent * 10));
-                modbusClient.WriteFunc(1, 53664, (ushort)(pCSModel.ParSettingModel.MaxDisChCurrent * 10));
+                pCSModel.ModbusClient.WriteFunc(1, 53653, (ushort)(pCSModel.ParSettingModel.BTLLimitVol * 10));
+                pCSModel.ModbusClient.WriteFunc(1, 53655, (ushort)(pCSModel.ParSettingModel.DischargeSTVol * 10));
+                pCSModel.ModbusClient.WriteFunc(1, 53658, (ushort)pCSModel.ParSettingModel.MultiBranchCurRegPar);
+                pCSModel.ModbusClient.WriteFunc(1, 53660, (ushort)(pCSModel.ParSettingModel.BatAveChVol * 10));
+                pCSModel.ModbusClient.WriteFunc(1, 53662, (ushort)(pCSModel.ParSettingModel.ChCutCurrent * 10));
+                pCSModel.ModbusClient.WriteFunc(1, 53663, (ushort)(pCSModel.ParSettingModel.MaxChCurrent * 10));
+                pCSModel.ModbusClient.WriteFunc(1, 53664, (ushort)(pCSModel.ParSettingModel.MaxDisChCurrent * 10));
 
 
             }
@@ -851,21 +844,21 @@ namespace EMS.ViewModel
         {
             if (IsConnected)
             {
-                byte[] data11 = modbusClient.ReadFunc(53651, 3);
+                byte[] data11 = pCSModel.ModbusClient.ReadFunc(53651, 3);
                 pCSModel.ParSettingModel.DCCurrentSet = Math.Round(BitConverter.ToInt16(data11, 0) * 0.1, 2);
                 pCSModel.ParSettingModel.DCPowerSet = Math.Round(BitConverter.ToInt16(data11, 2) * 0.1, 2);
                 pCSModel.ParSettingModel.BTLLimitVol = Math.Round(BitConverter.ToInt16(data11, 4) * 0.1, 2);
 
-                byte[] data12 = modbusClient.ReadFunc(53655, 1);
+                byte[] data12 = pCSModel.ModbusClient.ReadFunc(53655, 1);
                 pCSModel.ParSettingModel.DischargeSTVol = Math.Round(BitConverter.ToInt16(data12, 0) * 0.1, 2);
 
-                byte[] data13 = modbusClient.ReadFunc(53658, 1);
+                byte[] data13 = pCSModel.ModbusClient.ReadFunc(53658, 1);
                 pCSModel.ParSettingModel.MultiBranchCurRegPar = BitConverter.ToInt16(data13, 0);
 
-                byte[] data14 = modbusClient.ReadFunc(53660, 1);
+                byte[] data14 = pCSModel.ModbusClient.ReadFunc(53660, 1);
                 pCSModel.ParSettingModel.BatAveChVol = Math.Round(BitConverter.ToInt16(data14, 0) * 0.1, 2);
 
-                byte[] data15 = modbusClient.ReadFunc(53662, 3);
+                byte[] data15 = pCSModel.ModbusClient.ReadFunc(53662, 3);
                 pCSModel.ParSettingModel.ChCutCurrent = Math.Round(BitConverter.ToInt16(data15, 0) * 0.1, 2);
                 pCSModel.ParSettingModel.MaxChCurrent = Math.Round(BitConverter.ToInt16(data15, 2) * 0.1, 2);
                 pCSModel.ParSettingModel.MaxDisChCurrent = Math.Round(BitConverter.ToInt16(data15, 4) * 0.1, 2);
@@ -883,14 +876,14 @@ namespace EMS.ViewModel
                 
                 if (pCSModel.ParSettingModel.ModeSet1 == "设置电流调节")
                 {
-                    modbusClient.WriteFunc(1, 53650, 0);
+                    pCSModel.ModbusClient.WriteFunc(1, 53650, 0);
                     pCSModel.ParSettingModel.VisDCCur = Visibility.Visible;
                     pCSModel.ParSettingModel.VisDCPower = Visibility.Hidden;
                     pCSModel.ParSettingModel.VisDCChar = Visibility.Visible;
                 }
                 else if (pCSModel.ParSettingModel.ModeSet1 == "设置功率调节")
                 {
-                    modbusClient.WriteFunc(1, 53650, 1);
+                    pCSModel.ModbusClient.WriteFunc(1, 53650, 1);
                     pCSModel.ParSettingModel.VisDCPower = Visibility.Visible;
                     pCSModel.ParSettingModel.VisDCCur = Visibility.Hidden;
                     pCSModel.ParSettingModel.VisDCChar = Visibility.Visible;
@@ -923,7 +916,7 @@ namespace EMS.ViewModel
                         MessageBox.Show("直流电流设置：请输入一位小数");
                         return;
                     }
-                    modbusClient.WriteFunc(1, 53651, (ushort)(pCSModel.ParSettingModel.DCCurrentSet * 10));
+                    pCSModel.ModbusClient.WriteFunc(1, 53651, (ushort)(pCSModel.ParSettingModel.DCCurrentSet * 10));
                 }
                 else
                 {
@@ -938,7 +931,7 @@ namespace EMS.ViewModel
                         MessageBox.Show("直流功率设置：请输入一位小数");
                         return;
                     }
-                    modbusClient.WriteFunc(1, 53652, (ushort)(pCSModel.ParSettingModel.DCPowerSet * 10));
+                    pCSModel.ModbusClient.WriteFunc(1, 53652, (ushort)(pCSModel.ParSettingModel.DCPowerSet * 10));
                 }
             }
             else

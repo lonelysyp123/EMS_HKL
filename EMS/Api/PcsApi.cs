@@ -48,7 +48,7 @@ namespace EMS.Api
         /// <param name="actionid">动作编号，pcs对象类定义</param>
         /// <param name="actionParam">动作编号的对应参数，侧支路编号1开始</param>
         /// <returns></returns>
-        public static bool PcsSetAction(int pcsId,int actionId, byte[] actionParam)
+        public static bool PcsSetAction(int pcsId, int actionId, byte[] actionParam)
         {
             ///1、获取到pcs管理对象，pcs管理对象应该是单例的
             ///2、管理对象查询对应pcsid的实例对象
@@ -57,252 +57,27 @@ namespace EMS.Api
             //log.Debug("log Pcs test");
             return true;
         }
-        /// <summary>
-        /// 设置对应的Pcs到当前时间
-        /// </summary>
-        /// <param name="pcsid"></param>
-        /// <returns></returns>
-        public static bool PcsSetDataTime2Now(int pcsId)
-        {
-            return true;
-        }
-
-        
 
         /// <summary>
-        /// 设置PCS Bus 电压输出高低阈值
+        ///  对PCS发送控制指令，需要包含一定的验证，检查下发指令是否合理，否则报错，该API不能是阻塞函数，需要立刻返回。如遇到异常，需要抛出异常。
+        ///  如果下发指令和当前PCS正在执行的指令一直，可以避免重复下发。
         /// </summary>
-        /// <param name="pcsId"></param>
-        /// <param name="hthreshold">bus 侧上限电压阈值</param>
-        /// <param name="lthreshold">bus 侧下限限电压阈值</param>
-        /// <returns></returns>
-        public static bool PcsSetBusThreshHold(int pcsId,float hthreshold,float lthreshold)
+        /// <returns>指令下发是否成功</returns>
+        public static bool SendPcsCommand(BessCommand command)
         {
+
             return true;
         }
 
         /// <summary>
-        /// 设置PCS BUS 实时输出电压
+        ///  对负载放电为正，对电池充电为负
         /// </summary>
-        /// <param name="pcsId"></param>
-        /// <param name="busVolt"></param>
-        /// <returns></returns>
-        public static bool PcsSetBusVolt(int pcsId,float busVolt)
-        {
-            return true;
-        }
+        /// <returns>当前PCS的直流总功率</returns>
+        public static double GetPcsPower() { return 0; }
 
-        /// <summary>
-        /// 设置dc side工作模式
-        /// </summary>
-        /// <param name="pcsId">pcs id</param>
-        /// <param name="dcSideId">dc 侧支路 id</param>
-        /// <param name="dcMode">dc 侧支路工作模式，1-恒流模式，2-恒功率模式</param>
-        /// <returns></returns>
-        public static bool PcsSetDcSideMode(int pcsId,int dcSideId,int dcMode)
-        {
-            return true;
-        }
+        public static List<string> GetPCSFaultInfo() { return null; }
 
-        //public static bool PcsSetDcSideCCParams(int pcsId,int dcSideId,float curr,)
-        //{
-        //    return true;
-        //}
-
-        /// <summary>
-        /// 设置pcs 控制参数
-        /// </summary>
-        /// <param name="pcsId"></param>
-        /// <param name="dcSideId"></param>
-        /// <param name="dcscp">
-        /// </param>
-        /// <returns>配置返回结果，成功or失败</returns>
-        public static bool PcsSetDcSideControlParams(int pcsId, int dcSideId, PcsDcSideParams dcscp)
-        {
-            return true;
-        }
-
-
-
-
-        /// <summary>
-        /// 获取监视器所有数据
-        /// </summary>
-        /// <returns></returns>
-        public static PCSMonitorModel PCSGetMonitorInfo()
-        {
-            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel;
-        }
-
-        /// <summary>
-        /// 获取参数设置界面所有展现在界面上的数据
-        /// </summary>
-        /// <returns></returns>
-        public static PCSParSettingModel PCSGetParSettingInfo()
-        {
-            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.ParSettingModel;
-        }
-
-
-
-
-
-        /// <summary>
-        /// 获取DC侧支路状态
-        /// </summary>
-        /// <returns></returns>
-        public static string PCSGetDCSideBranchState()
-        {
-            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1State1;
-        }
-
-        /// <summary>
-        /// 获取DC侧支路启停状态
-        /// </summary>
-        /// <returns></returns>
-        public static string PCSGetDCSideBranchOperState()
-        {
-            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1State2;
-        }
-
-
-        /// <summary>
-        /// 获取指定pcs，指定的侧支路的功率
-        /// </summary>
-        /// <param name="pcsId"></param>
-        /// <param name="dcSideId">侧支路的编号</param>
-        /// <param name="dcPower">侧支路输出功率</param>
-        /// <returns></returns>
-        public static double  PcsGetDcSidePower()
-        {
-            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1DCPower;
-        }
-
-        /// <summary>
-        /// 获取侧支路电流
-        /// </summary>
-        /// <param name="pcsId"></param>
-        /// <param name="dcSideId"></param>
-        /// <param name="dcCurr">侧支路电流</param>
-        /// <returns></returns>
-        public static double PcsGetDcSideCurr()
-        {
-            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1DCCur;
-        }
-
-        /// <summary>
-        /// 获取侧支路电压
-        /// </summary>
-        /// <param name="pcsId"></param>
-        /// <param name="dcSideId"></param>
-        /// <param name="dcVolt"></param>
-        /// <returns></returns>
-        public static double PcsGetDcSideVolt()
-        {
-            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1DCVol;
-        }
-
-        /// <summary>
-        /// 获取总线侧电压
-        /// </summary>
-        /// <param name="pcsId"></param>
-        /// <param name="dcSideId"></param>
-        /// <param name="busVolt"></param>
-        /// <returns></returns>
-        public static double PcsGetBusSideVolt()
-        {
-            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1BUSVol;
-        }
-
-        /// <summary>
-        /// 获取累计充电容量
-        /// </summary>
-        /// <param name="pcsId"></param>
-        /// <param name="dcSideId"></param>
-        /// <param name="accGhgEnergy">累计充电能量 kwh</param>
-        /// <returns></returns>
-        public static uint PcsGetDcSideAccChgEnergy()
-        {
-            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1Char;
-        }
-
-        /// <summary>
-        ///  获取累计放电容量
-        /// </summary>
-        /// <param name="pcsId"></param>
-        /// <param name="dcSideId"></param>
-        /// <param name="accDsgEnergy">累计放电能量 kwh</param>
-        /// <returns></returns>
-        public static uint PcsGetDcSideAccDsgEnergy()
-        {
-            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1DisChar;
-        }
-
-
-        /// <summary>
-        /// 获取DC故障信息
-        /// </summary>
-        /// <returns></returns>
-        public static ObservableCollection<string> PCSGetDCModuleFaultInfo()
-        {
-            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.FaultInfoDC;
-        }
-
-        /// <summary>
-        /// 获取DC告警信息
-        /// </summary>
-        /// <returns></returns>
-        public static ObservableCollection<string> PCSGetDCModuleAlarmInfo()
-        {
-            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.AlarmInfoDC;
-        }
-
-        /// <summary>
-        /// 获取PDS故障信息
-        /// </summary>
-        /// <returns></returns>
-        public static ObservableCollection<string> PCSGetPDSFaultInfo()
-        {
-            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.FaultInfoPDS;
-        }
-
-        /// <summary>
-        /// 获取PDS告警信息
-        /// </summary>
-        /// <returns></returns>
-        public static ObservableCollection<string> PCSGetPDSAlarmInfo()
-        {
-            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.AlarmInfoPDS;
-        }
-
-
-        /// <summary>
-        /// 获取模组温度
-        /// </summary>
-        /// <returns></returns>
-        public static double PCSGetModuleTemper()
-        {
-            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.ModuleTemperature;       
-        }
-
-        /// <summary>
-        /// 获取环境温度
-        /// </summary>
-        /// <returns></returns>
-        public static double PCSGetAmbientTemper()
-        {
-            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.AmbientTemperature;
-        }
-
-        //public static string PCSGetPCSControlState()
-        //{
-
-        //    if (EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.PCSStateColorManControl.Color.Equals((Color)ColorConverter.ConvertFromString()
-        //    {
-
-        //    }
-        //    return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.
-        //}
+        public static bool SetPCSHalt() { return true; }
 
     }
 }
