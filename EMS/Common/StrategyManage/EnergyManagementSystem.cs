@@ -86,7 +86,7 @@ namespace EMS.Model
 
         public EmsController Controller { get { return _controller; } }
         public BmsManager BmsManager { get { return _bms_manager; } }
-        public object PcsManager { get { return _pcs_manager; } }
+        public PCSManager PcsManager { get { return _pcs_manager; } }
         public EnergyManagementSystem()
         {
            
