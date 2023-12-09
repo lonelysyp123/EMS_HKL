@@ -29,6 +29,7 @@ namespace EMS.ViewModel
             string bcmuid4 = "BCMU(4)";
             string bcmuid5 = "BCMU(5)";
             string bcmuid6 = "BCMU(6)";
+            
             BatteryTotalBase batteryTotalBases1 = BmsApi.GetBMSTotalInfo(bcmuid1);
             BatteryTotalBase batteryTotalBases2 = BmsApi.GetBMSTotalInfo(bcmuid2);
             BatteryTotalBase batteryTotalBases3 = BmsApi.GetBMSTotalInfo(bcmuid3);
@@ -37,256 +38,280 @@ namespace EMS.ViewModel
             BatteryTotalBase batteryTotalBases6 = BmsApi.GetBMSTotalInfo(bcmuid6);
 
             //电池簇1告警信息汇总
-            AssistanceStrategyViewModel.ClusterVolLevel(batteryTotalBases1.TotalVoltage);
-            for (int i = 0; i < batteryTotalBases1.SeriesCount; i++)
+            if(batteryTotalBases1 != null)
             {
-                for (int j = 0; j < batteryTotalBases1.BatteriesCountInSeries; j++)
+                AssistanceStrategyViewModel.ClusterVolLevel(batteryTotalBases1.TotalVoltage);
+                for (int i = 0; i < batteryTotalBases1.SeriesCount; i++)
                 {
-                    AssistanceStrategyViewModel.SingleVolLevel(batteryTotalBases1.Series[i].Batteries[j].Voltage);
-                    double singlevolvalue = batteryTotalBases1.Series[i].Batteries[j].Voltage;
-                    singleVoltages1.Add(singlevolvalue);
-                    if (batteryTotalBases1.StateBCMU == 1)
+                    for (int j = 0; j < batteryTotalBases1.BatteriesCountInSeries; j++)
                     {
-                        AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases1.Series[i].Batteries[j].Temperature1);
-                        AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases1.Series[i].Batteries[j].Temperature2);
-                    }
-                    else if (batteryTotalBases1.StateBCMU == 2)
-                    {
-                        AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases1.Series[i].Batteries[j].Temperature1);
-                        AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases1.Series[i].Batteries[j].Temperature2);
-                    }
-                    else
-                    {
+                        AssistanceStrategyViewModel.SingleVolLevel(batteryTotalBases1.Series[i].Batteries[j].Voltage);
+                        double singlevolvalue = batteryTotalBases1.Series[i].Batteries[j].Voltage;
+                        singleVoltages1.Add(singlevolvalue);
+                        if (batteryTotalBases1.StateBCMU == 1)
+                        {
+                            AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases1.Series[i].Batteries[j].Temperature1);
+                            AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases1.Series[i].Batteries[j].Temperature2);
+                        }
+                        else if (batteryTotalBases1.StateBCMU == 2)
+                        {
+                            AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases1.Series[i].Batteries[j].Temperature1);
+                            AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases1.Series[i].Batteries[j].Temperature2);
+                        }
+                        else
+                        {
 
+                        }
                     }
                 }
+                double maxSingleVolValue1 = singleVoltages1.Max();
+                double minSingleVolValue1 = singleVoltages1.Min();
+                double voltagesDiff1 = maxSingleVolValue1 - minSingleVolValue1;
+                AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff1);
+                if (batteryTotalBases1.StateBCMU == 1)
+                {
+                    AssistanceStrategyViewModel.CurrentCharLevel(batteryTotalBases1.TotalCurrent);
+                }
+                else if (batteryTotalBases1.StateBCMU == 2)
+                {
+                    AssistanceStrategyViewModel.CurrentDischarLevel(batteryTotalBases1.TotalCurrent);
+                }
+                else
+                {
+                }
+                AssistanceStrategyViewModel.SocProtectLevel(batteryTotalBases1.TotalSOC);
             }
-            double maxSingleVolValue1 = singleVoltages1.Max();
-            double minSingleVolValue1 = singleVoltages1.Min();
-            double voltagesDiff1 = maxSingleVolValue1 - minSingleVolValue1;
-            AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff1);
-            if (batteryTotalBases1.StateBCMU == 1)
-            {
-                AssistanceStrategyViewModel.CurrentCharLevel(batteryTotalBases1.TotalCurrent);
-            }
-            else if (batteryTotalBases1.StateBCMU == 2)
-            {
-                AssistanceStrategyViewModel.CurrentDischarLevel(batteryTotalBases1.TotalCurrent);
-            }
-            else
-            {
-            }
-            AssistanceStrategyViewModel.SocProtectLevel(batteryTotalBases1.TotalSOC);
+            
 
             //电池簇2告警信息汇总
-            AssistanceStrategyViewModel.ClusterVolLevel(batteryTotalBases2.TotalVoltage);
-            for (int i = 0; i < batteryTotalBases2.SeriesCount; i++)
+            if(batteryTotalBases2 != null)
             {
-                for (int j = 0; j < batteryTotalBases2.BatteriesCountInSeries; j++)
+                AssistanceStrategyViewModel.ClusterVolLevel(batteryTotalBases2.TotalVoltage);
+                for (int i = 0; i < batteryTotalBases2.SeriesCount; i++)
                 {
-                    AssistanceStrategyViewModel.SingleVolLevel(batteryTotalBases2.Series[i].Batteries[j].Voltage);
-                    double singlevolvalue = batteryTotalBases2.Series[i].Batteries[j].Voltage;
-                    singleVoltages2.Add(singlevolvalue);
-                    if (batteryTotalBases2.StateBCMU == 1)
+                    for (int j = 0; j < batteryTotalBases2.BatteriesCountInSeries; j++)
                     {
-                        AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases2.Series[i].Batteries[j].Temperature1);
-                        AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases2.Series[i].Batteries[j].Temperature2);
-                    }
-                    else if (batteryTotalBases2.StateBCMU == 2)
-                    {
-                        AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases2.Series[i].Batteries[j].Temperature1);
-                        AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases2.Series[i].Batteries[j].Temperature2);
-                    }
-                    else
-                    {
+                        AssistanceStrategyViewModel.SingleVolLevel(batteryTotalBases2.Series[i].Batteries[j].Voltage);
+                        double singlevolvalue = batteryTotalBases2.Series[i].Batteries[j].Voltage;
+                        singleVoltages2.Add(singlevolvalue);
+                        if (batteryTotalBases2.StateBCMU == 1)
+                        {
+                            AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases2.Series[i].Batteries[j].Temperature1);
+                            AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases2.Series[i].Batteries[j].Temperature2);
+                        }
+                        else if (batteryTotalBases2.StateBCMU == 2)
+                        {
+                            AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases2.Series[i].Batteries[j].Temperature1);
+                            AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases2.Series[i].Batteries[j].Temperature2);
+                        }
+                        else
+                        {
 
+                        }
                     }
                 }
+                double maxSingleVolValue2 = singleVoltages2.Max();
+                double minSingleVolValue2 = singleVoltages2.Min();
+                double voltagesDiff2 = maxSingleVolValue2 - minSingleVolValue2;
+                AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff2);
+                if (batteryTotalBases2.StateBCMU == 1)
+                {
+                    AssistanceStrategyViewModel.CurrentCharLevel(batteryTotalBases2.TotalCurrent);
+                }
+                else if (batteryTotalBases2.StateBCMU == 2)
+                {
+                    AssistanceStrategyViewModel.CurrentDischarLevel(batteryTotalBases2.TotalCurrent);
+                }
+                else
+                {
+                }
+                AssistanceStrategyViewModel.SocProtectLevel(batteryTotalBases2.TotalSOC);
             }
-            double maxSingleVolValue2 = singleVoltages2.Max();
-            double minSingleVolValue2 = singleVoltages2.Min();
-            double voltagesDiff2 = maxSingleVolValue2 - minSingleVolValue2;
-            AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff2);
-            if (batteryTotalBases2.StateBCMU == 1)
-            {
-                AssistanceStrategyViewModel.CurrentCharLevel(batteryTotalBases2.TotalCurrent);
-            }
-            else if (batteryTotalBases2.StateBCMU == 2)
-            {
-                AssistanceStrategyViewModel.CurrentDischarLevel(batteryTotalBases2.TotalCurrent);
-            }
-            else
-            {
-            }
-            AssistanceStrategyViewModel.SocProtectLevel(batteryTotalBases2.TotalSOC);
+            
 
             //电池簇3告警信息汇总
-            AssistanceStrategyViewModel.ClusterVolLevel(batteryTotalBases3.TotalVoltage);
-            for (int i = 0; i < batteryTotalBases3.SeriesCount; i++)
+            if(batteryTotalBases3 != null)
             {
-                for (int j = 0; j < batteryTotalBases3.BatteriesCountInSeries; j++)
+                AssistanceStrategyViewModel.ClusterVolLevel(batteryTotalBases3.TotalVoltage);
+                for (int i = 0; i < batteryTotalBases3.SeriesCount; i++)
                 {
-                    AssistanceStrategyViewModel.SingleVolLevel(batteryTotalBases3.Series[i].Batteries[j].Voltage);
-                    double singlevolvalue = batteryTotalBases3.Series[i].Batteries[j].Voltage;
-                    singleVoltages3.Add(singlevolvalue);
-                    if (batteryTotalBases3.StateBCMU == 1)
+                    for (int j = 0; j < batteryTotalBases3.BatteriesCountInSeries; j++)
                     {
-                        AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases3.Series[i].Batteries[j].Temperature1);
-                        AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases3.Series[i].Batteries[j].Temperature2);
-                    }
-                    else if (batteryTotalBases3.StateBCMU == 2)
-                    {
-                        AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases3.Series[i].Batteries[j].Temperature1);
-                        AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases3.Series[i].Batteries[j].Temperature2);
-                    }
-                    else
-                    {
+                        AssistanceStrategyViewModel.SingleVolLevel(batteryTotalBases3.Series[i].Batteries[j].Voltage);
+                        double singlevolvalue = batteryTotalBases3.Series[i].Batteries[j].Voltage;
+                        singleVoltages3.Add(singlevolvalue);
+                        if (batteryTotalBases3.StateBCMU == 1)
+                        {
+                            AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases3.Series[i].Batteries[j].Temperature1);
+                            AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases3.Series[i].Batteries[j].Temperature2);
+                        }
+                        else if (batteryTotalBases3.StateBCMU == 2)
+                        {
+                            AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases3.Series[i].Batteries[j].Temperature1);
+                            AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases3.Series[i].Batteries[j].Temperature2);
+                        }
+                        else
+                        {
 
+                        }
                     }
                 }
+                double maxSingleVolValue3 = singleVoltages3.Max();
+                double minSingleVolValue3 = singleVoltages3.Min();
+                double voltagesDiff3 = maxSingleVolValue3 - minSingleVolValue3;
+                AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff3);
+                if (batteryTotalBases3.StateBCMU == 1)
+                {
+                    AssistanceStrategyViewModel.CurrentCharLevel(batteryTotalBases3.TotalCurrent);
+                }
+                else if (batteryTotalBases3.StateBCMU == 2)
+                {
+                    AssistanceStrategyViewModel.CurrentDischarLevel(batteryTotalBases3.TotalCurrent);
+                }
+                else
+                {
+                }
+                AssistanceStrategyViewModel.SocProtectLevel(batteryTotalBases3.TotalSOC);
             }
-            double maxSingleVolValue3 = singleVoltages3.Max();
-            double minSingleVolValue3 = singleVoltages3.Min();
-            double voltagesDiff3 = maxSingleVolValue3 - minSingleVolValue3;
-            AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff3);
-            if (batteryTotalBases3.StateBCMU == 1)
-            {
-                AssistanceStrategyViewModel.CurrentCharLevel(batteryTotalBases3.TotalCurrent);
-            }
-            else if (batteryTotalBases3.StateBCMU == 2)
-            {
-                AssistanceStrategyViewModel.CurrentDischarLevel(batteryTotalBases3.TotalCurrent);
-            }
-            else
-            {
-            }
-            AssistanceStrategyViewModel.SocProtectLevel(batteryTotalBases3.TotalSOC);
+            
 
             //电池簇4告警信息汇总
-            AssistanceStrategyViewModel.ClusterVolLevel(batteryTotalBases4.TotalVoltage);
-            for (int i = 0; i < batteryTotalBases4.SeriesCount; i++)
+            if(batteryTotalBases4 != null)
             {
-                for (int j = 0; j < batteryTotalBases4.BatteriesCountInSeries; j++)
+                AssistanceStrategyViewModel.ClusterVolLevel(batteryTotalBases4.TotalVoltage);
+                for (int i = 0; i < batteryTotalBases4.SeriesCount; i++)
                 {
-                    AssistanceStrategyViewModel.SingleVolLevel(batteryTotalBases4.Series[i].Batteries[j].Voltage);
-                    double singlevolvalue = batteryTotalBases4.Series[i].Batteries[j].Voltage;
-                    singleVoltages4.Add(singlevolvalue);
-                    if (batteryTotalBases4.StateBCMU == 1)
+                    for (int j = 0; j < batteryTotalBases4.BatteriesCountInSeries; j++)
                     {
-                        AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases4.Series[i].Batteries[j].Temperature1);
-                        AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases4.Series[i].Batteries[j].Temperature2);
-                    }
-                    else if (batteryTotalBases4.StateBCMU == 2)
-                    {
-                        AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases4.Series[i].Batteries[j].Temperature1);
-                        AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases4.Series[i].Batteries[j].Temperature2);
-                    }
-                    else
-                    {
+                        AssistanceStrategyViewModel.SingleVolLevel(batteryTotalBases4.Series[i].Batteries[j].Voltage);
+                        double singlevolvalue = batteryTotalBases4.Series[i].Batteries[j].Voltage;
+                        singleVoltages4.Add(singlevolvalue);
+                        if (batteryTotalBases4.StateBCMU == 1)
+                        {
+                            AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases4.Series[i].Batteries[j].Temperature1);
+                            AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases4.Series[i].Batteries[j].Temperature2);
+                        }
+                        else if (batteryTotalBases4.StateBCMU == 2)
+                        {
+                            AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases4.Series[i].Batteries[j].Temperature1);
+                            AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases4.Series[i].Batteries[j].Temperature2);
+                        }
+                        else
+                        {
 
+                        }
                     }
                 }
+                double maxSingleVolValue4 = singleVoltages4.Max();
+                double minSingleVolValue4 = singleVoltages4.Min();
+                double voltagesDiff4 = maxSingleVolValue4 - minSingleVolValue4;
+                AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff4);
+                if (batteryTotalBases4.StateBCMU == 1)
+                {
+                    AssistanceStrategyViewModel.CurrentCharLevel(batteryTotalBases4.TotalCurrent);
+                }
+                else if (batteryTotalBases4.StateBCMU == 2)
+                {
+                    AssistanceStrategyViewModel.CurrentDischarLevel(batteryTotalBases4.TotalCurrent);
+                }
+                else
+                {
+                }
+                AssistanceStrategyViewModel.SocProtectLevel(batteryTotalBases4.TotalSOC);
             }
-            double maxSingleVolValue4 = singleVoltages4.Max();
-            double minSingleVolValue4 = singleVoltages4.Min();
-            double voltagesDiff4 = maxSingleVolValue4 - minSingleVolValue4;
-            AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff4);
-            if (batteryTotalBases4.StateBCMU == 1)
-            {
-                AssistanceStrategyViewModel.CurrentCharLevel(batteryTotalBases4.TotalCurrent);
-            }
-            else if (batteryTotalBases4.StateBCMU == 2)
-            {
-                AssistanceStrategyViewModel.CurrentDischarLevel(batteryTotalBases4.TotalCurrent);
-            }
-            else
-            {
-            }
-            AssistanceStrategyViewModel.SocProtectLevel(batteryTotalBases4.TotalSOC);
+            
 
             //电池簇5告警信息汇总
-            AssistanceStrategyViewModel.ClusterVolLevel(batteryTotalBases5.TotalVoltage);
-            for (int i = 0; i < batteryTotalBases5.SeriesCount; i++)
+            if(batteryTotalBases5 != null)
             {
-                for (int j = 0; j < batteryTotalBases5.BatteriesCountInSeries; j++)
+                AssistanceStrategyViewModel.ClusterVolLevel(batteryTotalBases5.TotalVoltage);
+                for (int i = 0; i < batteryTotalBases5.SeriesCount; i++)
                 {
-                    AssistanceStrategyViewModel.SingleVolLevel(batteryTotalBases5.Series[i].Batteries[j].Voltage);
-                    double singlevolvalue = batteryTotalBases5.Series[i].Batteries[j].Voltage;
-                    singleVoltages5.Add(singlevolvalue);
-                    if (batteryTotalBases5.StateBCMU == 1)
+                    for (int j = 0; j < batteryTotalBases5.BatteriesCountInSeries; j++)
                     {
-                        AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases5.Series[i].Batteries[j].Temperature1);
-                        AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases5.Series[i].Batteries[j].Temperature2);
-                    }
-                    else if (batteryTotalBases5.StateBCMU == 2)
-                    {
-                        AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases5.Series[i].Batteries[j].Temperature1);
-                        AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases5.Series[i].Batteries[j].Temperature2);
-                    }
-                    else
-                    {
+                        AssistanceStrategyViewModel.SingleVolLevel(batteryTotalBases5.Series[i].Batteries[j].Voltage);
+                        double singlevolvalue = batteryTotalBases5.Series[i].Batteries[j].Voltage;
+                        singleVoltages5.Add(singlevolvalue);
+                        if (batteryTotalBases5.StateBCMU == 1)
+                        {
+                            AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases5.Series[i].Batteries[j].Temperature1);
+                            AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases5.Series[i].Batteries[j].Temperature2);
+                        }
+                        else if (batteryTotalBases5.StateBCMU == 2)
+                        {
+                            AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases5.Series[i].Batteries[j].Temperature1);
+                            AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases5.Series[i].Batteries[j].Temperature2);
+                        }
+                        else
+                        {
 
+                        }
                     }
                 }
+                double maxSingleVolValue5 = singleVoltages5.Max();
+                double minSingleVolValue5 = singleVoltages5.Min();
+                double voltagesDiff5 = maxSingleVolValue5 - minSingleVolValue5;
+                AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff5);
+                if (batteryTotalBases5.StateBCMU == 1)
+                {
+                    AssistanceStrategyViewModel.CurrentCharLevel(batteryTotalBases5.TotalCurrent);
+                }
+                else if (batteryTotalBases5.StateBCMU == 2)
+                {
+                    AssistanceStrategyViewModel.CurrentDischarLevel(batteryTotalBases5.TotalCurrent);
+                }
+                else
+                {
+                }
+                AssistanceStrategyViewModel.SocProtectLevel(batteryTotalBases5.TotalSOC);
             }
-            double maxSingleVolValue5 = singleVoltages5.Max();
-            double minSingleVolValue5 = singleVoltages5.Min();
-            double voltagesDiff5 = maxSingleVolValue5 - minSingleVolValue5;
-            AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff5);
-            if (batteryTotalBases5.StateBCMU == 1)
-            {
-                AssistanceStrategyViewModel.CurrentCharLevel(batteryTotalBases5.TotalCurrent);
-            }
-            else if (batteryTotalBases5.StateBCMU == 2)
-            {
-                AssistanceStrategyViewModel.CurrentDischarLevel(batteryTotalBases5.TotalCurrent);
-            }
-            else
-            {
-            }
-            AssistanceStrategyViewModel.SocProtectLevel(batteryTotalBases5.TotalSOC);
+            
 
             //电池簇6告警信息汇总
-            AssistanceStrategyViewModel.ClusterVolLevel(batteryTotalBases6.TotalVoltage);
-            for (int i = 0; i < batteryTotalBases6.SeriesCount; i++)
+            if (batteryTotalBases6 != null)
             {
-                for (int j = 0; j < batteryTotalBases1.BatteriesCountInSeries; j++)
+                AssistanceStrategyViewModel.ClusterVolLevel(batteryTotalBases6.TotalVoltage);
+                for (int i = 0; i < batteryTotalBases6.SeriesCount; i++)
                 {
-                    AssistanceStrategyViewModel.SingleVolLevel(batteryTotalBases6.Series[i].Batteries[j].Voltage);
-                    double singlevolvalue = batteryTotalBases6.Series[i].Batteries[j].Voltage;
-                    singleVoltages6.Add(singlevolvalue);
-                    if (batteryTotalBases6.StateBCMU == 1)
+                    for (int j = 0; j < batteryTotalBases1.BatteriesCountInSeries; j++)
                     {
-                        AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases6.Series[i].Batteries[j].Temperature1);
-                        AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases6.Series[i].Batteries[j].Temperature2);
-                    }
-                    else if (batteryTotalBases6.StateBCMU == 2)
-                    {
-                        AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases6.Series[i].Batteries[j].Temperature1);
-                        AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases6.Series[i].Batteries[j].Temperature2);
-                    }
-                    else
-                    {
+                        AssistanceStrategyViewModel.SingleVolLevel(batteryTotalBases6.Series[i].Batteries[j].Voltage);
+                        double singlevolvalue = batteryTotalBases6.Series[i].Batteries[j].Voltage;
+                        singleVoltages6.Add(singlevolvalue);
+                        if (batteryTotalBases6.StateBCMU == 1)
+                        {
+                            AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases6.Series[i].Batteries[j].Temperature1);
+                            AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases6.Series[i].Batteries[j].Temperature2);
+                        }
+                        else if (batteryTotalBases6.StateBCMU == 2)
+                        {
+                            AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases6.Series[i].Batteries[j].Temperature1);
+                            AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases6.Series[i].Batteries[j].Temperature2);
+                        }
+                        else
+                        {
 
+                        }
                     }
                 }
+                double maxSingleVolValue6 = singleVoltages6.Max();
+                double minSingleVolValue6 = singleVoltages6.Min();
+                double voltagesDiff6 = maxSingleVolValue6 - minSingleVolValue6;
+                AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff6);
+                if (batteryTotalBases6.StateBCMU == 1)
+                {
+                    AssistanceStrategyViewModel.CurrentCharLevel(batteryTotalBases6.TotalCurrent);
+                }
+                else if (batteryTotalBases6.StateBCMU == 2)
+                {
+                    AssistanceStrategyViewModel.CurrentDischarLevel(batteryTotalBases6.TotalCurrent);
+                }
+                else
+                {
+                }
+                AssistanceStrategyViewModel.SocProtectLevel(batteryTotalBases6.TotalSOC);
             }
-            double maxSingleVolValue6 = singleVoltages6.Max();
-            double minSingleVolValue6 = singleVoltages6.Min();
-            double voltagesDiff6 = maxSingleVolValue6 - minSingleVolValue6;
-            AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff6);
-            if (batteryTotalBases6.StateBCMU == 1)
-            {
-                AssistanceStrategyViewModel.CurrentCharLevel(batteryTotalBases6.TotalCurrent);
-            }
-            else if (batteryTotalBases6.StateBCMU == 2)
-            {
-                AssistanceStrategyViewModel.CurrentDischarLevel(batteryTotalBases6.TotalCurrent);
-            }
-            else
-            {
-            }
-            AssistanceStrategyViewModel.SocProtectLevel(batteryTotalBases6.TotalSOC);
+            
 
             return INFOAS;
         }
