@@ -463,7 +463,7 @@ namespace EMS.ViewModel
             int.TryParse(SelectedStrategySeries, out int number);
             BatteryStrategyArray.Clear();
             PCSStrategyDailyPatternInfoManage manage = new PCSStrategyDailyPatternInfoManage();
-            if (TotalStrategies.Count >= 2)
+            if (TotalStrategies.Count !=0)
             {
                 manage.Delete(number);
                 foreach (var strategy in TotalStrategies)

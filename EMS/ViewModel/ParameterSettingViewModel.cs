@@ -409,10 +409,12 @@ namespace EMS.ViewModel
             ReadDBInfoCommand = new RelayCommand(ReadDBInfo);
             SyncInfoCommand = new RelayCommand(SyncInfo);
             ReadBCMUInfoCommand = new RelayCommand(ReadBCMUInfo);
+           
         }
 
         private void ReadBCMUInfo()
         {
+            
             byte[] data = new byte[68];
             data = ModbusClient.ReadFunc(40200, 34);
             ClusterVolUpLimitLv1 = BitConverter.ToUInt16(data, 0)*0.1;

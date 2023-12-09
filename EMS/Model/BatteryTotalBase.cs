@@ -842,6 +842,8 @@ namespace EMS.Model
             RecordImageChange(false);
         }
 
+       
+
         /// <summary>
         /// 标签图标
         /// </summary>
