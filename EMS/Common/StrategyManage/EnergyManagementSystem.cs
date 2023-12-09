@@ -29,6 +29,7 @@ namespace EMS.Model
     public class SmartMeterManager {
         private List<object> smart_meters;
     }
+
     public class BmsManager
     {
         //
