@@ -37,7 +37,7 @@ namespace EMS.ViewModel
             BatteryTotalBase batteryTotalBases5 = BmsApi.GetBMSTotalInfo(bcmuid5);
             BatteryTotalBase batteryTotalBases6 = BmsApi.GetBMSTotalInfo(bcmuid6);
 
-            AnalyzeBatteryCluster(batteryTotalBases1, singleVoltages1);
+            AnalyzeBatteryCluster(batteryTotalBases1, singleVoltages1);//第一簇
             AnalyzeBatteryCluster(batteryTotalBases2, singleVoltages2);
             AnalyzeBatteryCluster(batteryTotalBases3, singleVoltages3);
             AnalyzeBatteryCluster(batteryTotalBases4, singleVoltages4);
@@ -53,12 +53,12 @@ namespace EMS.ViewModel
         {
             if (batteryTotalBases != null)
             {
-                AssistanceStrategyViewModel.ClusterVolLevel(batteryTotalBases.TotalVoltage);//组端电压保护
+                ClusterVolLevel(batteryTotalBases.TotalVoltage);//组端电压保护
                 for (int i = 0; i < batteryTotalBases.SeriesCount; i++)
                 {
                     for (int j = 0; j < batteryTotalBases.BatteriesCountInSeries; j++)
                     {
-                        AssistanceStrategyViewModel.SingleVolLevel(batteryTotalBases.Series[i].Batteries[j].Voltage);//单体电压保护
+                        SingleVolLevel(batteryTotalBases.Series[i].Batteries[j].Voltage);//单体电压保护
                         double singlevolvalue = batteryTotalBases.Series[i].Batteries[j].Voltage;
                         singleVoltages.Add(singlevolvalue);
                         ProcessTemperature(batteryTotalBases, i, j);
@@ -67,7 +67,7 @@ namespace EMS.ViewModel
                 double maxSingleVolValue = singleVoltages.Max();
                 double minSingleVolValue = singleVoltages.Min();
                 double voltagesDiff = maxSingleVolValue - minSingleVolValue;
-                AssistanceStrategyViewModel.SingleVolDiffProtectLevel(voltagesDiff);//单体压差保护
+                SingleVolDiffProtectLevel(voltagesDiff);//单体压差保护
                 ProcessCurrentAndSOC(batteryTotalBases);
             }
         }
@@ -78,12 +78,12 @@ namespace EMS.ViewModel
             switch (batteryTotalBases.StateBCMU)
             {
                 case 1:
-                    AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases.Series[seriesIndex].Batteries[batteryIndex].Temperature1);
-                    AssistanceStrategyViewModel.TempCharProtectLevel(batteryTotalBases.Series[seriesIndex].Batteries[batteryIndex].Temperature2);
+                    TempCharProtectLevel(batteryTotalBases.Series[seriesIndex].Batteries[batteryIndex].Temperature1);
+                    TempCharProtectLevel(batteryTotalBases.Series[seriesIndex].Batteries[batteryIndex].Temperature2);
                     break;
                 case 2:
-                    AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases.Series[seriesIndex].Batteries[batteryIndex].Temperature1);
-                    AssistanceStrategyViewModel.TempDischarProtectLevel(batteryTotalBases.Series[seriesIndex].Batteries[batteryIndex].Temperature2);
+                    TempDischarProtectLevel(batteryTotalBases.Series[seriesIndex].Batteries[batteryIndex].Temperature1);
+                    TempDischarProtectLevel(batteryTotalBases.Series[seriesIndex].Batteries[batteryIndex].Temperature2);
                     break;
             }
         }
@@ -94,19 +94,19 @@ namespace EMS.ViewModel
             switch (batteryTotalBases.StateBCMU)
             {
                 case 1:
-                    AssistanceStrategyViewModel.CurrentCharLevel(batteryTotalBases.TotalCurrent);
+                    CurrentCharLevel(batteryTotalBases.TotalCurrent);
                     break;
                 case 2:
-                    AssistanceStrategyViewModel.CurrentDischarLevel(batteryTotalBases.TotalCurrent);
+                    CurrentDischarLevel(batteryTotalBases.TotalCurrent);
                     break;
             }
-            AssistanceStrategyViewModel.SocProtectLevel(batteryTotalBases.TotalSOC);
+            SocProtectLevel(batteryTotalBases.TotalSOC);
         }
 
 
 
         //组端电压保护等级
-        private static void ClusterVolLevel(double clustervoltages)
+        private void ClusterVolLevel(double clustervoltages)
         {
             if (clustervoltages >= 596 && clustervoltages < 617)
             {
@@ -138,7 +138,7 @@ namespace EMS.ViewModel
         }
 
         //单体电压保护等级
-        public static void SingleVolLevel(double singlevoltage)
+        private void SingleVolLevel(double singlevoltage)
         {
             if (singlevoltage >= 14.3 && singlevoltage < 14.8)
             {
@@ -170,7 +170,7 @@ namespace EMS.ViewModel
         }
 
         //充电电流保护等级
-        public static void CurrentCharLevel(double currentlevel)
+        private void CurrentCharLevel(double currentlevel)
         {
             if (currentlevel >= 120 && currentlevel < 130)
             {
@@ -190,7 +190,7 @@ namespace EMS.ViewModel
         }
 
         //放电电流保护等级
-        public static void CurrentDischarLevel(double currentlevel)
+        private void CurrentDischarLevel(double currentlevel)
         {
             if (currentlevel >= 120 && currentlevel < 130)
             {
@@ -210,7 +210,7 @@ namespace EMS.ViewModel
         }
 
         //充电温度保护等级
-        public static void TempCharProtectLevel(double tempcharprotectlevel)
+        private void TempCharProtectLevel(double tempcharprotectlevel)
         {
             if (tempcharprotectlevel >= 45 && tempcharprotectlevel < 50)
             {
@@ -243,7 +243,7 @@ namespace EMS.ViewModel
         }
 
         //放电温度保护等级
-        public static void TempDischarProtectLevel(double tempdischarprotectlevel)
+        private void TempDischarProtectLevel(double tempdischarprotectlevel)
         {
             if (tempdischarprotectlevel >= 45 && tempdischarprotectlevel < 50)
             {
@@ -264,7 +264,7 @@ namespace EMS.ViewModel
         }
 
         //SOC保护等级
-        public static void SocProtectLevel(double socprotectlevel)
+        private void SocProtectLevel(double socprotectlevel)
         {
             if (socprotectlevel > 5 && socprotectlevel <= 10)
             {
@@ -284,7 +284,7 @@ namespace EMS.ViewModel
         }
 
         //单体压差保护
-        public static void SingleVolDiffProtectLevel(double socprotectlevel)
+        private void SingleVolDiffProtectLevel(double socprotectlevel)
         {
             if (socprotectlevel >= 1.2 && socprotectlevel < 1.5)
             {
