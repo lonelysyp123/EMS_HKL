@@ -567,7 +567,7 @@ namespace EMS.ViewModel
                     case 0:
                         {
                             if (item.Value == 1) INFO.Add("单体电池低压1级");
-                            if (item.Value == 2) INFO.Add("单体电池低压2级");
+                            //hif (item.Value == 2) INFO.Add("单体电池低压2级");
                             if (item.Value == 3) INFO.Add("单体电池低压3级");
                         }
                         break;
@@ -661,7 +661,7 @@ namespace EMS.ViewModel
             }
             AssistanceStrategyViewModel INFO1 = new AssistanceStrategyViewModel();
             ObservableCollection<string> INFO2 = INFO1.RecheckStrategy();
-            ObservableCollection<string> MERGEINFO = new ObservableCollection<string>(INFO.Union(INFO2));
+            ObservableCollection<string> MERGEINFO = new ObservableCollection<string>(INFO.Concat(INFO2).Distinct());
             total.AlarmStateBCMU = MERGEINFO;
             return colorvalue;
         }
