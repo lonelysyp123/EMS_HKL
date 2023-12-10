@@ -222,13 +222,13 @@ namespace EMS.ViewModel
             switch (true)
             {
                 case bool _ when tempdischarprotectlevel >= 45 && tempdischarprotectlevel < 50:
-                    INFOAS.Add("放电低温1级");
+                    INFOAS.Add("放电高温1级");
                     break;
                 case bool _ when tempdischarprotectlevel >= 50 && tempdischarprotectlevel < 55:
-                    INFOAS.Add("放电低温2级");
+                    INFOAS.Add("放电高温2级");
                     break;
                 case bool _ when tempdischarprotectlevel >= 55:
-                    INFOAS.Add("放电低温3级");
+                    INFOAS.Add("放电高温3级");
                     break;
             }
         }
