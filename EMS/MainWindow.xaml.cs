@@ -37,7 +37,7 @@ namespace EMS
             InitializeComponent();
             //初始化log配置文件
             XmlConfigurator.Configure();
-
+            EnergyManagementSystem.Initialization(new EnergyManagementSystem());
 
             viewmodel = new MainViewModel();
             pCSMainViewModel = new PCSMainViewModel();
@@ -50,7 +50,7 @@ namespace EMS
             PCS_ConnectColor.DataContext = pCSMainViewModel;
             PCS_IP.DataContext = pCSMainViewModel;
             SelectedPage("DaqDataRaBtn");
-            EnergyManagementSystem.Initialization();
+            //EnergyManagementSystem.Initialization();
             EnergyManagementSystem.GlobalInstance.Initialization(null, null, null, null);
             //pcsviewmodel = new PCSSettingViewModel();
             //PCSView.DataContext = pcsviewmodel;

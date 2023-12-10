@@ -14,6 +14,7 @@ using EMS.View;
 using System.IO;
 using System.Windows.Media.Imaging;
 using EMS.Model;
+using EMS.Api;
 
 namespace EMS.ViewModel
 {
@@ -130,6 +131,7 @@ namespace EMS.ViewModel
 
 
             pCSModel = new PCSModel();
+            EnergyManagementSystem.GlobalInstance.PcsManager.SetPCS(pCSModel);
 
 
             ConnectCommand = new RelayCommand(Connect);
@@ -753,7 +755,6 @@ namespace EMS.ViewModel
 
             if (IsConnected)
             {
-
 
                 if (pCSModel.ParSettingModel.BTLLimitVol > 800 || pCSModel.ParSettingModel.BTLLimitVol < 30)
                 {
