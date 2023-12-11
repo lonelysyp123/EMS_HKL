@@ -278,16 +278,23 @@ namespace EMS.ViewModel
 
         public void StopDaq()
         {
-            isRead = false;
+            if (isRead == true) 
+            {
+                isRead = false;
 
-            BitmapImage bi;
-            DirectoryInfo directory = new DirectoryInfo("./Resource/Image");
-            FileInfo[] files = directory.GetFiles("pause.png");
-            bi = new BitmapImage();
-            bi.BeginInit();
-            bi.UriSource = new Uri(files[0].FullName, UriKind.Absolute);
-            bi.EndInit();
-            DaqImageSource = bi;
+                BitmapImage bi;
+                DirectoryInfo directory = new DirectoryInfo("./Resource/Image");
+                FileInfo[] files = directory.GetFiles("pause.png");
+                bi = new BitmapImage();
+                bi.BeginInit();
+                bi.UriSource = new Uri(files[0].FullName, UriKind.Absolute);
+                bi.EndInit();
+                DaqImageSource = bi;
+            }
+            else
+            {
+                MessageBox.Show("请开始采集");
+            }
         }
 
         public void ReadINFO()
