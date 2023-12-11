@@ -325,7 +325,7 @@ namespace EMS.Api
 
         public static bool PCSDisConnect()
         {
-            //Buffer,是个缓存，把所有指令封装成一个，下发的时候。
+            //Buffer,是个缓存，把所有指令封装成一个，下发的时候调用其中的指令。
             try
             {
                 EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.Disconnect();
@@ -336,6 +336,13 @@ namespace EMS.Api
                 return false;
                 throw (ex);
             }
+        }
+
+
+
+        public static bool SetPCSHalt()
+        {
+            return true;
         }
     }
 }
