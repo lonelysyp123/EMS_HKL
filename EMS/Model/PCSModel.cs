@@ -41,6 +41,40 @@ namespace EMS.Model
             _modbusClient.Disconnect();
             _isConnected = false;
         }
+
+
+        public void SetManChar(string model, double setvalue)
+        {
+            //注意：不该block的事就不能block
+            try
+            {
+                if (model == "设置电流调节")
+                {
+                    _modbusClient.WriteFunc(PcsId, (ushort)PcsCommandAdressEnum.CharModeSet, 0);
+                    _modbusClient.WriteFunc(1, 53651, (ushort)(setvalue * 10));
+                }
+                else
+                {
+                    _modbusClient.WriteFunc(1, 53650, 1);
+                    _modbusClient.WriteFunc(1, 53652, (ushort)(setvalue * 10));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        
+
+        static byte PcsId = 0;
+
+        public enum PcsCommandAdressEnum
+        {
+            CharModeSet=53650,
+            CurrentValueSet=53651,
+            PowerValueSet=53652,
+        }
         public PCSModel()
         {
             MonitorModel = new PCSMonitorModel();
