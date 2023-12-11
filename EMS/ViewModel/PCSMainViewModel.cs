@@ -880,7 +880,7 @@ namespace EMS.ViewModel
         {
             if (IsConnected)
             {
-                var item = PcsApi.PCSGetMonitorInfo();
+                
                 if (pCSModel.ParSettingModel.ModeSet1 == "设置电流调节")
                 {
                     modbusClient.WriteFunc(1, 53650, 0);
