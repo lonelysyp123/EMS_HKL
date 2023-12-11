@@ -51,7 +51,11 @@ namespace EMS.Storage.DB
         /// 电池串电池
         /// </summary>
         public DbSet<SeriesBatteryInfoModel> SeriesBatteryModelInfos { get; set; }
-        public DbSet<PCSStrategyInfoModel> PCSStrategyInfos { get; set; }
-        
+        public DbSet<AlarmParameterSettingModel> AlarmParameterSettingInfos { get; set; }
+        public DbSet<AlarmandFaultInfoModel> AlarmandFaultInfos { get;set; }
+        public DbSet<PCSControlSettingModel> PCSControlSettingInfos { get; set; }
+        public DbSet<PCSInfoModel> PCSInfos { get; set; }
+        public DbSet<PCSStrategyDailyPatternInfoModel> pCSStrategyDailyPatternInfos { get; set; }
+       
     }
 }

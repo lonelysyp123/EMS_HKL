@@ -1,4 +1,6 @@
-﻿using EMS.ViewModel;
+﻿using CommunityToolkit.Mvvm.Input;
+using EMS.Common.Modbus.ModbusTCP;
+using EMS.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,7 @@ using System.Windows;
 
 namespace EMS.Model
 {
-    public class PCSParSettingModel:ViewModelBase
+    public class PCSParSettingModel : ViewModelBase
     {
         /// <summary>
         /// BMS通讯中断超时

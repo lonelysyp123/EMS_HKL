@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using EMS.View;
 using System.Web.UI.WebControls;
+using EMS.Model;
 
 namespace EMS.View
 {
@@ -27,6 +28,7 @@ namespace EMS.View
         public PCSMainWindow(PCSMainViewModel viewmodel)
         {
             InitializeComponent();
+            
 
             viewModel = viewmodel;
             this.DataContext = viewModel;

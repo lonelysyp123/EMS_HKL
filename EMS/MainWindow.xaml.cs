@@ -29,15 +29,15 @@ namespace EMS
         DataAnalysis_OptimizeView dataAnalysis_Optimize;
         DevControlView devControlView;
         ParameterSettingView parameterSettingView;
-        PCSSettingView pCSSettingView;
+        
         PCSMainViewModel pCSMainViewModel;
-
+        StrategyControl strategyControlMainView;
         public MainWindow()
         {
             InitializeComponent();
             //初始化log配置文件
             XmlConfigurator.Configure();
-
+            EnergyManagementSystem.Initialization(new EnergyManagementSystem());
 
             viewmodel = new MainViewModel();
             pCSMainViewModel = new PCSMainViewModel();
@@ -50,7 +50,7 @@ namespace EMS
             PCS_ConnectColor.DataContext = pCSMainViewModel;
             PCS_IP.DataContext = pCSMainViewModel;
             SelectedPage("DaqDataRaBtn");
-            EnergyManagementSystem.Initialization();
+            //EnergyManagementSystem.Initialization();
             EnergyManagementSystem.GlobalInstance.Initialization(null, null, null, null);
             //pcsviewmodel = new PCSSettingViewModel();
             //PCSView.DataContext = pcsviewmodel;
@@ -164,14 +164,14 @@ namespace EMS
                     Mainbody.Content = new Frame() { Content = parameterSettingView };
                     break;
 
-                case "PCSSettingRaBtn":
-                    if (pCSSettingView == null)
+                case "StrategyControlRaBtn":
+                    if (strategyControlMainView == null)
                     {
-                        pCSSettingView = new PCSSettingView();
+                        strategyControlMainView = new StrategyControl();
 
                     }
                     //simulationSettingView.SyncContent(viewmodel.DisplayContent.OnlineBatteryTotalList.ToList(), viewmodel.DisplayContent.ClientList);
-                    Mainbody.Content = new Frame() { Content = pCSSettingView };
+                    Mainbody.Content = new Frame() { Content = strategyControlMainView };
                     break;
                 default:
                     break;

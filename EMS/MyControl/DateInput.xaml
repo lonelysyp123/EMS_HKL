@@ -16,9 +16,9 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <TextBox Name="P1" Grid.Column="0" BorderThickness="0" VerticalAlignment="Center" PreviewTextInput="Date_TextInput" TextChanged="P1_TextChanged"></TextBox>
-            <TextBlock Grid.Column="1" Text=":" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock Grid.Column="1" Text=":" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"></TextBlock>
             <TextBox Name="P2" Grid.Column="2" BorderThickness="0" VerticalAlignment="Center" PreviewTextInput="Date_TextInput" TextChanged="P2_TextChanged"></TextBox>
-            <TextBlock Grid.Column="3" Text=":" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock Grid.Column="3" Text=":" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"></TextBlock>
             <TextBox Name="P3" Grid.Column="4" BorderThickness="0" VerticalAlignment="Center" PreviewTextInput="Date_TextInput" TextChanged="P3_TextChanged"></TextBox>
         </Grid>
     </Border>

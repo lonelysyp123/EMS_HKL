@@ -19,12 +19,28 @@ namespace EMS.Model
             _startTime = TimeSpan.Zero;
         }
 
-        public BatteryStrategyModel(BatteryStrategyEnum batteryStrategy, int setValue)
+        public BatteryStrategyModel(BatteryStrategyModel batteryStrategyModel)
+        {
+            _id= batteryStrategyModel._id;
+            _setValue = batteryStrategyModel._setValue;
+            _batteryStrategy = batteryStrategyModel._batteryStrategy;
+            _startTime = batteryStrategyModel._startTime;
+        }
+
+        public BatteryStrategyModel(BatteryStrategyEnum batteryStrategy, double setValue)
         {
             _id = 0;
             SetValue = setValue;
             BatteryStrategy = batteryStrategy;
             StartTime = TimeSpan.Zero;
+        }
+
+        public BatteryStrategyModel(BatteryStrategyEnum batteryStrategy, double setValue,TimeSpan startTime)
+        {
+            _id = 0;
+            SetValue = setValue;
+            BatteryStrategy = batteryStrategy;
+            StartTime = startTime;
         }
 
         int IComparer.Compare(object left, object right)
@@ -115,6 +131,7 @@ namespace EMS.Model
         }
     }
 
+    
     public enum BatteryStrategyEnum
     {
         [Description("待机")]
