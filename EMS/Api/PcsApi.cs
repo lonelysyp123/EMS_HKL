@@ -48,7 +48,7 @@ namespace EMS.Api
         /// <param name="actionid">动作编号，pcs对象类定义</param>
         /// <param name="actionParam">动作编号的对应参数，侧支路编号1开始</param>
         /// <returns></returns>
-        public static bool PcsSetAction(int pcsId,int actionId, byte[] actionParam)
+        public static bool PcsSetAction(int pcsId, int actionId, byte[] actionParam)
         {
             ///1、获取到pcs管理对象，pcs管理对象应该是单例的
             ///2、管理对象查询对应pcsid的实例对象
@@ -57,57 +57,25 @@ namespace EMS.Api
             //log.Debug("log Pcs test");
             return true;
         }
-        /// <summary>
-        /// 设置对应的Pcs到当前时间
-        /// </summary>
-        /// <param name="pcsid"></param>
-        /// <returns></returns>
-        public static bool PcsSetDataTime2Now(int pcsId)
-        {
-            return true;
-        }
-
-        
 
         /// <summary>
-        /// 设置PCS Bus 电压输出高低阈值
+        ///  对PCS发送控制指令，需要包含一定的验证，检查下发指令是否合理，否则报错，该API不能是阻塞函数，需要立刻返回。如遇到异常，需要抛出异常。
+        ///  如果下发指令和当前PCS正在执行的指令一直，可以避免重复下发。
         /// </summary>
-        /// <param name="pcsId"></param>
-        /// <param name="hthreshold">bus 侧上限电压阈值</param>
-        /// <param name="lthreshold">bus 侧下限限电压阈值</param>
-        /// <returns></returns>
-        public static bool PcsSetBusThreshHold(int pcsId,float hthreshold,float lthreshold)
+        /// <returns>指令下发是否成功</returns>
+        public static bool SendPcsCommand(BessCommand command)
         {
+
             return true;
         }
 
         /// <summary>
-        /// 设置PCS BUS 实时输出电压
+        ///  对负载放电为正，对电池充电为负
         /// </summary>
-        /// <param name="pcsId"></param>
-        /// <param name="busVolt"></param>
-        /// <returns></returns>
-        public static bool PcsSetBusVolt(int pcsId,float busVolt)
-        {
-            return true;
-        }
+        /// <returns>当前PCS的直流总功率</returns>
+        public static double GetPcsPower() { return 0; }
 
-        /// <summary>
-        /// 设置dc side工作模式
-        /// </summary>
-        /// <param name="pcsId">pcs id</param>
-        /// <param name="dcSideId">dc 侧支路 id</param>
-        /// <param name="dcMode">dc 侧支路工作模式，1-恒流模式，2-恒功率模式</param>
-        /// <returns></returns>
-        public static bool PcsSetDcSideMode(int pcsId,int dcSideId,int dcMode)
-        {
-            return true;
-        }
-
-        //public static bool PcsSetDcSideCCParams(int pcsId,int dcSideId,float curr,)
-        //{
-        //    return true;
-        //}
+        public static List<string> GetPCSFaultInfo() { return null; }
 
         /// <summary>
         /// 设置pcs 控制参数
