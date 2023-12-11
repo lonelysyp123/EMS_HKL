@@ -246,7 +246,10 @@ namespace EMS.Model
                 while (IsStartDaqData)
                 {
                     Thread.Sleep(500);
+                    // 采集数据
                     Voltage_A = ReadDataForCmd(SerialPortInstance, Request_GetVoltage_A, Response_GetVoltage_A);
+
+                    // 储存数据
                     if (IsStartSaveData)
                     {
                         TemporaryData.Enqueue(GetItself());
