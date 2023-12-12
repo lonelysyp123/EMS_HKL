@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using EMS.Api;
+using EMS.Common;
 using log4net;
 using log4net.Core;
 using System;
@@ -159,12 +160,10 @@ namespace EMS.Model
         }
 
         public Configuaration Configuaration { get; set; }
-        private ILog Logger;
 
         public ElectricityMeterModel()
         {
             Configuaration = new Configuaration();
-            Logger = LogManager.GetLogger(typeof(ElectricityMeterModel));
         }
 
         private SerialPort SerialPortInstance;
@@ -259,7 +258,7 @@ namespace EMS.Model
             catch (Exception ex)
             {
                 // 记录报错
-                Logger.Error(ex.ToString());
+                LogUtils.Error(ex.ToString());
                 Close();
             }
         }
@@ -340,7 +339,7 @@ namespace EMS.Model
                     else
                     {
                         // 日志记录
-                        Logger.Warn("Data Validation Failed");
+                        LogUtils.Warn("Data Validation Failed");
                     }
                 }
             }
@@ -396,7 +395,7 @@ namespace EMS.Model
                         else
                         {
                             // 日志记录
-                            Logger.Warn("Data Validation Failed");
+                            LogUtils.Warn("Data Validation Failed");
                         }
                     }
                 }

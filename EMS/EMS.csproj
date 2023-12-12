@@ -217,6 +217,7 @@
     <Compile Include="Api\ElectricityMeterApi.cs" />
     <Compile Include="Api\PcsApi.cs" />
     <Compile Include="Api\StrategyApi.cs" />
+    <Compile Include="Common\LogUtils.cs" />
     <Compile Include="Common\Modbus\ModbusRequest.cs" />
     <Compile Include="Common\Mqtt\MqttClientService.cs" />
     <Compile Include="Common\Mqtt\MqttConnectOption.cs" />
