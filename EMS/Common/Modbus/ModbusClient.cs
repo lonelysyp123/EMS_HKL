@@ -228,7 +228,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
         }
 
-        
+
 
         public bool WriteFunc(byte slave, ushort address, ushort value)
         {
