@@ -338,10 +338,47 @@ namespace EMS.Api
         }
 
 
-        //public static bool SetPCSHalt()
-        //{
+        public static bool SetPCSHalt()
+        {
+            try
+            {
+                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.PCSClose();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw (ex);
+            }
+        }
 
-        //}
+        public static bool SetPCSStart()
+        {
+            try
+            {
+                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.PCSOpen();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw (ex);
+            }
+        }
+
+        public static bool SetPCSSystemClearFault()
+        {
+            try
+            {
+                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.PCSSystemClearFault();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw (ex);
+            }
+        }
 
 
     }
