@@ -296,7 +296,6 @@ namespace EMS.Api
         /// <returns></returns>
         public static bool PCSManChar(string model, double setvalue)
         {
-
             try
             {
                 EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.SetManChar(model, setvalue);
