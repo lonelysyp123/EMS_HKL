@@ -17,12 +17,6 @@ namespace EMS.ViewModel
         //BMS数据处理方法，生成告警
         public ObservableCollection<string> RecheckStrategy()
         {
-            ObservableCollection<double> singleVoltages1 = new ObservableCollection<double>();
-            ObservableCollection<double> singleVoltages2 = new ObservableCollection<double>();
-            ObservableCollection<double> singleVoltages3 = new ObservableCollection<double>();
-            ObservableCollection<double> singleVoltages4 = new ObservableCollection<double>();
-            ObservableCollection<double> singleVoltages5 = new ObservableCollection<double>();
-            ObservableCollection<double> singleVoltages6 = new ObservableCollection<double>();
             string bcmuid1 = "BCMU(1)";
             string bcmuid2 = "BCMU(2)";
             string bcmuid3 = "BCMU(3)";
@@ -37,22 +31,23 @@ namespace EMS.ViewModel
             BatteryTotalBase batteryTotalBases5 = BmsApi.GetBMSTotalInfo(bcmuid5);
             BatteryTotalBase batteryTotalBases6 = BmsApi.GetBMSTotalInfo(bcmuid6);
 
-            AnalyzeBatteryCluster(batteryTotalBases1, singleVoltages1);//第一簇
-            AnalyzeBatteryCluster(batteryTotalBases2, singleVoltages2);
-            AnalyzeBatteryCluster(batteryTotalBases3, singleVoltages3);
-            AnalyzeBatteryCluster(batteryTotalBases4, singleVoltages4);
-            AnalyzeBatteryCluster(batteryTotalBases5, singleVoltages5);
-            AnalyzeBatteryCluster(batteryTotalBases6, singleVoltages6);
+            AnalyzeBatteryCluster(batteryTotalBases1);//第一簇
+            AnalyzeBatteryCluster(batteryTotalBases2);
+            AnalyzeBatteryCluster(batteryTotalBases3);
+            AnalyzeBatteryCluster(batteryTotalBases4);
+            AnalyzeBatteryCluster(batteryTotalBases5);
+            AnalyzeBatteryCluster(batteryTotalBases6);
 
             return INFOAS;
         }
 
 
         //每簇组端电压保护，单体电压保护，单体压差保护逻辑
-        private void AnalyzeBatteryCluster(BatteryTotalBase batteryTotalBases, ObservableCollection<double> singleVoltages)
+        private void AnalyzeBatteryCluster(BatteryTotalBase batteryTotalBases)
         {
             if (batteryTotalBases != null)
             {
+                ObservableCollection<double> singleVoltages = new ObservableCollection<double>();
                 ClusterVolLevel(batteryTotalBases.TotalVoltage);//组端电压保护
                 for (int i = 0; i < batteryTotalBases.SeriesCount; i++)
                 {
