@@ -83,7 +83,7 @@ namespace EMS.Common.StrategyManage
                         }
                         double netPowerInjection = StrategyManager.Instance.GetACSmartMeterPower();
 
-                        double pcsPower = PcsApi.GetPcsPower();
+                        double pcsPower = PcsApi.PcsGetDcSidePower();
                         double load = netPowerInjection + pcsPower;
                         double tolerance = StrategyManager.Instance.GetAutomaticControlTolerance();
 
@@ -135,8 +135,6 @@ namespace EMS.Common.StrategyManage
                     PcsApi.SendPcsCommand(manualCommand);
                 }
             }
-
-
         }
 
         private BessCommand ContingencyAdjustment(BessCommand command)
