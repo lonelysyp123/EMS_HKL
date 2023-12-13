@@ -56,12 +56,12 @@ namespace EMS.Model
                 if (model == "设置电流调节")
                 {
                     _modbusClient.WriteFunc(PcsId, (ushort)PcsCommandAdressEnum.CharModeSet, 0);
-                    _modbusClient.WriteFunc(1, 53651, (ushort)(setvalue * 10));
+                    _modbusClient.WriteFunc(PcsId, (ushort)PcsCommandAdressEnum.CurrentValueSet, (ushort)(setvalue * 10));
                 }
                 else
                 {
-                    _modbusClient.WriteFunc(1, 53650, 1);
-                    _modbusClient.WriteFunc(1, 53652, (ushort)(setvalue * 10));
+                    _modbusClient.WriteFunc(PcsId, (ushort)PcsCommandAdressEnum.CharModeSet, 1);
+                    _modbusClient.WriteFunc(PcsId, (ushort)PcsCommandAdressEnum.PowerValueSet, (ushort)(setvalue * 10));
                 }
             }
             catch (Exception ex)
