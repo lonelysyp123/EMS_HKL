@@ -65,9 +65,9 @@ namespace EMS.ViewModel
             }
         }
 
-        public bool IsConnected { get { return IsConnected; } }
+        public bool IsConnected { get { return pcsModel.IsConnected; } }
 
-        public bool IsRead { get { return IsRead; } }
+        public bool IsRead { get { return pcsModel.IsRead; } }
 
         /// <summary>
         /// 主界面PCS连接状态颜色显示
