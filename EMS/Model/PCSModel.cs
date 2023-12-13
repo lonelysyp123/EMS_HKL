@@ -12,11 +12,10 @@ using OxyPlot;
 
 namespace EMS.Model
 {
-    public class PCSModel:ViewModelBase
+    public class PCSModel : ViewModelBase
     {
         private bool _isConnected = false;
         public bool IsConnected { get { return _isConnected; } }
-
 
         private ModbusClient _modbusClient;
         public ModbusClient ModbusClient { get { return _modbusClient; } }
@@ -26,9 +25,11 @@ namespace EMS.Model
 
         public void Connect(string ip, int port)
         {
-            try { 
-            _modbusClient = new ModbusClient(ip, port);
-            _modbusClient.Connect(); }
+            try
+            {
+                _modbusClient = new ModbusClient(ip, port);
+                _modbusClient.Connect();
+            }
             catch (Exception ex)
             {
                 _isConnected = false;
@@ -65,7 +66,7 @@ namespace EMS.Model
                     break;
                 case BatteryStrategyEnum.ConstantCurrentDischarge: //需要添加负值
                     modeValue = 0;
-                    controlValue = Convert.ToInt32(Math.Abs(command.Value * 10)*-1);
+                    controlValue = Convert.ToInt32(Math.Abs(command.Value * 10) * -1);
                     valueAddress = PcsCommandAdressEnum.CurrentValueSet;
                     break;
                 case BatteryStrategyEnum.ConstantPowerCharge:
@@ -75,13 +76,57 @@ namespace EMS.Model
                     break;
                 case BatteryStrategyEnum.ConstantPowerDischarge:  //需要添加负值
                     modeValue = 1;
-                    controlValue = Convert.ToInt32(Math.Abs(command.Value * 10)*-1);
+                    controlValue = Convert.ToInt32(Math.Abs(command.Value * 10) * -1);
                     valueAddress = PcsCommandAdressEnum.PowerValueSet;
                     break;
             }
 
             _modbusClient.WriteFunc(PcsId, modeAddress, modeValue);
             _modbusClient.WriteFunc(PcsId, valueAddress, modeValue);
+        }
+        /// <summary>
+        /// PCS系统开机
+        /// </summary>
+        public void PCSOpen()
+        {
+            try
+            {
+                _modbusClient.WriteFunc(PcsId, (ushort)PcsCommandAdressEnum.PCSSystemOpen, 1);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// PCS系统关机
+        /// </summary>
+        public void PCSClose()
+        {
+            try
+            {
+                _modbusClient.WriteFunc(PcsId, (ushort)PcsCommandAdressEnum.PCSSystemClose, 1);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// PCS系统清除故障
+        /// </summary>
+        public void PCSSystemClearFault()
+        {
+            try
+            {
+                _modbusClient.WriteFunc(PcsId, (ushort)PcsCommandAdressEnum.PCSSystemClearFault, 1);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         static byte PcsId = 0;
@@ -92,13 +137,16 @@ namespace EMS.Model
 
             ParSettingModel = new PCSParSettingModel();
         }
+
+
     }
     public enum PcsCommandAdressEnum
     {
+        PCSSystemOpen = 53900,
+        PCSSystemClose = 53901,
+        PCSSystemClearFault = 53903,
         CharModeSet = 53650,
         CurrentValueSet = 53651,
         PowerValueSet = 53652,
     }
-
-
 }
