@@ -18,7 +18,7 @@ using EMS.Api;
 
 namespace EMS.ViewModel
 {
-    public class PCSMainViewModel:ObservableObject
+    public class PCSMainViewModel : ObservableObject
     {
         /// <summary>
         /// 连接IP
@@ -32,6 +32,40 @@ namespace EMS.ViewModel
                 SetProperty(ref _iP, value);
             }
         }
+
+        /// <summary>
+        /// 采集状态图片
+        /// </summary>
+        private static BitmapImage DataAcuisitionOn = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/play.png"));
+        private static BitmapImage DataAcuisitionOff = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/pause.png"));
+
+        public BitmapImage DataAcquisitionImageSource
+        {
+            get
+            {
+                if (IsRead) return DataAcuisitionOn;
+                else return DataAcuisitionOff;
+            }
+        }
+
+
+        /// <summary>
+        /// 连接状态图片
+        /// </summary>
+        private static BitmapImage Connected = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OnConnect.png"));
+        private static BitmapImage Unconnected = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OffConnect.png"));
+        public BitmapImage ConnectImageSource
+        {
+            get
+            {
+                if (IsConnected) return Connected;
+                else return Unconnected;
+            }
+        }
+
+        public bool IsConnected { get { return pcsModel.IsConnected; } }
+
+        public bool IsRead { get { return pcsModel.IsRead; } }
 
         /// <summary>
         /// 主界面PCS连接状态颜色显示
@@ -97,8 +131,8 @@ namespace EMS.ViewModel
 
             ConnectCommand = new RelayCommand(Connect);
             DisConnectCommand = new RelayCommand(DisConnect);
-            StartDaqCommand = new RelayCommand(StartDaq);
-            StopDaqCommand = new RelayCommand(StopDaq);
+            StartDaqCommand = new RelayCommand(StartDataAcquisition);
+            StopDaqCommand = new RelayCommand(StopDataAcquisition);
 
             pcsModel.MonitorModel.VisDCFault = Visibility.Hidden;
             pcsModel.MonitorModel.VisPDSFault = Visibility.Hidden;
@@ -182,7 +216,7 @@ namespace EMS.ViewModel
             }
         }
 
-        public void StartDaq()
+        public void StartDataAcquisition()
         {
             if (pcsModel.IsConnected == false)
             {
@@ -198,9 +232,9 @@ namespace EMS.ViewModel
             }
         }
 
-        public void StopDaq()
+        public void StopDataAcquisition()
         {
-            if (pcsModel.IsRead == true) 
+            if (pcsModel.IsRead == true)
             {
                 pcsModel.IsRead = false;
             }
@@ -306,14 +340,14 @@ namespace EMS.ViewModel
                         GetActivePCSState();
                         DaqDCModuleStatus();
                     });
-                    
+
                     Thread.Sleep(DaqTimeSpan * 1000);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
 
                 }
-                
+
             }
         }
 
@@ -456,7 +490,7 @@ namespace EMS.ViewModel
             if ((value1 & 0x0200) != 0) { INFO.Add("电池电量不足"); colorflag = true; } //bit9
             if ((value1 & 0x0800) != 0) { INFO.Add("直流高压侧开关断开"); colorflag = true; } //bit11
             if ((value1 & 0x2000) != 0) { INFO.Add("机柜温度过高"); colorflag = true; } //bit13
-            
+
 
             if ((value2 & 0x0001) != 0) { INFO.Add("模块电流不平衡"); colorflag = true; } //53007 bit0
             if ((value2 & 0x0002) != 0) { INFO.Add("直流低压侧开关断开"); colorflag = true; } //bit1
@@ -507,7 +541,7 @@ namespace EMS.ViewModel
             if ((value & 0x0002) != 0) { INFO.Add("DSP初始化故障"); colorflag = true; } //bit1
             if ((value & 0x0004) != 0) { INFO.Add("BMS故障"); colorflag = true; } //bit2
             if ((value & 0x0008) != 0) { INFO.Add("紧急停机"); colorflag = true; } //bit3
-            
+
             pcsModel.MonitorModel.FaultInfoPDS = INFO;
             return colorflag;
         }
@@ -528,7 +562,7 @@ namespace EMS.ViewModel
             if ((value1 & 0x8000) != 0) { INFO.Add("环温探头故障"); colorflag = true; } //bit15  AAAAAA
 
             if ((value2 & 0x0200) != 0) { INFO.Add("校准参数异常"); colorflag = true; } //bit9   AAAAAA
-            pcsModel.MonitorModel.AlarmInfoDC= INFO;
+            pcsModel.MonitorModel.AlarmInfoDC = INFO;
             return colorflag;
         }
 
@@ -538,7 +572,7 @@ namespace EMS.ViewModel
             bool colorflag = false;
             ObservableCollection<string> INFO = new ObservableCollection<string>();
             value = pcsMonitorViewModel.AlarmStateFlagPDS;
-            
+
             if ((value & 0x0010) != 0) { INFO.Add("防雷器告警"); colorflag = true; } //bit4   AAAAAAAAA
             pcsModel.MonitorModel.AlarmInfoPDS = INFO;
             return colorflag;
@@ -709,7 +743,7 @@ namespace EMS.ViewModel
                     MessageBox.Show("电池均充电压：请输入30到800的数");
                     return;
                 }
-                else if (!System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.BatAveChVol.ToString(), @"^\d+\.\d$")&!System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.BatAveChVol.ToString(), @"^\d+$"))
+                else if (!System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.BatAveChVol.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.BatAveChVol.ToString(), @"^\d+$"))
                 {
                     MessageBox.Show("电池均充电压：请输入一位小数");
                     return;
@@ -800,7 +834,7 @@ namespace EMS.ViewModel
         {
             if (pcsModel.IsConnected)
             {
-                
+
                 if (pcsModel.ParSettingModel.ModeSet1 == "设置电流调节")
                 {
                     pcsModel.ModbusClient.WriteFunc(PCSModel.PcsId, 53650, 0);
@@ -838,7 +872,7 @@ namespace EMS.ViewModel
                         return;
                     }
                     else if (System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.DCCurrentSet.ToString(), @"^\d+\.\d$") == false & System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.DCCurrentSet.ToString(), @"^\-\d+\.\d$") == false
-                        & !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.DCCurrentSet.ToString(), @"^\d+$")& !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.DCCurrentSet.ToString(), @"^\-\d+$"))
+                        & !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.DCCurrentSet.ToString(), @"^\d+$") & !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.DCCurrentSet.ToString(), @"^\-\d+$"))
                     {
                         MessageBox.Show("直流电流设置：请输入一位小数");
                         return;

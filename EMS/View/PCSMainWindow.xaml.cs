@@ -42,9 +42,8 @@ namespace EMS.View
             button4.DataContext = viewModel;
             button5.DataContext = viewModel;
             button6.DataContext = viewModel;
-
-            Image1.DataContext = viewModel.pcsModel;
-            Image2.DataContext = viewModel.pcsModel;
+            Image1.DataContext = viewModel;
+            Image2.DataContext = viewModel;
 
             //viewModel = new PCSMainViewModel();
             //viewModel = viewModel1;
@@ -52,17 +51,17 @@ namespace EMS.View
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (viewModel.pcsModel.IsRead)
+            if (viewModel.IsRead)
             {
                 MessageBox.Show("请停止采集");
                 e.Cancel = true;
             }
-            else if (viewModel.pcsModel.IsConnected)
+            else if (viewModel.IsConnected)
             {
                 MessageBox.Show("请断开连接");
                 e.Cancel = true;
             }
-            else if(viewModel.pcsModel.IsConnected==false& viewModel.pcsModel.IsRead == false)
+            else if(!viewModel.IsConnected && !viewModel.IsRead)
             {
                 if (viewModel.thread != null)
                 {

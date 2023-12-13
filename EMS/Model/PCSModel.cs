@@ -16,103 +16,24 @@ namespace EMS.Model
     public class PCSModel : ViewModelBase
     {
         /// <summary>
-        /// 采集状态图片
-        /// </summary>
-        private BitmapImage _daqImageSource;
-        public BitmapImage DaqImageSource
-        {
-            get => _daqImageSource;
-            set
-            {
-                SetProperty(ref _daqImageSource, value);
-            }
-        }
-
-        /// <summary>
-        /// 连接状态图片
-        /// </summary>
-        private BitmapImage _connectImageSource;
-        public BitmapImage ConnectImageSource
-        {
-            get => _connectImageSource;
-            set
-            {
-                SetProperty(ref _connectImageSource, value);
-            }
-        }
-
-        /// <summary>
         /// 连接状态
         /// </summary>
         private bool _isConnected = false;
-        public bool IsConnected
-        {
-            get => _isConnected;
-            set
-            {
-                if (_isConnected != value)
-                {
-                    _isConnected = value;
-                    ConnectImageChange(value);
-                }
-            }
-        }
+        public bool IsConnected { get { return _isConnected; } }
 
         /// <summary>
         /// 采集状态
         /// </summary>
         private bool _isRead;
 
-        public bool IsRead
-        {
-            get => _isRead;
-            set
-            {
-                if (_isRead != value)
-                {
-                    _isRead = value;
-                    DaqImageChange(value);
-                }
-            }
-        }
+        public bool IsRead;
+        //  public bool IsRead { get { return _isRead; } }
 
         private ModbusClient _modbusClient;
         public ModbusClient ModbusClient { get { return _modbusClient; } }
 
         public PCSMonitorModel MonitorModel { get; set; }
         public PCSParSettingModel ParSettingModel { get; set; }
-
-        /// <summary>
-        /// 连接图标更改
-        /// </summary>
-        /// <param name="isconnect"></param>
-        public void ConnectImageChange(bool isconnect)
-        {
-            if (isconnect) 
-            {
-                ConnectImageSource = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OnConnect.png"));
-            }
-            else
-            {
-                ConnectImageSource = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OffConnect.png"));
-            }
-        }
-
-        /// <summary>
-        /// 采集图标更改
-        /// </summary>
-        /// <param name="isread"></param>
-        public void DaqImageChange(bool isread)
-        {
-            if (isread)
-            {
-                DaqImageSource = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/play.png"));
-            }
-            else
-            {
-                DaqImageSource = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/pause.png"));
-            }
-        }
 
         public void Connect(string ip, int port)
         {
@@ -123,17 +44,17 @@ namespace EMS.Model
             }
             catch (Exception ex)
             {
-                IsConnected = false;
+                _isConnected = false;
                 throw ex;
             }
-            IsConnected = true;
+            _isConnected = true;
         }
 
         public void Disconnect()
         {
             if (!_isConnected) return;
             _modbusClient.Disconnect();
-            IsConnected = false;
+            _isConnected = false;
         }
 
         public void SendPcsCommand(BessCommand command)
@@ -221,7 +142,7 @@ namespace EMS.Model
         }
 
         public static byte PcsId = 0;
-        
+
         public PCSModel()
         {
             MonitorModel = new PCSMonitorModel();
