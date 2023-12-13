@@ -15,11 +15,12 @@ namespace EMS.Model
     public class PCSModel:ViewModelBase
     {
         private bool _isConnected = false;
-
         public bool IsConnected { get { return _isConnected; } }
+
 
         private ModbusClient _modbusClient;
         public ModbusClient ModbusClient { get { return _modbusClient; } }
+
         public PCSMonitorModel MonitorModel { get; set; }
         public PCSParSettingModel ParSettingModel { get; set; }
 

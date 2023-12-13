@@ -29,7 +29,7 @@ namespace EMS.Api
     {
         /// <summary>
         ///  对PCS发送控制指令，需要包含一定的验证，检查下发指令是否合理，否则报错，该API不能是阻塞函数，需要立刻返回。如遇到异常，需要抛出异常。
-        ///  如果下发指令和当前PCS正在执行的指令一直，可以避免重复下发。
+        ///  如果下发指令和当前PCS正在执行的指令一致，可以避免重复下发。
         /// </summary>
         /// <returns>指令下发是否成功</returns>
         public static void SendPcsCommand(BessCommand command)
@@ -234,10 +234,48 @@ namespace EMS.Api
         }
 
 
-
         public static bool SetPCSHalt()
         {
-            return true;
+            try
+            {
+                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.PCSClose();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw (ex);
+            }
         }
+
+        public static bool SetPCSStart()
+        {
+            try
+            {
+                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.PCSOpen();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw (ex);
+            }
+        }
+
+        public static bool SetPCSSystemClearFault()
+        {
+            try
+            {
+                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.PCSSystemClearFault();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw (ex);
+            }
+        }
+
+
     }
 }
