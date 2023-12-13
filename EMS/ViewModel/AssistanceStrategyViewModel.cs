@@ -89,10 +89,10 @@ namespace EMS.ViewModel
             switch (batteryTotalBases.StateBCMU)
             {
                 case 1:
-                    CurrentCharLevel(batteryTotalBases.TotalCurrent);
+                    CurrentProtectLevel("电池组充电", batteryTotalBases.TotalCurrent);
                     break;
                 case 2:
-                    CurrentDischarLevel(batteryTotalBases.TotalCurrent);
+                    CurrentProtectLevel("电池组放电", batteryTotalBases.TotalCurrent);
                     break;
             }
             SocProtectLevel(batteryTotalBases.TotalSOC);
@@ -151,36 +151,19 @@ namespace EMS.ViewModel
             }
         }
 
-        //充电电流保护等级
-        private void CurrentCharLevel(double currentlevel)
+        //充放电流保护等级
+        private void CurrentProtectLevel(string action, double currentlevel)
         {
             switch (true)
             {
                 case bool _ when currentlevel >= 120 && currentlevel < 130:
-                    INFOAS.Add("电池组充电过流1级");
+                    INFOAS.Add($"{action}过流1级");
                     break;
                 case bool _ when currentlevel >= 130 && currentlevel < 140:
-                    INFOAS.Add("电池组充电过流2级");
+                    INFOAS.Add($"{action}过流2级");
                     break;
                 case bool _ when currentlevel >= 140:
-                    INFOAS.Add("电池组充电过流3级");
-                    break;
-            }
-        }
-
-        //放电电流保护等级
-        private void CurrentDischarLevel(double currentlevel)
-        {
-            switch (true)
-            {
-                case bool _ when currentlevel >= 120 && currentlevel < 130:
-                    INFOAS.Add("电池组放电过流1级");
-                    break;
-                case bool _ when currentlevel >= 130 && currentlevel < 140:
-                    INFOAS.Add("电池组放电过流2级");
-                    break;
-                case bool _ when currentlevel >= 140:
-                    INFOAS.Add("电池组放电过流3级");
+                    INFOAS.Add($"{action}过流3级");
                     break;
             }
         }
@@ -246,17 +229,17 @@ namespace EMS.ViewModel
         }
 
         //单体压差保护
-        private void SingleVolDiffProtectLevel(double socprotectlevel)
+        private void SingleVolDiffProtectLevel(double singlevoldiffprotectlevel)
         {
             switch (true)
             {
-                case bool _ when socprotectlevel >= 1.2 && socprotectlevel < 1.5:
+                case bool _ when singlevoldiffprotectlevel >= 1.2 && singlevoldiffprotectlevel < 1.5:
                     INFOAS.Add("单体压差1级");
                     break;
-                case bool _ when socprotectlevel >= 1.5 && socprotectlevel < 1.8:
+                case bool _ when singlevoldiffprotectlevel >= 1.5 && singlevoldiffprotectlevel < 1.8:
                     INFOAS.Add("单体压差2级");
                     break;
-                case bool _ when socprotectlevel >= 1.8:
+                case bool _ when singlevoldiffprotectlevel >= 1.8:
                     INFOAS.Add("单体压差3级");
                     break;
             }
