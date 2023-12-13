@@ -1,6 +1,7 @@
 ﻿using EMS.Model;
 using EMS.ViewModel;
 using log4net;
+using OxyPlot;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,74 +25,19 @@ namespace EMS.Api
         public int mindsgcurr;             //最大放电电流
     }
 
-    public class DcAlarmMessage
-    {
-
-    }
-
-    public class DcFaultMessage
-    {
-
-    }
-
-    public class DcRuningState
-    {
-
-    }
-
     public static class PcsApi
     {
-        /// <summary>
-        /// 设置对应 pcs对像的动作，动作包括1、开机，2、停机
-        /// </summary>
-        /// <param name="pcsid">pcs id编号</param>
-        /// <param name="actionid">动作编号，pcs对象类定义</param>
-        /// <param name="actionParam">动作编号的对应参数，侧支路编号1开始</param>
-        /// <returns></returns>
-        public static bool PcsSetAction(int pcsId, int actionId, byte[] actionParam)
-        {
-            ///1、获取到pcs管理对象，pcs管理对象应该是单例的
-            ///2、管理对象查询对应pcsid的实例对象
-            ///3、如果实例pcs对像所处状态可以下发动作指令,执行动作，并且返回动作执行结果，否则返回动作执行失败
-            //var log = LogManager.GetLogger(typeof(PcsApi));
-            //log.Debug("log Pcs test");
-            return true;
-        }
-
         /// <summary>
         ///  对PCS发送控制指令，需要包含一定的验证，检查下发指令是否合理，否则报错，该API不能是阻塞函数，需要立刻返回。如遇到异常，需要抛出异常。
         ///  如果下发指令和当前PCS正在执行的指令一致，可以避免重复下发。
         /// </summary>
         /// <returns>指令下发是否成功</returns>
-        public static bool SendPcsCommand(BessCommand command)
+        public static void SendPcsCommand(BessCommand command)
         {
-
-            return true;
+             EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.SendPcsCommand(command);
         }
-
-        /// <summary>
-        ///  对负载放电为正，对电池充电为负
-        /// </summary>
-        /// <returns>当前PCS的直流总功率</returns>
-        public static double GetPcsPower() { return 0; }
 
         public static List<string> GetPCSFaultInfo() { return null; }
-
-        /// <summary>
-        /// 设置pcs 控制参数
-        /// </summary>
-        /// <param name="pcsId"></param>
-        /// <param name="dcSideId"></param>
-        /// <param name="dcscp">
-        /// </param>
-        /// <returns>配置返回结果，成功or失败</returns>
-        public static bool PcsSetDcSideControlParams(int pcsId, int dcSideId, PcsDcSideParams dcscp)
-        {
-            return true;
-        }
-
-
-
 
         /// <summary>
         /// 获取监视器所有数据
@@ -111,10 +57,6 @@ namespace EMS.Api
             return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.ParSettingModel;
         }
 
-
-
-
-
         /// <summary>
         /// 获取DC侧支路状态
         /// </summary>
@@ -128,7 +70,7 @@ namespace EMS.Api
         /// 获取DC侧支路启停状态
         /// </summary>
         /// <returns></returns>
-        public static string PCSGetDCSideBranchOperState()
+        public static string PCSGetDCSideBranchOperationState()
         {
             return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1State2;
         }
@@ -153,7 +95,7 @@ namespace EMS.Api
         /// <param name="dcSideId"></param>
         /// <param name="dcCurr">侧支路电流</param>
         /// <returns></returns>
-        public static double PcsGetDcSideCurr()
+        public static double PcsGetDcSideCurrent()
         {
             return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1DCCur;
         }
@@ -165,7 +107,7 @@ namespace EMS.Api
         /// <param name="dcSideId"></param>
         /// <param name="dcVolt"></param>
         /// <returns></returns>
-        public static double PcsGetDcSideVolt()
+        public static double PcsGetDcSideVoltage()
         {
             return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1DCVol;
         }
@@ -177,7 +119,7 @@ namespace EMS.Api
         /// <param name="dcSideId"></param>
         /// <param name="busVolt"></param>
         /// <returns></returns>
-        public static double PcsGetBusSideVolt()
+        public static double PcsGetBusSideVoltage()
         {
             return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1BUSVol;
         }
@@ -189,7 +131,7 @@ namespace EMS.Api
         /// <param name="dcSideId"></param>
         /// <param name="accGhgEnergy">累计充电能量 kwh</param>
         /// <returns></returns>
-        public static uint PcsGetDcSideAccChgEnergy()
+        public static uint PcsGetDcSideAccumulatedChargedEnergy()
         {
             return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1Char;
         }
@@ -201,7 +143,7 @@ namespace EMS.Api
         /// <param name="dcSideId"></param>
         /// <param name="accDsgEnergy">累计放电能量 kwh</param>
         /// <returns></returns>
-        public static uint PcsGetDcSideAccDsgEnergy()
+        public static uint PcsGetDcSideAccumulatedDischargedEnergy()
         {
             return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1DisChar;
         }
@@ -248,7 +190,7 @@ namespace EMS.Api
         /// 获取模组温度
         /// </summary>
         /// <returns></returns>
-        public static double PCSGetModuleTemper()
+        public static double PCSGetModuleTemperature()
         {
             return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.ModuleTemperature;       
         }
@@ -257,55 +199,9 @@ namespace EMS.Api
         /// 获取环境温度
         /// </summary>
         /// <returns></returns>
-        public static double PCSGetAmbientTemper()
+        public static double PCSGetAmbientTemperature()
         {
             return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.AmbientTemperature;
-        }
-
-        /// <summary>
-        /// 获取PCS控制状态
-        /// </summary>
-        /// <returns></returns>
-        //public static string PCSGetPCSControlState()
-        //{
-
-        //    if (EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.PCSStateColorManControl.Color.Equals((Color)ColorConverter.ConvertFromString("#98FB98")))
-        //    {
-        //        return "本地手动控制状态";
-        //    }
-        //    else if (EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.PCSStateColorAutoControl.Color.Equals((Color)ColorConverter.ConvertFromString("#98FB98")))
-        //    {
-        //        return "本地自动控制状态";
-        //    }
-        //    else if (EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.PCSStateColorRemoteControl.Color.Equals((Color)ColorConverter.ConvertFromString("#98FB98")))
-        //    {
-        //        return "远程控制状态";
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-
-        //}
-
-        /// <summary>
-        /// 设置PCS充放电
-        /// </summary>
-        /// <param name="model">充放电模式,要string格式，带双引号</param>
-        /// <param name="setvalue">充放电值</param>
-        /// <returns></returns>
-        public static bool PCSManChar(string model, double setvalue)
-        {
-            try
-            {
-                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.SetManChar(model, setvalue);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-                return false;
-            }
         }
 
         public static bool PCSConnect()
