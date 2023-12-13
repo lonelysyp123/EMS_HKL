@@ -33,8 +33,8 @@ namespace EMS.View
             viewModel = viewmodel;
             this.DataContext = viewModel;
 
-            PCSMonitorView.DataContext = viewModel.MonitorModel;
-            DCStatusView.DataContext = viewModel.MonitorModel;
+            PCSMonitorView.DataContext = viewModel.PcsMonitorViewModelInstance;
+            DCStatusView.DataContext = viewModel.PcsMonitorViewModelInstance;
             PCSSettingView.DataContext = viewModel.pcsModel.ParSettingModel;
             button1.DataContext = viewModel;
             button2.DataContext = viewModel;

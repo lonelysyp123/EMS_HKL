@@ -104,7 +104,7 @@ namespace EMS.Model
         }
         public void StopDataAcquisition()
         {
-            if (IsRead == true)
+            if (IsRead)
             {
                 _isRead = false;
             }

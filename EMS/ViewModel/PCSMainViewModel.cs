@@ -95,8 +95,8 @@ namespace EMS.ViewModel
             }
         }
 
-        public DCStatusViewModel _dcStatusModel;
-        public PCSMonitorViewModel MonitorModel;
+        public DCStatusViewModel DcStatusViewModelInstance;
+        public PCSMonitorViewModel PcsMonitorViewModelInstance;
 
         public PCSModel pcsModel;
 
@@ -119,8 +119,8 @@ namespace EMS.ViewModel
 
         public PCSMainViewModel()
         {
-            _dcStatusModel = new DCStatusViewModel();
-            MonitorModel = new PCSMonitorViewModel();
+            DcStatusViewModelInstance = new DCStatusViewModel();
+            PcsMonitorViewModelInstance = new PCSMonitorViewModel();
 
 
             pcsModel = new PCSModel();
@@ -162,11 +162,11 @@ namespace EMS.ViewModel
         {
             try
             {
-                if (IsConnected == true)
+                if (IsConnected)
                 {
                     MessageBox.Show("已连接");
                 }
-                if (IsConnected == false)
+                else
                 {
                     PCSConView view = new PCSConView();
                     if (view.ShowDialog() == true)
@@ -192,18 +192,18 @@ namespace EMS.ViewModel
         {
             try
             {
-                if (IsConnected == false)
+                if (!IsConnected)
                 {
                     MessageBox.Show("请连接");
                 }
-                if (IsConnected == true & IsRead == false)
+                else if (IsConnected && !IsRead)
                 {
                     pcsModel.Disconnect();
 
                     MainWindowPCSConnectState = "未连接";
                     MainWindowPCSConnectColor = new SolidColorBrush(Colors.Red);
                 }
-                else if (IsConnected == true & IsRead == true)
+                else if (IsConnected && IsRead)
                 {
                     MessageBox.Show("请停止采集");
                 }
@@ -216,7 +216,7 @@ namespace EMS.ViewModel
 
         public void StartDataAcquisition()
         {
-            if (IsConnected == false)
+            if (!IsConnected)
             {
                 MessageBox.Show("请连接");
             }
@@ -228,7 +228,7 @@ namespace EMS.ViewModel
 
         public void StopDataAcquisition()
         {
-            if (IsRead == true)
+            if (IsRead)
             {
                 pcsModel.StopDataAcquisition();
             }
@@ -304,7 +304,7 @@ namespace EMS.ViewModel
         {
             if (IsConnected)
             {
-                pcsModel.ReadBUSVolInfo();    
+                pcsModel.ReadBUSVolInfo();
             }
             else
             {
@@ -331,7 +331,8 @@ namespace EMS.ViewModel
                     MessageBox.Show("远程TCP通信超时设置：请输入1-600的整数");
                     return;
                 }
-                 pcsModel.SyncCMTimeOut();          }
+                pcsModel.SyncCMTimeOut();
+            }
             else
             {
                 MessageBox.Show("请连接");
@@ -442,7 +443,7 @@ namespace EMS.ViewModel
         {
             if (IsConnected)
             {
-               pcsModel.ReadDCBranchInfo();
+                pcsModel.ReadDCBranchInfo();
             }
             else
             {
