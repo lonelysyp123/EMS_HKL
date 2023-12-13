@@ -93,6 +93,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.ToString());
                 throw ex;
             }
         }
@@ -111,6 +112,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.ToString());
                 throw ex;
             }
         }
@@ -137,6 +139,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.ToString());
                 throw ex;
             }
         }
@@ -157,6 +160,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.ToString());
                 return false;
             }
         }
@@ -181,6 +185,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.ToString());
                 return null;
             }
         }
@@ -224,6 +229,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.ToString());
                 throw ex;
             }
         }
@@ -239,6 +245,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.ToString());
                 return false;
             }
         }
@@ -263,6 +270,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.ToString());
                 return false;
             }
         }
@@ -297,6 +305,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.ToString());
                 throw ex;
             }
         }

@@ -113,6 +113,7 @@ namespace EMS.ViewModel
                 else
                 {
                     MessageBox.Show("重复");
+                    LogUtils.Warn("IP重复");
                 }
             }
         }
@@ -150,6 +151,7 @@ namespace EMS.ViewModel
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.Message);
                 return false;
             }
         }
@@ -174,8 +176,9 @@ namespace EMS.ViewModel
                 }
                 return -1;
             }
-            catch
+            catch(Exception ex)
             {
+                LogUtils.Error(ex.Message);
                 return -1;
             }
         }
@@ -198,9 +201,10 @@ namespace EMS.ViewModel
                     item.IsInternet = false;
                 }
             }
-            catch
+            catch(Exception ex)
             {
-
+                LogUtils.Error(ex.Message);
+                MessageBox.Show("设备请求入网失败");
             }
         }
 
@@ -220,6 +224,7 @@ namespace EMS.ViewModel
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.Message);
                 throw ex;
             }
         }
@@ -229,10 +234,18 @@ namespace EMS.ViewModel
         /// </summary>
         public void Disconnect(int index)
         {
-            if (OnlineBatteryTotalList[index].IsConnected)
+            try
             {
-                ClientList[index].Disconnect();
-                OnlineBatteryTotalList[index].IsConnected = false;
+                if (OnlineBatteryTotalList[index].IsConnected)
+                {
+                    ClientList[index].Disconnect();
+                    OnlineBatteryTotalList[index].IsConnected = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogUtils.Error(ex.Message);
+                throw ex;
             }
         }
 
@@ -1101,7 +1114,7 @@ namespace EMS.ViewModel
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    LogUtils.Error(ex.Message);
                     App.Current.Dispatcher.Invoke(() =>
                     {
                         if (total != null)
@@ -1114,6 +1127,7 @@ namespace EMS.ViewModel
 
                         if (client != null)
                         {
+                            client.Disconnect();
                             ClientList.Remove(client);
                         }
                     });
