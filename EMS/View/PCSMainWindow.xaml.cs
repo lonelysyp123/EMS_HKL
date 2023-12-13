@@ -33,8 +33,8 @@ namespace EMS.View
             viewModel = viewmodel;
             this.DataContext = viewModel;
 
-            PCSMonitorView.DataContext = viewModel.pcsModel.MonitorModel;
-            DCStatusView.DataContext = viewModel.pcsModel.MonitorModel;
+            PCSMonitorView.DataContext = viewModel.MonitorModel;
+            DCStatusView.DataContext = viewModel.MonitorModel;
             PCSSettingView.DataContext = viewModel.pcsModel.ParSettingModel;
             button1.DataContext = viewModel;
             button2.DataContext = viewModel;
@@ -63,11 +63,11 @@ namespace EMS.View
             }
             else if(!viewModel.IsConnected && !viewModel.IsRead)
             {
-                if (viewModel.thread != null)
+                if (viewModel.DataAcquisitionThread != null)
                 {
-                    if (viewModel.thread.ThreadState == ThreadState.Stopped)
+                    if (viewModel.DataAcquisitionThread.ThreadState == ThreadState.Stopped)
                     {
-                        viewModel.thread = null;
+                        viewModel.DataAcquisitionThread.Abort();
                     }
                 }
             }

@@ -1,33 +1,31 @@
-﻿using EMS.ViewModel;
+﻿using EMS.Common.Modbus.ModbusTCP;
+using EMS.ViewModel;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
+using System.Threading;
 using System.Windows;
-using EMS.Common.Modbus.ModbusTCP;
-using System.Windows.Media.Imaging;
-using OxyPlot;
+using System.Windows.Media;
 
 namespace EMS.Model
 {
     public class PCSModel : ViewModelBase
     {
+        private int DataAcquireTimeSpan = 1;
+        private DcStatusModel _dcStatusModel;
         /// <summary>
         /// 连接状态
         /// </summary>
         private bool _isConnected = false;
         public bool IsConnected { get { return _isConnected; } }
 
+        private Thread _dataAcquisitionThread;
+
+        public Thread DataAcuisitionThread { get { return _dataAcquisitionThread; } }
         /// <summary>
         /// 采集状态
         /// </summary>
         private bool _isRead;
-
-        public bool IsRead;
-        //  public bool IsRead { get { return _isRead; } }
+        public bool IsRead { get { return _isRead; } }
 
         private ModbusClient _modbusClient;
         public ModbusClient ModbusClient { get { return _modbusClient; } }
@@ -95,6 +93,747 @@ namespace EMS.Model
 
             _modbusClient.WriteFunc(PcsId, modeAddress, modeValue);
             _modbusClient.WriteFunc(PcsId, valueAddress, modeValue);
+        }
+
+        public void StartDataAcquisition()
+        {
+            _dataAcquisitionThread = new Thread(ReadInfo);
+            _dataAcquisitionThread.IsBackground = true;
+            _isRead = true;
+            _dataAcquisitionThread.Start();
+        }
+        public void StopDataAcquisition()
+        {
+            if (IsRead == true)
+            {
+                _isRead = false;
+            }
+        }
+
+        public void SyncBUSVolInfo()
+        {
+            ModbusClient.WriteFunc(PCSModel.PcsId, 53640, (ushort)(ParSettingModel.BUSUpperLimitVolThresh * 10));
+            ModbusClient.WriteFunc(PCSModel.PcsId, 53641, (ushort)(ParSettingModel.BUSLowerLimitVolThresh * 10));
+            ModbusClient.WriteFunc(PCSModel.PcsId, 53642, (ushort)(ParSettingModel.BUSHVolSetting * 10));
+            ModbusClient.WriteFunc(PCSModel.PcsId, 53643, (ushort)(ParSettingModel.BUSLVolSetting * 10));
+        }
+
+        public void ReadBUSVolInfo()
+        {
+            if (IsConnected)
+            {
+                byte[] data = ModbusClient.ReadFunc(53640, 4);
+                ParSettingModel.BUSUpperLimitVolThresh = Math.Round(BitConverter.ToInt16(data, 0) * 0.1, 2);
+                ParSettingModel.BUSLowerLimitVolThresh = Math.Round(BitConverter.ToInt16(data, 2) * 0.1, 2);
+                ParSettingModel.BUSHVolSetting = Math.Round(BitConverter.ToInt16(data, 4) * 0.1, 2);
+                ParSettingModel.BUSLVolSetting = Math.Round(BitConverter.ToInt16(data, 6) * 0.1, 2);
+            }
+        }
+
+        public void ReadCMTimeOut()
+        {
+            if (IsConnected)
+            {
+                byte[] data = ModbusClient.ReadFunc(56006, 3);
+                ParSettingModel.BMSCMInterruptionTimeOut = BitConverter.ToUInt16(data, 0);
+                ParSettingModel.Remote485CMInterruptonTimeOut = BitConverter.ToUInt16(data, 2);
+                ParSettingModel.RemoteTCPCMInterruptionTimeOut = BitConverter.ToUInt16(data, 4);
+            }
+        }
+        public void SyncCMTimeOut()
+        {
+            if (IsConnected)
+            {
+                ModbusClient.WriteFunc(PCSModel.PcsId, 56006, (ushort)(ParSettingModel.BMSCMInterruptionTimeOut));
+                ModbusClient.WriteFunc(PCSModel.PcsId, 56007, (ushort)(ParSettingModel.Remote485CMInterruptonTimeOut));
+                ModbusClient.WriteFunc(PCSModel.PcsId, 56008, (ushort)(ParSettingModel.RemoteTCPCMInterruptionTimeOut));
+            }
+        }
+
+        public void SyncDCBranchInfo()
+        {
+
+            if (IsConnected)
+            {
+                ModbusClient.WriteFunc(PCSModel.PcsId, 53653, (ushort)(ParSettingModel.BTLLimitVol * 10));
+                ModbusClient.WriteFunc(PCSModel.PcsId, 53655, (ushort)(ParSettingModel.DischargeSTVol * 10));
+                ModbusClient.WriteFunc(PCSModel.PcsId, 53658, (ushort)ParSettingModel.MultiBranchCurRegPar);
+                ModbusClient.WriteFunc(PCSModel.PcsId, 53660, (ushort)(ParSettingModel.BatAveChVol * 10));
+                ModbusClient.WriteFunc(PCSModel.PcsId, 53662, (ushort)(ParSettingModel.ChCutCurrent * 10));
+                ModbusClient.WriteFunc(PCSModel.PcsId, 53663, (ushort)(ParSettingModel.MaxChCurrent * 10));
+                ModbusClient.WriteFunc(PCSModel.PcsId, 53664, (ushort)(ParSettingModel.MaxDisChCurrent * 10));
+            }
+        }
+
+        public void ReadDCBranchInfo()
+        {
+            if (IsConnected)
+            {
+                byte[] data11 = ModbusClient.ReadFunc(53651, 3);
+                ParSettingModel.DCCurrentSet = Math.Round(BitConverter.ToInt16(data11, 0) * 0.1, 2);
+                ParSettingModel.DCPowerSet = Math.Round(BitConverter.ToInt16(data11, 2) * 0.1, 2);
+                ParSettingModel.BTLLimitVol = Math.Round(BitConverter.ToInt16(data11, 4) * 0.1, 2);
+
+                byte[] data12 = ModbusClient.ReadFunc(53655, 1);
+                ParSettingModel.DischargeSTVol = Math.Round(BitConverter.ToInt16(data12, 0) * 0.1, 2);
+
+                byte[] data13 = ModbusClient.ReadFunc(53658, 1);
+                ParSettingModel.MultiBranchCurRegPar = BitConverter.ToInt16(data13, 0);
+
+                byte[] data14 = ModbusClient.ReadFunc(53660, 1);
+                ParSettingModel.BatAveChVol = Math.Round(BitConverter.ToInt16(data14, 0) * 0.1, 2);
+
+                byte[] data15 = ModbusClient.ReadFunc(53662, 3);
+                ParSettingModel.ChCutCurrent = Math.Round(BitConverter.ToInt16(data15, 0) * 0.1, 2);
+                ParSettingModel.MaxChCurrent = Math.Round(BitConverter.ToInt16(data15, 2) * 0.1, 2);
+                ParSettingModel.MaxDisChCurrent = Math.Round(BitConverter.ToInt16(data15, 4) * 0.1, 2);
+            }
+        }
+
+        public void ModeSet()
+        {
+            if (IsConnected)
+            {
+
+                if (ParSettingModel.ModeSet1 == "设置电流调节")
+                {
+                    ModbusClient.WriteFunc(PCSModel.PcsId, 53650, 0);
+                }
+                else if (ParSettingModel.ModeSet1 == "设置功率调节")
+                {
+                    ModbusClient.WriteFunc(PCSModel.PcsId, 53650, 1);
+                }
+            }
+        }
+
+        public void ManChar()
+        {
+            if (IsConnected)
+            {
+                if (ParSettingModel.ModeSet1 == "设置电流调节")
+                {
+                    ModbusClient.WriteFunc(PCSModel.PcsId, 53651, (ushort)(ParSettingModel.DCCurrentSet * 10));
+                }
+                else
+                {
+                    ModbusClient.WriteFunc(PCSModel.PcsId, 53652, (ushort)(ParSettingModel.DCPowerSet * 10));
+                }
+            }
+        }
+        public void ReadInfo()
+        {
+            while (true)
+            {
+                if (!IsRead)
+                {
+                    break;
+                }
+                try
+                {
+                    byte[] dcState = ModbusClient.ReadFunc(53026, 7);
+                    _dcStatusModel.ModuleOnLineFlag = BitConverter.ToUInt16(dcState, 0);
+                    _dcStatusModel.ModuleRunFlag = BitConverter.ToUInt16(dcState, 4);
+                    _dcStatusModel.ModuleAlarmFlag = BitConverter.ToUInt16(dcState, 8);
+                    _dcStatusModel.ModuleFaultFlag = BitConverter.ToUInt16(dcState, 12);
+
+                    byte[] pcsData = ModbusClient.ReadFunc(53005, 10);
+                    MonitorModel.AlarmStateFlagDC1 = BitConverter.ToUInt16(pcsData, 0);
+                    MonitorModel.AlarmStateFlagDC2 = BitConverter.ToUInt16(pcsData, 4);
+                    MonitorModel.AlarmStateFlagDC3 = BitConverter.ToUInt16(pcsData, 6);
+                    MonitorModel.AlarmStateFlagPDS = BitConverter.ToUInt16(pcsData, 8);
+                    MonitorModel.ControlStateFlagPCS = BitConverter.ToUInt16(pcsData, 10);
+                    MonitorModel.StateFlagPCS = BitConverter.ToUInt16(pcsData, 12);
+                    MonitorModel.DcBranch1StateFlag1 = BitConverter.ToUInt16(pcsData, 16);
+                    MonitorModel.DcBranch1StateFlag2 = BitConverter.ToUInt16(pcsData, 18);
+
+                    GetDCBranchINFO();
+
+                    byte[] Temp = ModbusClient.ReadFunc(53221, 3);
+                    MonitorModel.ModuleTemperature = Math.Round(BitConverter.ToUInt16(Temp, 0) * 0.1 - 20, 2);
+                    MonitorModel.AmbientTemperature = Math.Round(BitConverter.ToUInt16(Temp, 4) * 0.1 - 20, 2);
+
+                    byte[] DCBranch1INFO = ModbusClient.ReadFunc(53250, 10);
+                    MonitorModel.DcBranch1DCPower = Math.Round(BitConverter.ToUInt16(DCBranch1INFO, 0) * 0.1 - 1500, 2);
+                    MonitorModel.DcBranch1DCVol = Math.Round(BitConverter.ToUInt16(DCBranch1INFO, 2) * 0.1, 2);
+                    MonitorModel.DcBranch1DCCur = Math.Round(BitConverter.ToUInt16(DCBranch1INFO, 4) * 0.1 - 2000, 2);
+                    MonitorModel.DcBranch1CharHigh = BitConverter.ToUInt16(DCBranch1INFO, 6);
+                    MonitorModel.DcBranch1CharLow = BitConverter.ToUInt16(DCBranch1INFO, 8);
+                    MonitorModel.DcBranch1DisCharHigh = BitConverter.ToUInt16(DCBranch1INFO, 10);
+                    MonitorModel.DcBranch1DisCharLow = BitConverter.ToUInt16(DCBranch1INFO, 12);
+                    MonitorModel.DcBranch1BUSVol = Math.Round(BitConverter.ToUInt16(DCBranch1INFO, 18) * 0.1, 2);
+
+                    EnergyCal();
+
+                    bool FaultColorFlagDC = GetDCFault();
+                    bool FaultColorFlagPDS = GetPDSFault();
+                    bool AlarmColorFlagDC = GetDCAlarm();
+                    bool AlarmColorFlagPDS = GetPDSAlarm();
+
+                    App.Current.Dispatcher.Invoke(() =>
+                    {
+                        if (AlarmColorFlagDC == true)
+                        {
+                            MonitorModel.VisDCAlarm = Visibility.Visible;
+                            MonitorModel.AlarmColorDC = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
+                        }
+                        else
+                        {
+                            MonitorModel.VisDCAlarm = Visibility.Hidden;
+                        }
+
+                        if (AlarmColorFlagPDS == true)
+                        {
+                            MonitorModel.VisPDSAlarm = Visibility.Visible;
+                            MonitorModel.AlarmColorPDS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
+                        }
+                        else
+                        {
+                            MonitorModel.VisPDSAlarm = Visibility.Hidden;
+                        }
+
+
+
+                        if (FaultColorFlagDC == true)
+                        {
+                            MonitorModel.VisDCFault = Visibility.Visible;
+                            MonitorModel.FaultColorDC = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000"));
+                        }
+                        else
+                        {
+                            MonitorModel.VisDCFault = Visibility.Hidden;
+                        }
+
+                        if (FaultColorFlagPDS == true)
+                        {
+                            MonitorModel.VisPDSFault = Visibility.Visible;
+                            MonitorModel.FaultColorPDS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000"));
+                        }
+                        else
+                        {
+                            MonitorModel.VisPDSFault = Visibility.Hidden;
+                        }
+                        GetActivePCSControlState();
+                        GetActivePCSState();
+                        DataAcquisitionDcModuleStatus();
+                    });
+
+                    Thread.Sleep(DataAcquireTimeSpan * 1000);
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+            }
+        }
+
+        public void DataAcquisitionDcModuleStatus()
+        {
+
+            int onlinevalue;
+            int runvalue;
+            int alarmvalue;
+            int faultvalue;
+            onlinevalue = _dcStatusModel.ModuleOnLineFlag;
+            runvalue = _dcStatusModel.ModuleRunFlag;
+            alarmvalue = _dcStatusModel.ModuleAlarmFlag;
+            faultvalue = _dcStatusModel.ModuleFaultFlag;
+
+            //DC模组1状态
+            if ((onlinevalue & 0x0001) != 0 && (runvalue & 0x0001) == 0 && (alarmvalue & 0x0001) == 0 && (faultvalue & 0x0001) == 0)
+            {
+                MonitorModel.Module1Status1 = "在线";
+                MonitorModel.Module1StatusColor1 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
+            }
+            else if ((runvalue & 0x0001) != 0 && (alarmvalue & 0x0001) == 0 && (faultvalue & 0x0001) == 0 && (onlinevalue & 0x0001) == 0)
+            {
+                MonitorModel.Module1Status1 = "运行";
+                MonitorModel.Module1StatusColor1 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
+            }
+            else if ((alarmvalue & 0x0001) != 0 && (onlinevalue & 0x0001) == 0 && (runvalue & 0x0001) == 0 && (faultvalue & 0x0001) == 0)
+            {
+                MonitorModel.Module1Status1 = "告警";
+                MonitorModel.Module1StatusColor1 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
+            }
+            else if ((faultvalue & 0x0001) != 0 && (onlinevalue & 0x0001) == 0 && (runvalue & 0x0001) == 0 && (alarmvalue & 0x0001) == 0)
+            {
+                MonitorModel.Module1Status1 = "故障";
+                MonitorModel.Module1StatusColor1 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
+            }
+            else if ((onlinevalue & 0x0001) == 0 && (runvalue & 0x0001) == 0 && (alarmvalue & 0x0001) == 0 && (faultvalue & 0x0001) == 0)
+            {
+                MonitorModel.Module1Status1 = "离线";
+                MonitorModel.Module1StatusColor1 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
+            }
+
+            //DC模组2状态
+            if ((onlinevalue & 0x0002) != 0 && (runvalue & 0x0002) == 0 && (alarmvalue & 0x0002) == 0 && (faultvalue & 0x0002) == 0)
+            {
+                MonitorModel.Module1Status2 = "在线";
+                MonitorModel.Module1StatusColor2 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
+            }
+            else if ((runvalue & 0x0002) != 0 && (alarmvalue & 0x0002) == 0 && (faultvalue & 0x0002) == 0 && (onlinevalue & 0x0002) == 0)
+            {
+                MonitorModel.Module1Status2 = "运行";
+                MonitorModel.Module1StatusColor2 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
+            }
+            else if ((alarmvalue & 0x0002) != 0 && (onlinevalue & 0x0002) == 0 && (runvalue & 0x0002) == 0 && (faultvalue & 0x0002) == 0)
+            {
+                MonitorModel.Module1Status2 = "告警";
+                MonitorModel.Module1StatusColor2 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
+            }
+            else if ((faultvalue & 0x0002) != 0 && (onlinevalue & 0x0002) == 0 && (runvalue & 0x0002) == 0 && (alarmvalue & 0x0002) == 0)
+            {
+                MonitorModel.Module1Status2 = "故障";
+                MonitorModel.Module1StatusColor2 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
+            }
+            else if ((onlinevalue & 0x0002) == 0 && (runvalue & 0x0002) == 0 && (alarmvalue & 0x0002) == 0 && (faultvalue & 0x0002) == 0)
+            {
+                MonitorModel.Module1Status2 = "离线";
+                MonitorModel.Module1StatusColor2 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
+            }
+
+            //DC模组3状态
+            if ((onlinevalue & 0x0004) != 0 && (runvalue & 0x0004) == 0 && (alarmvalue & 0x0004) == 0 && (faultvalue & 0x0004) == 0)
+            {
+                MonitorModel.Module1Status3 = "在线";
+                MonitorModel.Module1StatusColor3 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
+            }
+            else if ((runvalue & 0x0004) != 0 && (alarmvalue & 0x0004) == 0 && (faultvalue & 0x0004) == 0 && (onlinevalue & 0x0004) == 0)
+            {
+                MonitorModel.Module1Status3 = "运行";
+                MonitorModel.Module1StatusColor3 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
+            }
+            else if ((alarmvalue & 0x0004) != 0 && (onlinevalue & 0x0004) == 0 && (runvalue & 0x0004) == 0 && (faultvalue & 0x0004) == 0)
+            {
+                MonitorModel.Module1Status3 = "告警";
+                MonitorModel.Module1StatusColor3 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
+            }
+            else if ((faultvalue & 0x0004) != 0 && (onlinevalue & 0x0004) == 0 && (runvalue & 0x0004) == 0 && (alarmvalue & 0x0004) == 0)
+            {
+                MonitorModel.Module1Status3 = "故障";
+                MonitorModel.Module1StatusColor3 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
+            }
+            else if ((onlinevalue & 0x0004) == 0 && (runvalue & 0x0004) == 0 && (alarmvalue & 0x0004) == 0 && (faultvalue & 0x0004) == 0)
+            {
+                MonitorModel.Module1Status3 = "离线";
+                MonitorModel.Module1StatusColor3 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
+            }
+
+            //DC模组4状态
+            if ((onlinevalue & 0x0008) != 0 && (runvalue & 0x0008) == 0 && (alarmvalue & 0x0008) == 0 && (faultvalue & 0x0008) == 0)
+            {
+                MonitorModel.Module1Status4 = "在线";
+                MonitorModel.Module1StatusColor4 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
+            }
+            else if ((runvalue & 0x0008) != 0 && (alarmvalue & 0x0008) == 0 && (faultvalue & 0x0008) == 0 && (onlinevalue & 0x0008) == 0)
+            {
+                MonitorModel.Module1Status4 = "运行";
+                MonitorModel.Module1StatusColor4 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
+            }
+            else if ((alarmvalue & 0x0008) != 0 && (onlinevalue & 0x0008) == 0 && (runvalue & 0x0008) == 0 && (faultvalue & 0x0008) == 0)
+            {
+                MonitorModel.Module1Status4 = "告警";
+                MonitorModel.Module1StatusColor4 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
+            }
+            else if ((faultvalue & 0x0008) != 0 && (onlinevalue & 0x0008) == 0 && (runvalue & 0x0008) == 0 && (alarmvalue & 0x0008) == 0)
+            {
+                MonitorModel.Module1Status4 = "故障";
+                MonitorModel.Module1StatusColor4 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
+            }
+            else if ((onlinevalue & 0x0008) == 0 && (runvalue & 0x0008) == 0 && (alarmvalue & 0x0008) == 0 && (faultvalue & 0x0008) == 0)
+            {
+                MonitorModel.Module1Status4 = "离线";
+                MonitorModel.Module1StatusColor4 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
+            }
+
+            //DC模组5状态
+            if ((onlinevalue & 0x0010) != 0 && (runvalue & 0x0010) == 0 && (alarmvalue & 0x0010) == 0 && (faultvalue & 0x0010) == 0)
+            {
+                MonitorModel.Module1Status5 = "在线";
+                MonitorModel.Module1StatusColor5 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
+            }
+            else if ((runvalue & 0x0010) != 0 && (alarmvalue & 0x0010) == 0 && (faultvalue & 0x0010) == 0 && (onlinevalue & 0x0010) == 0)
+            {
+                MonitorModel.Module1Status5 = "运行";
+                MonitorModel.Module1StatusColor5 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
+            }
+            else if ((alarmvalue & 0x0010) != 0 && (onlinevalue & 0x0010) == 0 && (runvalue & 0x0010) == 0 && (faultvalue & 0x0010) == 0)
+            {
+                MonitorModel.Module1Status5 = "告警";
+                MonitorModel.Module1StatusColor5 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
+            }
+            else if ((faultvalue & 0x0010) != 0 && (onlinevalue & 0x0010) == 0 && (runvalue & 0x0010) == 0 && (alarmvalue & 0x0010) == 0)
+            {
+                MonitorModel.Module1Status5 = "故障";
+                MonitorModel.Module1StatusColor5 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
+            }
+            else if ((onlinevalue & 0x0010) == 0 && (runvalue & 0x0010) == 0 && (alarmvalue & 0x0010) == 0 && (faultvalue & 0x0010) == 0)
+            {
+                MonitorModel.Module1Status5 = "离线";
+                MonitorModel.Module1StatusColor5 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
+            }
+
+            //DC模组6状态
+            if ((onlinevalue & 0x0020) != 0 && (runvalue & 0x0020) == 0 && (alarmvalue & 0x0020) == 0 && (faultvalue & 0x0020) == 0)
+            {
+                MonitorModel.Module1Status6 = "在线";
+                MonitorModel.Module1StatusColor6 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
+            }
+            else if ((runvalue & 0x0020) != 0 && (alarmvalue & 0x0020) == 0 && (faultvalue & 0x0020) == 0 && (onlinevalue & 0x0020) == 0)
+            {
+                MonitorModel.Module1Status6 = "运行";
+                MonitorModel.Module1StatusColor6 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
+            }
+            else if ((alarmvalue & 0x0020) != 0 && (onlinevalue & 0x0020) == 0 && (runvalue & 0x0020) == 0 && (faultvalue & 0x0020) == 0)
+            {
+                MonitorModel.Module1Status6 = "告警";
+                MonitorModel.Module1StatusColor6 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
+            }
+            else if ((faultvalue & 0x0020) != 0 && (onlinevalue & 0x0020) == 0 && (runvalue & 0x0020) == 0 && (alarmvalue & 0x0020) == 0)
+            {
+                MonitorModel.Module1Status6 = "故障";
+                MonitorModel.Module1StatusColor6 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
+            }
+            else if ((onlinevalue & 0x0020) == 0 && (runvalue & 0x0020) == 0 && (alarmvalue & 0x0020) == 0 && (faultvalue & 0x0020) == 0)
+            {
+                MonitorModel.Module1Status6 = "离线";
+                MonitorModel.Module1StatusColor6 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
+            }
+
+            //DC模组7状态
+            if ((onlinevalue & 0x0040) != 0 && (runvalue & 0x0040) == 0 && (alarmvalue & 0x0040) == 0 && (faultvalue & 0x0040) == 0)
+            {
+                MonitorModel.Module1Status7 = "在线";
+                MonitorModel.Module1StatusColor7 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
+            }
+            else if ((runvalue & 0x0040) != 0 && (alarmvalue & 0x0040) == 0 && (faultvalue & 0x0040) == 0 && (onlinevalue & 0x0040) == 0)
+            {
+                MonitorModel.Module1Status7 = "运行";
+                MonitorModel.Module1StatusColor7 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
+            }
+            else if ((alarmvalue & 0x0040) != 0 && (onlinevalue & 0x0040) == 0 && (runvalue & 0x0040) == 0 && (faultvalue & 0x0040) == 0)
+            {
+                MonitorModel.Module1Status7 = "告警";
+                MonitorModel.Module1StatusColor7 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
+            }
+            else if ((faultvalue & 0x0040) != 0 && (onlinevalue & 0x0040) == 0 && (runvalue & 0x0040) == 0 && (alarmvalue & 0x0040) == 0)
+            {
+                MonitorModel.Module1Status7 = "故障";
+                MonitorModel.Module1StatusColor7 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
+            }
+            else if ((onlinevalue & 0x0040) == 0 && (runvalue & 0x0040) == 0 && (alarmvalue & 0x0020) == 0 && (faultvalue & 0x0040) == 0)
+            {
+                MonitorModel.Module1Status7 = "离线";
+                MonitorModel.Module1StatusColor7 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
+            }
+
+            //DC模组8状态
+            if ((onlinevalue & 0x0080) != 0 && (runvalue & 0x0080) == 0 && (alarmvalue & 0x0080) == 0 && (faultvalue & 0x0080) == 0)
+            {
+                MonitorModel.Module1Status8 = "在线";
+                MonitorModel.Module1StatusColor8 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
+            }
+            else if ((runvalue & 0x0080) != 0 && (alarmvalue & 0x0080) == 0 && (faultvalue & 0x0080) == 0 && (onlinevalue & 0x0080) == 0)
+            {
+                MonitorModel.Module1Status8 = "运行";
+                MonitorModel.Module1StatusColor8 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
+            }
+            else if ((alarmvalue & 0x0080) != 0 && (onlinevalue & 0x0080) == 0 && (runvalue & 0x0080) == 0 && (faultvalue & 0x0080) == 0)
+            {
+                MonitorModel.Module1Status8 = "告警";
+                MonitorModel.Module1StatusColor8 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
+            }
+            else if ((faultvalue & 0x0080) != 0 && (onlinevalue & 0x0080) == 0 && (runvalue & 0x0080) == 0 && (alarmvalue & 0x0080) == 0)
+            {
+                MonitorModel.Module1Status8 = "故障";
+                MonitorModel.Module1StatusColor8 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
+            }
+            else if ((onlinevalue & 0x0080) == 0 && (runvalue & 0x0080) == 0 && (alarmvalue & 0x0080) == 0 && (faultvalue & 0x0080) == 0)
+            {
+                MonitorModel.Module1Status8 = "离线";
+                MonitorModel.Module1StatusColor8 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
+            }
+
+            //DC模组9状态
+            if ((onlinevalue & 0x0100) != 0 && (runvalue & 0x0100) == 0 && (alarmvalue & 0x0100) == 0 && (faultvalue & 0x0100) == 0)
+            {
+                MonitorModel.Module1Status9 = "在线";
+                MonitorModel.Module1StatusColor9 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
+            }
+            else if ((runvalue & 0x0100) != 0 && (alarmvalue & 0x0100) == 0 && (faultvalue & 0x0100) == 0 && (onlinevalue & 0x0100) == 0)
+            {
+                MonitorModel.Module1Status9 = "运行";
+                MonitorModel.Module1StatusColor9 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
+            }
+            else if ((alarmvalue & 0x0100) != 0 && (onlinevalue & 0x0100) == 0 && (runvalue & 0x0100) == 0 && (faultvalue & 0x0100) == 0)
+            {
+                MonitorModel.Module1Status9 = "告警";
+                MonitorModel.Module1StatusColor9 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
+            }
+            else if ((faultvalue & 0x0100) != 0 && (onlinevalue & 0x0100) == 0 && (runvalue & 0x0100) == 0 && (alarmvalue & 0x0100) == 0)
+            {
+                MonitorModel.Module1Status9 = "故障";
+                MonitorModel.Module1StatusColor9 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
+            }
+            else if ((onlinevalue & 0x0100) == 0 && (runvalue & 0x0100) == 0 && (alarmvalue & 0x0100) == 0 && (faultvalue & 0x0100) == 0)
+            {
+                MonitorModel.Module1Status9 = "离线";
+                MonitorModel.Module1StatusColor9 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
+            }
+
+            // DC模组10状态
+            if ((onlinevalue & 0x0200) != 0 && (runvalue & 0x0200) == 0 && (alarmvalue & 0x0200) == 0 && (faultvalue & 0x0200) == 0)
+            {
+                MonitorModel.Module1Status10 = "在线";
+                MonitorModel.Module1StatusColor10 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00BFFF"));
+            }
+            else if ((runvalue & 0x0200) != 0 && (alarmvalue & 0x0200) == 0 && (faultvalue & 0x0200) == 0 && (onlinevalue & 0x0200) == 0)
+            {
+                MonitorModel.Module1Status10 = "运行";
+                MonitorModel.Module1StatusColor10 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FF00"));
+            }
+            else if ((alarmvalue & 0x0200) != 0 && (onlinevalue & 0x0200) == 0 && (runvalue & 0x0200) == 0 && (faultvalue & 0x0200) == 0)
+            {
+                MonitorModel.Module1Status10 = "告警";
+                MonitorModel.Module1StatusColor10 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
+            }
+            else if ((faultvalue & 0x0200) != 0 && (onlinevalue & 0x0200) == 0 && (runvalue & 0x0200) == 0 && (alarmvalue & 0x0200) == 0)
+            {
+                MonitorModel.Module1Status10 = "故障";
+                MonitorModel.Module1StatusColor10 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0000"));
+            }
+            else if ((onlinevalue & 0x0200) == 0 && (runvalue & 0x0200) == 0 && (alarmvalue & 0x0200) == 0 && (faultvalue & 0x0200) == 0)
+            {
+                MonitorModel.Module1Status10 = "离线";
+                MonitorModel.Module1StatusColor10 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
+            }
+        }
+        public void GetActivePCSControlState()
+        {
+            int value;
+            value = MonitorModel.ControlStateFlagPCS;
+            if ((value & 0x0100) != 0)
+            {
+                MonitorModel.PCSStateColorRemoteControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                MonitorModel.PCSStateColorAutoControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                MonitorModel.PCSStateColorManControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#98FB98"));
+            }
+            else if ((value & 0x0200) != 0)
+            {
+                MonitorModel.PCSStateColorManControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                MonitorModel.PCSStateColorRemoteControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                MonitorModel.PCSStateColorAutoControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#98FB98"));
+            }
+            else if ((value & 0x0400) != 0)
+            {
+                MonitorModel.PCSStateColorAutoControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                MonitorModel.PCSStateColorManControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                MonitorModel.PCSStateColorRemoteControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#98FB98"));
+            }
+            else
+            {
+                MonitorModel.PCSStateColorAutoControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                MonitorModel.PCSStateColorManControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                MonitorModel.PCSStateColorRemoteControl = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+            }
+        }
+
+        public void GetActivePCSState()
+        {
+            int value;
+            value = MonitorModel.StateFlagPCS;
+            if ((value & 0x0200) != 0)
+            {
+                MonitorModel.FaultStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                MonitorModel.PowerOnInitStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                MonitorModel.AlarmStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#98FB98"));
+            }
+            else if ((value & 0x0400) != 0)
+            {
+                MonitorModel.PowerOnInitStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                MonitorModel.AlarmStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                MonitorModel.FaultStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#98FB98"));
+            }
+            else if ((value & 0x1000) != 0)
+            {
+                MonitorModel.AlarmStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                MonitorModel.FaultStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                MonitorModel.PowerOnInitStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#98FB98"));
+            }
+            else
+            {
+                MonitorModel.AlarmStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                MonitorModel.FaultStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+                MonitorModel.PowerOnInitStateColorPCS = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D3D3"));
+            }
+        }
+
+        public void GetDCBranchINFO()
+        {
+            int value1;
+            int value2;
+
+            value1 = MonitorModel.DcBranch1StateFlag1;
+            value2 = MonitorModel.DcBranch1StateFlag2;
+            if ((value1 & 0x0001) != 0)
+            {
+                MonitorModel.DcBranch1State1 = "电池充满";
+            }
+            else if ((value1 & 0x0002) != 0)
+            {
+                MonitorModel.DcBranch1State1 = "电池放空";
+            }
+            else if ((value1 & 0x0004) != 0)
+            {
+                MonitorModel.DcBranch1State1 = "充电";
+            }
+            else if ((value1 & 0x0008) != 0)
+            {
+                MonitorModel.DcBranch1State1 = "放电";
+            }
+            else if ((value1 & 0x0040) != 0)
+            {
+                MonitorModel.DcBranch1State1 = "电池恒压均充";
+            }
+
+
+            if ((value2 & 0x0001) != 0)
+            {
+                MonitorModel.DcBranch1State2 = "启动";
+            }
+            else if ((value2 & 0x0001) == 0)
+            {
+                MonitorModel.DcBranch1State2 = "停止";
+            }
+        }
+
+        /// <summary>
+        /// 电量计算
+        /// </summary>
+        public void EnergyCal()
+        {
+            uint value1;
+            uint value2;
+            uint value3;
+            uint value4;
+            value1 = MonitorModel.DcBranch1CharHigh;
+            value2 = MonitorModel.DcBranch1CharLow;
+            value3 = MonitorModel.DcBranch1DisCharHigh;
+            value4 = MonitorModel.DcBranch1DisCharLow;
+            MonitorModel.DcBranch1Char = value1 << 16 | value2;
+            MonitorModel.DcBranch1DisChar = value3 << 16 | value4;
+        }
+
+        public bool GetDCFault()
+        {
+            int value1;
+            int value2;
+            int value3;
+            bool colorflag = false;
+
+            ObservableCollection<string> INFO = new ObservableCollection<string>();
+            value1 = MonitorModel.AlarmStateFlagDC1;
+            value2 = MonitorModel.AlarmStateFlagDC2;
+            value3 = MonitorModel.AlarmStateFlagDC3;
+            if ((value1 & 0x0001) != 0) { INFO.Add("直流高压侧过压"); colorflag = true; } //53005 bit0
+            if ((value1 & 0x0002) != 0) { INFO.Add("直流高压侧欠压"); colorflag = true; }  //bit1`
+            if ((value1 & 0x0004) != 0) { INFO.Add("直流低压侧过压"); colorflag = true; }  //bit2
+            if ((value1 & 0x0008) != 0) { INFO.Add("直流低压侧欠压"); colorflag = true; }  //bit3
+            if ((value1 & 0x0010) != 0) { INFO.Add("直流低压侧过流"); colorflag = true; }  //bit4
+            //if ((value1 & 0x0020) != 0) { INFO.Add("重启过多"); colorflag = true; } //bit5
+            if ((value1 & 0x0040) != 0) { INFO.Add("重启过多"); colorflag = true; } //bit6
+            if ((value1 & 0x0080) != 0) { INFO.Add("直流低压侧继电器短路"); colorflag = true; } //bit7
+            if ((value1 & 0x0100) != 0) { INFO.Add("光伏能量不足"); colorflag = true; } //bit8
+            if ((value1 & 0x0200) != 0) { INFO.Add("电池电量不足"); colorflag = true; } //bit9
+            if ((value1 & 0x0800) != 0) { INFO.Add("直流高压侧开关断开"); colorflag = true; } //bit11
+            if ((value1 & 0x2000) != 0) { INFO.Add("机柜温度过高"); colorflag = true; } //bit13
+
+
+            if ((value2 & 0x0001) != 0) { INFO.Add("模块电流不平衡"); colorflag = true; } //53007 bit0
+            if ((value2 & 0x0002) != 0) { INFO.Add("直流低压侧开关断开"); colorflag = true; } //bit1
+            if ((value2 & 0x0004) != 0) { INFO.Add("24V辅助电源故障"); colorflag = true; } //bit2
+            if ((value2 & 0x0008) != 0) { INFO.Add("紧急停机"); colorflag = true; } //bit3
+            //if ((value2 & 0x0010) != 0) { INFO.Add("环温探头故障"); colorflag = true; } //bit4
+            //if ((value2 & 0x0020) != 0) { INFO.Add("环温探头故障"); colorflag = true; } //bit5
+            if ((value2 & 0x0040) != 0) { INFO.Add("模块温度过温"); colorflag = true; } //bit6
+            if ((value2 & 0x0080) != 0) { INFO.Add("风扇故障"); colorflag = true; } //bit7
+            if ((value2 & 0x0100) != 0) { INFO.Add("直流低压侧继电器开路"); colorflag = true; } //bit8
+            if ((value2 & 0x0400) != 0) { INFO.Add("保险故障"); colorflag = true; } //bit10
+            if ((value2 & 0x0800) != 0) { INFO.Add("DSP初始化故障"); colorflag = true; } //bit11
+            if ((value2 & 0x1000) != 0) { INFO.Add("直流低压侧软启动失败"); colorflag = true; } //bit12
+            if ((value2 & 0x2000) != 0) { INFO.Add("CANA通讯故障"); colorflag = true; } //bit13
+            if ((value2 & 0x4000) != 0) { INFO.Add("直流高压侧继电器开路"); colorflag = true; } //bit14
+            if ((value2 & 0x8000) != 0) { INFO.Add("直流高压侧软启动失败"); colorflag = true; } //bit15
+
+            if ((value3 & 0x0001) != 0) { INFO.Add("DSP版本故障"); colorflag = true; } //53008 bit0
+            if ((value3 & 0x0002) != 0) { INFO.Add("CPLD版本故障"); colorflag = true; } //bit1
+            if ((value3 & 0x0004) != 0) { INFO.Add("参数不匹配"); colorflag = true; } //bit2
+            if ((value3 & 0x0008) != 0) { INFO.Add("硬件版本故障"); colorflag = true; } //bit3
+            if ((value3 & 0x0010) != 0) { INFO.Add("485通讯故障"); colorflag = true; } //bit4
+            if ((value3 & 0x0020) != 0) { INFO.Add("CANB通讯故障"); colorflag = true; } //bit5
+            if ((value3 & 0x0040) != 0) { INFO.Add("模块重号故障"); colorflag = true; } //bit6
+            //if ((value3 & 0x0080) != 0) { INFO.Add("风扇故障"); colorflag = true; } //bit7
+            if ((value3 & 0x0100) != 0) { INFO.Add("15V辅助电源故障"); colorflag = true; } //bit8
+            if ((value3 & 0x0200) != 0) { INFO.Add("直流高压侧继电器短路"); colorflag = true; } //bit9
+            if ((value3 & 0x0400) != 0) { INFO.Add("BMS电压异常"); colorflag = true; } //bit10
+            if ((value3 & 0x0800) != 0) { INFO.Add("BMS电流异常"); colorflag = true; } //bit11
+            if ((value3 & 0x1000) != 0) { INFO.Add("BMS温度异常"); colorflag = true; } //bit12
+            if ((value3 & 0x2000) != 0) { INFO.Add("BMS关机异常"); colorflag = true; } //bit13
+            if ((value3 & 0x4000) != 0) { INFO.Add("绝缘检测异常"); colorflag = true; } //bit14
+            //if ((value3 & 0x8000) != 0) { INFO.Add("直流高压侧软启动失败"); colorflag = true; } //bit15
+            MonitorModel.FaultInfoDC = INFO;
+
+            return colorflag;
+        }
+
+
+
+        public bool GetPDSFault()
+        {
+            int value;
+            bool colorflag = false;
+            ObservableCollection<string> INFO = new ObservableCollection<string>();
+            value = MonitorModel.AlarmStateFlagPDS;
+            if ((value & 0x0001) != 0) { INFO.Add("软件版本故障"); colorflag = true; } //53009 bit0
+            if ((value & 0x0002) != 0) { INFO.Add("DSP初始化故障"); colorflag = true; } //bit1
+            if ((value & 0x0004) != 0) { INFO.Add("BMS故障"); colorflag = true; } //bit2
+            if ((value & 0x0008) != 0) { INFO.Add("紧急停机"); colorflag = true; } //bit3
+
+            MonitorModel.FaultInfoPDS = INFO;
+            return colorflag;
+        }
+
+        public bool GetDCAlarm()
+        {
+            int value1;
+            int value2;
+            bool colorflag = false;
+
+            ObservableCollection<string> INFO = new ObservableCollection<string>();
+            value1 = MonitorModel.AlarmStateFlagDC1;
+            value2 = MonitorModel.AlarmStateFlagDC2;
+
+            if ((value1 & 0x0400) != 0) { INFO.Add("环境温度过高"); colorflag = true; } //bit10  AAAA
+            if ((value1 & 0x1000) != 0) { INFO.Add("U2通信异常1"); colorflag = true; } //bit12  AAAAA
+            if ((value1 & 0x4000) != 0) { INFO.Add("柜温探头故障"); colorflag = true; } //bit14  AAAAAA
+            if ((value1 & 0x8000) != 0) { INFO.Add("环温探头故障"); colorflag = true; } //bit15  AAAAAA
+
+            if ((value2 & 0x0200) != 0) { INFO.Add("校准参数异常"); colorflag = true; } //bit9   AAAAAA
+            MonitorModel.AlarmInfoDC = INFO;
+            return colorflag;
+        }
+
+        public bool GetPDSAlarm()
+        {
+            int value;
+            bool colorflag = false;
+            ObservableCollection<string> INFO = new ObservableCollection<string>();
+            value = MonitorModel.AlarmStateFlagPDS;
+
+            if ((value & 0x0010) != 0) { INFO.Add("防雷器告警"); colorflag = true; } //bit4   AAAAAAAAA
+            MonitorModel.AlarmInfoPDS = INFO;
+            return colorflag;
         }
         /// <summary>
         /// PCS系统开机

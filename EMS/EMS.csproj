@@ -226,6 +226,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\BatteryStrategyModel.cs" />
+    <Compile Include="Model\DcStatusModel.cs" />
     <Compile Include="Model\PCSModel.cs" />
     <Compile Include="Model\PCSMonitorModel.cs" />
     <Compile Include="Model\PCSParSettingModel.cs" />
