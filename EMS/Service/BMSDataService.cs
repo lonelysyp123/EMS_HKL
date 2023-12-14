@@ -159,7 +159,6 @@ namespace EMS.Service
         {
             for (int i = 0; i < total.Series.Count; i++)
             {
-                total.Series[i].SeriesId = i.ToString();
                 total.Series[i].AlarmStateFlagBMU = BitConverter.ToUInt16(obj1, (336 + i) * 2);
                 total.Series[i].FaultyStateFlagBMU = BitConverter.ToUInt16(obj1, (339 + i) * 2);
                 total.Series[i].ChargeChannelState = BitConverter.ToUInt16(obj1, (342 + i) * 2);

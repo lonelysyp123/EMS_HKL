@@ -227,6 +227,7 @@
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\BatteryModel.cs" />
     <Compile Include="Model\BatterySeriesModel.cs" />
     <Compile Include="Model\BatteryStrategyModel.cs" />
     <Compile Include="Model\BatteryTotalModel.cs" />
@@ -280,9 +281,6 @@
     <Compile Include="Storage\DB\ORMContext.cs" />
     <Compile Include="Storage\DB\SqliteConfiguration.cs" />
     <Compile Include="Storage\DB\DBManage\SeriesBatteryInfoManage.cs" />
-    <Compile Include="Model\BatteryBase.cs" />
-    <Compile Include="Model\BatterySeriesBase.cs" />
-    <Compile Include="Model\BatteryTotalBase.cs" />
     <Compile Include="Storage\File\BatteryModelForFile.cs" />
     <Compile Include="Storage\File\FileHelper.cs" />
     <Compile Include="ViewModel\DataAnalysisViewModel.cs" />

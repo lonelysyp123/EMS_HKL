@@ -79,18 +79,5 @@ namespace EMS.View
                 }
             }
         }
-
-        private ObservableCollection<BatteryTotalBase> devSource;
-        public ObservableCollection<BatteryTotalBase> DevSource
-        {
-            get
-            {
-                return devSource;
-            }
-            set
-            {
-                devSource = value;
-            }
-        }
     }
 }

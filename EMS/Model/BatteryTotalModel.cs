@@ -187,15 +187,15 @@ namespace EMS.Model
         private ushort BatteriesCountInSeries = 14;
 
 
-        public List<BatterySeriesBase> Series { get; set; }
+        public List<BatterySeriesModel> Series { get; set; }
 
 
         public BatteryTotalModel()
         {
-            Series = new List<BatterySeriesBase>();
+            Series = new List<BatterySeriesModel>();
             for (int i = 0; i < SeriesCount; i++)
             {
-                BatterySeriesBase series = new BatterySeriesBase(BatteriesCountInSeries);
+                BatterySeriesModel series = new BatterySeriesModel(BatteriesCountInSeries);
                 Series.Add(series);
             }
         }
