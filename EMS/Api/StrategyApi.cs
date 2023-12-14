@@ -51,36 +51,26 @@ namespace EMS.Api
         /// <param name="dailyPatternMode"></param>
         public static void SetMode(bool automationMode,bool maxDemandpowermode,bool reversePowermode, bool dailyPatternMode)
         {
-            
-            EnergyManagementSystem.GlobalInstance.Controller._hasMaxDemandControlEnabled = maxDemandpowermode;
-            EnergyManagementSystem.GlobalInstance.Controller._isAutomaticMode = automationMode;
-            EnergyManagementSystem.GlobalInstance.Controller._hasReversePowerflowProtectionEnabled = reversePowermode;
-            EnergyManagementSystem.GlobalInstance.Controller._hasDailyPatternEnabled = dailyPatternMode;
+
+            EnergyManagementSystem.GlobalInstance.Controller.SetMode(automationMode, maxDemandpowermode, reversePowermode, dailyPatternMode);
         }
 
         public static List<bool> GetMode()
         {
-            List<bool> result = new List<bool>()
-            {
-                EnergyManagementSystem.GlobalInstance.Controller._isAutomaticMode,
-                EnergyManagementSystem.GlobalInstance.Controller._hasDailyPatternEnabled,
-                EnergyManagementSystem.GlobalInstance.Controller._hasMaxDemandControlEnabled,
-                EnergyManagementSystem.GlobalInstance.Controller._hasReversePowerflowProtectionEnabled
-            } ;
-            return result ;
+            return EnergyManagementSystem.GlobalInstance.Controller.GetMode();
         }
 
         public static void SetMaxDemandThreshold(double maxdemandpower,double descendrate)
         {
-            EnergyManagementSystem.GlobalInstance.Controller._maxDemandPower = maxdemandpower;
-            EnergyManagementSystem.GlobalInstance.Controller._maxDemandPowerDescendRate = descendrate;
+            EnergyManagementSystem.GlobalInstance.Controller.SetMaxDemandThreshold(maxdemandpower, descendrate);
         }
 
-        public static void GetMaxDemandThreshhold(out double maxdemandpower,out double descendrate)
+        public static void GetMaxDemandThreshhold(out double maxdemandpower, out double descendrate)
         {
-            descendrate = EnergyManagementSystem.GlobalInstance.Controller._maxDemandPowerDescendRate;
-            maxdemandpower = EnergyManagementSystem.GlobalInstance.Controller._maxDemandPower;
+            EnergyManagementSystem.GlobalInstance.Controller.GetMaxDemandThreshhold(out maxdemandpower, out descendrate);
         }
+
+
         /// <summary>
         /// ReversePower的参数的get和set
         /// </summary>
@@ -89,17 +79,11 @@ namespace EMS.Api
         /// <param name="desecndrate"></param>
         public static void SetReversePowerThreshold(double threshold,double lowestthreshhold,double descendrate)
         {
-            var instance = EnergyManagementSystem.GlobalInstance.Controller;
-            instance._reversePowerThreshold = threshold;
-            instance._reversePowerLowestThreshold = lowestthreshhold;
-            instance._reversePowerDescendRate= descendrate;
+            EnergyManagementSystem.GlobalInstance.Controller.SetReversePowerThreshold(threshold, lowestthreshhold, descendrate);
         }
         public static void GetReversePowerThreshold(out double threshold, out double lowestthreshold,out double descendrate)
         {
-            var instance = EnergyManagementSystem.GlobalInstance.Controller;
-            threshold = instance._reversePowerThreshold;
-            lowestthreshold = instance._reversePowerLowestThreshold;
-            descendrate= instance._reversePowerDescendRate;
+            EnergyManagementSystem.GlobalInstance.Controller.GetReversePowerThreshold(out threshold, out lowestthreshold, out descendrate);
         }
     }
 
