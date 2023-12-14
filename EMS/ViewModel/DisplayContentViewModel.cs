@@ -672,9 +672,10 @@ namespace EMS.ViewModel
                 }
 
             }
-            AssistanceStrategyViewModel INFO1 = new AssistanceStrategyViewModel();
-            ObservableCollection<string> INFO2 = INFO1.RecheckStrategy();
-            ObservableCollection<string> MERGEINFO = new ObservableCollection<string>(INFO.Concat(INFO2).Distinct());
+            AssistanceStrategyViewModel ASSISTINFO = new AssistanceStrategyViewModel();
+            ObservableCollection<string> RECHECKINFO = ASSISTINFO.RecheckStrategy();
+            ObservableCollection<string> MERGEINFO = new ObservableCollection<string>(INFO.Concat(RECHECKINFO).Distinct());
+            LogUtils.Debug(MERGEINFO.ToString());
             total.AlarmStateBCMU = MERGEINFO;
             return colorvalue;
         }

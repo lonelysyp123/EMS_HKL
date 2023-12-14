@@ -1,4 +1,5 @@
 ﻿using EMS.Api;
+using EMS.Common;
 using EMS.Model;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,7 @@ namespace EMS.ViewModel
             AnalyzeBatteryCluster(batteryTotalBases5);
             AnalyzeBatteryCluster(batteryTotalBases6);
 
+            LogUtils.Debug(INFOAS.ToString());
             return INFOAS;
         }
 
@@ -64,6 +66,10 @@ namespace EMS.ViewModel
                 double voltagesDiff = maxSingleVolValue - minSingleVolValue;
                 SingleVolDiffProtectLevel(voltagesDiff);//单体压差保护
                 ProcessCurrentAndSOC(batteryTotalBases);
+            }
+            else
+            {
+                LogUtils.Warn("初始化未完成，batteryTotalBases中无数据");
             }
         }
 
@@ -98,150 +104,208 @@ namespace EMS.ViewModel
             SocProtectLevel(batteryTotalBases.TotalSOC);
         }
 
+        //充放电流保护等级
+        private void CurrentProtectLevel(string action, double currentlevel)
+        {
+            try
+            {
+                switch (true)
+                {
+                    case bool _ when currentlevel >= 120 && currentlevel < 130:
+                        INFOAS.Add($"{action}过流1级");
+                        break;
+                    case bool _ when currentlevel >= 130 && currentlevel < 140:
+                        INFOAS.Add($"{action}过流2级");
+                        break;
+                    case bool _ when currentlevel >= 140:
+                        INFOAS.Add($"{action}过流3级");
+                        break;
+                }
+            }
+            catch(Exception ex)
+            {
+                LogUtils.Error(ex.ToString());
+                throw ex;
+            }
+        }
+
 
         //组端电压保护等级
         private void ClusterVolLevel(double clustervoltages)
         {
-            switch (true)
+            try
             {
-                case bool _ when clustervoltages >= 596 && clustervoltages < 617:
-                    INFOAS.Add("电池组高压1级");
-                    break;
-                case bool _ when clustervoltages >= 617 && clustervoltages < 638:
-                    INFOAS.Add("电池组高压2级");
-                    break;
-                case bool _ when clustervoltages >= 638:
-                    INFOAS.Add("电池组高压3级");
-                    break;
-                case bool _ when clustervoltages > 474 && clustervoltages <= 495:
-                    INFOAS.Add("电池组低压1级");
-                    break;
-                case bool _ when clustervoltages > 453 && clustervoltages <= 474:
-                    INFOAS.Add("电池组低压2级");
-                    break;
-                case bool _ when clustervoltages <= 453:
-                    INFOAS.Add("电池组低压3级");
-                    break;
+                switch (true)
+                {
+                    case bool _ when clustervoltages >= 596 && clustervoltages < 617:
+                        INFOAS.Add("电池组高压1级");
+                        break;
+                    case bool _ when clustervoltages >= 617 && clustervoltages < 638:
+                        INFOAS.Add("电池组高压2级");
+                        break;
+                    case bool _ when clustervoltages >= 638:
+                        INFOAS.Add("电池组高压3级");
+                        break;
+                    case bool _ when clustervoltages > 474 && clustervoltages <= 495:
+                        INFOAS.Add("电池组低压1级");
+                        break;
+                    case bool _ when clustervoltages > 453 && clustervoltages <= 474:
+                        INFOAS.Add("电池组低压2级");
+                        break;
+                    case bool _ when clustervoltages <= 453:
+                        INFOAS.Add("电池组低压3级");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogUtils.Error(ex.ToString());
+                throw ex;
             }
         }
 
         //单体电压保护等级
         private void SingleVolLevel(double singlevoltage)
         {
-            switch (true)
+            try
             {
-                case bool _ when singlevoltage >= 14.3 && singlevoltage < 14.8:
-                    INFOAS.Add("单体电池高压1级");
-                    break;
-                case bool _ when singlevoltage >= 14.8 && singlevoltage < 15:
-                    INFOAS.Add("单体电池高压2级");
-                    break;
-                case bool _ when singlevoltage >= 15:
-                    INFOAS.Add("单体电池高压3级");
-                    break;
-                case bool _ when singlevoltage > 11 && singlevoltage <= 11.5:
-                    INFOAS.Add("单体电池低压1级");
-                    break;
-                case bool _ when singlevoltage > 10.6 && singlevoltage <= 11:
-                    INFOAS.Add("单体电池低压2级");
-                    break;
-                case bool _ when singlevoltage <= 10.6:
-                    INFOAS.Add("单体电池低压3级");
-                    break;
+                switch (true)
+                {
+                    case bool _ when singlevoltage >= 14.3 && singlevoltage < 14.8:
+                        INFOAS.Add("单体电池高压1级");
+                        break;
+                    case bool _ when singlevoltage >= 14.8 && singlevoltage < 15:
+                        INFOAS.Add("单体电池高压2级");
+                        break;
+                    case bool _ when singlevoltage >= 15:
+                        INFOAS.Add("单体电池高压3级");
+                        break;
+                    case bool _ when singlevoltage > 11 && singlevoltage <= 11.5:
+                        INFOAS.Add("单体电池低压1级");
+                        break;
+                    case bool _ when singlevoltage > 10.6 && singlevoltage <= 11:
+                        INFOAS.Add("单体电池低压2级");
+                        break;
+                    case bool _ when singlevoltage <= 10.6:
+                        INFOAS.Add("单体电池低压3级");
+                        break;
+                }
             }
-        }
-
-        //充放电流保护等级
-        private void CurrentProtectLevel(string action, double currentlevel)
-        {
-            switch (true)
+            catch (Exception ex)
             {
-                case bool _ when currentlevel >= 120 && currentlevel < 130:
-                    INFOAS.Add($"{action}过流1级");
-                    break;
-                case bool _ when currentlevel >= 130 && currentlevel < 140:
-                    INFOAS.Add($"{action}过流2级");
-                    break;
-                case bool _ when currentlevel >= 140:
-                    INFOAS.Add($"{action}过流3级");
-                    break;
+                LogUtils.Error(ex.ToString());
+                throw ex;
             }
+            
         }
 
         //充电温度保护等级
         private void TempCharProtectLevel(double tempcharprotectlevel)
         {
-            switch (true)
+            try
             {
-                case bool _ when tempcharprotectlevel >= 45 && tempcharprotectlevel < 50:
-                    INFOAS.Add("充电高温1级");
-                    break;
-                case bool _ when tempcharprotectlevel >= 50 && tempcharprotectlevel < 55:
-                    INFOAS.Add("充电高温2级");
-                    break;
-                case bool _ when tempcharprotectlevel >= 55:
-                    INFOAS.Add("充电高温3级");
-                    break;
-                case bool _ when tempcharprotectlevel > -2 && tempcharprotectlevel <= 0:
-                    INFOAS.Add("充电低温1级");
-                    break;
-                case bool _ when tempcharprotectlevel > -5 && tempcharprotectlevel <= -2:
-                    INFOAS.Add("充电低温2级");
-                    break;
-                case bool _ when tempcharprotectlevel <= -5:
-                    INFOAS.Add("充电低温3级");
-                    break;
+                switch (true)
+                {
+                    case bool _ when tempcharprotectlevel >= 45 && tempcharprotectlevel < 50:
+                        INFOAS.Add("充电高温1级");
+                        break;
+                    case bool _ when tempcharprotectlevel >= 50 && tempcharprotectlevel < 55:
+                        INFOAS.Add("充电高温2级");
+                        break;
+                    case bool _ when tempcharprotectlevel >= 55:
+                        INFOAS.Add("充电高温3级");
+                        break;
+                    case bool _ when tempcharprotectlevel > -2 && tempcharprotectlevel <= 0:
+                        INFOAS.Add("充电低温1级");
+                        break;
+                    case bool _ when tempcharprotectlevel > -5 && tempcharprotectlevel <= -2:
+                        INFOAS.Add("充电低温2级");
+                        break;
+                    case bool _ when tempcharprotectlevel <= -5:
+                        INFOAS.Add("充电低温3级");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogUtils.Error(ex.ToString());
+                throw ex;
             }
         }
 
         //放电温度保护等级
         private void TempDischarProtectLevel(double tempdischarprotectlevel)
         {
-            switch (true)
+            try
             {
-                case bool _ when tempdischarprotectlevel >= 45 && tempdischarprotectlevel < 50:
-                    INFOAS.Add("放电高温1级");
-                    break;
-                case bool _ when tempdischarprotectlevel >= 50 && tempdischarprotectlevel < 55:
-                    INFOAS.Add("放电高温2级");
-                    break;
-                case bool _ when tempdischarprotectlevel >= 55:
-                    INFOAS.Add("放电高温3级");
-                    break;
+                switch (true)
+                {
+                    case bool _ when tempdischarprotectlevel >= 45 && tempdischarprotectlevel < 50:
+                        INFOAS.Add("放电高温1级");
+                        break;
+                    case bool _ when tempdischarprotectlevel >= 50 && tempdischarprotectlevel < 55:
+                        INFOAS.Add("放电高温2级");
+                        break;
+                    case bool _ when tempdischarprotectlevel >= 55:
+                        INFOAS.Add("放电高温3级");
+                        break;
+                }
             }
+            catch (Exception ex)
+            {
+                LogUtils.Error(ex.ToString());
+                throw ex;
+            }
+            
         }
 
         //SOC保护等级
         private void SocProtectLevel(double socprotectlevel)
         {
-            switch (true)
+            try
             {
-                case bool _ when socprotectlevel > 5 && socprotectlevel <= 10:
-                    INFOAS.Add("低SOC1级");
-                    break;
-                case bool _ when socprotectlevel > 1 && socprotectlevel <= 5:
-                    INFOAS.Add("低SOC2级");
-                    break;
-                case bool _ when socprotectlevel > 0 && socprotectlevel <= 1:
-                    INFOAS.Add("低SOC3级");
-                    break;
+                switch (true)
+                {
+                    case bool _ when socprotectlevel > 5 && socprotectlevel <= 10:
+                        INFOAS.Add("低SOC1级");
+                        break;
+                    case bool _ when socprotectlevel > 1 && socprotectlevel <= 5:
+                        INFOAS.Add("低SOC2级");
+                        break;
+                    case bool _ when socprotectlevel > 0 && socprotectlevel <= 1:
+                        INFOAS.Add("低SOC3级");
+                        break;
+                }
+            }
+            catch(Exception ex)
+            {
+                LogUtils.Error(ex.ToString());
+                throw ex;
             }
         }
 
         //单体压差保护
         private void SingleVolDiffProtectLevel(double singlevoldiffprotectlevel)
         {
-            switch (true)
+            try
             {
-                case bool _ when singlevoldiffprotectlevel >= 1.2 && singlevoldiffprotectlevel < 1.5:
-                    INFOAS.Add("单体压差1级");
-                    break;
-                case bool _ when singlevoldiffprotectlevel >= 1.5 && singlevoldiffprotectlevel < 1.8:
-                    INFOAS.Add("单体压差2级");
-                    break;
-                case bool _ when singlevoldiffprotectlevel >= 1.8:
-                    INFOAS.Add("单体压差3级");
-                    break;
+                switch (true)
+                {
+                    case bool _ when singlevoldiffprotectlevel >= 1.2 && singlevoldiffprotectlevel < 1.5:
+                        INFOAS.Add("单体压差1级");
+                        break;
+                    case bool _ when singlevoldiffprotectlevel >= 1.5 && singlevoldiffprotectlevel < 1.8:
+                        INFOAS.Add("单体压差2级");
+                        break;
+                    case bool _ when singlevoldiffprotectlevel >= 1.8:
+                        INFOAS.Add("单体压差3级");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogUtils.Error(ex.ToString());
+                throw ex;
             }
         }
 
