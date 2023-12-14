@@ -39,57 +39,6 @@ namespace EMS.Api
 
         public static List<string> GetPCSFaultInfo() { return null; }
 
-        public static bool SetPCSHalt() { return true; }
-
-        /// <summary>
-        /// 设置PCS充放电
-        /// </summary>
-        /// <param name="model">充放电模式,要string格式，带双引号</param>
-        /// <param name="setvalue">充放电值</param>
-        /// <returns></returns>
-        public static bool PCSManChar(string model, double setvalue)
-        {
-            try
-            {
-                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.SetManChar(model, setvalue);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-                return false;
-            }
-        }
-
-        public static bool PCSConnect()
-        {
-            try
-            {
-                EnergyManagementSystem.GlobalInstance.PcsManager.PCSMainViewModel.Connect();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-                throw (ex);
-            }
-        }
-
-        public static bool PCSDisConnect()
-        {
-            //Buffer,是个缓存，把所有指令封装成一个，下发的时候调用其中的指令。
-            try
-            {
-                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.Disconnect();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-                throw (ex);
-            }
-        }
-
 
         public static bool SetPCSHalt()
         {
