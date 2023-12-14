@@ -56,13 +56,6 @@ namespace EMS.Model
             _pcsmainViewModel = pcsMainViewModel;
         }
     }
-       
-
-
-    public class SmartMeterManager
-    {
-        private List<object> smart_meters;
-    }
     public class BmsManager
     {
         //
