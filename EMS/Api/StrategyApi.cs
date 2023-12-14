@@ -35,12 +35,16 @@ namespace EMS.Api
             }
             else
             {
-               
                 EnergyManagementSystem.GlobalInstance.Controller.DailyPattern = null;
-                    return EnergyManagementSystem.GlobalInstance.Controller.DailyPattern;
+                return EnergyManagementSystem.GlobalInstance.Controller.DailyPattern;
             }
             // 输出需要排序，用户输入时需要检查设定值上下限   
         }
+
+        public static bool IsAutomaticMode { get { return EnergyManagementSystem.GlobalInstance.Controller.IsAutomaticMode; } }
+        public static bool HasDailyPatternEnabled { get { return EnergyManagementSystem.GlobalInstance.Controller.HasDailyPatternEnabled; } }
+        public static bool HasMaxDemandControlEnabled { get { return EnergyManagementSystem.GlobalInstance.Controller.HasMaxDemandControlEnabled; } }
+        public static bool HasReversePowerflowProtectionEnabled { get { return EnergyManagementSystem.GlobalInstance.Controller.HasReversePowerflowProtectionEnabled; } }
 
         /// <summary>
         /// 策略模式的get与set

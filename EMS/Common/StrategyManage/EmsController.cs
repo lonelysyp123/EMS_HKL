@@ -21,7 +21,12 @@ namespace EMS.Common.StrategyManage
         private bool _hasMaxDemandControlEnabled;
         private bool _hasReversePowerflowProtectionEnabled;
         private bool _hasContigencyCheckEnabled;
-        private bool _isFaultMode;
+
+        public bool IsAutomaticMode { get { return _isAutomaticMode; } }
+        public bool HasDailyPatternEnabled { get { return _hasDailyPatternEnabled; } }
+        public bool HasMaxDemandControlEnabled { get { return _hasMaxDemandControlEnabled; } }
+        public bool HasReversePowerflowProtectionEnabled { get { return  _hasReversePowerflowProtectionEnabled; } }
+
         private double _maxDemandPower;
         private double _maxDemandPowerDescendRate;
         private double _reversePowerThreshold;
