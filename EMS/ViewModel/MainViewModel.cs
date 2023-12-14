@@ -82,7 +82,6 @@ namespace EMS.ViewModel
 
         public RelayCommand OpenSystemSetViewCommand { set; get; }
         public RelayCommand OpenElectricMeterViewCommand { get; set; }
-        public RelayCommand OpenDataAnalysisViewCommand { set; get; }
         public RelayCommand OpenAboutCommand { set; get; }
         public RelayCommand StartOrStopDaqCommand { set; get; }
         public RelayCommand StartOrStopSaveDataCommand { set; get; }
@@ -94,7 +93,6 @@ namespace EMS.ViewModel
         public MainViewModel()
         {
             OpenSystemSetViewCommand = new RelayCommand(OpenSystemSetView);
-            OpenDataAnalysisViewCommand = new RelayCommand(OpenDataAnalysisView);
             OpenAboutCommand = new RelayCommand(OpenAboutView);
             StartOrStopDaqCommand = new RelayCommand(StartOrStopDaq);
             StartOrStopSaveDataCommand = new RelayCommand(StartOrStopSaveData);
@@ -138,28 +136,19 @@ namespace EMS.ViewModel
                 DisplayContent.StartSaveData();
                 SaveImageButtonChange();
             }
-
-            
         }
 
         private void StartOrStopDaq()
         {
             if (DisplayContent.IsStartDaqData)
             {
-                // 停止采集和显示数据
                 DisplayContent.StopDisplayRealTimeData();
-                DisplayContent.IsStartDaqData = false;
                 DaqImageButtonChange();
-                //ShowOperation("数据采集已停止", "操作");
-                
             }
             else
             {
-                // 开始采集并显示数据
                 DisplayContent.DisplayRealTimeData();
-                DisplayContent.IsStartDaqData = true;
                 DaqImageButtonChange();
-                //ShowOperation("数据采集已开始", "操作");
             }
         }
 
@@ -208,13 +197,6 @@ namespace EMS.ViewModel
         {
             AboutView aboutView = new AboutView();
             aboutView.ShowDialog();
-        }
-
-        private void OpenDataAnalysisView()
-        {
-            //DataAnalysisView view = new DataAnalysisView(DisplayContent.IntegratedDev.BatteryTotalList.ToList());
-            DataAnalysisView view = new DataAnalysisView();
-            view.ShowDialog();
         }
 
         private void OpenSystemSetView()

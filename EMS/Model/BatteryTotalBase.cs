@@ -621,24 +621,6 @@ namespace EMS.Model
             }
         }
 
-
-
-
-
-        private BitmapSource _devImage;
-        /// <summary>
-        /// 标签图标
-        /// </summary>
-        public BitmapSource DevImage
-        {
-
-            get => _devImage;
-            set
-            {
-                SetProperty(ref _devImage, value);
-            }
-        }
-
         private BitmapSource _connectImage;
         /// <summary>
         /// 连接图标
@@ -835,21 +817,10 @@ namespace EMS.Model
             Series = new ObservableCollection<BatterySeriesBase>();
             IP = ip;
             Port = port;
-            ImageTitle();
             ConnectImageChange(false);
             InternetImageChange(false);
             DaqImageChange(false);
             RecordImageChange(false);
-        }
-
-       
-
-        /// <summary>
-        /// 标签图标
-        /// </summary>
-        public void ImageTitle()
-        {
-            DevImage = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/BMS.png"));
         }
 
         public void ConnectImageChange(bool isconnected)

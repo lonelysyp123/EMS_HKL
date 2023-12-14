@@ -50,66 +50,7 @@ namespace EMS
             PCS_ConnectColor.DataContext = pCSMainViewModel;
             PCS_IP.DataContext = pCSMainViewModel;
             SelectedPage("DaqDataRaBtn");
-            //EnergyManagementSystem.Initialization();
             EnergyManagementSystem.GlobalInstance.Initialization(null, null, null, null);
-            //pcsviewmodel = new PCSSettingViewModel();
-            //PCSView.DataContext = pcsviewmodel;
-        }
-
-        private void ReConnect_Click(object sender, RoutedEventArgs e)
-        {
-            var item = DevList.SelectedItem as BatteryTotalBase;
-            try
-            {
-                if (item.IsConnected)
-                {
-                    DisConnect_Click(null, null);
-                    ReConnect_Click(null, null);
-                }
-                else
-                {
-                    // 连接成功后将设备信息添加到左边的导航栏中
-                    if (viewmodel.DisplayContent.AddConnectedDev(item))
-                    {
-                        // 更新数据库中设备信息BCMUID
-                        DevConnectInfoManage manage = new DevConnectInfoManage();
-                        manage.Update(new DevConnectInfoModel() { BCMUID = item.BCMUID, IP = item.IP, Port = item.Port });
-                    }
-                }
-            }
-            catch
-            {
-                MessageBox.Show("重新连接设备失败，请检查通讯参数和连接介质！");
-            }
-        }
-
-        private void DisConnect_Click(object sender, RoutedEventArgs e)
-        {
-            // 断开连接设备
-            var item = DevList.SelectedItem as BatteryTotalBase;
-            int index = viewmodel.DisplayContent.RemoveDisConnectedDev(item);
-        }
-
-        private void InterNet_Click(object sender, RoutedEventArgs e)
-        {
-            Console.WriteLine("入网操作");
-            var item = DevList.SelectedItem as BatteryTotalBase;
-            viewmodel.DisplayContent.RequestInterNet(item);
-        }
-
-        private void DelDev_Click(object sender, RoutedEventArgs e)
-        {
-            var item = DevList.SelectedItem as BatteryTotalBase;
-            if (!item.IsConnected)
-            {
-                viewmodel.DisplayContent.BatteryTotalList.Remove(item);
-                DevConnectInfoManage manage = new DevConnectInfoManage();
-                manage.Delete(new DevConnectInfoModel() { IP = item.IP, Port = item.Port, BCMUID = item.BCMUID });
-            }
-            else
-            {
-                MessageBox.Show("请先断开设备连接");
-            }
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
@@ -123,8 +64,6 @@ namespace EMS
             SelectedPage(radioButton.Name);
         }
 
-
-
         private void SelectedPage(string PageName)
         {
             switch (PageName)
@@ -133,8 +72,7 @@ namespace EMS
                     if (devTest_Daq == null)
                     {
                         devTest_Daq = new DevTest_CollectView();
-                        devTest_Daq.DevSource = viewmodel.DisplayContent.OnlineBatteryTotalList;
-                        devTest_Daq.DevSource.CollectionChanged += devTest_Daq.Test_CollectionChanged;
+                        viewmodel.DisplayContent.BatteryTotalViewModelList.CollectionChanged += devTest_Daq.Test_CollectionChanged;
                     }
                     Mainbody.Content = new Frame() { Content = devTest_Daq };
                     break;
@@ -151,7 +89,7 @@ namespace EMS
                         devControlView = new DevControlView();
 
                     }
-                    devControlView.SyncContent(viewmodel.DisplayContent.OnlineBatteryTotalList.ToList(), viewmodel.DisplayContent.ClientList);
+                    devControlView.SyncContent(viewmodel.DisplayContent.BatteryTotalViewModelList.ToList());
                     Mainbody.Content = new Frame() { Content = devControlView };
                     break;
 
@@ -160,7 +98,7 @@ namespace EMS
                     {
                         parameterSettingView = new ParameterSettingView();
                     }
-                    parameterSettingView.SyncContent(viewmodel.DisplayContent.OnlineBatteryTotalList.ToList(), viewmodel.DisplayContent.ClientList);
+                    parameterSettingView.SyncContent(viewmodel.DisplayContent.BatteryTotalViewModelList.ToList());
                     Mainbody.Content = new Frame() { Content = parameterSettingView };
                     break;
 
@@ -178,22 +116,17 @@ namespace EMS
             }
         }
 
-
-
         private void OperationManual_Click(object sender, RoutedEventArgs e)
         {
             string folderPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource", "About");
             string filePath = System.IO.Path.Combine(folderPath, "OperationManual.pdf");
-
             System.Diagnostics.Process.Start(filePath);
         }
 
         private void AboutMenuItem_Click(object sender, RoutedEventArgs e)
         {
             AboutView view = new AboutView();
-
             view.ShowDialog();
-
         }
 
         private void OpenPCSWindow_Click(object sender, RoutedEventArgs e)

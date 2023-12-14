@@ -1,12 +1,14 @@
 ﻿using EMS.Common.Modbus.ModbusTCP;
 using EMS.Model;
 using EMS.MyControl;
+using EMS.ViewModel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -41,26 +43,24 @@ namespace EMS.View
             {
                 foreach (var item in e.NewItems)
                 {
-                    AddDevIntoView(item as BatteryTotalBase);
+                    AddDevIntoView(item as BatteryTotalViewModel);
                 }
             }
             else
             {
                 foreach (var item in e.OldItems)
                 {
-                    RemoveDevIntoView(e.OldStartingIndex);
+                    RemoveDevIntoView(item as BatteryTotalViewModel);
                 }
             }
         }
 
-        public void AddDevIntoView(BatteryTotalBase model)
+        public void AddDevIntoView(BatteryTotalViewModel viewmodel)
         {
-            DataControl control = new DataControl(model);
-
-            //control.DataContext = model;
+            DataControl control = new DataControl(viewmodel);
             control.Margin = new Thickness(10, 10, 20, 10);
             string pattern = @"\d+";
-            Match match = Regex.Match(model.TotalID, pattern);
+            Match match = Regex.Match(viewmodel.TotalID, pattern);
             int.TryParse(match.Value, out int value);
             int index = value - 1;
             // int index = MainBody.Children.Count;
@@ -69,21 +69,14 @@ namespace EMS.View
             MainBody.Children.Add(control);
         }
 
-        public void RemoveDevIntoView(int index)
+        public void RemoveDevIntoView(BatteryTotalViewModel viewmodel)
         {
-            if (MainBody.Children.Count >= index)
+            foreach (var item in MainBody.Children)
             {
-                MainBody.Children.RemoveAt(index);
-            }
-        }
-
-        private void MainBody_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            DataControl control = e.Source as DataControl;
-            if (control != null)
-            {
-                SeriesBatteryView view = new SeriesBatteryView((BatteryTotalBase)control.DataContext);
-                view.ShowDialog();
+                if(((item as DataControl).DataContext as BatteryTotalViewModel).TotalID == viewmodel.TotalID)
+                {
+                    MainBody.Children.Remove(item as DataControl);
+                }
             }
         }
 
