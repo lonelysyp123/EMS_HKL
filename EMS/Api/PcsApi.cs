@@ -39,8 +39,6 @@ namespace EMS.Api
 
         public static List<string> GetPCSFaultInfo() { return null; }
 
-        public static List<string> GetPCSFaultInfo() { return null; }
-
         public static bool SetPCSHalt()
         {
             try
@@ -52,7 +50,8 @@ namespace EMS.Api
             {
                 return false;
                 throw (ex);
-            }
+            } 
+        }
         /// <summary>
         /// 获取监视器所有数据
         /// </summary>
@@ -116,14 +115,6 @@ namespace EMS.Api
         }
 
         public static bool SetPCSSystemClearFault()
-        /// <summary>
-        /// 获取侧支路电流
-        /// </summary>
-        /// <param name="pcsId"></param>
-        /// <param name="dcSideId"></param>
-        /// <param name="dcCurr">侧支路电流</param>
-        /// <returns></returns>
-        public static double PcsGetDcSideCurrent()
         {
             try
             {
@@ -135,6 +126,16 @@ namespace EMS.Api
                 return false;
                 throw (ex);
             }
+        }
+        /// <summary>
+        /// 获取侧支路电流
+        /// </summary>
+        /// <param name="pcsId"></param>
+        /// <param name="dcSideId"></param>
+        /// <param name="dcCurr">侧支路电流</param>
+        /// <returns></returns>
+        public static double PcsGetDcSideCurrent()
+        {
             return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1DCCur;
         }
 
@@ -270,50 +271,5 @@ namespace EMS.Api
                 throw (ex);
             }
         }
-
-
-        public static bool SetPCSHalt()
-        {
-            try
-            {
-                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.PCSClose();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-                throw (ex);
-            }
-        }
-
-        public static bool SetPCSStart()
-        {
-            try
-            {
-                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.PCSOpen();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-                throw (ex);
-            }
-        }
-
-        public static bool SetPCSSystemClearFault()
-        {
-            try
-            {
-                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.PCSSystemClearFault();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-                throw (ex);
-            }
-        }
-
-
     }
 }
