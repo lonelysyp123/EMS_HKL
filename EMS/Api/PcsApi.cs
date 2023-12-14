@@ -39,7 +39,238 @@ namespace EMS.Api
 
         public static List<string> GetPCSFaultInfo() { return null; }
 
-        public static double PcsGetDcSidePower() { return 0; }
+        public static List<string> GetPCSFaultInfo() { return null; }
+
+        public static bool SetPCSHalt()
+        {
+            try
+            {
+                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.PCSClose();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw (ex);
+            }
+        /// <summary>
+        /// 获取监视器所有数据
+        /// </summary>
+        /// <returns></returns>
+        public static PCSMonitorModel PCSGetMonitorInfo()
+        {
+            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel;
+        }
+
+        public static bool SetPCSStart()
+            {
+                try
+                {
+                    EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.PCSOpen();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                    throw (ex);
+                }
+            }
+            /// <summary>
+            /// 获取参数设置界面所有展现在界面上的数据
+            /// </summary>
+            /// <returns></returns>
+            public static PCSParSettingModel PCSGetParSettingInfo()
+                {
+                    return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.ParSettingModel;
+        }
+
+        /// <summary>
+        /// 获取DC侧支路状态
+        /// </summary>
+        /// <returns></returns>
+        public static string PCSGetDCSideBranchState()
+        {
+            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1State1;
+        }
+
+        /// <summary>
+        /// 获取DC侧支路启停状态
+        /// </summary>
+        /// <returns></returns>
+        public static string PCSGetDCSideBranchOperationState()
+        {
+            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1State2;
+        }
+
+
+        /// <summary>
+        /// 获取指定pcs，指定的侧支路的功率
+        /// </summary>
+        /// <param name="pcsId"></param>
+        /// <param name="dcSideId">侧支路的编号</param>
+        /// <param name="dcPower">侧支路输出功率</param>
+        /// <returns></returns>
+        public static double  PcsGetDcSidePower()
+        {
+            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1DCPower;
+        }
+
+        public static bool SetPCSSystemClearFault()
+        /// <summary>
+        /// 获取侧支路电流
+        /// </summary>
+        /// <param name="pcsId"></param>
+        /// <param name="dcSideId"></param>
+        /// <param name="dcCurr">侧支路电流</param>
+        /// <returns></returns>
+        public static double PcsGetDcSideCurrent()
+        {
+            try
+            {
+                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.PCSSystemClearFault();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw (ex);
+            }
+            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1DCCur;
+        }
+
+        /// <summary>
+        /// 获取侧支路电压
+        /// </summary>
+        /// <param name="pcsId"></param>
+        /// <param name="dcSideId"></param>
+        /// <param name="dcVolt"></param>
+        /// <returns></returns>
+        public static double PcsGetDcSideVoltage()
+        {
+            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1DCVol;
+        }
+
+        /// <summary>
+        /// 获取总线侧电压
+        /// </summary>
+        /// <param name="pcsId"></param>
+        /// <param name="dcSideId"></param>
+        /// <param name="busVolt"></param>
+        /// <returns></returns>
+        public static double PcsGetBusSideVoltage()
+        {
+            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1BUSVol;
+        }
+
+        /// <summary>
+        /// 获取累计充电容量
+        /// </summary>
+        /// <param name="pcsId"></param>
+        /// <param name="dcSideId"></param>
+        /// <param name="accGhgEnergy">累计充电能量 kwh</param>
+        /// <returns></returns>
+        public static uint PcsGetDcSideAccumulatedChargedEnergy()
+        {
+            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1Char;
+        }
+
+        /// <summary>
+        ///  获取累计放电容量
+        /// </summary>
+        /// <param name="pcsId"></param>
+        /// <param name="dcSideId"></param>
+        /// <param name="accDsgEnergy">累计放电能量 kwh</param>
+        /// <returns></returns>
+        public static uint PcsGetDcSideAccumulatedDischargedEnergy()
+        {
+            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1DisChar;
+        }
+
+
+        /// <summary>
+        /// 获取DC故障信息
+        /// </summary>
+        /// <returns></returns>
+        public static ObservableCollection<string> PCSGetDCModuleFaultInfo()
+        {
+            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.FaultInfoDC;
+        }
+
+        /// <summary>
+        /// 获取DC告警信息
+        /// </summary>
+        /// <returns></returns>
+        public static ObservableCollection<string> PCSGetDCModuleAlarmInfo()
+        {
+            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.AlarmInfoDC;
+        }
+
+        /// <summary>
+        /// 获取PDS故障信息
+        /// </summary>
+        /// <returns></returns>
+        public static ObservableCollection<string> PCSGetPDSFaultInfo()
+        {
+            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.FaultInfoPDS;
+        }
+
+        /// <summary>
+        /// 获取PDS告警信息
+        /// </summary>
+        /// <returns></returns>
+        public static ObservableCollection<string> PCSGetPDSAlarmInfo()
+        {
+            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.AlarmInfoPDS;
+        }
+
+
+        /// <summary>
+        /// 获取模组温度
+        /// </summary>
+        /// <returns></returns>
+        public static double PCSGetModuleTemperature()
+        {
+            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.ModuleTemperature;       
+        }
+
+        /// <summary>
+        /// 获取环境温度
+        /// </summary>
+        /// <returns></returns>
+        public static double PCSGetAmbientTemperature()
+        {
+            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.AmbientTemperature;
+        }
+
+        public static bool PCSConnect()
+        {
+            try
+            {
+                EnergyManagementSystem.GlobalInstance.PcsManager.PCSMainViewModel.Connect();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw (ex);
+            }
+        }
+
+        public static bool PCSDisConnect()
+        {
+            //Buffer,是个缓存，把所有指令封装成一个，下发的时候调用其中的指令。
+            try
+            {
+                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.Disconnect();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw (ex);
+            }
+        }
+
 
         public static bool SetPCSHalt()
         {
