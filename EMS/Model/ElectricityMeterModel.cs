@@ -3,6 +3,7 @@ using EMS.Api;
 using log4net;
 using log4net.Core;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
@@ -11,6 +12,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Markup;
 
 namespace EMS.Model
 {
@@ -165,19 +167,23 @@ namespace EMS.Model
             Logger = LogManager.GetLogger(typeof(ElectricityMeterModel));
         }
 
-        private SerialPort serialPort;
+        private SerialPort SerialPortInstance;
+        /// <summary>
+        /// 打开串口
+        /// </summary>
+        /// <returns>操作是否成功</returns>
         public bool Open()
         {
             try
             {
-                serialPort = new SerialPort();
-                serialPort.PortName = Configuaration.SelectedCommPort;
-                serialPort.BaudRate = Configuaration.SelectedBaudRate;
-                serialPort.DataBits = Configuaration.SelectedDataBits;
-                serialPort.StopBits = Configuaration.SelectedStopBits;
-                serialPort.Parity = Configuaration.SelectedParity;
-                serialPort.ReadTimeout = 500;
-                serialPort.Open();
+                SerialPortInstance = new SerialPort();
+                SerialPortInstance.PortName = Configuaration.SelectedCommPort;
+                SerialPortInstance.BaudRate = Configuaration.SelectedBaudRate;
+                SerialPortInstance.DataBits = Configuaration.SelectedDataBits;
+                SerialPortInstance.StopBits = Configuaration.SelectedStopBits;
+                SerialPortInstance.Parity = Configuaration.SelectedParity;
+                SerialPortInstance.ReadTimeout = 500;
+                SerialPortInstance.Open();
 
                 return true;
             }
@@ -187,16 +193,20 @@ namespace EMS.Model
             }
         }
 
+        /// <summary>
+        /// 关闭串口
+        /// </summary>
+        /// <returns>操作是否成功</returns>
         public bool Close()
         {
             try
             {
-                if (serialPort != null)
+                if (SerialPortInstance != null)
                 {
-                    if (serialPort.IsOpen)
+                    if (SerialPortInstance.IsOpen)
                     {
                         StopDaqTh();
-                        serialPort.Close();
+                        SerialPortInstance.Close();
                     }
                 }
 
@@ -208,29 +218,42 @@ namespace EMS.Model
             }
         }
 
-        private bool isStartDaqData = false;
+        private bool IsStartDaqData = false;
+        /// <summary>
+        /// 启动采集线程
+        /// </summary>
         public void StartDaqTh()
         {
-            if (serialPort != null && serialPort.IsOpen)
+            if (SerialPortInstance != null && SerialPortInstance.IsOpen)
             {
-                if (!isStartDaqData)
+                if (!IsStartDaqData)
                 {
                     Thread thread = new Thread(DaqTh);
                     thread.IsBackground = true;
-                    isStartDaqData = true;
+                    IsStartDaqData = true;
                     thread.Start();
                 }
             }
         }
 
+        /// <summary>
+        /// 采集线程
+        /// </summary>
         private void DaqTh()
         {
             try
             {
-                while (isStartDaqData)
+                while (IsStartDaqData)
                 {
                     Thread.Sleep(500);
-                    Voltage_A = ReadDataForCmd(serialPort, Request_GetVoltage_A, Response_GetVoltage_A);
+                    // 采集数据
+                    Voltage_A = ReadDataForCmd(SerialPortInstance, Request_GetVoltage_A, Response_GetVoltage_A);
+
+                    // 储存数据
+                    if (IsStartSaveData)
+                    {
+                        TemporaryData.Enqueue(GetItself());
+                    }
                 }
             }
             catch (Exception ex)
@@ -241,12 +264,38 @@ namespace EMS.Model
             }
         }
 
+        private ElectricityMeterModel GetItself()
+        {
+            return new ElectricityMeterModel()
+            {
+                Voltage_A = this.Voltage_A,
+                Voltage_B = this.Voltage_B,
+                Voltage_C = this.Voltage_C,
+                Electric_A = this.Electric_A,
+                Electric_B = this.Electric_B,
+                Electric_C = this.Electric_C,
+                ActivePower_A = this.ActivePower_A,
+                ActivePower_B = this.ActivePower_B,
+                ActivePower_C = this.ActivePower_C,
+                ActivePower_Total = this.ActivePower_Total,
+                ReactivePower_A = this.ReactivePower_A,
+                ReactivePower_B = this.ReactivePower_B,
+                ReactivePower_C = this.ReactivePower_C,
+                ReactivePower_Total = this.ReactivePower_Total,
+            };
+        }
+
         // CS校验不计算0xFE, 0xFE, 0xFE, 0xFE
         byte[] Request_GetVoltage_A = new byte[] { 0x68, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x68, 0x11, 0x04, 0x02, 0x01, 0x01, 0x00, 0xA4, 0x16 };
         byte[] Response_GetVoltage_A = new byte[] { 0xFE, 0xFE, 0xFE, 0xFE, 0x68, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x68, 0x91, 0x08, 0x33, 0x33, 0x33, 0x33, 0x00, 0x00, 0x00, 0x00, 0x44, 0x16 };
         byte[] Request_GetVoltage_B = new byte[0];
         byte[] Response_GetVoltage_B = new byte[0];
 
+        /// <summary>
+        /// 读取A相电压
+        /// </summary>
+        /// <param name="serialPort">串口实例</param>
+        /// <returns>电压值</returns>
         private int ReadVoltage_A(SerialPort serialPort)
         {
             if (serialPort != null)
@@ -298,6 +347,13 @@ namespace EMS.Model
             return 0;
         }
 
+        /// <summary>
+        /// 用指定的命令去读取数据
+        /// </summary>
+        /// <param name="serialPort">串口实例</param>
+        /// <param name="Request">请求数据包</param>
+        /// <param name="Response">响应数据包模板</param>
+        /// <returns>读数</returns>
         private int ReadDataForCmd(SerialPort serialPort, byte[] Request, byte[] Response)
         {
             try
@@ -352,13 +408,19 @@ namespace EMS.Model
             }
         }
 
-        private bool CheckData(byte[] standardVBytes, byte[] readBytes)
+        /// <summary>
+        /// 校验数据
+        /// </summary>
+        /// <param name="standardVBytes">标准模板</param>
+        /// <param name="readBytes">读取到的数据</param>
+        /// <returns>校验结果</returns>
+        private bool CheckData(byte[] standardBytes, byte[] readBytes)
         {
-            if (standardVBytes.Length == readBytes.Length)
+            if (standardBytes.Length == readBytes.Length)
             {
-                for (int i = 0; i < standardVBytes.Length - 4; i++)
+                for (int i = 0; i < standardBytes.Length - 4; i++)
                 {
-                    if (standardVBytes[i] != readBytes[i])
+                    if (standardBytes[i] != readBytes[i])
                     {
                         return false;
                     }
@@ -371,15 +433,58 @@ namespace EMS.Model
             return true;
         }
 
+        /// <summary>
+        /// 停止采集线程
+        /// </summary>
         public void StopDaqTh()
         {
-            if (serialPort != null && serialPort.IsOpen)
+            if (SerialPortInstance != null && SerialPortInstance.IsOpen)
             {
-                if (isStartDaqData)
+                if (IsStartDaqData)
                 {
-                    isStartDaqData = false;
+                    IsStartDaqData = false;
                 }
             }
+        }
+
+        private bool IsStartSaveData = false;
+        private int MedianRange = 10;
+        private ConcurrentQueue<ElectricityMeterModel> HistoryData;
+        private ConcurrentQueue<ElectricityMeterModel> TemporaryData;
+        /// <summary>
+        /// 开始数据存储
+        /// </summary>
+        public void StartSaveDataTh()
+        {
+            HistoryData = new ConcurrentQueue<ElectricityMeterModel>();
+            TemporaryData = new ConcurrentQueue<ElectricityMeterModel>();
+            Thread thread = new Thread(SaveDataTh);
+            thread.IsBackground = true;
+            IsStartSaveData = true;
+            thread.Start();
+        }
+
+        private void SaveDataTh()
+        {
+            while (IsStartSaveData)
+            {
+                if (TemporaryData.Count > MedianRange)
+                {
+                    ElectricityMeterModel[] models = new ElectricityMeterModel[MedianRange];
+                    for (int i = 0; i < MedianRange; i++)
+                    {
+                        TemporaryData.TryDequeue(out ElectricityMeterModel item);
+                        models[i] = item;
+                    }
+
+                    
+                }
+            }
+        }
+
+        public void StopSaveDataTh()
+        {
+            IsStartSaveData = false;
         }
     }
 
