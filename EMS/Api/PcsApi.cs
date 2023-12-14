@@ -39,6 +39,7 @@ namespace EMS.Api
 
         public static List<string> GetPCSFaultInfo() { return null; }
 
+        public static double PcsGetDcSidePower() { return 0; }
 
         public static bool SetPCSHalt()
         {

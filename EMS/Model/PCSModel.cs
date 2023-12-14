@@ -131,15 +131,6 @@ namespace EMS.Model
 
         static byte PcsId = 0;
 
-        public enum PcsCommandAdressEnum
-        {
-            PCSSystemOpen = 53900,
-            PCSSystemClose = 53901,
-            PCSSystemClearFault = 53903,
-            CharModeSet =53650,
-            CurrentValueSet=53651,
-            PowerValueSet=53652,
-        }
         public PCSModel()
         {
             MonitorModel = new PCSMonitorModel();
