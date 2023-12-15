@@ -102,11 +102,7 @@ namespace EMS.ViewModel
 
         public RelayCommand ConnectMSLCommand { get; set; }
         public RelayCommand SyncBUSVolInfoCommand { get; set; }
-        //public RelayCommand SyncTimeInfoCommand { get; set; }
-        //public RelayCommand SyncCMTimeOutCommand { get; set; }
         public RelayCommand ReadBUSVolInfoCommand { get; set; }
-        //public RelayCommand ReadCMTimeOutCommand { get; set; }
-        //public RelayCommand ReadTimeInfoCommand { get; set; }
         public RelayCommand SyncDCBranchInfoCommand { get; set; }
         public RelayCommand ReadDCBranchInfoCommand { get; set; }
         public RelayCommand ModeSetCommand { get; set; }
@@ -115,7 +111,6 @@ namespace EMS.ViewModel
         public RelayCommand StartDaqCommand { get; set; }
         public RelayCommand StopDaqCommand { get; set; }
         public RelayCommand DisConnectCommand { get; set; }
-
 
         public PCSMainViewModel()
         {
@@ -142,9 +137,7 @@ namespace EMS.ViewModel
 
 
             SyncBUSVolInfoCommand = new RelayCommand(SyncBUSVolInfo);
-            //SyncCMTimeOutCommand = new RelayCommand(SyncCMTimeOut);
             ReadBUSVolInfoCommand = new RelayCommand(ReadBUSVolInfo);
-            //ReadCMTimeOutCommand = new RelayCommand(ReadCMTimeOut);
             SyncDCBranchInfoCommand = new RelayCommand(SyncDCBranchInfo);
             ReadDCBranchInfoCommand = new RelayCommand(ReadDCBranchInfo);
             ModeSetCommand = new RelayCommand(ModeSet);
@@ -154,9 +147,6 @@ namespace EMS.ViewModel
             pcsModel.ParSettingModel.VisDCCur = Visibility.Hidden;
             pcsModel.ParSettingModel.VisDCChar = Visibility.Hidden;
         }
-
-
-
 
         public void Connect()
         {
@@ -237,9 +227,6 @@ namespace EMS.ViewModel
                 MessageBox.Show("请开始采集");
             }
         }
-
-
-
 
         private void SyncBUSVolInfo()
         {
@@ -455,7 +442,6 @@ namespace EMS.ViewModel
         {
             if (IsConnected)
             {
-                pcsModel.ModeSet();
                 if (pcsModel.ParSettingModel.ModeSet1 == "设置电流调节")
                 {
                     pcsModel.ParSettingModel.VisDCCur = Visibility.Visible;
@@ -472,6 +458,7 @@ namespace EMS.ViewModel
                 {
                     MessageBox.Show("请选择模式");
                 }
+                pcsModel.ModeSet();
             }
             else
             {

@@ -138,8 +138,6 @@ namespace EMS.ViewModel
                 DisplayContent.StartSaveData();
                 SaveImageButtonChange();
             }
-
-            
         }
 
         private void StartOrStopDaq()
@@ -165,7 +163,6 @@ namespace EMS.ViewModel
 
         public void DaqImageButtonChange()
         {
-           
             BitmapImage bi;
             if (DisplayContent.IsStartDaqData)
             {

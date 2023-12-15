@@ -12,26 +12,34 @@ namespace EMS.Model
     {
         private int DataAcquireTimeSpan = 1;
         private DcStatusModel _dcStatusModel;
+
+        
+        private bool _isConnected = false;
         /// <summary>
         /// 连接状态
         /// </summary>
-        private bool _isConnected = false;
-        public bool IsConnected { get { return _isConnected; } }
+        public bool IsConnected
+        {
+            get { return _isConnected; }
+        }
 
         private Thread _dataAcquisitionThread;
-
         public Thread DataAcuisitionThread { get { return _dataAcquisitionThread; } }
+        
+        private bool _isRead;
         /// <summary>
         /// 采集状态
         /// </summary>
-        private bool _isRead;
         public bool IsRead { get { return _isRead; } }
+
 
         private ModbusClient _modbusClient;
         public ModbusClient ModbusClient { get { return _modbusClient; } }
 
-        public PCSMonitorModel MonitorModel { get; set; }
-        public PCSParSettingModel ParSettingModel { get; set; }
+
+        public PCSMonitorModel MonitorModel;
+
+        public PCSParSettingModel ParSettingModel;
 
         public void Connect(string ip, int port)
         {
@@ -112,10 +120,10 @@ namespace EMS.Model
 
         public void SyncBUSVolInfo()
         {
-            ModbusClient.WriteFunc(PCSModel.PcsId, 53640, (ushort)(ParSettingModel.BUSUpperLimitVolThresh * 10));
-            ModbusClient.WriteFunc(PCSModel.PcsId, 53641, (ushort)(ParSettingModel.BUSLowerLimitVolThresh * 10));
-            ModbusClient.WriteFunc(PCSModel.PcsId, 53642, (ushort)(ParSettingModel.BUSHVolSetting * 10));
-            ModbusClient.WriteFunc(PCSModel.PcsId, 53643, (ushort)(ParSettingModel.BUSLVolSetting * 10));
+            ModbusClient.WriteFunc(PcsId, 53640, (ushort)(ParSettingModel.BUSUpperLimitVolThresh * 10));
+            ModbusClient.WriteFunc(PcsId, 53641, (ushort)(ParSettingModel.BUSLowerLimitVolThresh * 10));
+            ModbusClient.WriteFunc(PcsId, 53642, (ushort)(ParSettingModel.BUSHVolSetting * 10));
+            ModbusClient.WriteFunc(PcsId, 53643, (ushort)(ParSettingModel.BUSLVolSetting * 10));
         }
 
         public void ReadBUSVolInfo()
@@ -140,28 +148,28 @@ namespace EMS.Model
                 ParSettingModel.RemoteTCPCMInterruptionTimeOut = BitConverter.ToUInt16(data, 4);
             }
         }
+
         public void SyncCMTimeOut()
         {
             if (IsConnected)
             {
-                ModbusClient.WriteFunc(PCSModel.PcsId, 56006, (ushort)(ParSettingModel.BMSCMInterruptionTimeOut));
-                ModbusClient.WriteFunc(PCSModel.PcsId, 56007, (ushort)(ParSettingModel.Remote485CMInterruptonTimeOut));
-                ModbusClient.WriteFunc(PCSModel.PcsId, 56008, (ushort)(ParSettingModel.RemoteTCPCMInterruptionTimeOut));
+                ModbusClient.WriteFunc(PcsId, 56006, (ushort)(ParSettingModel.BMSCMInterruptionTimeOut));
+                ModbusClient.WriteFunc(PcsId, 56007, (ushort)(ParSettingModel.Remote485CMInterruptonTimeOut));
+                ModbusClient.WriteFunc(PcsId, 56008, (ushort)(ParSettingModel.RemoteTCPCMInterruptionTimeOut));
             }
         }
 
         public void SyncDCBranchInfo()
         {
-
             if (IsConnected)
             {
-                ModbusClient.WriteFunc(PCSModel.PcsId, 53653, (ushort)(ParSettingModel.BTLLimitVol * 10));
-                ModbusClient.WriteFunc(PCSModel.PcsId, 53655, (ushort)(ParSettingModel.DischargeSTVol * 10));
-                ModbusClient.WriteFunc(PCSModel.PcsId, 53658, (ushort)ParSettingModel.MultiBranchCurRegPar);
-                ModbusClient.WriteFunc(PCSModel.PcsId, 53660, (ushort)(ParSettingModel.BatAveChVol * 10));
-                ModbusClient.WriteFunc(PCSModel.PcsId, 53662, (ushort)(ParSettingModel.ChCutCurrent * 10));
-                ModbusClient.WriteFunc(PCSModel.PcsId, 53663, (ushort)(ParSettingModel.MaxChCurrent * 10));
-                ModbusClient.WriteFunc(PCSModel.PcsId, 53664, (ushort)(ParSettingModel.MaxDisChCurrent * 10));
+                ModbusClient.WriteFunc(PcsId, 53653, (ushort)(ParSettingModel.BTLLimitVol * 10));
+                ModbusClient.WriteFunc(PcsId, 53655, (ushort)(ParSettingModel.DischargeSTVol * 10));
+                ModbusClient.WriteFunc(PcsId, 53658, (ushort)ParSettingModel.MultiBranchCurRegPar);
+                ModbusClient.WriteFunc(PcsId, 53660, (ushort)(ParSettingModel.BatAveChVol * 10));
+                ModbusClient.WriteFunc(PcsId, 53662, (ushort)(ParSettingModel.ChCutCurrent * 10));
+                ModbusClient.WriteFunc(PcsId, 53663, (ushort)(ParSettingModel.MaxChCurrent * 10));
+                ModbusClient.WriteFunc(PcsId, 53664, (ushort)(ParSettingModel.MaxDisChCurrent * 10));
             }
         }
 
@@ -194,14 +202,13 @@ namespace EMS.Model
         {
             if (IsConnected)
             {
-
                 if (ParSettingModel.ModeSet1 == "设置电流调节")
                 {
-                    ModbusClient.WriteFunc(PCSModel.PcsId, 53650, 0);
+                    ModbusClient.WriteFunc(PcsId, 53650, 0);
                 }
                 else if (ParSettingModel.ModeSet1 == "设置功率调节")
                 {
-                    ModbusClient.WriteFunc(PCSModel.PcsId, 53650, 1);
+                    ModbusClient.WriteFunc(PcsId, 53650, 1);
                 }
             }
         }
@@ -212,14 +219,15 @@ namespace EMS.Model
             {
                 if (ParSettingModel.ModeSet1 == "设置电流调节")
                 {
-                    ModbusClient.WriteFunc(PCSModel.PcsId, 53651, (ushort)(ParSettingModel.DCCurrentSet * 10));
+                    ModbusClient.WriteFunc(PcsId, 53651, (ushort)(ParSettingModel.DCCurrentSet * 10));
                 }
                 else
                 {
-                    ModbusClient.WriteFunc(PCSModel.PcsId, 53652, (ushort)(ParSettingModel.DCPowerSet * 10));
+                    ModbusClient.WriteFunc(PcsId, 53652, (ushort)(ParSettingModel.DCPowerSet * 10));
                 }
             }
         }
+
         public void ReadInfo()
         {
             while (true)
@@ -290,8 +298,6 @@ namespace EMS.Model
                         {
                             MonitorModel.VisPDSAlarm = Visibility.Hidden;
                         }
-
-
 
                         if (FaultColorFlagDC == true)
                         {
@@ -609,6 +615,7 @@ namespace EMS.Model
                 MonitorModel.Module1StatusColor10 = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A52A2A"));
             }
         }
+
         public void GetActivePCSControlState()
         {
             int value;
@@ -880,13 +887,15 @@ namespace EMS.Model
             }
         }
 
-        public static byte PcsId = 0;
+        public static byte PcsId = 1;
 
         public PCSModel()
         {
             MonitorModel = new PCSMonitorModel();
 
             ParSettingModel = new PCSParSettingModel();
+
+            _dcStatusModel=new DcStatusModel();
         }
     }
     public enum PcsCommandAdressEnum

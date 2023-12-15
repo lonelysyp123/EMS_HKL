@@ -38,7 +38,7 @@
             <Button Content=" 开始采集" Command="{Binding StartDaqCommand}" Margin="10 0 0 0 "/>
             <Button Content=" 停止采集" Command="{Binding StopDaqCommand}" Margin="10 0 0 0"/>
             <Image x:Name="Image1" Source="{Binding ConnectImageSource}" Height="20" Width="20" Margin="20 0 20 0"/>
-            <Image x:Name="Image2" Source="{Binding DaqImageSource}" Height="20" Width="20"/>
+            <Image x:Name="Image2" Source="{Binding DataAcquisitionImageSource}" Height="20" Width="20"/>
         </StackPanel>
 
         <TabControl Grid.Row="1" FontSize="25" >
