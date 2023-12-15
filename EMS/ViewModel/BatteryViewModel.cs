@@ -9,6 +9,7 @@ namespace EMS.ViewModel
 {
     public class BatteryViewModel : ViewModelBase
     {
+        #region DependencyProperty
         private double _voltage;
         public double Voltage
         {
@@ -110,9 +111,31 @@ namespace EMS.ViewModel
             }
         }
 
+        #endregion
+
         public BatteryViewModel()
         {
 
+        }
+
+        public void MarkMinVoltage()
+        {
+            VoltageColor = new SolidColorBrush(Colors.LightBlue);
+        }
+
+        public void MarkMaxVoltage()
+        {
+            VoltageColor = new SolidColorBrush(Colors.Red);
+        }
+
+        public void MarkMinTemperature()
+        {
+            TemperatureColor = new SolidColorBrush(Colors.LightBlue);
+        }
+
+        public void MarkMaxTemperature()
+        {
+            TemperatureColor = new SolidColorBrush(Colors.Red);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace EMS.ViewModel
 {
     public class BatterySeriesViewModel : ViewModelBase
     {
-        #region Property
+        #region DependencyProperty
         private string _bMUID;
         public string BMUID
         {
@@ -98,7 +98,7 @@ namespace EMS.ViewModel
                 if (_minVoltageIndex != value)
                 {
                     _minVoltageIndex = value;
-                    BatteryViewModelList[value - 1].VoltageColor = new SolidColorBrush(Colors.LightBlue);
+                    BatteryViewModelList[value - 1].MarkMinVoltage();
                 }
             }
         }
@@ -115,7 +115,7 @@ namespace EMS.ViewModel
                 if (_maxVoltageIndex != value)
                 {
                     _maxVoltageIndex = value;
-                    BatteryViewModelList[value - 1].VoltageColor = new SolidColorBrush(Colors.Red);
+                    BatteryViewModelList[value - 1].MarkMaxVoltage();
                 }
             }
         }
@@ -132,7 +132,7 @@ namespace EMS.ViewModel
                 if (_minTemperatureIndex != value)
                 {
                     _minTemperatureIndex = value;
-                    BatteryViewModelList[value - 1].TemperatureColor = new SolidColorBrush(Colors.LightBlue);
+                    BatteryViewModelList[value - 1].MarkMinTemperature();
                 }
             }
         }
@@ -149,7 +149,7 @@ namespace EMS.ViewModel
                 if (_maxTemperatureIndex != value)
                 {
                     _maxTemperatureIndex = value;
-                    BatteryViewModelList[value - 1].TemperatureColor = new SolidColorBrush(Colors.Red);
+                    BatteryViewModelList[value - 1].MarkMaxTemperature();
                 }
             }
         }

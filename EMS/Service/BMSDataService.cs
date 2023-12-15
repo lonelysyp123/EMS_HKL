@@ -43,6 +43,7 @@ namespace EMS.Service
                 }
             }
         }
+
         public ModbusClient Client { get; private set; }
         private Action<bool, bool> OnChangeState;
 

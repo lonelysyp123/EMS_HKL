@@ -21,7 +21,7 @@ namespace EMS.ViewModel
 {
     public class BatteryTotalViewModel : ViewModelBase
     {
-        #region Property
+        #region DependencyProperty
 
         private BitmapSource _devImage;
         public BitmapSource DevImage
