@@ -1,5 +1,6 @@
 ﻿using EMS.Model;
 using EMS.MyControl;
+using EMS.ViewModel;
 using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace EMS.View
     /// </summary>
     public partial class SeriesBatteryView : Window
     {
-        public SeriesBatteryView(BatteryTotalBase viewmodel)
+        public SeriesBatteryView(BatteryTotalViewModel viewmodel)
         {
             InitializeComponent();
 
@@ -31,9 +32,9 @@ namespace EMS.View
             InitView(viewmodel);
         }
 
-        private void InitView(BatteryTotalBase item)
+        private void InitView(BatteryTotalViewModel item)
         {
-            for (int i = 0; i < item.Series.Count; i++)
+            for (int i = 0; i < item.batterySeriesViewModelList.Count; i++)
             {
                 Grid grid;
                 Grid gridb;
@@ -52,7 +53,7 @@ namespace EMS.View
                     grid = BMUC;
                     gridb = BMUC_Battery;
                 }
-                for (int l = 0;l < item.Series[i].Batteries.Count; l++)
+                for (int l = 0;l < item.batterySeriesViewModelList[i].BatteryViewModelList.Count; l++)
                 {
                     Battery battery = new Battery();
                     Grid.SetRow(battery, l/7);
@@ -60,10 +61,10 @@ namespace EMS.View
                     battery.Margin = new Thickness(5);
                     Binding binding = new Binding() { Path = new PropertyPath("SOC")};
                     battery.SetBinding(Battery.SOCProperty, binding);
-                    battery.DataContext = item.Series[i].Batteries[l];                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+                    battery.DataContext = item.batterySeriesViewModelList[i].BatteryViewModelList[l];                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
                     gridb.Children.Add(battery);
                 }
-                grid.DataContext = item.Series[i];
+                grid.DataContext = item.batterySeriesViewModelList[i];
             }
         }
     }

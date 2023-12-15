@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EMS.Service;
 
 namespace EMS.ViewModel
 {
@@ -399,11 +400,11 @@ namespace EMS.ViewModel
         public RelayCommand ReadDBInfoCommand { get; set; }
         public RelayCommand SyncInfoCommand { get; set; }
         public RelayCommand ReadBCMUInfoCommand { get; set; }
-        private ModbusClient ModbusClient;
+        private BMSDataService DevService;
         string BCMUid;
-        public ParameterSettingViewModel(ModbusClient client,string bcmuid)
+        public ParameterSettingViewModel(BMSDataService service,string bcmuid)
         {
-            ModbusClient = client;
+            DevService = service;
             BCMUid = bcmuid;
            
             ReadDBInfoCommand = new RelayCommand(ReadDBInfo);
@@ -416,7 +417,7 @@ namespace EMS.ViewModel
         {
             
             byte[] data = new byte[68];
-            data = ModbusClient.ReadFunc(40200, 34);
+            data = DevService.Client.ReadFunc(40200, 34);
             ClusterVolUpLimitLv1 = BitConverter.ToUInt16(data, 0)*0.1;
             ClusterVolUpLimitLv2 = BitConverter.ToUInt16(data, 2)*0.1;
             ClusterVolUpLimitLv3 = BitConverter.ToUInt16(data, 4)*0.1;
@@ -544,7 +545,7 @@ namespace EMS.ViewModel
                 (ushort)(SOCLowLimitLv3*10),
                 (ushort)IsoRLowLimitLv1
         };
-            ModbusClient.WriteFunc(40200, values);
+            DevService.Client.WriteFunc(40200, values);
 
 
         }

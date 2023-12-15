@@ -26,69 +26,66 @@ namespace EMS.View
     /// </summary>
     public partial class DevControlView : Page
     {
-        private List<BatteryTotalBase> batteryTotalBases;
-        private List<ModbusClient> Clients;
-        private List<DevControlViewModel> ViewModels;
+        private List<BatteryTotalViewModel> batteryTotalViewModelList;
         public DevControlView()
         {
             InitializeComponent();
-            ViewModels = new List<DevControlViewModel>();
         }
 
-        public void SyncContent(List<BatteryTotalBase> TotalList, List<ModbusClient> ClientList)
+        public void SyncContent(List<BatteryTotalViewModel> TotalList)
         {
-            batteryTotalBases = TotalList;
-            Clients = ClientList;
+            batteryTotalViewModelList = TotalList;
             InitDevList();
         }
 
         private void InitDevList()
         {
             BCMUInfo.Items.Clear();
-            ViewModels.Clear();
             // 初始化BCMU列表
-            for (int i = 0; i < batteryTotalBases.Count; i++)
+            bool isFirst = true;
+            for (int i = 0; i < batteryTotalViewModelList.Count; i++)
             {
-                Image image = new Image();
-                image.Source = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/Online.png"));
-                image.Height = 50;
-
-                TextBlock textBlock = new TextBlock();
-                textBlock.Margin = new Thickness(5, 0, 10, 0);
-                textBlock.VerticalAlignment = VerticalAlignment.Bottom;
-                textBlock.Text = batteryTotalBases[i].TotalID;
-                textBlock.Foreground =new SolidColorBrush(Colors.White);
-                ListBox listBox = new ListBox();
-                listBox.Items.Add(image);
-                listBox.Items.Add(textBlock);
-                
-                //StackPanel stackPanel = new StackPanel();
-                //stackPanel.Orientation = Orientation.Horizontal;
-                //stackPanel.Children.Add(image);
-                //stackPanel.Children.Add(textBlock);
-
-                RadioButton radioButton = new RadioButton();
-                radioButton.Click += RadioButton_Click;
-                radioButton.Content = listBox;
-
-                BCMUInfo.Items.Add(radioButton);
-                
-                DevControlViewModel viewmodel = new DevControlViewModel(Clients[i]);
-                ViewModels.Add(viewmodel);
-                if (i == 0)
+                if (batteryTotalViewModelList[i].IsConnected)
                 {
-                    radioButton.IsChecked = true;
-                    this.DataContext = ViewModels[i];
+                    Image image = new Image();
+                    image.Source = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/Online.png"));
+                    image.Height = 50;
+
+                    TextBlock textBlock = new TextBlock();
+                    textBlock.Margin = new Thickness(5, 0, 10, 0);
+                    textBlock.VerticalAlignment = VerticalAlignment.Bottom;
+                    textBlock.Text = batteryTotalViewModelList[i].TotalID;
+                    textBlock.Foreground = new SolidColorBrush(Colors.White);
+                    ListBox listBox = new ListBox();
+                    listBox.Items.Add(image);
+                    listBox.Items.Add(textBlock);
+
+                    RadioButton radioButton = new RadioButton();
+                    radioButton.Name = batteryTotalViewModelList[i].TotalID;
+                    radioButton.Click += RadioButton_Click;
+                    radioButton.Content = listBox;
+
+                    BCMUInfo.Items.Add(radioButton);
+
+                    if (isFirst)
+                    {
+                        radioButton.IsChecked = true;
+                        this.DataContext = batteryTotalViewModelList[i].devControlViewModel;
+                        isFirst = false;
+                    }
                 }
             }
-            
         }
 
         private void RadioButton_Click(object sender, RoutedEventArgs e)
         {
-            var item = sender as RadioButton;
-            int index = BCMUInfo.Items.IndexOf(item);
-            this.DataContext = ViewModels[index];
+            for (int i = 0; i < batteryTotalViewModelList.Count; i++)
+            {
+                if(batteryTotalViewModelList[i].TotalID == (sender as RadioButton).Name)
+                {
+                    this.DataContext = batteryTotalViewModelList[i].devControlViewModel;
+                }
+            }
         }
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -98,17 +95,13 @@ namespace EMS.View
             string pattern = @"^[\x00-\x7F]*$";
             if (textBox.Text.Length ==16)
             {
-                
                 e.Handled = true;
                 return;
             }
             if (!Regex.IsMatch(text, pattern))
             {
                 MessageBox.Show("请输入正确字符");
-                
             }
-
-
         }
     }
 }

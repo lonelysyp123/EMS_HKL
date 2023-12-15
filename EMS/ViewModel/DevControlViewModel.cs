@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using EMS.Common.Modbus.ModbusTCP;
+using EMS.Service;
 using EMS.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -357,12 +358,12 @@ namespace EMS.Model
         public RelayCommand SelectBalancedModeCommand { get; set; }
         public RelayCommand InNetCommand { get; set; }
         public RelayCommand FwUpdateCommand { get; set; }
-        private ModbusClient ModbusClient;
         public RelayCommand ReadBCMUIDINFOCommand { get; set; }
         public RelayCommand SyncBCMUIDINFOCommand { get; set; }
-        public DevControlViewModel(ModbusClient client)
-        {
 
+        private BMSDataService DevService;
+        public DevControlViewModel(BMSDataService service)
+        {
             ReadNetInfoCommand = new RelayCommand(ReadNetInfo);
             SyncNetInfoCommand = new RelayCommand(SyncNetInfo);
             OpenChargeChannelCommand = new RelayCommand(OpenChargeChannel);
@@ -398,12 +399,12 @@ namespace EMS.Model
                 "正常模式",
                 "仿真模式"
             };
-            ModbusClient = client;
+            DevService = service;
         }
 
         private void InNet()
         {
-            ModbusClient.WriteFunc(40103, 0xBB11);
+            DevService.Client.WriteFunc(40103, 0xBB11);
         }
 
         private void SelectBalancedMode()
@@ -411,12 +412,12 @@ namespace EMS.Model
 
             if (SelectedBalanceMode == "自动模式")
             {
-                ModbusClient.WriteFunc(40102, 0xBC11);
+                DevService.Client.WriteFunc(40102, 0xBC11);
 
             }
             else if (SelectedBalanceMode == "远程模式")
             {
-                ModbusClient.WriteFunc(40102, 0xBC22);
+                DevService.Client.WriteFunc(40102, 0xBC22);
 
             }
             else
@@ -434,14 +435,14 @@ namespace EMS.Model
                     {
 
                         UInt16 data = (UInt16)(0xBB11);
-                        ModbusClient.WriteFunc(40101, (ushort)data);
+                        DevService.Client.WriteFunc(40101, (ushort)data);
                     }
                     break;
                 case "2":
                     {
                         UInt16 data = (UInt16)(0xBC11);
 
-                        ModbusClient.WriteFunc(40101, (ushort)data);
+                        DevService.Client.WriteFunc(40101, (ushort)data);
 
                     }
                     break;
@@ -449,7 +450,7 @@ namespace EMS.Model
                     {
                         UInt16 data = (UInt16)(0xBD11);
 
-                        ModbusClient.WriteFunc(40101, (ushort)data);
+                        DevService.Client.WriteFunc(40101, (ushort)data);
 
                     }
                     break;
@@ -469,13 +470,13 @@ namespace EMS.Model
                     {
 
                         UInt16 data = (UInt16)(0xAB00 + openchannel);
-                        ModbusClient.WriteFunc(40100, (ushort)data);
+                        DevService.Client.WriteFunc(40100, (ushort)data);
                     } break;
                 case "2":
                     {
                         UInt16 data = (UInt16)(0xAC00 + openchannel);
 
-                        ModbusClient.WriteFunc(40100, (ushort)data);
+                        DevService.Client.WriteFunc(40100, (ushort)data);
 
                     }
                     break;
@@ -483,7 +484,7 @@ namespace EMS.Model
                     {
                         UInt16 data = (UInt16)(0xAD00 + openchannel);
 
-                        ModbusClient.WriteFunc(40100, (ushort)data);
+                        DevService.Client.WriteFunc(40100, (ushort)data);
 
                     }
                     break;
@@ -500,7 +501,7 @@ namespace EMS.Model
 
         private void ReadNetInfo()
         {
-            byte[] data = ModbusClient.ReadFunc(40301, 6);
+            byte[] data = DevService.Client.ReadFunc(40301, 6);
             int ipaddr1 = BitConverter.ToUInt16(data, 0);
             int ipaddr2 = BitConverter.ToUInt16(data, 2);
             int ma1 = BitConverter.ToUInt16(data, 4);
@@ -529,29 +530,29 @@ namespace EMS.Model
             int ma2 = (Mask4 << 8) | Mask3;
             int gw1 = (Gateway2 << 8) | Gateway1;
             int gw2 = (Gateway4 << 8) | Gateway3;
-            ModbusClient.WriteFunc(40301, (ushort)ipaddr1);
-            ModbusClient.WriteFunc(40302, (ushort)ipaddr2);
-            ModbusClient.WriteFunc(40303, (ushort)ma1);
-            ModbusClient.WriteFunc(40304, (ushort)ma2);
-            ModbusClient.WriteFunc(40305, (ushort)gw1);
-            ModbusClient.WriteFunc(40306, (ushort)gw2);
+            DevService.Client.WriteFunc(40301, (ushort)ipaddr1);
+            DevService.Client.WriteFunc(40302, (ushort)ipaddr2);
+            DevService.Client.WriteFunc(40303, (ushort)ma1);
+            DevService.Client.WriteFunc(40304, (ushort)ma2);
+            DevService.Client.WriteFunc(40305, (ushort)gw1);
+            DevService.Client.WriteFunc(40306, (ushort)gw2);
 
         }
         private void FwUpdate()
         {
-            ModbusClient.WriteFunc(40104, 0xBBAA);
+            DevService.Client.WriteFunc(40104, 0xBBAA);
         }
 
         private void SelectDataCollectionMode()
         {
             if (SelectedDataCollectionMode == "正常模式")
             {
-                //ModbusClient.WriteFunc(40105, 0xAAAA);
+                //DevService.Client.WriteFunc(40105, 0xAAAA);
 
             }
             else if (SelectedDataCollectionMode == "仿真模式")
             {
-                ModbusClient.WriteFunc(40105, 0xAA55);
+                DevService.Client.WriteFunc(40105, 0xAA55);
             }
             else
             {
@@ -562,7 +563,7 @@ namespace EMS.Model
 
         private void ReadBCMUIDINFO()
         {
-            byte[] data = ModbusClient.ReadFunc(40307, 16);
+            byte[] data = DevService.Client.ReadFunc(40307, 16);
             StringBuilder BCMUNameBuilder = new StringBuilder();
             for (int i = 0; i < 16; i++)
             {
@@ -608,7 +609,7 @@ namespace EMS.Model
                 {
                     asciiCode2 = (BCMUFullSName[i + 1]) << 8;                  
                     int nameof = asciiCode | asciiCode2;
-                    ModbusClient.WriteFunc((ushort)(40315 + indexSN), (ushort)nameof);
+                    DevService.Client.WriteFunc((ushort)(40315 + indexSN), (ushort)nameof);
                     indexSN++;
                 }
             }
@@ -620,7 +621,7 @@ namespace EMS.Model
                 {
                     int asciiCode2 = (BCMUFullName[i + 1]) << 8;
                     int nameof = asciiCode | asciiCode2;
-                    ModbusClient.WriteFunc((ushort)(40307 + indexN), (ushort)nameof);
+                    DevService.Client.WriteFunc((ushort)(40307 + indexN), (ushort)nameof);
                     indexN++;
                 }
             }

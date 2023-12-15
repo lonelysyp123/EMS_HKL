@@ -10,6 +10,7 @@ using System.IO.Ports;
 using System.Diagnostics.Contracts;
 using System.Collections.Concurrent;
 using System.Threading;
+using EMS.Model;
 
 namespace EMS.Common.Modbus.ModbusTCP
 {
@@ -234,7 +235,10 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
         }
 
-        
+        public bool WriteFunc(byte slave, PcsCommandAdressEnum address, int value)
+        {
+            return WriteFunc(slave, (ushort)address, (ushort)value);
+        }
 
         public bool WriteFunc(byte slave, ushort address, ushort value)
         {

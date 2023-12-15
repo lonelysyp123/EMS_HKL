@@ -23,26 +23,24 @@ namespace EMS.View
     /// </summary>
     public partial class ParameterSettingView : Page
     {
-        private List<BatteryTotalBase> batteryTotalBases;
-        private List<ModbusClient> Clients;
-        private List<ParameterSettingViewModel> ViewModels;
+        private List<BatteryTotalViewModel> batteryTotalViewModelList;
         public ParameterSettingView()
         {
             InitializeComponent();
-            ViewModels = new List<ParameterSettingViewModel>();
         }
-        public void SyncContent(List<BatteryTotalBase> TotalList, List<ModbusClient> ClientList)
+
+        public void SyncContent(List<BatteryTotalViewModel> TotalList)
         {
-            batteryTotalBases = TotalList;
-            Clients = ClientList;
+            batteryTotalViewModelList = TotalList;
             InitDevList();
         }
+
         private void InitDevList()
         {
             BCMUInfo2.Items.Clear();
-            ViewModels.Clear();
+            bool isFirst = true;
             // 初始化BCMU列表
-            for (int i = 0; i < batteryTotalBases.Count; i++)
+            for (int i = 0; i < batteryTotalViewModelList.Count; i++)
             {
                 Image image = new Image();
                 image.Source = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/Online.png"));
@@ -52,38 +50,39 @@ namespace EMS.View
                 TextBlock textBlock = new TextBlock();
                 textBlock.Margin = new Thickness(5, 0, 10, 0);
                 textBlock.VerticalAlignment = VerticalAlignment.Bottom;
-                textBlock.Text = batteryTotalBases[i].TotalID;
+                textBlock.Text = batteryTotalViewModelList[i].TotalID;
                 textBlock.Foreground = new SolidColorBrush(Colors.White);
-
 
                 ListBox listBox = new ListBox();
                 listBox.Items.Add(image);
                 listBox.Items.Add(textBlock);
 
                 RadioButton radioButton = new RadioButton();
+                radioButton.Name = batteryTotalViewModelList[i].TotalID;
                 radioButton.Click += RadioButton_Click;
                 radioButton.Content = listBox;
 
                 BCMUInfo2.Items.Add(radioButton);
-                ParameterSettingViewModel viewmodel = new ParameterSettingViewModel(Clients[i], batteryTotalBases[i].TotalID);
-                ViewModels.Add(viewmodel);
-                if (i == 0)
+
+                if (isFirst)
                 {
                     radioButton.IsChecked = true;
-                    this.DataContext = ViewModels[i];
+                    this.DataContext = batteryTotalViewModelList[i].parameterSettingViewModel;
+                    isFirst = false;
                 }
             }
-
         }
 
         private void RadioButton_Click(object sender, RoutedEventArgs e)
         {
-            var item = sender as RadioButton;
-            int index = BCMUInfo2.Items.IndexOf(item);
-            this.DataContext = ViewModels[index];
+            for (int i = 0; i < batteryTotalViewModelList.Count; i++)
+            {
+                if (batteryTotalViewModelList[i].TotalID == (sender as RadioButton).Name)
+                {
+                    this.DataContext = batteryTotalViewModelList[i].parameterSettingViewModel;
+                }
+            }
         }
-
-      
     }
 }
 

@@ -6,7 +6,7 @@
              xmlns:oxy="http://oxyplot.org/wpf"
              xmlns:local="clr-namespace:EMS.MyControl"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="200">
+             d:DesignHeight="200" d:DesignWidth="200" Visibility="{Binding DevControlVisibility}" MouseLeftButtonUp="UserControl_MouseLeftButtonUp">
 
     <UserControl.Resources>
         <Style x:Key="EmptyTooltipStyle" TargetType="ToolTip">

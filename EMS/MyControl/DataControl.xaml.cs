@@ -1,5 +1,6 @@
 ﻿using EMS.Common.Modbus.ModbusTCP;
 using EMS.Model;
+using EMS.View;
 using EMS.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -25,26 +26,16 @@ namespace EMS.MyControl
     /// </summary>
     public partial class DataControl : UserControl
     {
-        
-       
-        public DataControl()
+        public DataControl(BatteryTotalViewModel viewmodel)
         {
             InitializeComponent();
+            this.DataContext = viewmodel;
         }
 
-        public DataControl(BatteryTotalBase model)
+        private void UserControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            InitializeComponent();
-            this.DataContext = model;
-            //DisplayContentViewModel viewModel = new DisplayContentViewModel();
-            //model.FaultyStateBCMUColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
-           // viewModel.GetActiveProtect(model);
-            //viewModel.GetActiveFaulty(model);
-            //viewModel.GetActiveAlarm(model);
-            //FalutyState.InvalidateVisual();
-            //model.GetColor(model.FaultyColorINFO);
-
-
+            SeriesBatteryView view = new SeriesBatteryView((BatteryTotalViewModel)this.DataContext);
+            view.ShowDialog();
         }
     }
 }

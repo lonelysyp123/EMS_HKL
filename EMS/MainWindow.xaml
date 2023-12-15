@@ -171,10 +171,11 @@
                         </TextBlock>
                     </Border>
 
-                    <ListBox Name="DevList"  ItemsSource="{Binding BatteryTotalList}" BorderThickness="0" materialDesign:ListBoxItemAssist.ShowSelection="False" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Column="0" Grid.Row="1">
+                    <ListBox Name="DevList"  ItemsSource="{Binding BatteryTotalViewModelList}" SelectedItem="{Binding SelectedBatteryTotalViewModel}" BorderThickness="0" materialDesign:ListBoxItemAssist.ShowSelection="False" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Column="0" Grid.Row="1">
                         <ListBox.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="添加设备" Command="{Binding AddDevCommand}"></MenuItem>
+                                <MenuItem Header="删除设备" Command="{Binding DeleteDevCommand}"></MenuItem>
                                 <MenuItem Header="删除所有设备" Command="{Binding DelAllDevCommand}"></MenuItem>
                             </ContextMenu>
                         </ListBox.ContextMenu>
@@ -209,9 +210,8 @@
                                     </Border.Background>
                                     <Border.ContextMenu>
                                         <ContextMenu>
-                                            <MenuItem Header="重新连接" Click="ReConnect_Click"></MenuItem>
-                                            <MenuItem Header="断开连接" Click="DisConnect_Click"></MenuItem>
-                                            <MenuItem Header="删除设备" Click="DelDev_Click"></MenuItem>
+                                            <MenuItem Header="重新连接" Command="{Binding ConnectDevCommand}"></MenuItem>
+                                            <MenuItem Header="断开连接" Command="{Binding DisconnectDevCommand}"></MenuItem>
                                         </ContextMenu>
                                     </Border.ContextMenu>
                                     <Grid>
@@ -224,7 +224,7 @@
                                                 <ColumnDefinition Width="auto"/>
                                                 <ColumnDefinition/>
                                             </Grid.ColumnDefinitions>
-                                            <Image Grid.Column="0" Source="{Binding DevImage}" Width="70"/>
+                                            <Image Grid.Column="0" Source="pack://application:,,,/EMS;component/Resource/Image/BMS.png" Width="70"/>
                                             <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center">
                                                 <TextBlock Text="{Binding TotalID}" FontSize="12" VerticalAlignment="Center" Foreground="White" Opacity="1">
                                                     <TextBlock.Effect>
