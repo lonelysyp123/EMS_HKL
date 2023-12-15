@@ -60,10 +60,10 @@ namespace EMS.Model
     public class BmsManager
     {
         //
-        private List<BatteryTotalBase> _bmsTotalList;
-        public List<BatteryTotalBase> BmsTotalList { get { return _bmsTotalList; } } //封装，不能set
+        private List<BatteryTotalViewModel> _bmsTotalList;
+        public List<BatteryTotalViewModel> BmsTotalList { get { return _bmsTotalList; } } //封装，不能set
         
-        public void SetBMSList(List<BatteryTotalBase> totallist)
+        public void SetBMSList(List<BatteryTotalViewModel> totallist)
         {
             _bmsTotalList = totallist;
         }
