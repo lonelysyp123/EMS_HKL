@@ -79,7 +79,7 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <ListBox x:Name="BCMUInfo"  ScrollViewer.CanContentScroll="False" >
+        <ListBox x:Name="BCMUInfo" ScrollViewer.CanContentScroll="False" >
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel/>

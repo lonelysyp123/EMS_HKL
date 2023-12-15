@@ -227,7 +227,10 @@
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\BatteryModel.cs" />
+    <Compile Include="Model\BatterySeriesModel.cs" />
     <Compile Include="Model\BatteryStrategyModel.cs" />
+    <Compile Include="Model\BatteryTotalModel.cs" />
     <Compile Include="Model\PCSModel.cs" />
     <Compile Include="Model\PCSMonitorModel.cs" />
     <Compile Include="Model\PCSParSettingModel.cs" />
@@ -236,6 +239,7 @@
     <Compile Include="Model\ElectricityMeterModel.cs" />
     <Compile Include="Model\SerialPortSettingsModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
+    <Compile Include="Service\BMSDataService.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmandFaultInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmParameterSettingInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSControlInfoManage.cs" />
@@ -246,6 +250,9 @@
     <Compile Include="Storage\DB\Models\PCSControlSettingModel.cs" />
     <Compile Include="Storage\DB\Models\PCSInfoModel.cs" />
     <Compile Include="Storage\DB\Models\PCSStrategyDailyPatternInfoModel.cs" />
+    <Compile Include="ViewModel\BatterySeriesViewModel.cs" />
+    <Compile Include="ViewModel\BatteryTotalViewModel.cs" />
+    <Compile Include="ViewModel\BatteryViewModel.cs" />
     <Compile Include="ViewModel\AssistanceStrategyViewModel.cs" />
     <Compile Include="ViewModel\DCStatusViewModel.cs" />
     <Compile Include="ViewModel\DevControlViewModel.cs" />
@@ -275,9 +282,6 @@
     <Compile Include="Storage\DB\ORMContext.cs" />
     <Compile Include="Storage\DB\SqliteConfiguration.cs" />
     <Compile Include="Storage\DB\DBManage\SeriesBatteryInfoManage.cs" />
-    <Compile Include="Model\BatteryBase.cs" />
-    <Compile Include="Model\BatterySeriesBase.cs" />
-    <Compile Include="Model\BatteryTotalBase.cs" />
     <Compile Include="Storage\File\BatteryModelForFile.cs" />
     <Compile Include="Storage\File\FileHelper.cs" />
     <Compile Include="ViewModel\DataAnalysisViewModel.cs" />
