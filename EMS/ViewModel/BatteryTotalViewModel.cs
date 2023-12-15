@@ -594,11 +594,12 @@ namespace EMS.ViewModel
         {
             ConnectDevCommand = new RelayCommand(ConnectDev);
             DisconnectDevCommand = new RelayCommand(DisconnectDev);
-
+            service = new BMSDataService();
             IP = ip;
             Port = port;
             TotalList = new ConcurrentQueue<BatteryTotalModel>();
-            devControlViewModel = new DevControlViewModel(service.Client);
+            devControlViewModel = new DevControlViewModel(service);
+            parameterSettingViewModel = new ParameterSettingViewModel(service, TotalID);
             batterySeriesViewModelList = new List<BatterySeriesViewModel>();
             for (int i = 0; i < 3; i++)
             {
@@ -619,7 +620,6 @@ namespace EMS.ViewModel
 
         private void ConnectDev()
         {
-            service = new BMSDataService();
             service.RegisterState(ServiceStateCallBack);
             service.SetCommunicationConfig(IP, Port, TotalList);
             service.Connect();
