@@ -91,7 +91,7 @@ namespace EMS.Model
         public static void Initialization(EnergyManagementSystem globalInstance)
         {
             _globalInstance = globalInstance;
-    }
+        }
 
         public EmsController Controller { get { return _controller; } }
         public BmsManager BmsManager { get { return _bms_manager; } }

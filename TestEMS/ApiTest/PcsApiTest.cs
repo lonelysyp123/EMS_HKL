@@ -16,7 +16,7 @@ namespace TestEMS.ApiTest
         public void TestPcsSetAction()
         {
             log4net.Config.XmlConfigurator.Configure(); // log4net
-            Assert.AreEqual(true, PcsApi.PcsSetAction(1, 1, null));
+            Assert.AreEqual(true, PcsApi.SetPCSHalt());
         }
     }
 }
