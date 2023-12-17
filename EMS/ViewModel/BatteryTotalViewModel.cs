@@ -503,7 +503,7 @@ namespace EMS.ViewModel
         private Visibility _devControlVisibility;
         public Visibility DevControlVisibility
         {
-            get=> _devControlVisibility;
+            get => _devControlVisibility;
             set
             {
                 SetProperty(ref _devControlVisibility, value);
@@ -548,7 +548,7 @@ namespace EMS.ViewModel
             get => _isDaqData;
             private set
             {
-                if(_isDaqData != value)
+                if (_isDaqData != value)
                 {
                     _isDaqData = value;
                     if (_isDaqData)
@@ -566,10 +566,10 @@ namespace EMS.ViewModel
         private bool _isRecordData = false;
         public bool IsRecordData
         {
-            get=>_isRecordData;
+            get => _isRecordData;
             set
             {
-                if(_isRecordData != value)
+                if (_isRecordData != value)
                 {
                     _isRecordData = value;
                     if (_isRecordData)
@@ -588,6 +588,7 @@ namespace EMS.ViewModel
         public DevControlViewModel devControlViewModel;
         public ParameterSettingViewModel parameterSettingViewModel;
         private ConcurrentQueue<BatteryTotalModel> TotalList;
+        public BatteryTotalModel CurrentBatteryTotalModel { get; private set; }
         private BMSDataService service;
 
         public BatteryTotalViewModel(string ip, string port)
@@ -635,16 +636,16 @@ namespace EMS.ViewModel
 
         private void RefreshDataTh()
         {
-            while(IsDaqData)
+            while (IsDaqData)
             {
-                if(TotalList.TryDequeue(out BatteryTotalModel result))
+                if (TotalList.TryDequeue(out BatteryTotalModel CurrentBatteryTotalModel))
                 {
                     // 把数据分发给需要显示的内容
-                    RefreshData(result);
+                    RefreshData(CurrentBatteryTotalModel);
 
                     if (IsRecordData)
                     {
-                        SaveData(result);
+                        SaveData(CurrentBatteryTotalModel);
                     }
                 }
                 else
@@ -917,7 +918,12 @@ namespace EMS.ViewModel
                 }
 
             }
-            AlarmStateBCMU = INFO;
+            AssistanceStrategyViewModel ASSISTINFO = new AssistanceStrategyViewModel();
+            ObservableCollection<string> RECHECKINFO = ASSISTINFO.RecheckStrategy();
+            ObservableCollection<string> MERGEINFO = new ObservableCollection<string>(INFO.Concat(RECHECKINFO).Distinct());
+            //LogUtils.Debug(MERGEINFO.ToString());
+            AlarmStateBCMU = MERGEINFO;
+            //AlarmStateBCMU = INFO;
             List<string> list = new List<string>();
 
             if (colorvalue == 1)

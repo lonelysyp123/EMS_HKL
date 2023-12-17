@@ -24,13 +24,13 @@ namespace EMS.ViewModel
             string bcmuid4 = "BCMU(4)";
             string bcmuid5 = "BCMU(5)";
             string bcmuid6 = "BCMU(6)";
-            
-            BatteryTotalBase batteryTotalBases1 = BmsApi.GetBMSTotalInfo(bcmuid1);
-            BatteryTotalBase batteryTotalBases2 = BmsApi.GetBMSTotalInfo(bcmuid2);
-            BatteryTotalBase batteryTotalBases3 = BmsApi.GetBMSTotalInfo(bcmuid3);
-            BatteryTotalBase batteryTotalBases4 = BmsApi.GetBMSTotalInfo(bcmuid4);
-            BatteryTotalBase batteryTotalBases5 = BmsApi.GetBMSTotalInfo(bcmuid5);
-            BatteryTotalBase batteryTotalBases6 = BmsApi.GetBMSTotalInfo(bcmuid6);
+
+            BatteryTotalViewModel batteryTotalBases1 = BmsApi.GetBMSTotalInfo(bcmuid1);
+            BatteryTotalViewModel batteryTotalBases2 = BmsApi.GetBMSTotalInfo(bcmuid2);
+            BatteryTotalViewModel batteryTotalBases3 = BmsApi.GetBMSTotalInfo(bcmuid3);
+            BatteryTotalViewModel batteryTotalBases4 = BmsApi.GetBMSTotalInfo(bcmuid4);
+            BatteryTotalViewModel batteryTotalBases5 = BmsApi.GetBMSTotalInfo(bcmuid5);
+            BatteryTotalViewModel batteryTotalBases6 = BmsApi.GetBMSTotalInfo(bcmuid6);
 
             AnalyzeBatteryCluster(batteryTotalBases1);//第一簇
             AnalyzeBatteryCluster(batteryTotalBases2);
@@ -54,7 +54,7 @@ namespace EMS.ViewModel
 
 
         //每簇组端电压保护，单体电压保护，单体压差保护逻辑
-        private void AnalyzeBatteryCluster(BatteryTotalBase batteryTotalBases)
+        private void AnalyzeBatteryCluster(BatteryTotalViewModel batteryTotalBases)
         {
             if (batteryTotalBases != null)
             {
@@ -83,7 +83,7 @@ namespace EMS.ViewModel
         }
 
         //充放电温度告警逻辑
-        private void ProcessTemperature(BatteryTotalBase batteryTotalBases, int seriesIndex, int batteryIndex)
+        private void ProcessTemperature(BatteryTotalViewModel batteryTotalBases, int seriesIndex, int batteryIndex)
         {
             switch (batteryTotalBases.StateBCMU)
             {
@@ -99,7 +99,7 @@ namespace EMS.ViewModel
         }
 
         //充放电电流告警逻辑和SOC告警逻辑
-        private void ProcessCurrentAndSOC(BatteryTotalBase batteryTotalBases)
+        private void ProcessCurrentAndSOC(BatteryTotalViewModel batteryTotalBases)
         {
             switch (batteryTotalBases.StateBCMU)
             {
