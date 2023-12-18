@@ -231,6 +231,7 @@
     <Compile Include="Model\BatterySeriesModel.cs" />
     <Compile Include="Model\BatteryStrategyModel.cs" />
     <Compile Include="Model\BatteryTotalModel.cs" />
+    <Compile Include="Model\MqttConnectInfoModel.cs" />
     <Compile Include="Model\PCSModel.cs" />
     <Compile Include="Model\PCSMonitorModel.cs" />
     <Compile Include="Model\PCSParSettingModel.cs" />
@@ -238,8 +239,10 @@
     <Compile Include="Model\BMSParameterSettingModel.cs" />
     <Compile Include="Model\ElectricityMeterModel.cs" />
     <Compile Include="Model\SerialPortSettingsModel.cs" />
+    <Compile Include="Model\SubscribeMessageModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
     <Compile Include="Service\BMSDataService.cs" />
+    <Compile Include="Service\MqttClientService.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmandFaultInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmParameterSettingInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSControlInfoManage.cs" />
