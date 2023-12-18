@@ -41,15 +41,6 @@ namespace EMS.ViewModel
             AnalyzeBatteryCluster(batteryTotalBases5, INFOAS);
             AnalyzeBatteryCluster(batteryTotalBases6, INFOAS);
 
-            if(batteryTotalBases1 == null &&
-                batteryTotalBases2 == null &&
-                batteryTotalBases3 == null &&
-                batteryTotalBases4 == null &&
-                batteryTotalBases5 == null &&
-                batteryTotalBases6 == null)
-            {
-                INFOAS.Clear();
-            }
             LogUtils.Debug(INFOAS.ToString());
             return INFOAS;
         }
