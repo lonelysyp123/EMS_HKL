@@ -182,8 +182,8 @@ namespace EMS.Model
         /// 电池数量
         /// </summary>
         public ushort BatteryCount { set; get; }
-        private ushort SeriesCount = 3;
-        private ushort BatteriesCountInSeries = 14;
+        public ushort SeriesCount = 3;
+        public ushort BatteriesCountInSeries = 14;
 
         public List<BatterySeriesModel> Series { get; set; }
 
