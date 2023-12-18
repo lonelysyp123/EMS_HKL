@@ -60,12 +60,12 @@ namespace EMS.ViewModel
             {
                 ObservableCollection<double> singleVoltages = new ObservableCollection<double>();
                 ClusterVolLevel(batteryTotalBases.TotalVoltage);//组端电压保护
-                for (int i = 0; i < batteryTotalBases.SeriesCount; i++)
+                for (int i = 0; i < batteryTotalBases.CurrentBatteryTotalModel.SeriesCount; i++)
                 {
-                    for (int j = 0; j < batteryTotalBases.BatteriesCountInSeries; j++)
+                    for (int j = 0; j < batteryTotalBases.CurrentBatteryTotalModel.BatteriesCountInSeries; j++)
                     {
-                        SingleVolLevel(batteryTotalBases.Series[i].Batteries[j].Voltage);//单体电压保护
-                        double singlevolvalue = batteryTotalBases.Series[i].Batteries[j].Voltage;
+                        SingleVolLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[i].Batteries[j].Voltage);//单体电压保护
+                        double singlevolvalue = batteryTotalBases.CurrentBatteryTotalModel.Series[i].Batteries[j].Voltage;
                         singleVoltages.Add(singlevolvalue);
                         ProcessTemperature(batteryTotalBases, i, j);
                     }
@@ -85,15 +85,15 @@ namespace EMS.ViewModel
         //充放电温度告警逻辑
         private void ProcessTemperature(BatteryTotalViewModel batteryTotalBases, int seriesIndex, int batteryIndex)
         {
-            switch (batteryTotalBases.StateBCMU)
+            switch (batteryTotalBases.CurrentBatteryTotalModel.StateBCMU)
             {
                 case 1:
-                    TempCharProtectLevel(batteryTotalBases.Series[seriesIndex].Batteries[batteryIndex].Temperature1);
-                    TempCharProtectLevel(batteryTotalBases.Series[seriesIndex].Batteries[batteryIndex].Temperature2);
+                    TempCharProtectLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[seriesIndex].Batteries[batteryIndex].Temperature1);
+                    TempCharProtectLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[seriesIndex].Batteries[batteryIndex].Temperature2);
                     break;
                 case 2:
-                    TempDischarProtectLevel(batteryTotalBases.Series[seriesIndex].Batteries[batteryIndex].Temperature1);
-                    TempDischarProtectLevel(batteryTotalBases.Series[seriesIndex].Batteries[batteryIndex].Temperature2);
+                    TempDischarProtectLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[seriesIndex].Batteries[batteryIndex].Temperature1);
+                    TempDischarProtectLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[seriesIndex].Batteries[batteryIndex].Temperature2);
                     break;
             }
         }
@@ -101,7 +101,7 @@ namespace EMS.ViewModel
         //充放电电流告警逻辑和SOC告警逻辑
         private void ProcessCurrentAndSOC(BatteryTotalViewModel batteryTotalBases)
         {
-            switch (batteryTotalBases.StateBCMU)
+            switch (batteryTotalBases.CurrentBatteryTotalModel.StateBCMU)
             {
                 case 1:
                     CurrentProtectLevel("电池组充电", batteryTotalBases.TotalCurrent);
