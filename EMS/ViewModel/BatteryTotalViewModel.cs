@@ -595,12 +595,9 @@ namespace EMS.ViewModel
         {
             ConnectDevCommand = new RelayCommand(ConnectDev);
             DisconnectDevCommand = new RelayCommand(DisconnectDev);
-            service = new BMSDataService();
             IP = ip;
             Port = port;
             TotalList = new ConcurrentQueue<BatteryTotalModel>();
-            devControlViewModel = new DevControlViewModel(service);
-            parameterSettingViewModel = new ParameterSettingViewModel(service, TotalID);
             batterySeriesViewModelList = new List<BatterySeriesViewModel>();
             for (int i = 0; i < 3; i++)
             {
@@ -621,9 +618,14 @@ namespace EMS.ViewModel
 
         private void ConnectDev()
         {
+            service = new BMSDataService();
             service.RegisterState(ServiceStateCallBack);
             service.SetCommunicationConfig(IP, Port, TotalList);
             service.Connect();
+
+            devControlViewModel = new DevControlViewModel(service);
+            devControlViewModel.InitBCMUInfo(3, 14);
+            parameterSettingViewModel = new ParameterSettingViewModel(service, TotalID);
         }
 
         public void StartDaqData()
@@ -638,7 +640,7 @@ namespace EMS.ViewModel
         {
             while (IsDaqData)
             {
-                if (TotalList.TryDequeue(out BatteryTotalModel CurrentBatteryTotalModel))
+                if(TotalList.TryDequeue(out BatteryTotalModel CurrentBatteryTotalModel))
                 {
                     // 把数据分发给需要显示的内容
                     RefreshData(CurrentBatteryTotalModel);

@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Markup;
 
 namespace EMS.Service
 {
@@ -248,6 +250,187 @@ namespace EMS.Service
         public void StopDaqData()
         {
             IsDaqData = false;
+        }
+
+        public int[] ReadNetInfo()
+        {
+            byte[] data = Client.ReadFunc(40301, 6);
+            int ipaddr1 = BitConverter.ToUInt16(data, 0);
+            int ipaddr2 = BitConverter.ToUInt16(data, 2);
+            int ma1 = BitConverter.ToUInt16(data, 4);
+            int ma2 = BitConverter.ToUInt16(data, 6);
+            int gw1 = BitConverter.ToUInt16(data, 8);
+            int gw2 = BitConverter.ToUInt16(data, 10);
+            return new int[] {ipaddr1, ipaddr2, ma1, ma2, gw1, gw2};
+        }
+
+        public void SyncNetInfo(DevControlViewModel viewmodel)
+        {
+            int ipaddr1 = (viewmodel.Address2 << 8) | viewmodel.Address1;
+            int ipaddr2 = (viewmodel.Address4 << 8) | viewmodel.Address3;
+            int ma1 = (viewmodel.Mask2 << 8) | viewmodel.Mask1;
+            int ma2 = (viewmodel.Mask4 << 8) | viewmodel.Mask3;
+            int gw1 = (viewmodel.Gateway2 << 8) | viewmodel.Gateway1;
+            int gw2 = (viewmodel.Gateway4 << 8) | viewmodel.Gateway3;
+            Client.WriteFunc(40301, (ushort)ipaddr1);
+            Client.WriteFunc(40302, (ushort)ipaddr2);
+            Client.WriteFunc(40303, (ushort)ma1);
+            Client.WriteFunc(40304, (ushort)ma2);
+            Client.WriteFunc(40305, (ushort)gw1);
+            Client.WriteFunc(40306, (ushort)gw2);
+        }
+
+        private Int32[] OpenObjs = { 0xAB00, 0xAC00, 0xAD00 };
+        public void OpenChargeChannel(string SelectedChannel, string SelectedBMU)
+        {
+            if (int.TryParse(SelectedChannel, out int openchannel))
+            {
+                if (int.TryParse(SelectedBMU, out int index))
+                {
+                    if (index - 1 < 3)
+                    {
+                        UInt16 data = (UInt16)(OpenObjs[index - 1] + openchannel);
+                        Client.WriteFunc(40100, (ushort)data);
+                        return;
+                    }
+                }
+            }
+            MessageBox.Show("失败");
+        }
+
+        private Int32[] CloseObjs = { 0xBB11, 0xBC11, 0xBD11 };
+        public void CloseChargeChannel(string SelectedChannel, string SelectedBMU)
+        {
+            if(int.TryParse(SelectedChannel, out int closechannel))
+            {
+                if (int.TryParse(SelectedBMU, out int index))
+                {
+                    if (index - 1 < 3)
+                    {
+                        UInt16 data = (UInt16)(CloseObjs[index-1]);
+                        Client.WriteFunc(40101, (ushort)data);
+                        return;
+                    }
+                }
+            }
+            MessageBox.Show("失败");
+        }
+
+        public void SelectBalancedMode(string SelectedBalanceMode)
+        {
+            if (SelectedBalanceMode == "自动模式")
+            {
+                Client.WriteFunc(40102, 0xBC11);
+            }
+            else if (SelectedBalanceMode == "远程模式")
+            {
+                Client.WriteFunc(40102, 0xBC22);
+            }
+            else
+            {
+                MessageBox.Show("请选择模式");
+            }
+        }
+
+        public void FWUpdate()
+        {
+            Client.WriteFunc(40104, 0xBBAA);
+        }
+
+        public void InNet()
+        {
+            Client.WriteFunc(40103, 0xBB11);
+        }
+
+        public string[] ReadBCMUIDINFO()
+        {
+            byte[] data = Client.ReadFunc(40307, 16);
+            StringBuilder BCMUNameBuilder = new StringBuilder();
+            for (int i = 0; i < 16; i++)
+            {
+                char BCMUNameChar = Convert.ToChar(data[i]);
+                BCMUNameBuilder.Append(BCMUNameChar);
+            }
+
+            string str1 = BCMUNameBuilder.ToString().TrimStart('0');
+            StringBuilder BCMUSNameBuilder = new StringBuilder();
+            for (int i = 16; i < 32; i++)
+            {
+                char BCMUSNameChar = Convert.ToChar(data[i]);
+                BCMUSNameBuilder.Append(BCMUSNameChar);
+
+            }
+            string str2 = BCMUSNameBuilder.ToString().TrimStart('0');
+            return new string[] { str1, str2 };
+        }
+
+        public void SyncBCMUIDINFO(DevControlViewModel viewmodel)
+        {
+            int indexSN = 0; //BCMU序列号数据序号
+            int indexN = 0;//BCMU别名序号
+            string BCMUFullSName = "";//补足16位的BCMU序列号
+            string BCMUFullName = "";//补足16位的BCMU别名
+            if (viewmodel.BCMUSName.Length < 16 || viewmodel.BCMUName.Length < 16)
+            {
+                BCMUFullSName = viewmodel.BCMUSName.PadLeft(16, '0');
+                BCMUFullName = viewmodel.BCMUName.PadLeft(16, '0');
+            }
+            else
+            {
+                BCMUFullSName = viewmodel.BCMUSName;
+                BCMUFullName = viewmodel.BCMUName;
+            }
+            //写BCMU序列号
+            for (int i = 0; i < BCMUFullSName.Length; i++)
+            {
+                int asciiCode = (int)BCMUFullSName[i];
+                int asciiCode2;
+                if (i % 2 == 0)
+                {
+                    asciiCode2 = (BCMUFullSName[i + 1]) << 8;
+                    int nameof = asciiCode | asciiCode2;
+                    Client.WriteFunc((ushort)(40315 + indexSN), (ushort)nameof);
+                    indexSN++;
+                }
+            }
+            //写BCMU别名
+            for (int i = 0; i < BCMUFullName.Length; i++)
+            {
+                int asciiCode = (int)BCMUFullName[i];
+                if (i % 2 == 0)
+                {
+                    int asciiCode2 = (BCMUFullName[i + 1]) << 8;
+                    int nameof = asciiCode | asciiCode2;
+                    Client.WriteFunc((ushort)(40307 + indexN), (ushort)nameof);
+                    indexN++;
+                }
+            }
+        }
+
+        public void SelectDataCollectionMode(string SelectedDataCollectionMode)
+        {
+            if (SelectedDataCollectionMode == "正常模式")
+            {
+                //ModbusClient.WriteFunc(40105, 0xAAAA);
+            }
+            else if (SelectedDataCollectionMode == "仿真模式")
+            {
+                Client.WriteFunc(40105, 0xAA55);
+            }
+            else
+            {
+                MessageBox.Show("请选择正确模式");
+            }
+        }
+
+        public byte[] ReadBCMUInfo()
+        {
+            return Client.ReadFunc(40200, 34);
+        }
+
+        public void SyncBCMUInfo(ushort[] values)
+        {
+            Client.WriteFunc(40200, values);
         }
     }
 }
