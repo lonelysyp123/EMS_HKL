@@ -588,18 +588,16 @@ namespace EMS.ViewModel
         public DevControlViewModel devControlViewModel;
         public ParameterSettingViewModel parameterSettingViewModel;
         private ConcurrentQueue<BatteryTotalModel> TotalList;
+        public BatteryTotalModel CurrentBatteryTotalModel { get; private set; }
         private BMSDataService service;
 
         public BatteryTotalViewModel(string ip, string port)
         {
             ConnectDevCommand = new RelayCommand(ConnectDev);
             DisconnectDevCommand = new RelayCommand(DisconnectDev);
-            service = new BMSDataService();
             IP = ip;
             Port = port;
             TotalList = new ConcurrentQueue<BatteryTotalModel>();
-            devControlViewModel = new DevControlViewModel(service);
-            parameterSettingViewModel = new ParameterSettingViewModel(service, TotalID);
             batterySeriesViewModelList = new List<BatterySeriesViewModel>();
             for (int i = 0; i < 3; i++)
             {
@@ -620,9 +618,14 @@ namespace EMS.ViewModel
 
         private void ConnectDev()
         {
+            service = new BMSDataService();
             service.RegisterState(ServiceStateCallBack);
             service.SetCommunicationConfig(IP, Port, TotalList);
             service.Connect();
+
+            devControlViewModel = new DevControlViewModel(service);
+            devControlViewModel.InitBCMUInfo(3, 14);
+            parameterSettingViewModel = new ParameterSettingViewModel(service, TotalID);
         }
 
         public void StartDaqData()
@@ -637,14 +640,14 @@ namespace EMS.ViewModel
         {
             while(IsDaqData)
             {
-                if(TotalList.TryDequeue(out BatteryTotalModel result))
+                if(TotalList.TryDequeue(out BatteryTotalModel CurrentBatteryTotalModel))
                 {
                     // 把数据分发给需要显示的内容
-                    RefreshData(result);
+                    RefreshData(CurrentBatteryTotalModel);
 
                     if (IsRecordData)
                     {
-                        SaveData(result);
+                        SaveData(CurrentBatteryTotalModel);
                     }
                 }
                 else

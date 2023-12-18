@@ -1,5 +1,6 @@
 ﻿using EMS.Common.Modbus.ModbusTCP;
 using EMS.Model;
+using EMS.MyControl;
 using EMS.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -54,23 +55,22 @@ namespace EMS.View
                     TextBlock textBlock = new TextBlock();
                     textBlock.Margin = new Thickness(5, 0, 10, 0);
                     textBlock.VerticalAlignment = VerticalAlignment.Bottom;
-                    textBlock.Text = batteryTotalViewModelList[i].TotalID;
+                    Binding binding = new Binding() { Path = new PropertyPath("TotalID") };
+                    textBlock.SetBinding(TextBlock.TextProperty, binding);
                     textBlock.Foreground = new SolidColorBrush(Colors.White);
                     ListBox listBox = new ListBox();
                     listBox.Items.Add(image);
                     listBox.Items.Add(textBlock);
 
                     RadioButton radioButton = new RadioButton();
-                    radioButton.Name = batteryTotalViewModelList[i].TotalID;
                     radioButton.Click += RadioButton_Click;
                     radioButton.Content = listBox;
-
+                    radioButton.DataContext = batteryTotalViewModelList[i];
                     BCMUInfo.Items.Add(radioButton);
-
                     if (isFirst)
                     {
                         radioButton.IsChecked = true;
-                        this.DataContext = batteryTotalViewModelList[i].devControlViewModel;
+                        this.DataContext = (radioButton.DataContext as BatteryTotalViewModel).devControlViewModel;
                         isFirst = false;
                     }
                 }
@@ -79,13 +79,7 @@ namespace EMS.View
 
         private void RadioButton_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < batteryTotalViewModelList.Count; i++)
-            {
-                if(batteryTotalViewModelList[i].TotalID == (sender as RadioButton).Name)
-                {
-                    this.DataContext = batteryTotalViewModelList[i].devControlViewModel;
-                }
-            }
+            this.DataContext = ((sender as RadioButton).DataContext as BatteryTotalViewModel).devControlViewModel;
         }
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
