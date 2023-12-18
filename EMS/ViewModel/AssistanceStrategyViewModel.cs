@@ -12,9 +12,6 @@ namespace EMS.ViewModel
 {
     public class AssistanceStrategyViewModel : ViewModelBase
     {
-
-        //public static ObservableCollection<string> INFOAS = new ObservableCollection<string>();
-
         //BMS数据处理方法，生成告警
         public ObservableCollection<string> RecheckStrategy()
         {
@@ -25,8 +22,10 @@ namespace EMS.ViewModel
             string bcmuid5 = "BCMU(5)";
             string bcmuid6 = "BCMU(6)";
 
+            //定义告警信息字符串数据集合
             ObservableCollection<string> INFOAS = new ObservableCollection<string>();
 
+            //API调用电池簇数据
             BatteryTotalViewModel batteryTotalBases1 = BmsApi.GetBMSTotalInfo(bcmuid1);
             BatteryTotalViewModel batteryTotalBases2 = BmsApi.GetBMSTotalInfo(bcmuid2);
             BatteryTotalViewModel batteryTotalBases3 = BmsApi.GetBMSTotalInfo(bcmuid3);
@@ -34,7 +33,8 @@ namespace EMS.ViewModel
             BatteryTotalViewModel batteryTotalBases5 = BmsApi.GetBMSTotalInfo(bcmuid5);
             BatteryTotalViewModel batteryTotalBases6 = BmsApi.GetBMSTotalInfo(bcmuid6);
 
-            AnalyzeBatteryCluster(batteryTotalBases1, INFOAS);//第一簇
+            //共6簇告警逻辑方法调用
+            AnalyzeBatteryCluster(batteryTotalBases1, INFOAS);
             AnalyzeBatteryCluster(batteryTotalBases2, INFOAS);
             AnalyzeBatteryCluster(batteryTotalBases3, INFOAS);
             AnalyzeBatteryCluster(batteryTotalBases4, INFOAS);
@@ -46,7 +46,7 @@ namespace EMS.ViewModel
         }
 
 
-        //每簇组端电压保护，单体电压保护，单体压差保护逻辑
+        //每簇组端电压保护，单体电压保护，单体压差保护告警逻辑
         private void AnalyzeBatteryCluster(BatteryTotalViewModel batteryTotalBases, ObservableCollection<string> INFO)
         {
             if (batteryTotalBases != null)
