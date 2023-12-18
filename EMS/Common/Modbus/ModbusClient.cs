@@ -141,8 +141,23 @@ namespace EMS.Common.Modbus.ModbusTCP
             catch (Exception ex)
             {
                 LogUtils.Error(ex.ToString());
+
+                LogUtils.Warn("读取数据失败", ex);
+                if (!_client.Connected)
+                {
+                    if (CommunicationCheck())
+                    {
+                        throw new Exception("MobusClient Communication Error");
+                    }
+                }
+
                 throw ex;
             }
+        }
+
+        private bool CommunicationCheck()
+        {
+            throw new NotImplementedException();
         }
 
         public bool ReadFunc(byte slave, ushort address, ushort num, ref byte[] value)
