@@ -215,6 +215,7 @@ namespace EMS.Model
                 SetProperty(ref _gateway4, value);
             }
         }
+
         /// <summary>
         /// BMU集合
         /// </summary>
@@ -224,9 +225,6 @@ namespace EMS.Model
             get { return _bMUid; }
             set { SetProperty(ref _bMUid, value); }
         }
-
-
-
 
         private List<string> _channels;
         /// <summary>
@@ -244,8 +242,6 @@ namespace EMS.Model
             }
         }
 
-
-
         private string _selectedChannel;
         /// <summary>
         /// BMU的通道
@@ -261,8 +257,6 @@ namespace EMS.Model
                 SetProperty(ref _selectedChannel, value);
             }
         }
-
-
 
         /// <summary>
         /// 被选择的BMU
@@ -280,13 +274,9 @@ namespace EMS.Model
             }
         }
 
-
-
-
         /// <summary>
         /// 数据采集模式
         /// </summary>
-
         private string _selectedDataCollectionMode;
         public string SelectedDataCollectionMode
         {
@@ -306,6 +296,7 @@ namespace EMS.Model
                 SetProperty(ref _dataCollectionMode, value);
             }
         }
+
         /// <summary>
         /// 均衡模式选择
         /// </summary>
@@ -350,7 +341,6 @@ namespace EMS.Model
         }
 
         public RelayCommand SelectDataCollectionModeCommand { get; set; }
-
         public RelayCommand ReadNetInfoCommand { get; set; }
         public RelayCommand SyncNetInfoCommand { get; set; }
         public RelayCommand OpenChargeChannelCommand { get; set; }
@@ -373,25 +363,28 @@ namespace EMS.Model
             InNetCommand = new RelayCommand(InNet);
             ReadBCMUIDINFOCommand = new RelayCommand(ReadBCMUIDINFO);
             SyncBCMUIDINFOCommand = new RelayCommand(SyncBCMUIDINFO);
-            Channels = new List<string>();
             SelectDataCollectionModeCommand = new RelayCommand(SelectDataCollectionMode);   
-            
-            for (int i = 1; i <= 14; i++)
+            DevService = service;
+        }
+
+        public void InitBCMUInfo(int channelCounr, int bmuCount)
+        {
+            Channels = new List<string>();
+            for (int i = 1; i <= channelCounr; i++)
             {
                 Channels.Add(i.ToString());
             }
 
-            BMUID = new List<string>
+            BMUID = new List<string>();
+            for (int i = 1;i <= bmuCount; i++)
             {
-                "1",
-                "2",
-                "3"
-            };
+                BMUID.Add(i.ToString());
+            }
+
             BalanceMode = new List<string>
             {
                 "远程模式",
                 "自动模式"
-
             };
 
             DataCollectionMode = new List<string>
@@ -399,233 +392,69 @@ namespace EMS.Model
                 "正常模式",
                 "仿真模式"
             };
-            DevService = service;
         }
 
         private void InNet()
         {
-            DevService.Client.WriteFunc(40103, 0xBB11);
+            DevService.InNet();
         }
 
         private void SelectBalancedMode()
         {
-
-            if (SelectedBalanceMode == "自动模式")
-            {
-                DevService.Client.WriteFunc(40102, 0xBC11);
-
-            }
-            else if (SelectedBalanceMode == "远程模式")
-            {
-                DevService.Client.WriteFunc(40102, 0xBC22);
-
-            }
-            else
-            {
-                MessageBox.Show("请选择模式");
-            }
+            DevService.SelectBalancedMode(SelectedBalanceMode);
         }
 
         private void CloseChargeChannel()
         {
-            int.TryParse(SelectedChannel, out int closechannel);
-            switch (SelectedBMU)
-            {
-                case "1":
-                    {
-
-                        UInt16 data = (UInt16)(0xBB11);
-                        DevService.Client.WriteFunc(40101, (ushort)data);
-                    }
-                    break;
-                case "2":
-                    {
-                        UInt16 data = (UInt16)(0xBC11);
-
-                        DevService.Client.WriteFunc(40101, (ushort)data);
-
-                    }
-                    break;
-                case "3":
-                    {
-                        UInt16 data = (UInt16)(0xBD11);
-
-                        DevService.Client.WriteFunc(40101, (ushort)data);
-
-                    }
-                    break;
-                default:
-                    {
-                        MessageBox.Show("请选择需要关闭的BMU");
-                    } break;
-            }
+            DevService.CloseChargeChannel(SelectedChannel, SelectedBMU);
         }
 
         private void OpenChargeChannel()
         {
-            int.TryParse(SelectedChannel, out int openchannel);
-            switch (SelectedBMU)
-            {
-                case "1":
-                    {
-
-                        UInt16 data = (UInt16)(0xAB00 + openchannel);
-                        DevService.Client.WriteFunc(40100, (ushort)data);
-                    } break;
-                case "2":
-                    {
-                        UInt16 data = (UInt16)(0xAC00 + openchannel);
-
-                        DevService.Client.WriteFunc(40100, (ushort)data);
-
-                    }
-                    break;
-                case "3":
-                    {
-                        UInt16 data = (UInt16)(0xAD00 + openchannel);
-
-                        DevService.Client.WriteFunc(40100, (ushort)data);
-
-                    }
-                    break;
-                default:
-                    {
-                        MessageBox.Show("请选择数据");
-                    } break;
-
-            }
-
-
-
+            DevService.OpenChargeChannel(SelectedChannel, SelectedBMU);
         }
 
         private void ReadNetInfo()
         {
-            byte[] data = DevService.Client.ReadFunc(40301, 6);
-            int ipaddr1 = BitConverter.ToUInt16(data, 0);
-            int ipaddr2 = BitConverter.ToUInt16(data, 2);
-            int ma1 = BitConverter.ToUInt16(data, 4);
-            int ma2 = BitConverter.ToUInt16(data, 6);
-            int gw1 = BitConverter.ToUInt16(data, 8);
-            int gw2 = BitConverter.ToUInt16(data, 10);
-            Address1 = ipaddr1 & 0xFF;//192
-            Address2 = (ipaddr1 & 0xFF00) >> 8; //168
-            Address3 = ipaddr2 & 0xFF; //0
-            Address4 = (ipaddr2 & 0xFF00) >> 8; //102
-            Mask1 = ma1 & 0xFF; //255
-            Mask2 = (ma1 & 0xFF00) >> 8;//255
-            Mask3 = (ma2 & 0xFF);//255
-            Mask4 = (ma2 & 0xFF00) >> 8;//0
-            Gateway1 = gw1 & 0xFF;//192
-            Gateway2 = (gw1 & 0xFF00) >> 8;//168
-            Gateway3 = gw2 & 0xFF;//1
-            Gateway4 = (gw2 & 0xFF00) >> 8;//1
+            int[] data = DevService.ReadNetInfo();
+            Address1 = data[0] & 0xFF;//192
+            Address2 = (data[0] & 0xFF00) >> 8; //168
+            Address3 = data[1] & 0xFF; //0
+            Address4 = (data[1] & 0xFF00) >> 8; //102
+            Mask1 = data[2] & 0xFF; //255
+            Mask2 = (data[2] & 0xFF00) >> 8;//255
+            Mask3 = (data[3] & 0xFF);//255
+            Mask4 = (data[3] & 0xFF00) >> 8;//0
+            Gateway1 = data[4] & 0xFF;//192
+            Gateway2 = (data[4] & 0xFF00) >> 8;//168
+            Gateway3 = data[5] & 0xFF;//1
+            Gateway4 = (data[5] & 0xFF00) >> 8;//1
         }
 
         private void SyncNetInfo()
         {
-            int ipaddr1 = (Address2 << 8) | Address1;
-            int ipaddr2 = (Address4 << 8) | Address3;
-            int ma1 = (Mask2 << 8) | Mask1;
-            int ma2 = (Mask4 << 8) | Mask3;
-            int gw1 = (Gateway2 << 8) | Gateway1;
-            int gw2 = (Gateway4 << 8) | Gateway3;
-            DevService.Client.WriteFunc(40301, (ushort)ipaddr1);
-            DevService.Client.WriteFunc(40302, (ushort)ipaddr2);
-            DevService.Client.WriteFunc(40303, (ushort)ma1);
-            DevService.Client.WriteFunc(40304, (ushort)ma2);
-            DevService.Client.WriteFunc(40305, (ushort)gw1);
-            DevService.Client.WriteFunc(40306, (ushort)gw2);
-
+            DevService.SyncNetInfo(this);
         }
         private void FwUpdate()
         {
-            DevService.Client.WriteFunc(40104, 0xBBAA);
+            DevService.FWUpdate();
         }
 
         private void SelectDataCollectionMode()
         {
-            if (SelectedDataCollectionMode == "正常模式")
-            {
-                //DevService.Client.WriteFunc(40105, 0xAAAA);
-
-            }
-            else if (SelectedDataCollectionMode == "仿真模式")
-            {
-                DevService.Client.WriteFunc(40105, 0xAA55);
-            }
-            else
-            {
-                MessageBox.Show("请选择正确模式");
-            }
-
+            DevService.SelectDataCollectionMode(SelectedDataCollectionMode);
         }
 
         private void ReadBCMUIDINFO()
         {
-            byte[] data = DevService.Client.ReadFunc(40307, 16);
-            StringBuilder BCMUNameBuilder = new StringBuilder();
-            for (int i = 0; i < 16; i++)
-            {
-                char BCMUNameChar = Convert.ToChar(data[i]);
-                BCMUNameBuilder.Append(BCMUNameChar);
-            }
-
-            BCMUName = BCMUNameBuilder.ToString().TrimStart('0');
-            StringBuilder BCMUSNameBuilder = new StringBuilder();           
-            for (int i = 16; i < 32; i++)
-            {
-                char BCMUSNameChar = Convert.ToChar(data[i]);
-                BCMUSNameBuilder.Append(BCMUSNameChar);
-   
-            }          
-            BCMUSName = BCMUSNameBuilder.ToString().TrimStart('0');
+            string[] names = DevService.ReadBCMUIDINFO();
+            BCMUName = names[0];
+            BCMUSName = names[1];
         }
 
         private void SyncBCMUIDINFO()
         {
-            int indexSN = 0; //BCMU序列号数据序号
-            int indexN = 0;//BCMU别名序号
-            
-            
-            string BCMUFullSName="";//补足16位的BCMU序列号
-            string BCMUFullName = "";//补足16位的BCMU别名
-            if (BCMUSName.Length< 16|| BCMUName.Length<16)
-            {
-                BCMUFullSName = BCMUSName.PadLeft(16, '0');
-                BCMUFullName = BCMUName.PadLeft(16, '0');
-            }
-            else
-            {
-                BCMUFullSName = BCMUSName;
-                BCMUFullName = BCMUName;
-            }
-            //写BCMU序列号
-            for (int i = 0; i < BCMUFullSName.Length; i++)
-            {
-                int asciiCode = (int)BCMUFullSName[i];
-                int asciiCode2;
-                if (i % 2 == 0)
-                {
-                    asciiCode2 = (BCMUFullSName[i + 1]) << 8;                  
-                    int nameof = asciiCode | asciiCode2;
-                    DevService.Client.WriteFunc((ushort)(40315 + indexSN), (ushort)nameof);
-                    indexSN++;
-                }
-            }
-            //写BCMU别名
-            for (int i = 0; i < BCMUFullName.Length; i++)
-            {
-                int asciiCode = (int)BCMUFullName[i];
-                if (i % 2 == 0)
-                {
-                    int asciiCode2 = (BCMUFullName[i + 1]) << 8;
-                    int nameof = asciiCode | asciiCode2;
-                    DevService.Client.WriteFunc((ushort)(40307 + indexN), (ushort)nameof);
-                    indexN++;
-                }
-            }
- 
+            DevService.SyncBCMUIDINFO(this);
         }
 
     }
