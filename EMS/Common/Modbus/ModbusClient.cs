@@ -24,8 +24,8 @@ namespace EMS.Common.Modbus.ModbusTCP
         private Thread ProcessRequestThread;
         private ConcurrentQueue<ModbusRequest> RequestQueue;
         private bool _isConnected = false;
-        public bool IsConnected { get => _isConnected; }
-        private Thread CommunicationProtectTr;
+        //public bool IsConnected { get => _isConnected; }
+        //private Thread CommunicationProtectTr;
         /// <summary>
         /// 以TCP格式生成ModbusClient实例
         /// </summary>
@@ -35,8 +35,8 @@ namespace EMS.Common.Modbus.ModbusTCP
         {
             _ip = IP;
             _port = Port;
-            CommunicationProtectTr = new Thread(CommunicationProtect);
-            CommunicationProtectTr.IsBackground = true;
+            //CommunicationProtectTr = new Thread(CommunicationProtect);
+            //CommunicationProtectTr.IsBackground = true;
             RequestQueue = new ConcurrentQueue<ModbusRequest>();
             ProcessRequestThread = new Thread(ProcessRequest);
         }
@@ -141,64 +141,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             catch (Exception ex)
             {
                 LogUtils.Warn("读取数据失败", ex);
-                if (!_client.Connected)
-                {
-                    if (CommunicationCheck())
-                    {
-                        return ReadFunc(address, num);
-                    }
-                }
-
                 return new byte[num * 2];
-            }
-        }
-
-        private static int reconnectInterval = 150; // ms
-        private static int maxReconnectTimes = 3;
-        private int reconnectCount = 0;
-        public bool CommunicationCheck()
-        {
-            while (true)
-            {
-                Thread.Sleep(reconnectInterval);
-                try
-                {
-                    _client = new TcpClient();
-                    _client.Connect(IPAddress.Parse(_ip), _port);
-                    _master = ModbusIpMaster.CreateIp(_client);
-                    reconnectCount = 0;
-                    return true;
-                }
-                catch
-                {
-                    reconnectCount++;
-                    if (reconnectCount > maxReconnectTimes)
-                    {
-                        _isConnected = false;
-                        CommunicationProtectTr.Start();
-                        return false;
-                    }
-                }
-            }
-        }
-
-        private static int reconnectIntervalLong = 60 * 1000 * 5; // ms
-        private void CommunicationProtect()
-        {
-            while(!_isConnected)
-            {
-                Thread.Sleep(reconnectIntervalLong);
-                try
-                {
-                    _client = new TcpClient();
-                    _client.Connect(IPAddress.Parse(_ip), _port);
-                    _master = ModbusIpMaster.CreateIp(_client);
-                    _isConnected = true;
-                }
-                catch(Exception ex)
-                {
-                    LogUtils.Debug("保护机制重连失败", ex);
-                }
             }
         }
 

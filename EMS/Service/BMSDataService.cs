@@ -134,20 +134,99 @@ namespace EMS.Service
                     Thread.Sleep(DaqTimeSpan * 1000);
 
                     byte[] BCMUData = new byte[90];
-                    Array.Copy(Client.ReadFunc(11000, 45), 0, BCMUData, 0, 90);
+                    Array.Copy(ReadFunc(11000, 45), 0, BCMUData, 0, 90);
                     byte[] BMUIDData = new byte[48];
-                    Array.Copy(Client.ReadFunc(11045, 24), 0, BMUIDData, 0, 48);
+                    Array.Copy(ReadFunc(11045, 24), 0, BMUIDData, 0, 48);
                     byte[] BMUData = new byte[744];
-                    Array.Copy(Client.ReadFunc(10000, 120), 0, BMUData, 0, 240);
-                    Array.Copy(Client.ReadFunc(10120, 120), 0, BMUData, 240, 240);
-                    Array.Copy(Client.ReadFunc(10240, 120), 0, BMUData, 480, 240);
-                    Array.Copy(Client.ReadFunc(10360, 12), 0, BMUData, 720, 24);
+                    Array.Copy(ReadFunc(10000, 120), 0, BMUData, 0, 240);
+                    Array.Copy(ReadFunc(10120, 120), 0, BMUData, 240, 240);
+                    Array.Copy(ReadFunc(10240, 120), 0, BMUData, 480, 240);
+                    Array.Copy(ReadFunc(10360, 12), 0, BMUData, 720, 24);
                     batteryTotalModels.Enqueue(DataDecode(BCMUData, BMUIDData, BMUData));
                 }
                 catch (Exception)
                 {
 
                     throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 通用读取函数
+        /// </summary>
+        /// <param name="address">寄存器地址</param>
+        /// <param name="num">读取位数</param>
+        /// <returns>读取值</returns>
+        public byte[] ReadFunc(ushort address, ushort num)
+        {
+            try
+            {
+                ushort[] holding_register = _master.ReadHoldingRegisters(0, address, num);
+                byte[] ret = new byte[holding_register.Length * 2];
+                for (int i = 0; i < holding_register.Length; i++)
+                {
+                    var objs = BitConverter.GetBytes(holding_register[i]);
+                    ret[i * 2] = objs[0];
+                    ret[i * 2 + 1] = objs[1];
+                }
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                LogUtils.Warn("读取数据失败", ex);
+                if (!_client.Connected)
+                {
+                    if (CommunicationCheck())
+                    {
+                        return ReadFunc(address, num);
+                    }
+                }
+
+                return new byte[num * 2];
+            }
+        }
+
+        private static int reconnectInterval = 150; // ms
+        private static int maxReconnectTimes = 3;
+        private int reconnectCount = 0;
+        private Thread CommunicationProtectTr;
+        public bool CommunicationCheck()
+        {
+            while (true)
+            {
+                Thread.Sleep(reconnectInterval);
+                if (Connect())
+                {
+                    reconnectCount = 0;
+                    return true;
+                }
+                else
+                {
+                    reconnectCount++;
+                    if (reconnectCount > maxReconnectTimes)
+                    {
+                        IsConnected = false;
+                        CommunicationProtectTr.Start();
+                        return false;
+                    }
+                }
+            }
+        }
+
+        private static int reconnectIntervalLong = 60 * 1000 * 5; // ms
+        private void CommunicationProtect()
+        {
+            while (!_isConnected)
+            {
+                Thread.Sleep(reconnectIntervalLong);
+                if (!Connect())
+                {
+                    LogUtils.Debug("保护机制重连失败");
+                }
+                else
+                {
+                    LogUtils.Debug("保护机制重连成功，设备上线");
                 }
             }
         }
@@ -275,7 +354,7 @@ namespace EMS.Service
 
         public int[] ReadNetInfo()
         {
-            byte[] data = Client.ReadFunc(40301, 6);
+            byte[] data = ReadFunc(40301, 6);
             int ipaddr1 = BitConverter.ToUInt16(data, 0);
             int ipaddr2 = BitConverter.ToUInt16(data, 2);
             int ma1 = BitConverter.ToUInt16(data, 4);
@@ -293,12 +372,30 @@ namespace EMS.Service
             int ma2 = (viewmodel.Mask4 << 8) | viewmodel.Mask3;
             int gw1 = (viewmodel.Gateway2 << 8) | viewmodel.Gateway1;
             int gw2 = (viewmodel.Gateway4 << 8) | viewmodel.Gateway3;
-            Client.WriteFunc(40301, (ushort)ipaddr1);
-            Client.WriteFunc(40302, (ushort)ipaddr2);
-            Client.WriteFunc(40303, (ushort)ma1);
-            Client.WriteFunc(40304, (ushort)ma2);
-            Client.WriteFunc(40305, (ushort)gw1);
-            Client.WriteFunc(40306, (ushort)gw2);
+            WriteFunc(40301, (ushort)ipaddr1);
+            WriteFunc(40302, (ushort)ipaddr2);
+            WriteFunc(40303, (ushort)ma1);
+            WriteFunc(40304, (ushort)ma2);
+            WriteFunc(40305, (ushort)gw1);
+            WriteFunc(40306, (ushort)gw2);
+        }
+
+        /// <summary>
+        /// 通用写入函数
+        /// </summary>
+        /// <param name="address">寄存器</param>
+        /// <param name="value">写入值</param>
+        public void WriteFunc(ushort address, ushort value)
+        {
+            try
+            {
+                _master.WriteSingleRegister(0, address, value);
+            }
+            catch (Exception ex)
+            {
+                LogUtils.Error(ex.ToString());
+                throw ex;
+            }
         }
 
         private Int32[] OpenObjs = { 0xAB00, 0xAC00, 0xAD00 };
@@ -311,7 +408,7 @@ namespace EMS.Service
                     if (index - 1 < 3)
                     {
                         UInt16 data = (UInt16)(OpenObjs[index - 1] + openchannel);
-                        Client.WriteFunc(40100, (ushort)data);
+                        WriteFunc(40100, (ushort)data);
                         return;
                     }
                 }
@@ -329,7 +426,7 @@ namespace EMS.Service
                     if (index - 1 < 3)
                     {
                         UInt16 data = (UInt16)(CloseObjs[index-1]);
-                        Client.WriteFunc(40101, (ushort)data);
+                        WriteFunc(40101, (ushort)data);
                         return;
                     }
                 }
@@ -341,11 +438,11 @@ namespace EMS.Service
         {
             if (SelectedBalanceMode == "自动模式")
             {
-                Client.WriteFunc(40102, 0xBC11);
+                WriteFunc(40102, 0xBC11);
             }
             else if (SelectedBalanceMode == "远程模式")
             {
-                Client.WriteFunc(40102, 0xBC22);
+                WriteFunc(40102, 0xBC22);
             }
             else
             {
@@ -355,17 +452,17 @@ namespace EMS.Service
 
         public void FWUpdate()
         {
-            Client.WriteFunc(40104, 0xBBAA);
+            WriteFunc(40104, 0xBBAA);
         }
 
         public void InNet()
         {
-            Client.WriteFunc(40103, 0xBB11);
+            WriteFunc(40103, 0xBB11);
         }
 
         public string[] ReadBCMUIDINFO()
         {
-            byte[] data = Client.ReadFunc(40307, 16);
+            byte[] data = ReadFunc(40307, 16);
             StringBuilder BCMUNameBuilder = new StringBuilder();
             for (int i = 0; i < 16; i++)
             {
@@ -410,7 +507,7 @@ namespace EMS.Service
                 {
                     asciiCode2 = (BCMUFullSName[i + 1]) << 8;
                     int nameof = asciiCode | asciiCode2;
-                    Client.WriteFunc((ushort)(40315 + indexSN), (ushort)nameof);
+                    WriteFunc((ushort)(40315 + indexSN), (ushort)nameof);
                     indexSN++;
                 }
             }
@@ -422,7 +519,7 @@ namespace EMS.Service
                 {
                     int asciiCode2 = (BCMUFullName[i + 1]) << 8;
                     int nameof = asciiCode | asciiCode2;
-                    Client.WriteFunc((ushort)(40307 + indexN), (ushort)nameof);
+                    WriteFunc((ushort)(40307 + indexN), (ushort)nameof);
                     indexN++;
                 }
             }
@@ -436,7 +533,7 @@ namespace EMS.Service
             }
             else if (SelectedDataCollectionMode == "仿真模式")
             {
-                Client.WriteFunc(40105, 0xAA55);
+                WriteFunc(40105, 0xAA55);
             }
             else
             {
@@ -446,12 +543,30 @@ namespace EMS.Service
 
         public byte[] ReadBCMUInfo()
         {
-            return Client.ReadFunc(40200, 34);
+            return ReadFunc(40200, 34);
         }
 
         public void SyncBCMUInfo(ushort[] values)
         {
-            Client.WriteFunc(40200, values);
+            WriteFunc(40200, values);
+        }
+
+        /// <summary>
+        /// 通用批量写入函数
+        /// </summary>
+        /// <param name="address">寄存器地址</param>
+        /// <param name="values">写入值</param>
+        public void WriteFunc(ushort address, ushort[] values)
+        {
+            try
+            {
+                _master.WriteMultipleRegisters(0, address, values);
+            }
+            catch (Exception ex)
+            {
+                LogUtils.Error(ex.ToString());
+                throw ex;
+            }
         }
     }
 }
