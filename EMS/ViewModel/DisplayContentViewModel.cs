@@ -16,6 +16,7 @@ using System.Windows;
 using System.Windows.Media;
 using EMS.Common;
 using EMS.Api;
+using EMS.Service;
 
 namespace EMS.ViewModel
 {
@@ -72,6 +73,16 @@ namespace EMS.ViewModel
             }
         }
 
+        private void DisconnectDev()
+        {
+            SelectedBatteryTotalViewModel.DisconnectDev();
+        }
+
+        private void ConnectDev()
+        {
+            SelectedBatteryTotalViewModel.ConnectDev();
+        }
+
         private void DeleteDev()
         {
             if (SelectedBatteryTotalViewModel != null)
@@ -91,19 +102,16 @@ namespace EMS.ViewModel
 
         private void DelAllDev()
         {
-            if (SelectedBatteryTotalViewModel != null)
+            var items = BatteryTotalViewModelList.Where(p => p.IsConnected);
+            if (items.Count() > 0)
             {
-                var items = BatteryTotalViewModelList.Where(p => p.IsConnected);
-                if (items.Count() > 0)
-                {
-                    MessageBox.Show("请先断开设备连接");
-                }
-                else
-                {
-                    BatteryTotalViewModelList.Clear();
-                    DevConnectInfoManage manage = new DevConnectInfoManage();
-                    manage.DeleteAll();
-                }
+                MessageBox.Show("请先断开设备连接");
+            }
+            else
+            {
+                BatteryTotalViewModelList.Clear();
+                DevConnectInfoManage manage = new DevConnectInfoManage();
+                manage.DeleteAll();
             }
         }
 

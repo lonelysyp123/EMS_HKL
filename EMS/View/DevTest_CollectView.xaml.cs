@@ -55,10 +55,7 @@ namespace EMS.View
             }
             else if (e.Action == NotifyCollectionChangedAction.Reset)
             {
-                foreach (var item in e.OldItems)
-                {
-                    RemoveDevIntoView(item as BatteryTotalViewModel);
-                }
+                MainBody.Children.Clear();
             }
         }
 

@@ -174,7 +174,7 @@
                     <ListBox Name="DevList"  ItemsSource="{Binding BatteryTotalViewModelList}" SelectedItem="{Binding SelectedBatteryTotalViewModel}" 
                              BorderThickness="0" materialDesign:ListBoxItemAssist.ShowSelection="False" ScrollViewer.VerticalScrollBarVisibility="Disabled" 
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Column="0" Grid.Row="1" 
-                             >
+                             MouseMove="DevList_MouseMove">
                         <ListBox.ContextMenu>
                             <ContextMenu>
                                 <MenuItem x:Name="AddMenu" Header="添加设备" Command="{Binding AddDevCommand}"></MenuItem>
