@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 
 namespace EMS.Model
@@ -17,25 +18,89 @@ namespace EMS.Model
         private DcStatusModel _dcStatusModel;
 
         
-        private bool _isConnected = false;
+        private bool _isConnected;
         /// <summary>
         /// 连接状态
         /// </summary>
         public bool IsConnected
-        {
-            get { return _isConnected; }
+        {  
+            get =>_isConnected;
+            private set
+            {
+                _isConnected = value;
+                if (_isConnected)
+                {
+                    ConnectImageSource= new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OnConnect.png"));
+                }
+                else
+                {
+                    ConnectImageSource= new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OffConnect.png"));
+                }
+            }
         }
 
-        private Thread _dataAcquisitionThread;
-        public Thread DataAcuisitionThread { get { return _dataAcquisitionThread; } }
-        
+        /// <summary>
+        /// 连接状态图片
+        /// </summary>
+        private BitmapImage _connectImageSource;
+        public BitmapImage ConnectImageSource
+        {
+            get
+            {
+                return _connectImageSource;
+            }
+            set
+            {
+                SetProperty(ref _connectImageSource, value);
+            }
+        }
+
         private bool _isRead;
         /// <summary>
         /// 采集状态
         /// </summary>
-        public bool IsRead { get { return _isRead; } }
+        public bool IsRead 
+        { 
+            get =>_isRead;
+            private set
+            {
+                if (_isRead!=value)
+                {
+                    _isRead = value;
+                    if (_isRead)
+                    {
+                        DataAcquisitionImageSource= new BitmapImage(new Uri("pack://application:,,,/Resource/Image/play.png"));
+                    }
+                    else
+                    {
+                        DataAcquisitionImageSource = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/pause.png"));
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 采集状态图片
+        /// </summary>
+        private BitmapImage _dataAcquisitionImageSource;
+        public BitmapImage DataAcquisitionImageSource
+        {
+            get
+            {
+                return _dataAcquisitionImageSource;
+            }
+            set
+            {
+                SetProperty(ref _dataAcquisitionImageSource, value);
+            }
+        }
 
 
+
+        private Thread _dataAcquisitionThread;
+        public Thread DataAcuisitionThread { get { return _dataAcquisitionThread; } }
+
+        
         private ModbusClient _modbusClient;
         public ModbusClient ModbusClient { get { return _modbusClient; } }
 
@@ -54,17 +119,17 @@ namespace EMS.Model
             }
             catch (Exception ex)
             {
-                _isConnected = false;
+                IsConnected = false;
                 throw ex;
             }
-            _isConnected = true;
+            IsConnected = true;
         }
 
         public void Disconnect()
         {
             if (!_isConnected) return;
             _modbusClient.Disconnect();
-            _isConnected = false;
+            IsConnected = false;
         }
 
         public void SendPcsCommand(BessCommand command)
@@ -111,14 +176,14 @@ namespace EMS.Model
         {
             _dataAcquisitionThread = new Thread(ReadInfo);
             _dataAcquisitionThread.IsBackground = true;
-            _isRead = true;
+            IsRead = true;
             _dataAcquisitionThread.Start();
         }
         public void StopDataAcquisition()
         {
             if (IsRead)
             {
-                _isRead = false;
+                IsRead = false;
             }
         }
 

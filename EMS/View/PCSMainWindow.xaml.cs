@@ -44,8 +44,8 @@ namespace EMS.View
             button5.DataContext = viewModel;
             button6.DataContext = viewModel;
 
-            Image1.DataContext = viewModel;
-            Image2.DataContext = viewModel;
+            Image1.DataContext = viewModel.pcsModel;
+            Image2.DataContext = viewModel.pcsModel;
 
             //viewModel = new PCSMainViewModel();
             //viewModel = viewModel1;

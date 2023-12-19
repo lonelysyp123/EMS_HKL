@@ -33,40 +33,41 @@ namespace EMS.ViewModel
             }
         }
 
-        public bool IsConnected { get { return pcsModel.IsConnected; } }
+        public bool IsConnected { get => pcsModel.IsConnected; }
 
-        public bool IsRead { get { return pcsModel.IsRead; } }
+        public bool IsRead { get => pcsModel.IsRead;}
 
         public Thread DataAcquisitionThread { get { return pcsModel.DataAcuisitionThread; } }
 
         /// <summary>
         /// 采集状态图片
         /// </summary>
-        private static BitmapImage DataAcuisitionOn = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/play.png"));
-        private static BitmapImage DataAcuisitionOff = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/pause.png"));
+        //private static BitmapImage DataAcuisitionOn = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/play.png"));
+        //private static BitmapImage DataAcuisitionOff = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/pause.png"));
+        //private BitmapImage _dataAcquisitionImageSource;
+        //public BitmapImage DataAcquisitionImageSource
+        //{
+        //    get
+        //    {
+        //        if (IsRead) _dataAcquisitionImageSource = DataAcuisitionOn;
+        //        else _dataAcquisitionImageSource = DataAcuisitionOff;
+        //        return _dataAcquisitionImageSource;
+        //    }
+        //}
 
-        public BitmapImage DataAcquisitionImageSource
-        {
-            get
-            {
-                if (IsRead) return DataAcuisitionOn;
-                else return DataAcuisitionOff;
-            }
-        }
-
-        /// <summary>
-        /// 连接状态图片
-        /// </summary>
-        private static BitmapImage Connected = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OnConnect.png"));
-        private static BitmapImage Unconnected = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OffConnect.png"));
-        public BitmapImage ConnectImageSource
-        {
-            get
-            {
-                if (IsConnected) return Connected;
-                else return Unconnected;
-            }
-        }
+        ///// <summary>
+        ///// 连接状态图片
+        ///// </summary>
+        //private static BitmapImage Connected = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OnConnect.png"));
+        //private static BitmapImage Unconnected = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OffConnect.png"));
+        //public BitmapImage ConnectImageSource
+        //{
+        //    get
+        //    {
+        //        if (IsConnected) return Connected;
+        //        else return Unconnected;
+        //    }
+        //}
 
 
         /// <summary>
