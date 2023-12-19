@@ -1,10 +1,13 @@
 ﻿using EMS.Common.Modbus.ModbusTCP;
 using EMS.ViewModel;
+using log4net;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
+
 
 namespace EMS.Model
 {
@@ -37,9 +40,11 @@ namespace EMS.Model
         public ModbusClient ModbusClient { get { return _modbusClient; } }
 
 
-        public PCSMonitorModel MonitorModel;
+        public PCSMonitorModel MonitorModel { get; set; }
 
-        public PCSParSettingModel ParSettingModel;
+        public PCSParSettingModel ParSettingModel { get; set; }
+
+        private ILog Logger;
 
         public void Connect(string ip, int port)
         {
@@ -100,7 +105,7 @@ namespace EMS.Model
             }
 
             _modbusClient.WriteFunc(PcsId, modeAddress, modeValue);
-            _modbusClient.WriteFunc(PcsId, valueAddress, modeValue);
+            _modbusClient.WriteFunc(PcsId, valueAddress, controlValue);
         }
 
         public void StartDataAcquisition()
@@ -120,10 +125,10 @@ namespace EMS.Model
 
         public void SyncBUSVolInfo()
         {
-            ModbusClient.WriteFunc(PcsId, 53640, (ushort)(ParSettingModel.BUSUpperLimitVolThresh * 10));
-            ModbusClient.WriteFunc(PcsId, 53641, (ushort)(ParSettingModel.BUSLowerLimitVolThresh * 10));
-            ModbusClient.WriteFunc(PcsId, 53642, (ushort)(ParSettingModel.BUSHVolSetting * 10));
-            ModbusClient.WriteFunc(PcsId, 53643, (ushort)(ParSettingModel.BUSLVolSetting * 10));
+            ModbusClient.WriteFunc(PcsId, PcsCommandAdressEnum.HigherVolThreshold, (ushort)(ParSettingModel.BUSUpperLimitVolThresh * 10));
+            ModbusClient.WriteFunc(PcsId, PcsCommandAdressEnum.LowerVolThreshold, (ushort)(ParSettingModel.BUSLowerLimitVolThresh * 10));
+            ModbusClient.WriteFunc(PcsId, PcsCommandAdressEnum.HigherVolSetting, (ushort)(ParSettingModel.BUSHVolSetting * 10));
+            ModbusClient.WriteFunc(PcsId, PcsCommandAdressEnum.LowerVolSetting, (ushort)(ParSettingModel.BUSLVolSetting * 10));
         }
 
         public void ReadBUSVolInfo()
@@ -204,11 +209,11 @@ namespace EMS.Model
             {
                 if (ParSettingModel.ModeSet1 == "设置电流调节")
                 {
-                    ModbusClient.WriteFunc(PcsId, 53650, 0);
+                    ModbusClient.WriteFunc(PcsId, PcsCommandAdressEnum.CharModeSet, 0);
                 }
                 else if (ParSettingModel.ModeSet1 == "设置功率调节")
                 {
-                    ModbusClient.WriteFunc(PcsId, 53650, 1);
+                    ModbusClient.WriteFunc(PcsId, PcsCommandAdressEnum.CharModeSet, 1);
                 }
             }
         }
@@ -219,11 +224,11 @@ namespace EMS.Model
             {
                 if (ParSettingModel.ModeSet1 == "设置电流调节")
                 {
-                    ModbusClient.WriteFunc(PcsId, 53651, (ushort)(ParSettingModel.DCCurrentSet * 10));
+                    ModbusClient.WriteFunc(PcsId, PcsCommandAdressEnum.CurrentValueSet, (ushort)(ParSettingModel.DCCurrentSet * 10));
                 }
                 else
                 {
-                    ModbusClient.WriteFunc(PcsId, 53652, (ushort)(ParSettingModel.DCPowerSet * 10));
+                    ModbusClient.WriteFunc(PcsId, PcsCommandAdressEnum.PowerValueSet, (ushort)ParSettingModel.DCPowerSet * 10);
                 }
             }
         }
@@ -327,9 +332,8 @@ namespace EMS.Model
                 }
                 catch (Exception ex)
                 {
-
+                    Logger.Error(ex.ToString());
                 }
-
             }
         }
 
@@ -849,7 +853,7 @@ namespace EMS.Model
         {
             try
             {
-                _modbusClient.WriteFunc(PcsId, (ushort)PcsCommandAdressEnum.PCSSystemOpen, 1);
+                _modbusClient.WriteFunc(PcsId,PcsCommandAdressEnum.PCSSystemOpen, 1);
             }
             catch (Exception ex)
             {
@@ -864,7 +868,7 @@ namespace EMS.Model
         {
             try
             {
-                _modbusClient.WriteFunc(PcsId, (ushort)PcsCommandAdressEnum.PCSSystemClose, 1);
+                _modbusClient.WriteFunc(PcsId, PcsCommandAdressEnum.PCSSystemClose, 1);
             }
             catch (Exception ex)
             {
@@ -879,7 +883,7 @@ namespace EMS.Model
         {
             try
             {
-                _modbusClient.WriteFunc(PcsId, (ushort)PcsCommandAdressEnum.PCSSystemClearFault, 1);
+                _modbusClient.WriteFunc(PcsId, PcsCommandAdressEnum.PCSSystemClearFault, 1);
             }
             catch (Exception ex)
             {
@@ -896,15 +900,34 @@ namespace EMS.Model
             ParSettingModel = new PCSParSettingModel();
 
             _dcStatusModel=new DcStatusModel();
+
+            Logger=LogManager.GetLogger(typeof(PCSModel));
         }
     }
     public enum PcsCommandAdressEnum
     {
+        [Description("系统开机")]
         PCSSystemOpen = 53900,
+        [Description("系统关机")]
         PCSSystemClose = 53901,
+        [Description("系统清除故障")]
         PCSSystemClearFault = 53903,
+        [Description("直流控制模式")]
         CharModeSet = 53650,
+        [Description("直流电流设置")]
         CurrentValueSet = 53651,
+        [Description("直流功率设置")]
         PowerValueSet = 53652,
+        [Description("BUS上限电压")]
+        HigherVolThreshold = 53640,
+        [Description("BUS下限电压")]
+        LowerVolThreshold = 53641,
+        [Description("BUS高压设置")]
+        HigherVolSetting = 53642,
+        [Description("BUS低压设置")]
+        LowerVolSetting = 53643,
+        [Description("DC侧支路1：电池下限电压")]
+        BatteryLowerVolThreshold = 53653,
+
     }
 }

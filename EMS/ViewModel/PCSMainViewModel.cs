@@ -50,7 +50,6 @@ namespace EMS.ViewModel
             }
         }
 
-
         /// <summary>
         /// 连接状态图片
         /// </summary>
