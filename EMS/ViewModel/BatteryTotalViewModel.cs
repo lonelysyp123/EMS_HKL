@@ -613,19 +613,27 @@ namespace EMS.ViewModel
 
         private void DisconnectDev()
         {
-            service.Disconnect();
+            if(!service.Disconnect())
+            {
+                MessageBox.Show("断开连接失败");
+            }
         }
 
         private void ConnectDev()
         {
             service = new BMSDataService();
-            service.RegisterState(ServiceStateCallBack);
             service.SetCommunicationConfig(IP, Port, TotalList);
-            service.Connect();
 
-            devControlViewModel = new DevControlViewModel(service);
-            devControlViewModel.InitBCMUInfo(3, 14);
-            parameterSettingViewModel = new ParameterSettingViewModel(service, TotalID);
+            if (service.Connect())
+            {
+                devControlViewModel = new DevControlViewModel(service);
+                devControlViewModel.InitBCMUInfo(3, 14);
+                parameterSettingViewModel = new ParameterSettingViewModel(service, TotalID);
+            }
+            else
+            {
+                MessageBox.Show("连接设备失败");
+            }
         }
 
         public void StartDaqData()

@@ -1,13 +1,18 @@
-﻿using EMS.Common.Modbus.ModbusTCP;
+﻿using EMS.Common;
+using EMS.Common.Modbus.ModbusTCP;
 using EMS.Model;
+using Modbus.Device;
 using OxyPlot.Series;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls.WebParts;
 using System.Windows;
 using System.Windows.Markup;
 
@@ -27,18 +32,17 @@ namespace EMS.Service
                 if(_isConnected != value)
                 {
                     _isConnected = value;
-                    OnChangeState(_isConnected, _isDaqData);
                 }
             } 
         }
 
         private bool _isDaqData;
-        public bool IsDaqData 
-        { 
-            get => _isDaqData; 
+        public bool IsDaqData
+        {
+            get => _isDaqData;
             private set
             {
-                if( _isDaqData != value)
+                if (_isDaqData != value)
                 {
                     _isDaqData = value;
                     OnChangeState(_isConnected, _isDaqData);
@@ -46,7 +50,8 @@ namespace EMS.Service
             }
         }
 
-        public ModbusClient Client { get; private set; }
+        private TcpClient _client;
+        private ModbusMaster _master;
         private Action<bool, bool> OnChangeState;
 
         public BMSDataService() 
@@ -61,34 +66,44 @@ namespace EMS.Service
             batteryTotalModels = obj;
         }
 
-        public void RegisterState(Action<bool, bool> action)
+        public bool Connect()
         {
-            OnChangeState = action;
-        }
-
-        public void Connect()
-        {
-            if (!IsConnected)
+            try
             {
-                if (int.TryParse(Port, out int port))
+                if (!IsConnected)
                 {
-                    Client = new ModbusClient(IP, port);
-                    Client.Connect();
-                    IsConnected = true;
+                    if (int.TryParse(Port, out int port))
+                    {
+                        _client = new TcpClient();
+                        _client.Connect(IPAddress.Parse(IP), port);
+                        _master = ModbusIpMaster.CreateIp(_client);
+                        IsConnected = true;
+                        return true;
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                LogUtils.Error(ex.ToString());
+            }
+            return false;
         }
 
-        public void Disconnect()
+        public bool Disconnect()
         {
-            if (IsConnected)
+            try
             {
-                if (Client != null)
-                {
-                    Client.Disconnect();
-                    IsConnected = false;
-                }
+                _master.Transport.Dispose();
+                _client.Close();
+                _client.Dispose();
+                IsConnected = false;
+                return true;
             }
+            catch (Exception ex)
+            {
+                LogUtils.Error(ex.ToString());
+            }
+            return false;
         }
 
         public void StartDaqData()
