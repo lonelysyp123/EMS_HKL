@@ -41,7 +41,6 @@ namespace EMS.Model
 
 
         public PCSMonitorModel MonitorModel { get; set; }
-
         public PCSParSettingModel ParSettingModel { get; set; }
 
         private ILog Logger;
@@ -168,7 +167,7 @@ namespace EMS.Model
         {
             if (IsConnected)
             {
-                ModbusClient.WriteFunc(PcsId, 53653, (ushort)(ParSettingModel.BTLLimitVol * 10));
+                ModbusClient.WriteFunc(PcsId, PcsCommandAdressEnum.BatteryLowerVolThreshold, (ushort)(ParSettingModel.BTLLimitVol * 10));
                 ModbusClient.WriteFunc(PcsId, 53655, (ushort)(ParSettingModel.DischargeSTVol * 10));
                 ModbusClient.WriteFunc(PcsId, 53658, (ushort)ParSettingModel.MultiBranchCurRegPar);
                 ModbusClient.WriteFunc(PcsId, 53660, (ushort)(ParSettingModel.BatAveChVol * 10));
@@ -303,7 +302,7 @@ namespace EMS.Model
                         {
                             MonitorModel.VisPDSAlarm = Visibility.Hidden;
                         }
-
+                        
                         if (FaultColorFlagDC == true)
                         {
                             MonitorModel.VisDCFault = Visibility.Visible;
