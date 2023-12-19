@@ -46,7 +46,14 @@ namespace EMS.View
                     AddDevIntoView(item as BatteryTotalViewModel);
                 }
             }
-            else
+            else if(e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (var item in e.OldItems)
+                {
+                    RemoveDevIntoView(item as BatteryTotalViewModel);
+                }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Reset)
             {
                 foreach (var item in e.OldItems)
                 {
@@ -76,7 +83,16 @@ namespace EMS.View
                 if(((item as DataControl).DataContext as BatteryTotalViewModel).TotalID == viewmodel.TotalID)
                 {
                     MainBody.Children.Remove(item as DataControl);
+                    break;
                 }
+            }
+        }
+
+        internal void InitView(ObservableCollection<BatteryTotalViewModel> viewmodels)
+        {
+            for (int i = 0; i < viewmodels.Count; i++)
+            {
+                AddDevIntoView(viewmodels[i]);
             }
         }
     }

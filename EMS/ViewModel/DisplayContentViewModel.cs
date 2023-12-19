@@ -45,6 +45,8 @@ namespace EMS.ViewModel
         public RelayCommand DeleteDevCommand { get; set; }
         public RelayCommand DelAllDevCommand { get; set; }
         public RelayCommand ModifyPCSTCPCommand { get; set; }
+        public RelayCommand ConnectDevCommand { get; set; }
+        public RelayCommand DisconnectDevCommand { get; set; }
 
         public int DaqTimeSpan = 1;
         public bool IsStartSaveData = false;
@@ -54,6 +56,8 @@ namespace EMS.ViewModel
             AddDevCommand = new RelayCommand(AddDev);
             DeleteDevCommand = new RelayCommand(DeleteDev);
             DelAllDevCommand = new RelayCommand(DelAllDev);
+            ConnectDevCommand = new RelayCommand(ConnectDev);
+            DisconnectDevCommand = new RelayCommand(DisconnectDev);
 
             // 初始化设备列表
             BatteryTotalViewModelList = new ObservableCollection<BatteryTotalViewModel>();
@@ -70,30 +74,36 @@ namespace EMS.ViewModel
 
         private void DeleteDev()
         {
-            if (!SelectedBatteryTotalViewModel.IsConnected)
+            if (SelectedBatteryTotalViewModel != null)
             {
-                BatteryTotalViewModelList.Remove(SelectedBatteryTotalViewModel);
-                DevConnectInfoManage manage = new DevConnectInfoManage();
-                manage.Delete(new DevConnectInfoModel() { IP = SelectedBatteryTotalViewModel.IP, Port = SelectedBatteryTotalViewModel.Port, BCMUID = SelectedBatteryTotalViewModel.TotalID });
-            }
-            else
-            {
-                MessageBox.Show("请先断开设备连接");
+                if (!SelectedBatteryTotalViewModel.IsConnected)
+                {
+                    DevConnectInfoManage manage = new DevConnectInfoManage();
+                    manage.Delete(new DevConnectInfoModel() { IP = SelectedBatteryTotalViewModel.IP, Port = SelectedBatteryTotalViewModel.Port, BCMUID = SelectedBatteryTotalViewModel.TotalID });
+                    BatteryTotalViewModelList.Remove(SelectedBatteryTotalViewModel);
+                }
+                else
+                {
+                    MessageBox.Show("请先断开设备连接");
+                }
             }
         }
 
         private void DelAllDev()
         {
-            var items = BatteryTotalViewModelList.Where(p => p.IsConnected);
-            if (items.Count() > 0)
+            if (SelectedBatteryTotalViewModel != null)
             {
-                MessageBox.Show("请先断开设备连接");
-            }
-            else
-            {
-                BatteryTotalViewModelList.Clear();
-                DevConnectInfoManage manage = new DevConnectInfoManage();
-                manage.DeleteAll();
+                var items = BatteryTotalViewModelList.Where(p => p.IsConnected);
+                if (items.Count() > 0)
+                {
+                    MessageBox.Show("请先断开设备连接");
+                }
+                else
+                {
+                    BatteryTotalViewModelList.Clear();
+                    DevConnectInfoManage manage = new DevConnectInfoManage();
+                    manage.DeleteAll();
+                }
             }
         }
 

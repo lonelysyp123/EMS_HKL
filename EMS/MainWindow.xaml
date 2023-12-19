@@ -171,12 +171,17 @@
                         </TextBlock>
                     </Border>
 
-                    <ListBox Name="DevList"  ItemsSource="{Binding BatteryTotalViewModelList}" SelectedItem="{Binding SelectedBatteryTotalViewModel}" BorderThickness="0" materialDesign:ListBoxItemAssist.ShowSelection="False" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Column="0" Grid.Row="1">
+                    <ListBox Name="DevList"  ItemsSource="{Binding BatteryTotalViewModelList}" SelectedItem="{Binding SelectedBatteryTotalViewModel}" 
+                             BorderThickness="0" materialDesign:ListBoxItemAssist.ShowSelection="False" ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Column="0" Grid.Row="1" 
+                             >
                         <ListBox.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="添加设备" Command="{Binding AddDevCommand}"></MenuItem>
-                                <MenuItem Header="删除设备" Command="{Binding DeleteDevCommand}"></MenuItem>
-                                <MenuItem Header="删除所有设备" Command="{Binding DelAllDevCommand}"></MenuItem>
+                                <MenuItem x:Name="AddMenu" Header="添加设备" Command="{Binding AddDevCommand}"></MenuItem>
+                                <MenuItem x:Name="RemoveMenu" Header="删除设备" Command="{Binding DeleteDevCommand}"></MenuItem>
+                                <MenuItem x:Name="ConnectMenu" Header="连接设备" Command="{Binding ConnectDevCommand}"></MenuItem>
+                                <MenuItem x:Name="DisconnectMenu" Header="断开设备" Command="{Binding DisconnectDevCommand}"></MenuItem>
+                                <MenuItem x:Name="RemoveAllMenu" Header="删除所有设备" Command="{Binding DelAllDevCommand}"></MenuItem>
                             </ContextMenu>
                         </ListBox.ContextMenu>
                         <ListBox.ItemContainerStyle>
@@ -208,12 +213,12 @@
                                     <Border.Background >
                                         <ImageBrush ImageSource="pack://application:,,,/EMS;component/Resource/Image/BCMUList.png" AlignmentX="Center" AlignmentY="Center"/>
                                     </Border.Background>
-                                    <Border.ContextMenu>
+                                    <!--<Border.ContextMenu>
                                         <ContextMenu>
                                             <MenuItem Header="重新连接" Command="{Binding ConnectDevCommand}"></MenuItem>
                                             <MenuItem Header="断开连接" Command="{Binding DisconnectDevCommand}"></MenuItem>
                                         </ContextMenu>
-                                    </Border.ContextMenu>
+                                    </Border.ContextMenu>-->
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition/>

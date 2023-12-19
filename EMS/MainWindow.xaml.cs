@@ -9,6 +9,7 @@ using log4net.Config;
 using log4net.Repository.Hierarchy;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -72,6 +73,7 @@ namespace EMS
                     if (devTest_Daq == null)
                     {
                         devTest_Daq = new DevTest_CollectView();
+                        devTest_Daq.InitView(viewmodel.DisplayContent.BatteryTotalViewModelList);
                         viewmodel.DisplayContent.BatteryTotalViewModelList.CollectionChanged += devTest_Daq.Test_CollectionChanged;
                     }
                     Mainbody.Content = new Frame() { Content = devTest_Daq };
@@ -135,6 +137,46 @@ namespace EMS
             mainwindow.Show();
         }
 
+        private void DevList_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            //if(e.OriginalSource.GetType() == typeof(ScrollViewer))
+            //{
+            //    RemoveMenu.Visibility = Visibility.Collapsed;
+            //    ConnectMenu.Visibility = Visibility.Collapsed;
+            //    DisconnectMenu.Visibility = Visibility.Collapsed;
+            //}
+            //else
+            //{
+            //    RemoveMenu.Visibility = Visibility.Visible;
+            //    ConnectMenu.Visibility = Visibility.Visible;
+            //    DisconnectMenu.Visibility = Visibility.Visible;
+            //}
+            //e.Handled = true;
+        }
 
+        bool isSelectedItem = false;
+        private void DevList_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (e.OriginalSource.GetType() == typeof(ScrollViewer))
+            {
+                if (!isSelectedItem) 
+                {
+                    isSelectedItem = true;
+                    RemoveMenu.Visibility = Visibility.Collapsed;
+                    ConnectMenu.Visibility = Visibility.Collapsed;
+                    DisconnectMenu.Visibility = Visibility.Collapsed;
+                }
+            }
+            else
+            {
+                if (isSelectedItem)
+                {
+                    isSelectedItem = false;
+                    RemoveMenu.Visibility = Visibility.Visible;
+                    ConnectMenu.Visibility = Visibility.Visible;
+                    DisconnectMenu.Visibility = Visibility.Visible;
+                }
+            }
+        }
     }
 }
