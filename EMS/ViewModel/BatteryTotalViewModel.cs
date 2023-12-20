@@ -500,13 +500,13 @@ namespace EMS.ViewModel
             }
         }
 
-        private Visibility _devControlVisibility;
-        public Visibility DevControlVisibility
+        private string _connectInfo = "未连接";
+        public string ConnectInfo
         {
-            get => _devControlVisibility;
+            get => _connectInfo;
             set
             {
-                SetProperty(ref _devControlVisibility, value);
+                SetProperty(ref _connectInfo, value);
             }
         }
 
@@ -531,12 +531,12 @@ namespace EMS.ViewModel
                     if (_isConnected)
                     {
                         ConnectImage = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OnConnect.png"));
-                        DevControlVisibility = Visibility.Visible;
+                        ConnectInfo = "连接";
                     }
                     else
                     {
                         ConnectImage = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OffConnect.png"));
-                        DevControlVisibility = Visibility.Hidden;
+                        ConnectInfo = "未连接";
                     }
                 }
             }
@@ -566,8 +566,8 @@ namespace EMS.ViewModel
         private bool _isRecordData = false;
         public bool IsRecordData
         {
-            get => _isRecordData;
-            set
+            get=>_isRecordData;
+            private set
             {
                 if (_isRecordData != value)
                 {
@@ -603,6 +603,13 @@ namespace EMS.ViewModel
             {
                 batterySeriesViewModelList.Add(new BatterySeriesViewModel(14));
             }
+            ConnectImage = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OffConnect.png"));
+            DaqDataImage = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OffDaq.png"));
+            RecordDataImage = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OffRecord.png"));
+
+            service = new BMSDataService();
+            service.RegisterState(ServiceStateCallBack);
+            service.SetCommunicationConfig(IP, Port, TotalList);
         }
 
         private void ServiceStateCallBack(bool isConnected, bool isDaqData)
@@ -611,21 +618,22 @@ namespace EMS.ViewModel
             IsDaqData = isDaqData;
         }
 
-        private void DisconnectDev()
+        public void DisconnectDev()
         {
             service.Disconnect();
         }
 
-        private void ConnectDev()
+        public void ConnectDev()
         {
-            service = new BMSDataService();
-            service.RegisterState(ServiceStateCallBack);
-            service.SetCommunicationConfig(IP, Port, TotalList);
             service.Connect();
-
             devControlViewModel = new DevControlViewModel(service);
             devControlViewModel.InitBCMUInfo(3, 14);
             parameterSettingViewModel = new ParameterSettingViewModel(service, TotalID);
+
+            if (IsDaqData)
+            {
+                StartDaqData();
+            }
         }
 
         public void StartDaqData()
@@ -643,7 +651,10 @@ namespace EMS.ViewModel
                 if(TotalList.TryDequeue(out BatteryTotalModel CurrentBatteryTotalModel))
                 {
                     // 把数据分发给需要显示的内容
-                    RefreshData(CurrentBatteryTotalModel);
+                    App.Current.Dispatcher.Invoke(() =>
+                    {
+                        RefreshData(CurrentBatteryTotalModel);
+                    });
 
                     if (IsRecordData)
                     {
@@ -693,7 +704,6 @@ namespace EMS.ViewModel
             StateBCMUChange(model.StateBCMU);
             GetActiveFaultyBCMU(model.FaultyStateBCMUFlag);
             GetBCMUAlarm(model.AlarmStateBCMUFlag1, model.AlarmStateBCMUFlag2, model.AlarmStateBCMUFlag3);
-
 
             for (int i = 0; i < batterySeriesViewModelList.Count; i++)
             {
@@ -949,20 +959,21 @@ namespace EMS.ViewModel
         public void GetActiveFaultyBCMU(int flag)
         {
             bool colorflag = false;
-            if ((flag & 0x0001) != 0) { FaultyStateBCMU.Add("主接触开关异常"); colorflag = true; } //bit0
-            if ((flag & 0x0002) != 0) { FaultyStateBCMU.Add("预放继电器开关异常"); colorflag = true; }  //bit1
-            if ((flag & 0x0004) != 0) { FaultyStateBCMU.Add("断路器继电器开关异常"); colorflag = true; }  //bit2
-            if ((flag & 0x0008) != 0) { FaultyStateBCMU.Add("CAN通讯异常"); colorflag = true; }  //bit3
-            if ((flag & 0x0010) != 0) { FaultyStateBCMU.Add("485硬件异常"); colorflag = true; }  //bit4
-            if ((flag & 0x0020) != 0) { FaultyStateBCMU.Add("以太网phy异常"); colorflag = true; } //bit5
-            if ((flag & 0x0040) != 0) { FaultyStateBCMU.Add("以太网通讯测试异常"); colorflag = true; } //bit6
-            if ((flag & 0x0080) != 0) { FaultyStateBCMU.Add("霍尔ADC I2C通讯异常"); colorflag = true; } //bit7
-            if ((flag & 0x0100) != 0) { FaultyStateBCMU.Add("霍尔电流检测异常"); colorflag = true; } //bit8
-            if ((flag & 0x0200) != 0) { FaultyStateBCMU.Add("分流器电流检测异常"); colorflag = true; } //bit9
-            if ((flag & 0x0400) != 0) { FaultyStateBCMU.Add("绝缘检测ADC I2C通讯异常"); colorflag = true; } //bit10
-            if ((flag & 0x0800) != 0) { FaultyStateBCMU.Add("高压DC电压检测ADC I2C通讯异常"); colorflag = true; }//bit11
-            if ((flag & 0x1000) != 0) { FaultyStateBCMU.Add("高压箱NTC连接异常"); colorflag = true; } //bit12
-
+            ObservableCollection<string> list = new ObservableCollection<string>();
+            if ((flag & 0x0001) != 0) { list.Add("主接触开关异常"); colorflag = true; } //bit0
+            if ((flag & 0x0002) != 0) { list.Add("预放继电器开关异常"); colorflag = true; }  //bit1
+            if ((flag & 0x0004) != 0) { list.Add("断路器继电器开关异常"); colorflag = true; }  //bit2
+            if ((flag & 0x0008) != 0) { list.Add("CAN通讯异常"); colorflag = true; }  //bit3
+            if ((flag & 0x0010) != 0) { list.Add("485硬件异常"); colorflag = true; }  //bit4
+            if ((flag & 0x0020) != 0) { list.Add("以太网phy异常"); colorflag = true; } //bit5
+            if ((flag & 0x0040) != 0) { list.Add("以太网通讯测试异常"); colorflag = true; } //bit6
+            if ((flag & 0x0080) != 0) { list.Add("霍尔ADC I2C通讯异常"); colorflag = true; } //bit7
+            if ((flag & 0x0100) != 0) { list.Add("霍尔电流检测异常"); colorflag = true; } //bit8
+            if ((flag & 0x0200) != 0) { list.Add("分流器电流检测异常"); colorflag = true; } //bit9
+            if ((flag & 0x0400) != 0) { list.Add("绝缘检测ADC I2C通讯异常"); colorflag = true; } //bit10
+            if ((flag & 0x0800) != 0) { list.Add("高压DC电压检测ADC I2C通讯异常"); colorflag = true; }//bit11
+            if ((flag & 0x1000) != 0) { list.Add("高压箱NTC连接异常"); colorflag = true; } //bit12
+            FaultyStateBCMU = list;
             if (colorflag == true)
             {
                 FaultyColorBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE0000"));

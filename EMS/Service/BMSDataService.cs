@@ -140,8 +140,14 @@ namespace EMS.Service
         private BatteryTotalModel DataDecode(byte[] BCMU, byte[] BMUID, byte[] BMU)
         {
             BatteryTotalModel item = new BatteryTotalModel();
-            DataDecode_BCMU(BCMU, ref item);
-            DataDecode_BMU(BCMU, BMUID, ref item);
+            if (BCMU != null)
+            {
+                DataDecode_BCMU(BCMU, ref item);
+            }
+            if (BMU != null && BMUID != null)
+            {
+                DataDecode_BMU(BMU, BMUID, ref item);
+            }
             return item;
         }
 

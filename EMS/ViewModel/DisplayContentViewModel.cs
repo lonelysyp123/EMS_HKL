@@ -16,6 +16,7 @@ using System.Windows;
 using System.Windows.Media;
 using EMS.Common;
 using EMS.Api;
+using EMS.Service;
 
 namespace EMS.ViewModel
 {
@@ -45,6 +46,8 @@ namespace EMS.ViewModel
         public RelayCommand DeleteDevCommand { get; set; }
         public RelayCommand DelAllDevCommand { get; set; }
         public RelayCommand ModifyPCSTCPCommand { get; set; }
+        public RelayCommand ConnectDevCommand { get; set; }
+        public RelayCommand DisconnectDevCommand { get; set; }
 
         public int DaqTimeSpan = 1;
         public bool IsStartSaveData = false;
@@ -54,6 +57,8 @@ namespace EMS.ViewModel
             AddDevCommand = new RelayCommand(AddDev);
             DeleteDevCommand = new RelayCommand(DeleteDev);
             DelAllDevCommand = new RelayCommand(DelAllDev);
+            ConnectDevCommand = new RelayCommand(ConnectDev);
+            DisconnectDevCommand = new RelayCommand(DisconnectDev);
 
             // 初始化设备列表
             BatteryTotalViewModelList = new ObservableCollection<BatteryTotalViewModel>();
@@ -68,17 +73,30 @@ namespace EMS.ViewModel
             }
         }
 
+        private void DisconnectDev()
+        {
+            SelectedBatteryTotalViewModel.DisconnectDev();
+        }
+
+        private void ConnectDev()
+        {
+            SelectedBatteryTotalViewModel.ConnectDev();
+        }
+
         private void DeleteDev()
         {
-            if (!SelectedBatteryTotalViewModel.IsConnected)
+            if (SelectedBatteryTotalViewModel != null)
             {
-                BatteryTotalViewModelList.Remove(SelectedBatteryTotalViewModel);
-                DevConnectInfoManage manage = new DevConnectInfoManage();
-                manage.Delete(new DevConnectInfoModel() { IP = SelectedBatteryTotalViewModel.IP, Port = SelectedBatteryTotalViewModel.Port, BCMUID = SelectedBatteryTotalViewModel.TotalID });
-            }
-            else
-            {
-                MessageBox.Show("请先断开设备连接");
+                if (!SelectedBatteryTotalViewModel.IsConnected)
+                {
+                    DevConnectInfoManage manage = new DevConnectInfoManage();
+                    manage.Delete(new DevConnectInfoModel() { IP = SelectedBatteryTotalViewModel.IP, Port = SelectedBatteryTotalViewModel.Port, BCMUID = SelectedBatteryTotalViewModel.TotalID });
+                    BatteryTotalViewModelList.Remove(SelectedBatteryTotalViewModel);
+                }
+                else
+                {
+                    MessageBox.Show("请先断开设备连接");
+                }
             }
         }
 
