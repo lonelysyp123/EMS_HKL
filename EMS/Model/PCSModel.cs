@@ -233,12 +233,12 @@ namespace EMS.Model
             if (IsConnected)
             {
                 ModbusClient.WriteFunc(PcsId, PcsCommandAdressEnum.BatteryLowerVolThreshold, (ushort)(ParSettingModel.BTLLimitVol * 10));
-                ModbusClient.WriteFunc(PcsId, 53655, (ushort)(ParSettingModel.DischargeSTVol * 10));
-                ModbusClient.WriteFunc(PcsId, 53658, (ushort)ParSettingModel.MultiBranchCurRegPar);
-                ModbusClient.WriteFunc(PcsId, 53660, (ushort)(ParSettingModel.BatAveChVol * 10));
-                ModbusClient.WriteFunc(PcsId, 53662, (ushort)(ParSettingModel.ChCutCurrent * 10));
-                ModbusClient.WriteFunc(PcsId, 53663, (ushort)(ParSettingModel.MaxChCurrent * 10));
-                ModbusClient.WriteFunc(PcsId, 53664, (ushort)(ParSettingModel.MaxDisChCurrent * 10));
+                ModbusClient.WriteFunc(PcsId, PcsCommandAdressEnum.EndOfDischargeVol, (ushort)(ParSettingModel.DischargeSTVol * 10));
+                ModbusClient.WriteFunc(PcsId, PcsCommandAdressEnum.MutiStrCurRegulationPar, (ushort)ParSettingModel.MultiBranchCurRegPar);
+                ModbusClient.WriteFunc(PcsId, PcsCommandAdressEnum.BatteryToppingCharVol, (ushort)(ParSettingModel.BatAveChVol * 10));
+                ModbusClient.WriteFunc(PcsId, PcsCommandAdressEnum.EndOfCharCur, (ushort)(ParSettingModel.ChCutCurrent * 10));
+                ModbusClient.WriteFunc(PcsId, PcsCommandAdressEnum.MaxCharCur, (ushort)(ParSettingModel.MaxChCurrent * 10));
+                ModbusClient.WriteFunc(PcsId, PcsCommandAdressEnum.MaxDischarCur, (ushort)(ParSettingModel.MaxDisChCurrent * 10));
             }
         }
 
@@ -992,6 +992,18 @@ namespace EMS.Model
         LowerVolSetting = 53643,
         [Description("DC侧支路1：电池下限电压")]
         BatteryLowerVolThreshold = 53653,
+        [Description("DC侧支路1：放电终止电压")]
+        EndOfDischargeVol = 53655,
+        [Description("DC侧支路1：多支路电流调节参数")]
+        MutiStrCurRegulationPar = 53658,
+        [Description("DC侧支路1：电池均充电压")]
+        BatteryToppingCharVol = 53660,
+        [Description("DC侧支路1：充电截止电流")]
+        EndOfCharCur = 53662,
+        [Description("DC侧支路1：最大充电电流")]
+        MaxCharCur = 53663,
+        [Description("DC侧支路1：最大放电电流")]
+        MaxDischarCur = 53664,
 
     }
 }
