@@ -253,6 +253,7 @@
     <Compile Include="ViewModel\BatterySeriesViewModel.cs" />
     <Compile Include="ViewModel\BatteryTotalViewModel.cs" />
     <Compile Include="ViewModel\BatteryViewModel.cs" />
+    <Compile Include="ViewModel\AssistanceStrategyViewModel.cs" />
     <Compile Include="ViewModel\DCStatusViewModel.cs" />
     <Compile Include="ViewModel\DevControlViewModel.cs" />
     <Compile Include="MyControl\Battery.xaml.cs">

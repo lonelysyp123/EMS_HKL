@@ -23,14 +23,17 @@ namespace EMS.Api
         {// 这个函数如果经常被调用，可以考虑重构成Dictionary
             List<BatteryTotalViewModel> totallist= EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList;
             
-            foreach(var total in totallist)
+            if(totallist != null)
             {
-                if(total.TotalID == bcmuid)
+                foreach (var total in totallist)
                 {
-                    return total;
-                  
+                    if (total.TotalID == bcmuid)
+                    {
+                        return total;
+
+                    }
+
                 }
-              
             }
             return null;
         }

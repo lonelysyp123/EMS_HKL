@@ -548,7 +548,7 @@ namespace EMS.ViewModel
             get => _isDaqData;
             private set
             {
-                if(_isDaqData != value)
+                if (_isDaqData != value)
                 {
                     _isDaqData = value;
                     if (_isDaqData)
@@ -569,7 +569,7 @@ namespace EMS.ViewModel
             get=>_isRecordData;
             private set
             {
-                if(_isRecordData != value)
+                if (_isRecordData != value)
                 {
                     _isRecordData = value;
                     if (_isRecordData)
@@ -649,7 +649,7 @@ namespace EMS.ViewModel
 
         private void RefreshDataTh()
         {
-            while(IsDaqData)
+            while (IsDaqData)
             {
                 if(TotalList.TryDequeue(out BatteryTotalModel CurrentBatteryTotalModel))
                 {
@@ -933,7 +933,11 @@ namespace EMS.ViewModel
                 }
 
             }
-            AlarmStateBCMU = INFO;
+            AssistanceStrategyViewModel ASSISTINFO = new AssistanceStrategyViewModel();
+            ObservableCollection<string> RECHECKINFO = ASSISTINFO.RecheckStrategy();
+            ObservableCollection<string> MERGEINFO = new ObservableCollection<string>(INFO.Concat(RECHECKINFO).Distinct());
+            AlarmStateBCMU = MERGEINFO;
+            //AlarmStateBCMU = INFO;
             List<string> list = new List<string>();
 
             if (colorvalue == 1)
