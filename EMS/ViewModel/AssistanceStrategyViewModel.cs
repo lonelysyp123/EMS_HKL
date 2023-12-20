@@ -12,9 +12,6 @@ namespace EMS.ViewModel
 {
     public class AssistanceStrategyViewModel : ViewModelBase
     {
-
-        public static ObservableCollection<string> INFOAS = new ObservableCollection<string>();
-
         //BMS数据处理方法，生成告警
         public ObservableCollection<string> RecheckStrategy()
         {
@@ -25,6 +22,10 @@ namespace EMS.ViewModel
             string bcmuid5 = "BCMU(5)";
             string bcmuid6 = "BCMU(6)";
 
+            //定义告警信息字符串数据集合
+            ObservableCollection<string> INFOAS = new ObservableCollection<string>();
+
+            //API调用电池簇数据
             BatteryTotalViewModel batteryTotalBases1 = BmsApi.GetBMSTotalInfo(bcmuid1);
             BatteryTotalViewModel batteryTotalBases2 = BmsApi.GetBMSTotalInfo(bcmuid2);
             BatteryTotalViewModel batteryTotalBases3 = BmsApi.GetBMSTotalInfo(bcmuid3);
@@ -32,49 +33,41 @@ namespace EMS.ViewModel
             BatteryTotalViewModel batteryTotalBases5 = BmsApi.GetBMSTotalInfo(bcmuid5);
             BatteryTotalViewModel batteryTotalBases6 = BmsApi.GetBMSTotalInfo(bcmuid6);
 
-            AnalyzeBatteryCluster(batteryTotalBases1);//第一簇
-            AnalyzeBatteryCluster(batteryTotalBases2);
-            AnalyzeBatteryCluster(batteryTotalBases3);
-            AnalyzeBatteryCluster(batteryTotalBases4);
-            AnalyzeBatteryCluster(batteryTotalBases5);
-            AnalyzeBatteryCluster(batteryTotalBases6);
+            //共6簇告警逻辑方法调用
+            AnalyzeBatteryCluster(batteryTotalBases1, INFOAS);
+            AnalyzeBatteryCluster(batteryTotalBases2, INFOAS);
+            AnalyzeBatteryCluster(batteryTotalBases3, INFOAS);
+            AnalyzeBatteryCluster(batteryTotalBases4, INFOAS);
+            AnalyzeBatteryCluster(batteryTotalBases5, INFOAS);
+            AnalyzeBatteryCluster(batteryTotalBases6, INFOAS);
 
-            if(batteryTotalBases1 == null &&
-                batteryTotalBases2 == null &&
-                batteryTotalBases3 == null &&
-                batteryTotalBases4 == null &&
-                batteryTotalBases5 == null &&
-                batteryTotalBases6 == null)
-            {
-                INFOAS.Clear();
-            }
             LogUtils.Debug(INFOAS.ToString());
             return INFOAS;
         }
 
 
-        //每簇组端电压保护，单体电压保护，单体压差保护逻辑
-        private void AnalyzeBatteryCluster(BatteryTotalViewModel batteryTotalBases)
+        //每簇组端电压保护，单体电压保护，单体压差保护告警逻辑
+        private void AnalyzeBatteryCluster(BatteryTotalViewModel batteryTotalBases, ObservableCollection<string> INFO)
         {
             if (batteryTotalBases != null)
             {
                 ObservableCollection<double> singleVoltages = new ObservableCollection<double>();
-                ClusterVolLevel(batteryTotalBases.TotalVoltage);//组端电压保护
+                ClusterVolLevel(batteryTotalBases.TotalVoltage, INFO);//组端电压保护
                 for (int i = 0; i < batteryTotalBases.CurrentBatteryTotalModel.SeriesCount; i++)
                 {
                     for (int j = 0; j < batteryTotalBases.CurrentBatteryTotalModel.BatteriesCountInSeries; j++)
                     {
-                        SingleVolLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[i].Batteries[j].Voltage);//单体电压保护
+                        SingleVolLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[i].Batteries[j].Voltage, INFO);//单体电压保护
                         double singlevolvalue = batteryTotalBases.CurrentBatteryTotalModel.Series[i].Batteries[j].Voltage;
                         singleVoltages.Add(singlevolvalue);
-                        ProcessTemperature(batteryTotalBases, i, j);
+                        ProcessTemperature(batteryTotalBases, i, j, INFO);
                     }
                 }
                 double maxSingleVolValue = singleVoltages.Max();
                 double minSingleVolValue = singleVoltages.Min();
                 double voltagesDiff = maxSingleVolValue - minSingleVolValue;
-                SingleVolDiffProtectLevel(voltagesDiff);//单体压差保护
-                ProcessCurrentAndSOC(batteryTotalBases);
+                SingleVolDiffProtectLevel(voltagesDiff, INFO);//单体压差保护
+                ProcessCurrentAndSOC(batteryTotalBases, INFO);
             }
             else
             {
@@ -83,51 +76,51 @@ namespace EMS.ViewModel
         }
 
         //充放电温度告警逻辑
-        private void ProcessTemperature(BatteryTotalViewModel batteryTotalBases, int seriesIndex, int batteryIndex)
+        private void ProcessTemperature(BatteryTotalViewModel batteryTotalBases, int seriesIndex, int batteryIndex, ObservableCollection<string> INFO)
         {
             switch (batteryTotalBases.CurrentBatteryTotalModel.StateBCMU)
             {
                 case 1:
-                    TempCharProtectLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[seriesIndex].Batteries[batteryIndex].Temperature1);
-                    TempCharProtectLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[seriesIndex].Batteries[batteryIndex].Temperature2);
+                    TempCharProtectLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[seriesIndex].Batteries[batteryIndex].Temperature1, INFO);
+                    TempCharProtectLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[seriesIndex].Batteries[batteryIndex].Temperature2, INFO);
                     break;
                 case 2:
-                    TempDischarProtectLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[seriesIndex].Batteries[batteryIndex].Temperature1);
-                    TempDischarProtectLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[seriesIndex].Batteries[batteryIndex].Temperature2);
+                    TempDischarProtectLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[seriesIndex].Batteries[batteryIndex].Temperature1, INFO);
+                    TempDischarProtectLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[seriesIndex].Batteries[batteryIndex].Temperature2, INFO);
                     break;
             }
         }
 
         //充放电电流告警逻辑和SOC告警逻辑
-        private void ProcessCurrentAndSOC(BatteryTotalViewModel batteryTotalBases)
+        private void ProcessCurrentAndSOC(BatteryTotalViewModel batteryTotalBases, ObservableCollection<string> INFO)
         {
             switch (batteryTotalBases.CurrentBatteryTotalModel.StateBCMU)
             {
                 case 1:
-                    CurrentProtectLevel("电池组充电", batteryTotalBases.TotalCurrent);
+                    CurrentProtectLevel("电池组充电", batteryTotalBases.TotalCurrent, INFO);
                     break;
                 case 2:
-                    CurrentProtectLevel("电池组放电", batteryTotalBases.TotalCurrent);
+                    CurrentProtectLevel("电池组放电", batteryTotalBases.TotalCurrent, INFO);
                     break;
             }
-            SocProtectLevel(batteryTotalBases.TotalSOC);
+            SocProtectLevel(batteryTotalBases.TotalSOC, INFO);
         }
 
         //充放电流保护等级
-        private void CurrentProtectLevel(string action, double currentlevel)
+        private void CurrentProtectLevel(string action, double currentlevel, ObservableCollection<string> INFO)
         {
             try
             {
                 switch (true)
                 {
                     case bool _ when currentlevel >= 120 && currentlevel < 130:
-                        INFOAS.Add($"{action}过流1级");
+                        INFO.Add($"{action}过流1级");
                         break;
                     case bool _ when currentlevel >= 130 && currentlevel < 140:
-                        INFOAS.Add($"{action}过流2级");
+                        INFO.Add($"{action}过流2级");
                         break;
                     case bool _ when currentlevel >= 140:
-                        INFOAS.Add($"{action}过流3级");
+                        INFO.Add($"{action}过流3级");
                         break;
                 }
             }
@@ -140,29 +133,29 @@ namespace EMS.ViewModel
 
 
         //组端电压保护等级
-        private void ClusterVolLevel(double clustervoltages)
+        private void ClusterVolLevel(double clustervoltages, ObservableCollection<string> INFO)
         {
             try
             {
                 switch (true)
                 {
                     case bool _ when clustervoltages >= 596 && clustervoltages < 617:
-                        INFOAS.Add("电池组高压1级");
+                        INFO.Add("电池组高压1级");
                         break;
                     case bool _ when clustervoltages >= 617 && clustervoltages < 638:
-                        INFOAS.Add("电池组高压2级");
+                        INFO.Add("电池组高压2级");
                         break;
                     case bool _ when clustervoltages >= 638:
-                        INFOAS.Add("电池组高压3级");
+                        INFO.Add("电池组高压3级");
                         break;
                     case bool _ when clustervoltages > 474 && clustervoltages <= 495:
-                        INFOAS.Add("电池组低压1级");
+                        INFO.Add("电池组低压1级");
                         break;
                     case bool _ when clustervoltages > 453 && clustervoltages <= 474:
-                        INFOAS.Add("电池组低压2级");
+                        INFO.Add("电池组低压2级");
                         break;
                     case bool _ when clustervoltages <= 453:
-                        INFOAS.Add("电池组低压3级");
+                        INFO.Add("电池组低压3级");
                         break;
                 }
             }
@@ -174,29 +167,29 @@ namespace EMS.ViewModel
         }
 
         //单体电压保护等级
-        private void SingleVolLevel(double singlevoltage)
+        private void SingleVolLevel(double singlevoltage, ObservableCollection<string> INFO)
         {
             try
             {
                 switch (true)
                 {
                     case bool _ when singlevoltage >= 14.3 && singlevoltage < 14.8:
-                        INFOAS.Add("单体电池高压1级");
+                        INFO.Add("单体电池高压1级");
                         break;
                     case bool _ when singlevoltage >= 14.8 && singlevoltage < 15:
-                        INFOAS.Add("单体电池高压2级");
+                        INFO.Add("单体电池高压2级");
                         break;
                     case bool _ when singlevoltage >= 15:
-                        INFOAS.Add("单体电池高压3级");
+                        INFO.Add("单体电池高压3级");
                         break;
                     case bool _ when singlevoltage > 11 && singlevoltage <= 11.5:
-                        INFOAS.Add("单体电池低压1级");
+                        INFO.Add("单体电池低压1级");
                         break;
                     case bool _ when singlevoltage > 10.6 && singlevoltage <= 11:
-                        INFOAS.Add("单体电池低压2级");
+                        INFO.Add("单体电池低压2级");
                         break;
                     case bool _ when singlevoltage <= 10.6:
-                        INFOAS.Add("单体电池低压3级");
+                        INFO.Add("单体电池低压3级");
                         break;
                 }
             }
@@ -209,29 +202,29 @@ namespace EMS.ViewModel
         }
 
         //充电温度保护等级
-        private void TempCharProtectLevel(double tempcharprotectlevel)
+        private void TempCharProtectLevel(double tempcharprotectlevel, ObservableCollection<string> INFO)
         {
             try
             {
                 switch (true)
                 {
                     case bool _ when tempcharprotectlevel >= 45 && tempcharprotectlevel < 50:
-                        INFOAS.Add("充电高温1级");
+                        INFO.Add("充电高温1级");
                         break;
                     case bool _ when tempcharprotectlevel >= 50 && tempcharprotectlevel < 55:
-                        INFOAS.Add("充电高温2级");
+                        INFO.Add("充电高温2级");
                         break;
                     case bool _ when tempcharprotectlevel >= 55:
-                        INFOAS.Add("充电高温3级");
+                        INFO.Add("充电高温3级");
                         break;
                     case bool _ when tempcharprotectlevel > -2 && tempcharprotectlevel <= 0:
-                        INFOAS.Add("充电低温1级");
+                        INFO.Add("充电低温1级");
                         break;
                     case bool _ when tempcharprotectlevel > -5 && tempcharprotectlevel <= -2:
-                        INFOAS.Add("充电低温2级");
+                        INFO.Add("充电低温2级");
                         break;
                     case bool _ when tempcharprotectlevel <= -5:
-                        INFOAS.Add("充电低温3级");
+                        INFO.Add("充电低温3级");
                         break;
                 }
             }
@@ -243,20 +236,20 @@ namespace EMS.ViewModel
         }
 
         //放电温度保护等级
-        private void TempDischarProtectLevel(double tempdischarprotectlevel)
+        private void TempDischarProtectLevel(double tempdischarprotectlevel, ObservableCollection<string> INFO)
         {
             try
             {
                 switch (true)
                 {
                     case bool _ when tempdischarprotectlevel >= 45 && tempdischarprotectlevel < 50:
-                        INFOAS.Add("放电高温1级");
+                        INFO.Add("放电高温1级");
                         break;
                     case bool _ when tempdischarprotectlevel >= 50 && tempdischarprotectlevel < 55:
-                        INFOAS.Add("放电高温2级");
+                        INFO.Add("放电高温2级");
                         break;
                     case bool _ when tempdischarprotectlevel >= 55:
-                        INFOAS.Add("放电高温3级");
+                        INFO.Add("放电高温3级");
                         break;
                 }
             }
@@ -269,20 +262,20 @@ namespace EMS.ViewModel
         }
 
         //SOC保护等级
-        private void SocProtectLevel(double socprotectlevel)
+        private void SocProtectLevel(double socprotectlevel, ObservableCollection<string> INFO)
         {
             try
             {
                 switch (true)
                 {
                     case bool _ when socprotectlevel > 5 && socprotectlevel <= 10:
-                        INFOAS.Add("低SOC1级");
+                        INFO.Add("低SOC1级");
                         break;
                     case bool _ when socprotectlevel > 1 && socprotectlevel <= 5:
-                        INFOAS.Add("低SOC2级");
+                        INFO.Add("低SOC2级");
                         break;
                     case bool _ when socprotectlevel > 0 && socprotectlevel <= 1:
-                        INFOAS.Add("低SOC3级");
+                        INFO.Add("低SOC3级");
                         break;
                 }
             }
@@ -294,20 +287,20 @@ namespace EMS.ViewModel
         }
 
         //单体压差保护
-        private void SingleVolDiffProtectLevel(double singlevoldiffprotectlevel)
+        private void SingleVolDiffProtectLevel(double singlevoldiffprotectlevel, ObservableCollection<string> INFO)
         {
             try
             {
                 switch (true)
                 {
                     case bool _ when singlevoldiffprotectlevel >= 1.2 && singlevoldiffprotectlevel < 1.5:
-                        INFOAS.Add("单体压差1级");
+                        INFO.Add("单体压差1级");
                         break;
                     case bool _ when singlevoldiffprotectlevel >= 1.5 && singlevoldiffprotectlevel < 1.8:
-                        INFOAS.Add("单体压差2级");
+                        INFO.Add("单体压差2级");
                         break;
                     case bool _ when singlevoldiffprotectlevel >= 1.8:
-                        INFOAS.Add("单体压差3级");
+                        INFO.Add("单体压差3级");
                         break;
                 }
             }
