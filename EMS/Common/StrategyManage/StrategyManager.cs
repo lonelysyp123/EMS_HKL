@@ -32,6 +32,7 @@ namespace EMS.ViewModel
             }
         }
 
+
         private StrategyManager()
         {
 

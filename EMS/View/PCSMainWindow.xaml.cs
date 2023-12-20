@@ -33,9 +33,9 @@ namespace EMS.View
             viewModel = viewmodel;
             this.DataContext = viewModel;
 
-            PCSMonitorView.DataContext = viewModel.pcsModel.MonitorModel;
-            DCStatusView.DataContext = viewModel.pcsModel.MonitorModel;
-            PCSSettingView.DataContext = viewModel.pcsModel.ParSettingModel;
+            PCSMonitorView.DataContext = viewModel.PCSModel.MonitorModel;
+            DCStatusView.DataContext = viewModel.PCSModel.MonitorModel;
+            PCSSettingView.DataContext = viewModel.PCSModel.ParSettingModel;
 
             button1.DataContext = viewModel;
             button2.DataContext = viewModel;
@@ -44,8 +44,8 @@ namespace EMS.View
             button5.DataContext = viewModel;
             button6.DataContext = viewModel;
 
-            Image1.DataContext = viewModel.pcsModel;
-            Image2.DataContext = viewModel.pcsModel;
+            Image1.DataContext = viewModel.PCSModel;
+            Image2.DataContext = viewModel.PCSModel;
 
             //viewModel = new PCSMainViewModel();
             //viewModel = viewModel1;

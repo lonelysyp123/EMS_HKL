@@ -20,24 +20,11 @@ namespace EMS.ViewModel
 {
     public class PCSMainViewModel : ObservableObject
     {
-        /// <summary>
-        /// 连接IP
-        /// </summary>
-        private string _iP;
-        public string IP
-        {
-            get => _iP;
-            set
-            {
-                SetProperty(ref _iP, value);
-            }
-        }
+        public bool IsConnected { get => _pcsModel.IsConnected;}
 
-        public bool IsConnected { get => pcsModel.IsConnected; }
+        public bool IsRead { get => _pcsModel.IsRead;}
 
-        public bool IsRead { get => pcsModel.IsRead;}
-
-        public Thread DataAcquisitionThread { get { return pcsModel.DataAcuisitionThread; } }
+        public Thread DataAcquisitionThread { get {return _pcsModel.DataAcuisitionThread; } }
 
         /// <summary>
         /// 采集状态图片
@@ -71,6 +58,19 @@ namespace EMS.ViewModel
 
 
         /// <summary>
+        /// 连接IP
+        /// </summary>
+        private string _iP;
+        public string IP
+        {
+            get => _iP;
+            set
+            {
+                SetProperty(ref _iP, value);
+            }
+        }
+
+        /// <summary>
         /// 主界面PCS连接状态颜色显示
         /// </summary>
         private SolidColorBrush _mainWindowPCSConnectColor;
@@ -99,7 +99,11 @@ namespace EMS.ViewModel
         public DCStatusViewModel DcStatusViewModelInstance;
         public PCSMonitorViewModel PcsMonitorViewModelInstance;
 
-        public PCSModel pcsModel;
+        private PCSModel _pcsModel;
+        public PCSModel PCSModel
+        {
+            get { return _pcsModel; }
+        }
 
         public RelayCommand ConnectMSLCommand { get; set; }
         public RelayCommand SyncBUSVolInfoCommand { get; set; }
@@ -119,8 +123,8 @@ namespace EMS.ViewModel
             PcsMonitorViewModelInstance = new PCSMonitorViewModel();
 
 
-            pcsModel = new PCSModel();
-            EnergyManagementSystem.GlobalInstance.PcsManager.SetPCS(pcsModel);
+            _pcsModel = new PCSModel();
+            EnergyManagementSystem.GlobalInstance.PcsManager.SetPCS(_pcsModel);
 
 
             ConnectCommand = new RelayCommand(Connect);
@@ -128,10 +132,10 @@ namespace EMS.ViewModel
             StartDaqCommand = new RelayCommand(StartDataAcquisition);
             StopDaqCommand = new RelayCommand(StopDataAcquisition);
 
-            pcsModel.MonitorModel.VisDCFault = Visibility.Hidden;
-            pcsModel.MonitorModel.VisPDSFault = Visibility.Hidden;
-            pcsModel.MonitorModel.VisDCAlarm = Visibility.Hidden;
-            pcsModel.MonitorModel.VisPDSAlarm = Visibility.Hidden;
+            _pcsModel.MonitorModel.VisDCFault = Visibility.Hidden;
+            _pcsModel.MonitorModel.VisPDSFault = Visibility.Hidden;
+            _pcsModel.MonitorModel.VisDCAlarm = Visibility.Hidden;
+            _pcsModel.MonitorModel.VisPDSAlarm = Visibility.Hidden;
 
             MainWindowPCSConnectState = "未连接";
             MainWindowPCSConnectColor = new SolidColorBrush(Colors.Red);
@@ -144,9 +148,9 @@ namespace EMS.ViewModel
             ModeSetCommand = new RelayCommand(ModeSet);
             ManCharCommand = new RelayCommand(ManChar);
 
-            pcsModel.ParSettingModel.VisDCPower = Visibility.Hidden;
-            pcsModel.ParSettingModel.VisDCCur = Visibility.Hidden;
-            pcsModel.ParSettingModel.VisDCChar = Visibility.Hidden;
+            _pcsModel.ParSettingModel.VisDCPower = Visibility.Hidden;
+            _pcsModel.ParSettingModel.VisDCCur = Visibility.Hidden;
+            _pcsModel.ParSettingModel.VisDCChar = Visibility.Hidden;
         }
 
         public void Connect()
@@ -164,7 +168,7 @@ namespace EMS.ViewModel
                     {
                         IP = view.PCSIPText.AddressText;
                         int port = Convert.ToInt32(view.PCSTCPPort.Text);
-                        pcsModel.Connect(IP, port);
+                        _pcsModel.Connect(IP, port);
 
                         MainWindowPCSConnectState = "已连接";
                         MainWindowPCSConnectColor = new SolidColorBrush(Colors.Green);
@@ -175,6 +179,7 @@ namespace EMS.ViewModel
             {
                 MainWindowPCSConnectState = "未连接";
                 MainWindowPCSConnectColor = new SolidColorBrush(Colors.Red);
+
                 MessageBox.Show("请输入正确的IP地址");
             }
         }
@@ -189,7 +194,7 @@ namespace EMS.ViewModel
                 }
                 else if (IsConnected && !IsRead)
                 {
-                    pcsModel.Disconnect();
+                    _pcsModel.Disconnect();
 
                     MainWindowPCSConnectState = "未连接";
                     MainWindowPCSConnectColor = new SolidColorBrush(Colors.Red);
@@ -213,7 +218,7 @@ namespace EMS.ViewModel
             }
             else
             {
-                pcsModel.StartDataAcquisition();
+                _pcsModel.StartDataAcquisition();
             }
         }
 
@@ -221,7 +226,7 @@ namespace EMS.ViewModel
         {
             if (IsRead)
             {
-                pcsModel.StopDataAcquisition();
+                _pcsModel.StopDataAcquisition();
             }
             else
             {
@@ -233,50 +238,50 @@ namespace EMS.ViewModel
         {
             if (IsConnected)
             {
-                if (pcsModel.ParSettingModel.BUSUpperLimitVolThresh < 100 || pcsModel.ParSettingModel.BUSUpperLimitVolThresh > 900)
+                if (_pcsModel.ParSettingModel.BUSUpperLimitVolThresh < 100 || _pcsModel.ParSettingModel.BUSUpperLimitVolThresh > 900)
                 {
                     MessageBox.Show("上限电压：请输入100-900的数");
                     return;
                 }
-                else if (!System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.BUSUpperLimitVolThresh.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.BUSUpperLimitVolThresh.ToString(), @"^\d+$"))
+                else if (!System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.BUSUpperLimitVolThresh.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.BUSUpperLimitVolThresh.ToString(), @"^\d+$"))
                 {
                     MessageBox.Show("上限电压：请输入一位小数");
                     return;
                 }
 
-                if (pcsModel.ParSettingModel.BUSLowerLimitVolThresh < 100 || pcsModel.ParSettingModel.BUSLowerLimitVolThresh > 900)
+                if (_pcsModel.ParSettingModel.BUSLowerLimitVolThresh < 100 || _pcsModel.ParSettingModel.BUSLowerLimitVolThresh > 900)
                 {
                     MessageBox.Show("下限电压：请输入100-900的数");
                     return;
                 }
-                else if (!System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.BUSLowerLimitVolThresh.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.BUSLowerLimitVolThresh.ToString(), @"^\d+$"))
+                else if (!System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.BUSLowerLimitVolThresh.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.BUSLowerLimitVolThresh.ToString(), @"^\d+$"))
                 {
                     MessageBox.Show("下限电压：请输入一位小数");
                     return;
                 }
 
-                if (pcsModel.ParSettingModel.BUSHVolSetting < 100 || pcsModel.ParSettingModel.BUSHVolSetting > 900)
+                if (_pcsModel.ParSettingModel.BUSHVolSetting < 100 || _pcsModel.ParSettingModel.BUSHVolSetting > 900)
                 {
                     MessageBox.Show("高压设置：请输入100-900的数");
                     return;
                 }
-                else if (!System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.BUSHVolSetting.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.BUSHVolSetting.ToString(), @"^\d+$"))
+                else if (!System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.BUSHVolSetting.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.BUSHVolSetting.ToString(), @"^\d+$"))
                 {
                     MessageBox.Show("高压设置：请输入一位小数");
                     return;
                 }
 
-                if (pcsModel.ParSettingModel.BUSLVolSetting < 100 || pcsModel.ParSettingModel.BUSLVolSetting > 900)
+                if (_pcsModel.ParSettingModel.BUSLVolSetting < 100 || _pcsModel.ParSettingModel.BUSLVolSetting > 900)
                 {
                     MessageBox.Show("低压设置：请输入100-900的数");
                     return;
                 }
-                else if (!System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.BUSLVolSetting.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.BUSLVolSetting.ToString(), @"^\d+$"))
+                else if (!System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.BUSLVolSetting.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.BUSLVolSetting.ToString(), @"^\d+$"))
                 {
                     MessageBox.Show("低压设置：请输入一位小数");
                     return;
                 }
-                pcsModel.SyncBUSVolInfo();
+                _pcsModel.SyncBUSVolInfo();
             }
             else
             {
@@ -292,7 +297,7 @@ namespace EMS.ViewModel
         {
             if (IsConnected)
             {
-                pcsModel.ReadBUSVolInfo();
+                _pcsModel.ReadBUSVolInfo();
             }
             else
             {
@@ -300,45 +305,45 @@ namespace EMS.ViewModel
             }
         }
 
-        private void SyncCMTimeOut()
-        {
-            if (IsConnected)
-            {
-                if (pcsModel.ParSettingModel.BMSCMInterruptionTimeOut < 1 || pcsModel.ParSettingModel.BMSCMInterruptionTimeOut > 600)
-                {
-                    MessageBox.Show("BMS通信超时设置：请输入1-600的整数");
-                    return;
-                }
-                if (pcsModel.ParSettingModel.Remote485CMInterruptonTimeOut < 1 || pcsModel.ParSettingModel.Remote485CMInterruptonTimeOut > 600)
-                {
-                    MessageBox.Show("远程485通信超时设置：请输入1-600的整数");
-                    return;
-                }
-                if (pcsModel.ParSettingModel.RemoteTCPCMInterruptionTimeOut < 1 || pcsModel.ParSettingModel.RemoteTCPCMInterruptionTimeOut > 600)
-                {
-                    MessageBox.Show("远程TCP通信超时设置：请输入1-600的整数");
-                    return;
-                }
-                pcsModel.SyncCMTimeOut();
-            }
-            else
-            {
-                MessageBox.Show("请连接");
-            }
-        }
+        //private void SyncCMTimeOut()
+        //{
+        //    if (IsConnected)
+        //    {
+        //        if (_pcsModel.ParSettingModel.BMSCMInterruptionTimeOut < 1 || _pcsModel.ParSettingModel.BMSCMInterruptionTimeOut > 600)
+        //        {
+        //            MessageBox.Show("BMS通信超时设置：请输入1-600的整数");
+        //            return;
+        //        }
+        //        if (_pcsModel.ParSettingModel.Remote485CMInterruptonTimeOut < 1 || _pcsModel.ParSettingModel.Remote485CMInterruptonTimeOut > 600)
+        //        {
+        //            MessageBox.Show("远程485通信超时设置：请输入1-600的整数");
+        //            return;
+        //        }
+        //        if (_pcsModel.ParSettingModel.RemoteTCPCMInterruptionTimeOut < 1 || _pcsModel.ParSettingModel.RemoteTCPCMInterruptionTimeOut > 600)
+        //        {
+        //            MessageBox.Show("远程TCP通信超时设置：请输入1-600的整数");
+        //            return;
+        //        }
+        //        _pcsModel.SyncCMTimeOut();
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("请连接");
+        //    }
+        //}
 
 
-        private void ReadCMTimeOut()
-        {
-            if (IsConnected)
-            {
-                pcsModel.ReadCMTimeOut();
-            }
-            else
-            {
-                MessageBox.Show("请连接");
-            }
-        }
+        //private void ReadCMTimeOut()
+        //{
+        //    if (IsConnected)
+        //    {
+        //        _pcsModel.ReadCMTimeOut();
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("请连接");
+        //    }
+        //}
 
 
         private void SyncDCBranchInfo()
@@ -347,78 +352,78 @@ namespace EMS.ViewModel
             if (IsConnected)
             {
 
-                if (pcsModel.ParSettingModel.BTLLimitVol > 800 || pcsModel.ParSettingModel.BTLLimitVol < 30)
+                if (_pcsModel.ParSettingModel.BTLLimitVol > 800 || _pcsModel.ParSettingModel.BTLLimitVol < 30)
                 {
                     MessageBox.Show("电池下限电压：请输入30到800的数");
                     return;
                 }
-                else if (!System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.BTLLimitVol.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.BTLLimitVol.ToString(), @"^\d+$"))
+                else if (!System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.BTLLimitVol.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.BTLLimitVol.ToString(), @"^\d+$"))
                 {
                     MessageBox.Show("电池下限电压：请输入一位小数");
                     return;
                 }
 
-                if (pcsModel.ParSettingModel.DischargeSTVol > 900 || pcsModel.ParSettingModel.DischargeSTVol < 30)
+                if (_pcsModel.ParSettingModel.DischargeSTVol > 900 || _pcsModel.ParSettingModel.DischargeSTVol < 30)
                 {
                     MessageBox.Show("放电终止电压：请输入30到800的数");
                     return;
                 }
-                else if (!System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.DischargeSTVol.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.DischargeSTVol.ToString(), @"^\d+$"))
+                else if (!System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.DischargeSTVol.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.DischargeSTVol.ToString(), @"^\d+$"))
                 {
                     MessageBox.Show("放电终止电压：请输入一位小数");
                     return;
                 }
 
-                if (pcsModel.ParSettingModel.MultiBranchCurRegPar > 50 || pcsModel.ParSettingModel.MultiBranchCurRegPar < -50)
+                if (_pcsModel.ParSettingModel.MultiBranchCurRegPar > 50 || _pcsModel.ParSettingModel.MultiBranchCurRegPar < -50)
                 {
                     MessageBox.Show("多支路电流调节参数：请输入-50到50的数");
                     return;
                 }
 
-                if (pcsModel.ParSettingModel.BatAveChVol > 800 || pcsModel.ParSettingModel.BatAveChVol < 30)
+                if (_pcsModel.ParSettingModel.BatAveChVol > 800 || _pcsModel.ParSettingModel.BatAveChVol < 30)
                 {
                     MessageBox.Show("电池均充电压：请输入30到800的数");
                     return;
                 }
-                else if (!System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.BatAveChVol.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.BatAveChVol.ToString(), @"^\d+$"))
+                else if (!System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.BatAveChVol.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.BatAveChVol.ToString(), @"^\d+$"))
                 {
                     MessageBox.Show("电池均充电压：请输入一位小数");
                     return;
                 }
 
-                if (pcsModel.ParSettingModel.ChCutCurrent > 250 || pcsModel.ParSettingModel.ChCutCurrent < 0)
+                if (_pcsModel.ParSettingModel.ChCutCurrent > 250 || _pcsModel.ParSettingModel.ChCutCurrent < 0)
                 {
                     MessageBox.Show("充电截止电流：请输入0到250的数");
                     return;
                 }
-                else if (!System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.ChCutCurrent.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.ChCutCurrent.ToString(), @"^\d+$"))
+                else if (!System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.ChCutCurrent.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.ChCutCurrent.ToString(), @"^\d+$"))
                 {
                     MessageBox.Show("充电截止电流：请输入一位小数");
                     return;
                 }
 
-                if (pcsModel.ParSettingModel.MaxChCurrent > 1500 || pcsModel.ParSettingModel.MaxChCurrent < 0)
+                if (_pcsModel.ParSettingModel.MaxChCurrent > 1500 || _pcsModel.ParSettingModel.MaxChCurrent < 0)
                 {
                     MessageBox.Show("最大充电电流：请输入0到1500的数");
                     return;
                 }
-                else if (!System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.MaxChCurrent.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.MaxChCurrent.ToString(), @"^\d+$"))
+                else if (!System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.MaxChCurrent.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.MaxChCurrent.ToString(), @"^\d+$"))
                 {
                     MessageBox.Show("最大充电电流：请输入一位小数");
                     return;
                 }
 
-                if (pcsModel.ParSettingModel.MaxDisChCurrent > 1500 || pcsModel.ParSettingModel.MaxDisChCurrent < 0)
+                if (_pcsModel.ParSettingModel.MaxDisChCurrent > 1500 || _pcsModel.ParSettingModel.MaxDisChCurrent < 0)
                 {
                     MessageBox.Show("最大放电电流：请输入0到1500的数");
                     return;
                 }
-                else if (!System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.MaxDisChCurrent.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.MaxDisChCurrent.ToString(), @"^\d+$"))
+                else if (!System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.MaxDisChCurrent.ToString(), @"^\d+\.\d$") & !System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.MaxDisChCurrent.ToString(), @"^\d+$"))
                 {
                     MessageBox.Show("最大放电电流：请输入一位小数");
                     return;
                 }
-                pcsModel.SyncDCBranchInfo();
+                _pcsModel.SyncDCBranchInfo();
             }
             else
             {
@@ -431,7 +436,7 @@ namespace EMS.ViewModel
         {
             if (IsConnected)
             {
-                pcsModel.ReadDCBranchInfo();
+                _pcsModel.ReadDCBranchInfo();
             }
             else
             {
@@ -443,23 +448,23 @@ namespace EMS.ViewModel
         {
             if (IsConnected)
             {
-                if (pcsModel.ParSettingModel.ModeSet1 == "设置电流调节")
+                if (_pcsModel.ParSettingModel.ModeSet1 == "设置电流调节")
                 {
-                    pcsModel.ParSettingModel.VisDCCur = Visibility.Visible;
-                    pcsModel.ParSettingModel.VisDCPower = Visibility.Hidden;
-                    pcsModel.ParSettingModel.VisDCChar = Visibility.Visible;
+                    _pcsModel.ParSettingModel.VisDCCur = Visibility.Visible;
+                    _pcsModel.ParSettingModel.VisDCPower = Visibility.Hidden;
+                    _pcsModel.ParSettingModel.VisDCChar = Visibility.Visible;
                 }
-                else if (pcsModel.ParSettingModel.ModeSet1 == "设置功率调节")
+                else if (_pcsModel.ParSettingModel.ModeSet1 == "设置功率调节")
                 {
-                    pcsModel.ParSettingModel.VisDCPower = Visibility.Visible;
-                    pcsModel.ParSettingModel.VisDCCur = Visibility.Hidden;
-                    pcsModel.ParSettingModel.VisDCChar = Visibility.Visible;
+                    _pcsModel.ParSettingModel.VisDCPower = Visibility.Visible;
+                    _pcsModel.ParSettingModel.VisDCCur = Visibility.Hidden;
+                    _pcsModel.ParSettingModel.VisDCChar = Visibility.Visible;
                 }
                 else
                 {
                     MessageBox.Show("请选择模式");
                 }
-                pcsModel.ModeSet();
+                _pcsModel.ModeSet();
             }
             else
             {
@@ -471,15 +476,15 @@ namespace EMS.ViewModel
         {
             if (IsConnected)
             {
-                if (pcsModel.ParSettingModel.ModeSet1 == "设置电流调节")
+                if (_pcsModel.ParSettingModel.ModeSet1 == "设置电流调节")
                 {
-                    if (pcsModel.ParSettingModel.DCCurrentSet > 1500 || pcsModel.ParSettingModel.DCCurrentSet < -1500)
+                    if (_pcsModel.ParSettingModel.DCCurrentSet > 1500 || _pcsModel.ParSettingModel.DCCurrentSet < -1500)
                     {
                         MessageBox.Show("直流电流设置：请输入-1500到1500的数");
                         return;
                     }
-                    else if (System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.DCCurrentSet.ToString(), @"^\d+\.\d$") == false & System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.DCCurrentSet.ToString(), @"^\-\d+\.\d$") == false
-                        & !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.DCCurrentSet.ToString(), @"^\d+$") & !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.DCCurrentSet.ToString(), @"^\-\d+$"))
+                    else if (System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.DCCurrentSet.ToString(), @"^\d+\.\d$") == false & System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.DCCurrentSet.ToString(), @"^\-\d+\.\d$") == false
+                        & !System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.DCCurrentSet.ToString(), @"^\d+$") & !System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.DCCurrentSet.ToString(), @"^\-\d+$"))
                     {
                         MessageBox.Show("直流电流设置：请输入一位小数");
                         return;
@@ -487,19 +492,19 @@ namespace EMS.ViewModel
                 }
                 else
                 {
-                    if (pcsModel.ParSettingModel.DCPowerSet > 1000 || pcsModel.ParSettingModel.DCPowerSet < -1000)
+                    if (_pcsModel.ParSettingModel.DCPowerSet > 1000 || _pcsModel.ParSettingModel.DCPowerSet < -1000)
                     {
                         MessageBox.Show("直流功率设置：请输入-1000到1000的数");
                         return;
                     }
-                    else if (System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.DCPowerSet.ToString(), @"^\d+\.\d$") == false & System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.DCPowerSet.ToString(), @"^\-\d+\.\d$") == false
-                        & !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.DCPowerSet.ToString(), @"^\d+$") & !System.Text.RegularExpressions.Regex.IsMatch(pcsModel.ParSettingModel.DCPowerSet.ToString(), @"^\-\d+$"))
+                    else if (System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.DCPowerSet.ToString(), @"^\d+\.\d$") == false & System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.DCPowerSet.ToString(), @"^\-\d+\.\d$") == false
+                        & !System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.DCPowerSet.ToString(), @"^\d+$") & !System.Text.RegularExpressions.Regex.IsMatch(_pcsModel.ParSettingModel.DCPowerSet.ToString(), @"^\-\d+$"))
                     {
                         MessageBox.Show("直流功率设置：请输入一位小数");
                         return;
                     }
                 }
-                pcsModel.ManChar();
+                _pcsModel.ManChar();
             }
             else
             {

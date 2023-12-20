@@ -120,7 +120,7 @@ namespace EMS.Model
             catch (Exception ex)
             {
                 IsConnected = false;
-                throw ex;
+                Logger.Info(ex.ToString());
             }
             IsConnected = true;
         }
@@ -218,15 +218,15 @@ namespace EMS.Model
             }
         }
 
-        public void SyncCMTimeOut()
-        {
-            if (IsConnected)
-            {
-                ModbusClient.WriteFunc(PcsId, 56006, (ushort)(ParSettingModel.BMSCMInterruptionTimeOut));
-                ModbusClient.WriteFunc(PcsId, 56007, (ushort)(ParSettingModel.Remote485CMInterruptonTimeOut));
-                ModbusClient.WriteFunc(PcsId, 56008, (ushort)(ParSettingModel.RemoteTCPCMInterruptionTimeOut));
-            }
-        }
+        //public void SyncCMTimeOut()
+        //{
+        //    if (IsConnected)
+        //    {
+        //        ModbusClient.WriteFunc(PcsId, 56006, (ushort)(ParSettingModel.BMSCMInterruptionTimeOut));
+        //        ModbusClient.WriteFunc(PcsId, 56007, (ushort)(ParSettingModel.Remote485CMInterruptonTimeOut));
+        //        ModbusClient.WriteFunc(PcsId, 56008, (ushort)(ParSettingModel.RemoteTCPCMInterruptionTimeOut));
+        //    }
+        //}
 
         public void SyncDCBranchInfo()
         {
@@ -1004,6 +1004,5 @@ namespace EMS.Model
         MaxCharCur = 53663,
         [Description("DC侧支路1：最大放电电流")]
         MaxDischarCur = 53664,
-
     }
 }
