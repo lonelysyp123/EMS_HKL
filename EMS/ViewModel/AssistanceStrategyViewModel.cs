@@ -25,7 +25,7 @@ namespace EMS.ViewModel
             //定义告警信息字符串数据集合
             ObservableCollection<string> INFOAS = new ObservableCollection<string>();
 
-            //API调用电池簇数据
+            //使用API调用电池簇数据
             BatteryTotalViewModel batteryTotalBases1 = BmsApi.GetBMSTotalInfo(bcmuid1);
             BatteryTotalViewModel batteryTotalBases2 = BmsApi.GetBMSTotalInfo(bcmuid2);
             BatteryTotalViewModel batteryTotalBases3 = BmsApi.GetBMSTotalInfo(bcmuid3);
