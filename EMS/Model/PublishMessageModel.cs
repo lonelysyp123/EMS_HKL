@@ -4,15 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TNCN.EMS.Model
+namespace EMS.Model
 {
-    public class SubscribeMessageModel
+    public class PublishMessageModel
     {
-        /// <summary>
-        /// 客户端Id
-        /// </summary>
-        public string ClientId { get { return clientId; } }
-        private string clientId;
         /// <summary>
         /// 消息的主题
         /// </summary>
@@ -24,8 +19,7 @@ namespace TNCN.EMS.Model
         public byte[] Payload { get { return payload; } }
         private byte[] payload;
 
-        public SubscribeMessageModel(string clientId, string topic, byte[] payload) {
-            this.clientId = clientId;
+        public PublishMessageModel(string topic, byte[] payload) { 
             this.topic = topic;
             this.payload = payload;
         }

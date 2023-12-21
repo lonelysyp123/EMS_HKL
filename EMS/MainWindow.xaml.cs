@@ -37,6 +37,7 @@ namespace EMS
             InitializeComponent();
             //初始化log配置文件
             XmlConfigurator.Configure();
+
             EnergyManagementSystem.Initialization(new EnergyManagementSystem());
 
             viewmodel = new MainViewModel();

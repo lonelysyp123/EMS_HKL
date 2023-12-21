@@ -224,6 +224,7 @@
     <Compile Include="Common\StrategyManage\EmsController.cs" />
     <Compile Include="Common\StrategyManage\IntraDayScheduler.cs" />
     <Compile Include="Common\SingletonBase.cs" />
+    <Compile Include="Common\Util\ConcurrentQueueLength.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -238,11 +239,13 @@
     <Compile Include="Common\StrategyManage\EnergyManagementSystem.cs" />
     <Compile Include="Model\BMSParameterSettingModel.cs" />
     <Compile Include="Model\ElectricityMeterModel.cs" />
+    <Compile Include="Model\PublishMessageModel.cs" />
     <Compile Include="Model\SerialPortSettingsModel.cs" />
     <Compile Include="Model\SubscribeMessageModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
     <Compile Include="Service\BMSDataService.cs" />
-    <Compile Include="Service\MqttClientService.cs" />
+    <Compile Include="Service\impl\MqttClientService.cs" />
+    <Compile Include="Service\IMqttClientService.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmandFaultInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmParameterSettingInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSControlInfoManage.cs" />

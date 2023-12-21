@@ -33,13 +33,19 @@ namespace TNCN.EMS.Model
         /// </summary>
         public string ClientId { get { return clientId; } }
         private string clientId;
-
+        /// <summary>
+        /// 心跳间隔
+        /// </summary>
         public int KeepAlivePeriod { get { return keepAlivePeriod; } }
         private int keepAlivePeriod;
         /// <summary>
         /// 订阅的topic列表
         /// </summary>
-        public List<string> Topics { get; set; }
+        public List<string> Topics { 
+            get { return topics; }
+            set { topics = value; } 
+        }
+        private List<string> topics;
 
         public MqttConnectInfoModel(string ip, int port, string userName, string password, string clientId, int keepAlivePeriod) { 
             this.ip = ip;
