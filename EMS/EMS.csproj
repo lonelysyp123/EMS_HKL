@@ -351,6 +351,9 @@
     <Compile Include="View\NewEMSView\Analysis_SmartMeterPage.xaml.cs">
       <DependentUpon>Analysis_SmartMeterPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\NewEMSView\EMSMainView.xaml.cs">
+      <DependentUpon>EMSMainView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\NewEMSView\FaultLogPage.xaml.cs">
       <DependentUpon>FaultLogPage.xaml</DependentUpon>
     </Compile>
@@ -362,9 +365,6 @@
     </Compile>
     <Compile Include="View\NewEMSView\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\NewEMSView\EMSMainView.xaml.cs">
-      <DependentUpon>EMSMainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\NewEMSView\Monitor_PCSPage.xaml.cs">
       <DependentUpon>Monitor_PCSPage.xaml</DependentUpon>
@@ -494,6 +494,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\NewEMSView\EMSMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\NewEMSView\FaultLogPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -507,10 +511,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\NewEMSView\HomePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\NewEMSView\EMSMainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
