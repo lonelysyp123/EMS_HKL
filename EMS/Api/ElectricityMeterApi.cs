@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMS.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,32 +9,32 @@ namespace EMS.Api
 {
     public static class ElectricityMeterApi
     {
-        public static int[] GetVoltage()
+        public static ThreePhaseValue GetVoltage()
         {
-            return new int[3];
+            return new ThreePhaseValue();
         }
 
-        public static int[] GetElectric()
+        public static ThreePhaseValue GetElectric()
         {
-            return new int[3];
+            return new ThreePhaseValue();
         }
 
-        public static int[] GetActivePower()
+        public static ThreePhaseValue GetActivePower()
         {
-            return new int[3];
+            return new ThreePhaseValue();
         }
 
-        public static int[] GetReactivePower()
+        public static ThreePhaseValue GetReactivePower()
         {
-            return new int[3];
+            return new ThreePhaseValue();
         }
 
-        public static int GetActivePowerTotal() 
+        public static double GetActivePowerTotal() 
         {
             return -1;
         }
 
-        public static int GetReactivePowerTotal()
+        public static double GetReactivePowerTotal()
         {
             return -1;
         }
