@@ -17,21 +17,27 @@ using System.Windows.Markup;
 
 namespace EMS.Model
 {
+    public struct ThreePhaseValue
+    {
+        public double PhaseA; 
+        public double PhaseB; 
+        public double PhaseC;
+    }
     public class ElectricityMeterModel : ObservableObject
     {
         private int _voltage_A;
-        public int Voltage_A 
+        public int Voltage_A
         {
-            get => _voltage_A; 
-            set 
+            get => _voltage_A;
+            set
             {
                 SetProperty(ref _voltage_A, value);
-            } 
+            }
         }
 
         private int _voltage_B;
-        public int Voltage_B 
-        { 
+        public int Voltage_B
+        {
             get => _voltage_B;
             set
             {
@@ -40,9 +46,9 @@ namespace EMS.Model
         }
 
         private int _voltage_C;
-        public int Voltage_C 
-        { 
-            get => _voltage_C; 
+        public int Voltage_C
+        {
+            get => _voltage_C;
             set
             {
                 SetProperty(ref _voltage_C, value);
@@ -50,9 +56,9 @@ namespace EMS.Model
         }
 
         private int _electric_A;
-        public int Electric_A 
-        { 
-            get => _electric_A; 
+        public int Electric_A
+        {
+            get => _electric_A;
             set
             {
                 SetProperty(ref _electric_A, value);
@@ -60,28 +66,28 @@ namespace EMS.Model
         }
 
         private int _electric_B;
-        public int Electric_B 
-        { 
+        public int Electric_B
+        {
             get => _electric_B;
             set
             {
                 SetProperty(ref _electric_B, value);
-            } 
+            }
         }
 
         private int _electric_C;
-        public int Electric_C 
-        { 
+        public int Electric_C
+        {
             get => _electric_C;
             set
             {
                 SetProperty(ref _electric_C, value);
-            } 
+            }
         }
 
         private int _activePower_A;
-        public int ActivePower_A 
-        { 
+        public int ActivePower_A
+        {
             get => _activePower_A;
             set
             {
@@ -90,18 +96,18 @@ namespace EMS.Model
         }
 
         private int _activePower_B;
-        public int ActivePower_B 
-        { 
+        public int ActivePower_B
+        {
             get => _activePower_B;
             set
             {
                 SetProperty(ref _activePower_B, value);
-            } 
+            }
         }
 
         private int _activePower_C;
-        public int ActivePower_C 
-        { 
+        public int ActivePower_C
+        {
             get => _activePower_C;
             set
             {
@@ -110,9 +116,9 @@ namespace EMS.Model
         }
 
         private int _activePower_Total;
-        public int ActivePower_Total 
-        { 
-            get => _activePower_Total; 
+        public int ActivePower_Total
+        {
+            get => _activePower_Total;
             set
             {
                 SetProperty(ref _activePower_Total, value);
@@ -120,9 +126,9 @@ namespace EMS.Model
         }
 
         private int _reactivePower_A;
-        public int ReactivePower_A 
-        { 
-            get => _reactivePower_A; 
+        public int ReactivePower_A
+        {
+            get => _reactivePower_A;
             set
             {
                 SetProperty(ref _reactivePower_A, value);
@@ -130,9 +136,9 @@ namespace EMS.Model
         }
 
         private int _reactivePower_B;
-        public int ReactivePower_B 
-        { 
-            get => _reactivePower_B; 
+        public int ReactivePower_B
+        {
+            get => _reactivePower_B;
             set
             {
                 SetProperty(ref _reactivePower_B, value);
@@ -140,9 +146,9 @@ namespace EMS.Model
         }
 
         private int _reactivePower_C;
-        public int ReactivePower_C 
-        { 
-            get => _reactivePower_C; 
+        public int ReactivePower_C
+        {
+            get => _reactivePower_C;
             set
             {
                 SetProperty(ref _reactivePower_C, value);
@@ -150,9 +156,9 @@ namespace EMS.Model
         }
 
         private int _reactivePower_Total;
-        public int ReactivePower_Total 
-        { 
-            get => _reactivePower_Total; 
+        public int ReactivePower_Total
+        {
+            get => _reactivePower_Total;
             set
             {
                 SetProperty(ref _reactivePower_Total, value);
@@ -476,7 +482,7 @@ namespace EMS.Model
                         models[i] = item;
                     }
 
-                    
+
                 }
             }
         }
@@ -506,7 +512,7 @@ namespace EMS.Model
             BaudRates = SerialPortSettingsModel.Instance.getBaudRates();
             Parities = SerialPortSettingsModel.Instance.getParities();
             StopBitsList = SerialPortSettingsModel.Instance.getStopBits();
-            DataBits = new int[]{ 4,5,6,7,8 };
+            DataBits = new int[] { 4, 5, 6, 7, 8 };
         }
     }
 }
