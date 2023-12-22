@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EMSCommon
+namespace EMSCommon.Common.CAN
 {
-    public class Class1
+    public class CANClient
     {
+
     }
 }
