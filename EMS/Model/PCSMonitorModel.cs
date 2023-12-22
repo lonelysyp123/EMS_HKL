@@ -928,5 +928,20 @@ namespace EMS.Model
                 SetProperty(ref _cabSerialNumber, value);
             }
         }
+
+
+        /// <summary>
+        /// 机柜序列号地址
+        /// </summary>
+        private ushort[] _snAdress; 
+
+        public ushort[] SNAdress
+        {
+            get => _snAdress;
+            set
+            {
+                SetProperty(ref _snAdress, value);
+            }
+        }
     }
 }

@@ -96,8 +96,7 @@ namespace EMS.ViewModel
             }
         }
 
-        public DCStatusViewModel DcStatusViewModelInstance;
-        public PCSMonitorViewModel PcsMonitorViewModelInstance;
+        
 
         private PCSModel _pcsModel;
         public PCSModel PCSModel
@@ -119,8 +118,7 @@ namespace EMS.ViewModel
 
         public PCSMainViewModel()
         {
-            DcStatusViewModelInstance = new DCStatusViewModel();
-            PcsMonitorViewModelInstance = new PCSMonitorViewModel();
+            
 
 
             _pcsModel = new PCSModel();

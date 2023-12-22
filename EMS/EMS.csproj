@@ -245,7 +245,6 @@
     <Compile Include="Storage\DB\Models\PCSControlSettingModel.cs" />
     <Compile Include="Storage\DB\Models\PCSInfoModel.cs" />
     <Compile Include="Storage\DB\Models\PCSStrategyDailyPatternInfoModel.cs" />
-    <Compile Include="ViewModel\DCStatusViewModel.cs" />
     <Compile Include="ViewModel\DevControlViewModel.cs" />
     <Compile Include="MyControl\Battery.xaml.cs">
       <DependentUpon>Battery.xaml</DependentUpon>
@@ -287,7 +286,6 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ParameterSettingViewModel.cs" />
     <Compile Include="ViewModel\PCSMainViewModel.cs" />
-    <Compile Include="ViewModel\PCSMonitorViewModel.cs" />
     <Compile Include="ViewModel\PCSSettingViewModel.cs" />
     <Compile Include="Common\StrategyManage\StrategyManager.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />

@@ -107,7 +107,7 @@ namespace EMS.Model
 
         public PCSMonitorModel MonitorModel { get; set; }
         public PCSParSettingModel ParSettingModel { get; set; }
-
+        
         private ILog Logger;
 
         public void Connect(string ip, int port)
@@ -346,10 +346,16 @@ namespace EMS.Model
                     MonitorModel.DcBranch1BUSVol = Math.Round(BitConverter.ToUInt16(DCBranch1INFO, 18) * 0.1, 2);
 
                     byte[] SerialNumber = ModbusClient.ReadFunc(53579, 15);
+                    MonitorModel.SNAdress =new ushort[11];
+                    for (int i = 0; i < 11; i++)
+                    {
+                        MonitorModel.SNAdress[i]= BitConverter.ToUInt16(SerialNumber, 2*i);
+                    }
                     MonitorModel.MonitorSoftCode = BitConverter.ToUInt16(SerialNumber, 22);
                     MonitorModel.DcSoftCode=BitConverter.ToUInt16(SerialNumber, 26);
                     MonitorModel.U2SoftCode=BitConverter.ToUInt16(SerialNumber, 28);
 
+                    GetSN();
                     EnergyCal();
 
                     bool FaultColorFlagDC = GetDCFault();
@@ -814,6 +820,25 @@ namespace EMS.Model
             value4 = MonitorModel.DcBranch1DisCharLow;
             MonitorModel.DcBranch1Char = value1 << 16 | value2;
             MonitorModel.DcBranch1DisChar = value3 << 16 | value4;
+        }
+
+        /// <summary>
+        /// 获取机柜序列号
+        /// </summary>
+        public void GetSN()
+        {
+            ushort value;
+            string serialnumber="";
+            for (int i = 0; i < 11; i ++ )
+            {
+                value = MonitorModel.SNAdress[i];
+                byte[] bytes =BitConverter.GetBytes(value);
+                char asciichar1 = Convert.ToChar(bytes[0]);
+                char asciichar2 = Convert.ToChar(bytes[1]);
+                serialnumber = serialnumber.PadRight(1+2*i, asciichar1);
+                serialnumber = serialnumber.PadRight(2+2*i, asciichar2);
+            }
+            MonitorModel.CabSerialNumber = serialnumber;
         }
 
         public bool GetDCFault()

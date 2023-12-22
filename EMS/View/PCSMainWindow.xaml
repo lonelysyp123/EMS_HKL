@@ -226,13 +226,16 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                                 <RowDefinition/>
+                                <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="监控软件代码:" Grid.Row="1"/>
+                            
                             <TextBlock Text="{Binding MonitorSoftCode}"  Grid.Row="1"/>
-                            <TextBlock Text="DC软件代码:" Grid.Row="2"/>
+                            
                             <TextBlock Text="{Binding DcSoftCode}"  Grid.Row="2"/>
-                            <TextBlock Text="U2软件代码:" Grid.Row="3"/>
+                            
                             <TextBlock Text="{Binding U2SoftCode}" Grid.Row="3"/>
+                            <TextBlock Text="{Binding CabSerialNumber}" Grid.Row="4"/>
+                            
                         </Grid>
                     </Grid>
 
