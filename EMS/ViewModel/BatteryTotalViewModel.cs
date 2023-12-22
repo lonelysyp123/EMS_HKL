@@ -514,8 +514,8 @@ namespace EMS.ViewModel
 
         #region Command
 
-        public RelayCommand ConnectDevCommand { get; set; }
-        public RelayCommand DisconnectDevCommand { get; set; }
+        //public RelayCommand ConnectDevCommand { get; set; }
+        //public RelayCommand DisconnectDevCommand { get; set; }
 
         #endregion
 
@@ -593,8 +593,8 @@ namespace EMS.ViewModel
 
         public BatteryTotalViewModel(string ip, string port)
         {
-            ConnectDevCommand = new RelayCommand(ConnectDev);
-            DisconnectDevCommand = new RelayCommand(DisconnectDev);
+            //ConnectDevCommand = new RelayCommand(ConnectDev);
+            //DisconnectDevCommand = new RelayCommand(DisconnectDev);
             IP = ip;
             Port = port;
             TotalList = new ConcurrentQueue<BatteryTotalModel>();
@@ -614,10 +614,13 @@ namespace EMS.ViewModel
 
         private void ServiceStateCallBack(bool isConnected, bool isDaqData)
         {
-            IsConnected = isConnected;
-            IsDaqData = isDaqData;
+            App.Current.Dispatcher.Invoke(()=>{
+                IsConnected = isConnected;
+                IsDaqData = isDaqData;
+            });
         }
 
+        [RelayCommand]
         public void DisconnectDev()
         {
             if(!service.Disconnect())
@@ -626,16 +629,14 @@ namespace EMS.ViewModel
             }
         }
 
-        public void ConnectDev()
+        [RelayCommand]
+        public async void ConnectDev()
         {
-            service.Connect();
-            devControlViewModel = new DevControlViewModel(service);
-            devControlViewModel.InitBCMUInfo(3, 14);
-            parameterSettingViewModel = new ParameterSettingViewModel(service, TotalID);
-
-            if (IsDaqData)
+            if(await service.ConnectAsync())
             {
-                StartDaqData();
+                devControlViewModel = new DevControlViewModel(service);
+                devControlViewModel.InitBCMUInfo(3, 14);
+                parameterSettingViewModel = new ParameterSettingViewModel(service, TotalID);
             }
         }
 

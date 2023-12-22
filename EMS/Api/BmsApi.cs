@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace EMS.Api
 {
 
-    public class BmsApi
+    public static class BmsApi
     {
         /// <summary>
         /// 得到BMS信息

@@ -20,9 +20,6 @@ namespace EMS.Service
 {
     public class BMSDataService
     {
-        public string IP { get; private set; }
-        public string Port { get; private set; }
-
         private bool _isConnected;
         public bool IsConnected 
         { 
@@ -32,6 +29,7 @@ namespace EMS.Service
                 if(_isConnected != value)
                 {
                     _isConnected = value;
+                    OnChangeState(_isConnected, _isDaqData);
                 }
             } 
         }
@@ -50,19 +48,27 @@ namespace EMS.Service
             }
         }
 
+        private string IP;
+        private int Port;
         private TcpClient _client;
         private ModbusMaster _master;
         private Action<bool, bool> OnChangeState;
 
         public BMSDataService() 
         {
+            CommunicationProtectTr = new Thread(CommunicationProtect);
+            CommunicationProtectTr.IsBackground = true;
+        }
 
+        public void RegisterState(Action<bool, bool> action)
+        {
+            OnChangeState = action;
         }
 
         public void SetCommunicationConfig(string ip, string port, ConcurrentQueue<BatteryTotalModel> obj)
         {
             IP = ip;
-            Port = port;
+            int.TryParse(port, out Port);
             batteryTotalModels = obj;
         }
 
@@ -72,14 +78,17 @@ namespace EMS.Service
             {
                 if (!IsConnected)
                 {
-                    if (int.TryParse(Port, out int port))
+                    _client = new TcpClient();
+                    _client.Connect(IPAddress.Parse(IP), Port);
+                    _master = ModbusIpMaster.CreateIp(_client);
+                    IsConnected = true;
+
+                    // 采集状态
+                    if (IsDaqData)
                     {
-                        _client = new TcpClient();
-                        _client.Connect(IPAddress.Parse(IP), port);
-                        _master = ModbusIpMaster.CreateIp(_client);
-                        IsConnected = true;
-                        return true;
+                        StartDaqData();
                     }
+                    return true;
                 }
             }
             catch (Exception ex)
@@ -89,14 +98,52 @@ namespace EMS.Service
             return false;
         }
 
+        public async Task<bool> ConnectAsync()
+        {
+            try
+            {
+                if (!IsConnected)
+                {
+                    _client = new TcpClient();
+                    await _client.ConnectAsync(IPAddress.Parse(IP), Port);
+                    _master = ModbusIpMaster.CreateIp(_client);
+                    IsConnected = true;
+
+                    // 采集状态
+                    if (IsDaqData)
+                    {
+                        StartDaqData();
+                    }
+
+                    return true;
+                }
+            }
+            catch (SocketException)
+            {
+                LogUtils.Error("未应答");
+            }
+            catch(TimeoutException)
+            {
+                LogUtils.Error("TCP链接超时");
+            }
+            return false;
+        }
+
         public bool Disconnect()
         {
             try
             {
-                _master.Transport.Dispose();
-                _client.Close();
-                _client.Dispose();
-                IsConnected = false;
+                if (IsConnected)
+                {
+                    if(IsDaqData)
+                    {
+                        StopDaqData();
+                    }
+                    _master.Transport.Dispose();
+                    _client.Close();
+                    _client.Dispose();
+                    IsConnected = false;
+                }
                 return true;
             }
             catch (Exception ex)
@@ -108,14 +155,20 @@ namespace EMS.Service
 
         public void StartDaqData()
         {
-            if(batteryTotalModels == null)
+            if (IsConnected)
             {
-                batteryTotalModels = new ConcurrentQueue<BatteryTotalModel>();
+                if (!IsDaqData)
+                {
+                    if (batteryTotalModels == null)
+                    {
+                        batteryTotalModels = new ConcurrentQueue<BatteryTotalModel>();
+                    }
+                    IsDaqData = true;
+                    Thread th = new Thread(DaqDataTh);
+                    th.IsBackground = true;
+                    th.Start();
+                }
             }
-            IsDaqData = true;
-            Thread th = new Thread(DaqDataTh);
-            th.IsBackground = true;
-            th.Start();
         }
 
         private int DaqTimeSpan = 1;
@@ -124,6 +177,7 @@ namespace EMS.Service
             DaqTimeSpan = value;
         }
 
+        public BlockingCollection<ConcurrentQueue<string>> objs = new BlockingCollection<ConcurrentQueue<string>>();
         public ConcurrentQueue<BatteryTotalModel> batteryTotalModels;
         private void DaqDataTh()
         {
@@ -146,8 +200,7 @@ namespace EMS.Service
                 }
                 catch (Exception)
                 {
-
-                    throw;
+                    break;
                 }
             }
         }
@@ -175,7 +228,7 @@ namespace EMS.Service
             catch (Exception ex)
             {
                 LogUtils.Warn("读取数据失败", ex);
-                if (!_client.Connected)
+                if (!_client.Connected && !IsCommunicationProtectState)
                 {
                     if (CommunicationCheck())
                     {
@@ -190,14 +243,15 @@ namespace EMS.Service
         private static int reconnectInterval = 150; // ms
         private static int maxReconnectTimes = 3;
         private int reconnectCount = 0;
+        private bool IsCommunicationProtectState = false;
         private Thread CommunicationProtectTr;
         public bool CommunicationCheck()
         {
             while (true)
             {
-                Thread.Sleep(reconnectInterval);
-                if (Connect())
+                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(reconnectInterval))
                 {
+                    _master = ModbusIpMaster.CreateIp(_client);
                     reconnectCount = 0;
                     return true;
                 }
@@ -206,6 +260,7 @@ namespace EMS.Service
                     reconnectCount++;
                     if (reconnectCount > maxReconnectTimes)
                     {
+                        IsCommunicationProtectState = true;
                         IsConnected = false;
                         CommunicationProtectTr.Start();
                         return false;
@@ -214,19 +269,21 @@ namespace EMS.Service
             }
         }
 
-        private static int reconnectIntervalLong = 60 * 1000 * 5; // ms
+        private static int reconnectIntervalLong =60 * 1000 * 5; // ms
         private void CommunicationProtect()
         {
-            while (!_isConnected)
+            while (!IsConnected)
             {
                 Thread.Sleep(reconnectIntervalLong);
-                if (!Connect())
+                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(reconnectInterval))
                 {
-                    LogUtils.Debug("保护机制重连失败");
+                    _master = ModbusIpMaster.CreateIp(_client);
+                    IsConnected = true;
+                    LogUtils.Debug("保护机制重连成功，设备上线");
                 }
                 else
                 {
-                    LogUtils.Debug("保护机制重连成功，设备上线");
+                    LogUtils.Debug("保护机制重连失败");
                 }
             }
         }
