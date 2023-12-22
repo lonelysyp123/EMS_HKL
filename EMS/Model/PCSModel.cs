@@ -116,13 +116,15 @@ namespace EMS.Model
             {
                 _modbusClient = new ModbusClient(ip, port);
                 _modbusClient.Connect();
+                IsConnected = true;
             }
             catch (Exception ex)
             {
                 IsConnected = false;
                 Logger.Info(ex.ToString());
+                throw ex;
             }
-            IsConnected = true;
+            
         }
 
         public void Disconnect()
@@ -312,6 +314,10 @@ namespace EMS.Model
                     _dcStatusModel.ModuleRunFlag = BitConverter.ToUInt16(dcState, 4);
                     _dcStatusModel.ModuleAlarmFlag = BitConverter.ToUInt16(dcState, 8);
                     _dcStatusModel.ModuleFaultFlag = BitConverter.ToUInt16(dcState, 12);
+                    //_dcStatusModel.ModuleAlarmFlag= dcState[0];
+                    //_dcStatusModel.ModuleRunFlag = dcState[2];
+                    //_dcStatusModel.ModuleAlarmFlag = dcState[4];
+                    //_dcStatusModel.ModuleFaultFlag = dcState[6];
 
                     byte[] pcsData = ModbusClient.ReadFunc(53005, 10);
                     MonitorModel.AlarmStateFlagDC1 = BitConverter.ToUInt16(pcsData, 0);
@@ -338,6 +344,11 @@ namespace EMS.Model
                     MonitorModel.DcBranch1DisCharHigh = BitConverter.ToUInt16(DCBranch1INFO, 10);
                     MonitorModel.DcBranch1DisCharLow = BitConverter.ToUInt16(DCBranch1INFO, 12);
                     MonitorModel.DcBranch1BUSVol = Math.Round(BitConverter.ToUInt16(DCBranch1INFO, 18) * 0.1, 2);
+
+                    byte[] SerialNumber = ModbusClient.ReadFunc(53579, 15);
+                    MonitorModel.MonitorSoftCode = BitConverter.ToUInt16(SerialNumber, 22);
+                    MonitorModel.DcSoftCode=BitConverter.ToUInt16(SerialNumber, 26);
+                    MonitorModel.U2SoftCode=BitConverter.ToUInt16(SerialNumber, 28);
 
                     EnergyCal();
 

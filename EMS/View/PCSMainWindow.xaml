@@ -59,6 +59,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition  Width="auto"/>
                             <ColumnDefinition  Width="auto"/>
+                            <ColumnDefinition  Width="auto"/>
                         </Grid.ColumnDefinitions>
 
                         <Grid Grid.Column="1">
@@ -217,6 +218,21 @@
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="White" Text="BUS侧电压：" Grid.Row="5" Grid.Column="3" Margin="0 20 0 20"/>
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="{Binding DcBranch1BUSVol}" Grid.Row="5" Grid.Column="4" Margin="0 20 0 20"/>
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="V" Grid.Row="5" Grid.Column="5" Margin="0 20 0 20" FontSize="30"/>
+                        </Grid>
+
+                        <Grid Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="监控软件代码:" Grid.Row="1"/>
+                            <TextBlock Text="{Binding MonitorSoftCode}"  Grid.Row="1"/>
+                            <TextBlock Text="DC软件代码:" Grid.Row="2"/>
+                            <TextBlock Text="{Binding DcSoftCode}"  Grid.Row="2"/>
+                            <TextBlock Text="U2软件代码:" Grid.Row="3"/>
+                            <TextBlock Text="{Binding U2SoftCode}" Grid.Row="3"/>
                         </Grid>
                     </Grid>
 

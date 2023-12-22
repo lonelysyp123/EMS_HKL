@@ -872,5 +872,61 @@ namespace EMS.Model
                 SetProperty(ref _dcBranch1DisCharLow, value);
             }
         }
+
+        /// <summary>
+        /// 监控软件代码
+        /// </summary>
+        private ushort _monitorSoftCode;
+
+        public ushort MonitorSoftCode
+        {
+            get => _monitorSoftCode;
+            set
+            {
+                SetProperty(ref _monitorSoftCode, value);
+            }
+        }
+
+        /// <summary>
+        /// DC软件代码
+        /// </summary>
+        private ushort _dcSoftCode;
+
+        public ushort DcSoftCode
+        {
+            get => _dcSoftCode;
+            set
+            {
+                SetProperty(ref _dcSoftCode, value);
+            }
+        }
+
+        /// <summary>
+        /// U2软件代码
+        /// </summary>
+        private ushort _u2SoftCode;
+
+        public ushort U2SoftCode
+        {
+            get => _u2SoftCode;
+            set
+            {
+                SetProperty(ref _u2SoftCode, value);
+            }
+        }
+
+        /// <summary>
+        /// 机柜序列号
+        /// </summary>
+        private string _cabSerialNumber;
+
+        public string CabSerialNumber
+        {
+            get => _cabSerialNumber;
+            set
+            {
+                SetProperty(ref _cabSerialNumber, value);
+            }
+        }
     }
 }
