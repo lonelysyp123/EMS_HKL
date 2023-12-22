@@ -603,6 +603,7 @@
     <Content Include="Resource\Image\Battery75.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resource\Iconfont\iconfont.ttf" />
     <Resource Include="Resource\Image\topback.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

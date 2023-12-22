@@ -24,5 +24,10 @@ namespace EMS.View.NewEMSView
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
