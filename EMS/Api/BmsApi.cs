@@ -11,15 +11,22 @@ namespace EMS.Api
 
     public static class BmsApi
     {
+        public static BatteryTotalModel GetNextBMSData(string bcmuid)
+        {
+            EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList.Find(x => x.TotalID == bcmuid);
+            return null;
+        }
+
         /// <summary>
         /// 得到BMS信息
         /// </summary>
         /// <returns></returns>
-        public static List<BatteryTotalViewModel> GetBMSTotalInfo()//得到所有BMS信息
+        public static List<BatteryTotalViewModel> GetBMSTotalInfo()
         {
             return EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList;
         }
-        public static BatteryTotalViewModel GetBMSTotalInfo(string bcmuid)//得到单簇信息
+
+        public static BatteryTotalViewModel GetBMSTotalInfo(string bcmuid)
         {// 这个函数如果经常被调用，可以考虑重构成Dictionary
             List<BatteryTotalViewModel> totallist= EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList;
             

@@ -65,7 +65,7 @@ namespace EMS.Service
             OnChangeState = action;
         }
 
-        public void SetCommunicationConfig(string ip, string port, ConcurrentQueue<BatteryTotalModel> obj)
+        public void SetCommunicationConfig(string ip, string port, BlockingCollection<BatteryTotalModel> obj)
         {
             IP = ip;
             int.TryParse(port, out Port);
@@ -159,10 +159,6 @@ namespace EMS.Service
             {
                 if (!IsDaqData)
                 {
-                    if (batteryTotalModels == null)
-                    {
-                        batteryTotalModels = new ConcurrentQueue<BatteryTotalModel>();
-                    }
                     IsDaqData = true;
                     Thread th = new Thread(DaqDataTh);
                     th.IsBackground = true;
@@ -177,8 +173,7 @@ namespace EMS.Service
             DaqTimeSpan = value;
         }
 
-        public BlockingCollection<ConcurrentQueue<string>> objs = new BlockingCollection<ConcurrentQueue<string>>();
-        public ConcurrentQueue<BatteryTotalModel> batteryTotalModels;
+        public BlockingCollection<BatteryTotalModel> batteryTotalModels;
         private void DaqDataTh()
         {
             while (IsConnected && IsDaqData)
@@ -196,7 +191,7 @@ namespace EMS.Service
                     Array.Copy(ReadFunc(10120, 120), 0, BMUData, 240, 240);
                     Array.Copy(ReadFunc(10240, 120), 0, BMUData, 480, 240);
                     Array.Copy(ReadFunc(10360, 12), 0, BMUData, 720, 24);
-                    batteryTotalModels.Enqueue(DataDecode(BCMUData, BMUIDData, BMUData));
+                    batteryTotalModels.TryAdd(DataDecode(BCMUData, BMUIDData, BMUData));
                 }
                 catch (Exception)
                 {

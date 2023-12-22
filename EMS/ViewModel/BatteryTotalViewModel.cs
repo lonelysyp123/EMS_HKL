@@ -587,17 +587,17 @@ namespace EMS.ViewModel
         public List<BatterySeriesViewModel> batterySeriesViewModelList { get; private set; }
         public DevControlViewModel devControlViewModel;
         public ParameterSettingViewModel parameterSettingViewModel;
-        private ConcurrentQueue<BatteryTotalModel> TotalList;
+        private BlockingCollection<BatteryTotalModel> TotalList;
+        private BlockingCollection<BatteryTotalModel> TotalListForMqtt;
         public BatteryTotalModel CurrentBatteryTotalModel { get; private set; }
         private BMSDataService service;
 
         public BatteryTotalViewModel(string ip, string port)
         {
-            //ConnectDevCommand = new RelayCommand(ConnectDev);
-            //DisconnectDevCommand = new RelayCommand(DisconnectDev);
             IP = ip;
             Port = port;
-            TotalList = new ConcurrentQueue<BatteryTotalModel>();
+            TotalList = new BlockingCollection<BatteryTotalModel>(new ConcurrentQueue<BatteryTotalModel>(), 300);
+            TotalListForMqtt = new BlockingCollection<BatteryTotalModel>(new ConcurrentQueue<BatteryTotalModel>(),300);
             batterySeriesViewModelList = new List<BatterySeriesViewModel>();
             for (int i = 0; i < 3; i++)
             {
@@ -652,8 +652,9 @@ namespace EMS.ViewModel
         {
             while (IsDaqData)
             {
-                if(TotalList.TryDequeue(out BatteryTotalModel CurrentBatteryTotalModel))
+                if(TotalList.TryTake(out BatteryTotalModel CurrentBatteryTotalModel))
                 {
+                    TotalListForMqtt.Add(CurrentBatteryTotalModel);
                     // 把数据分发给需要显示的内容
                     App.Current.Dispatcher.Invoke(() =>
                     {
