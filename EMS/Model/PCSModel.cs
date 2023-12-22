@@ -396,6 +396,11 @@ namespace EMS.Model
                 }
                 catch (Exception ex)
                 {
+                    App.Current.Dispatcher.Invoke(() =>
+                    {
+                        IsConnected = false;
+                        IsRead = false;
+                    });
                     Logger.Error(ex.ToString());
                 }
             }
