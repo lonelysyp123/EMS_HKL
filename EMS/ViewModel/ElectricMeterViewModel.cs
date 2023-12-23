@@ -50,7 +50,6 @@ namespace EMS.ViewModel
         {
             if (electricityMeterModel.Close())
             {
-                EnergyManagementSystem.GlobalInstance.SmartMeterManager.RemoveDev(electricityMeterModel);
                 Logger.Info("Close Serial Port("+ electricityMeterModel.Configuaration.SelectedCommPort + ")");
             }
             else
@@ -63,7 +62,6 @@ namespace EMS.ViewModel
         {
             if (electricityMeterModel.Open())
             {
-                EnergyManagementSystem.GlobalInstance.SmartMeterManager.AddDev(electricityMeterModel);
                 Logger.Info("Open Serial Port(" + electricityMeterModel.Configuaration.SelectedCommPort + ")");
             }
             else
