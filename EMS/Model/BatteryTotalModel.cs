@@ -196,5 +196,10 @@ namespace EMS.Model
                 Series.Add(series);
             }
         }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 }

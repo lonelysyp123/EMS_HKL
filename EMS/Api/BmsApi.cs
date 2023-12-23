@@ -13,8 +13,8 @@ namespace EMS.Api
     {
         public static BatteryTotalModel GetNextBMSData(string bcmuid)
         {
-            EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList.Find(x => x.TotalID == bcmuid);
-            return null;
+            var item = EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList.Find(x => x.TotalID == bcmuid);
+            return item.GetNextBMSDataForMqtt();
         }
 
         /// <summary>

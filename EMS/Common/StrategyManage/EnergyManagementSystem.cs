@@ -16,19 +16,19 @@ namespace EMS.Model
 {
     public class SmartMeterManager 
     {
-        private List<ElectricityMeterModel> _smartMeters;
-        public List<ElectricityMeterModel> SmartMeters { get { return _smartMeters; } } //封装，不能set
+        private List<ElectricMeterViewModel> _smartMeters;
+        public List<ElectricMeterViewModel> SmartMeters { get { return _smartMeters; } } //封装，不能set
 
-        public void AddDev(ElectricityMeterModel item)
+        public void AddDev(ElectricMeterViewModel item)
         {
             if (_smartMeters == null)
             {
-                _smartMeters = new List<ElectricityMeterModel>();
+                _smartMeters = new List<ElectricMeterViewModel>();
             }
             _smartMeters.Add(item);
         }
 
-        public void RemoveDev(ElectricityMeterModel item)
+        public void RemoveDev(ElectricMeterViewModel item)
         {
             if (_smartMeters != null && _smartMeters.Count > 0)
             {

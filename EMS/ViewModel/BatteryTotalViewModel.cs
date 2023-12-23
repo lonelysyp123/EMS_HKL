@@ -654,7 +654,7 @@ namespace EMS.ViewModel
             {
                 if(TotalList.TryTake(out BatteryTotalModel CurrentBatteryTotalModel))
                 {
-                    TotalListForMqtt.Add(CurrentBatteryTotalModel);
+                    TotalListForMqtt.Add((BatteryTotalModel)CurrentBatteryTotalModel.Clone());
                     // 把数据分发给需要显示的内容
                     App.Current.Dispatcher.Invoke(() =>
                     {
@@ -670,6 +670,18 @@ namespace EMS.ViewModel
                 {
                     Thread.Sleep(500);
                 }
+            }
+        }
+
+        public BatteryTotalModel GetNextBMSDataForMqtt()
+        {
+            if (TotalListForMqtt.TryTake(out BatteryTotalModel item))
+            {
+                return item;
+            }
+            else
+            {
+                return null;
             }
         }
 
