@@ -243,6 +243,24 @@
     <Compile Include="Model\SerialPortSettingsModel.cs" />
     <Compile Include="Model\SubscribeMessageModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
+    <Compile Include="MyControl\CheckedButton.xaml.cs">
+      <DependentUpon>CheckedButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControl\IconBorder.xaml.cs">
+      <DependentUpon>IconBorder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControl\TitleBorder.xaml.cs">
+      <DependentUpon>TitleBorder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControl\WarnControl.xaml.cs">
+      <DependentUpon>WarnControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControl\WarnControl2.xaml.cs">
+      <DependentUpon>WarnControl2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControl\WarnControl3.xaml.cs">
+      <DependentUpon>WarnControl3.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Service\BMSDataService.cs" />
     <Compile Include="Service\impl\MqttClientService.cs" />
     <Compile Include="Service\IMqttClientService.cs" />
@@ -422,6 +440,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MyControl\CheckedButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MyControl\DataControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -434,11 +456,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MyControl\IconBorder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MyControl\IDInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MyControl\IPInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControl\TitleBorder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControl\WarnControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControl\WarnControl2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControl\WarnControl3.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

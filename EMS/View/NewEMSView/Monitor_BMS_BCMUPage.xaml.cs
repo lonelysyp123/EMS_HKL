@@ -24,5 +24,10 @@ namespace EMS.View.NewEMSView
         {
             InitializeComponent();
         }
+
+        private void IconBorder_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
