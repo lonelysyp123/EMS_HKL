@@ -10,9 +10,8 @@ using System.IO.Ports;
 using System.Diagnostics.Contracts;
 using System.Collections.Concurrent;
 using System.Threading;
-using EMS.Model;
 
-namespace EMS.Common.Modbus.ModbusTCP
+namespace EMSCommon.Common.Modbus.ModbusTCP
 {
     public class ModbusClient
     {
@@ -94,7 +93,6 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
-                LogUtils.Error(ex.ToString());
                 throw ex;
             }
         }
@@ -113,7 +111,6 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
-                LogUtils.Error(ex.ToString());
                 throw ex;
             }
         }
@@ -140,7 +137,6 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
-                LogUtils.Warn("读取数据失败", ex);
                 return new byte[num * 2];
             }
         }
@@ -161,7 +157,6 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
-                LogUtils.Error(ex.ToString());
                 return false;
             }
         }
@@ -186,7 +181,6 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
-                LogUtils.Error(ex.ToString());
                 return null;
             }
         }
@@ -230,7 +224,6 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
-                LogUtils.Error(ex.ToString());
                 throw ex;
             }
         }
@@ -249,7 +242,6 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
-                LogUtils.Error(ex.ToString());
                 return false;
             }
         }
@@ -274,7 +266,6 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
-                LogUtils.Error(ex.ToString());
                 return false;
             }
         }
@@ -309,7 +300,6 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
-                LogUtils.Error(ex.ToString());
                 throw ex;
             }
         }
@@ -403,5 +393,15 @@ namespace EMS.Common.Modbus.ModbusTCP
             string value = BitConverter.ToString(ReadFunc(address, num), 0);
             return value;
         }
+    }
+
+    public enum PcsCommandAdressEnum
+    {
+        PCSSystemOpen = 53900,
+        PCSSystemClose = 53901,
+        PCSSystemClearFault = 53903,
+        CharModeSet = 53650,
+        CurrentValueSet = 53651,
+        PowerValueSet = 53652,
     }
 }

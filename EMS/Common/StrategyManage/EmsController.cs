@@ -127,7 +127,7 @@ namespace EMS.Common.StrategyManage
                             controlValue = newCommand.Value;
                             strategy = newCommand.BatteryStrategy;
                         }
-                        double netPowerInjection = StrategyManager.Instance.GetACSmartMeterPower();
+                        double netPowerInjection = ElectricityMeterApi.GetRealPowerTotal();
 
                         double pcsPower = PcsApi.PcsGetDcSidePower();
                         double load = netPowerInjection + pcsPower;
