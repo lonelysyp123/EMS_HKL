@@ -1,0 +1,131 @@
+﻿<Page x:Class="EMS.View.NewEMSView.test"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:EMS.View.NewEMSView"
+      mc:Ignorable="d" 
+      d:DesignHeight="900" d:DesignWidth="1600"
+      Title="test"
+      Background="#FAFAFA">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <!--文本-->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="剩余SOC(%):"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center" FontSize="18" FontWeight="Bold" />
+                <TextBlock Grid.Row="1"
+                           Text="剩余SOC(%):"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           FontSize="18"
+                           FontWeight="Bold" />
+                <TextBlock Grid.Row="2"
+                           Text="当前电流(A):"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           FontSize="18"
+                           FontWeight="Bold" />
+                <TextBlock Grid.Row="3"
+                           Text="最高单体电压(V):"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           FontSize="18"
+                           FontWeight="Bold" />
+                <TextBlock Grid.Row="4"
+                           Text="最低单体电压(V):"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           FontSize="18"
+                           FontWeight="Bold" />
+                <TextBlock Grid.Row="5"
+                           Text="最高温度(℃):"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           FontSize="18"
+                           FontWeight="Bold" />
+            </Grid>
+        </Grid>
+        <!--BCMU1-->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="5*" />
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           Text="剩余SOC(%):"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="18"
+                           FontWeight="Bold" />
+                <TextBlock Grid.Row="1"
+                           Text="剩余SOC(%):"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="18"
+                           FontWeight="Bold" />
+                <TextBlock Grid.Row="2"
+                           Text="当前电流(A):"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="18"
+                           FontWeight="Bold" />
+                <TextBlock Grid.Row="3"
+                           Text="最高单体电压(V):"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="18"
+                           FontWeight="Bold" />
+                <TextBlock Grid.Row="4"
+                           Text="最低单体电压(V):"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="18"
+                           FontWeight="Bold" />
+                <TextBlock Grid.Row="5"
+                           Text="最高温度(℃):"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="18"
+                           FontWeight="Bold" />
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

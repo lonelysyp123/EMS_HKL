@@ -2,13 +2,985 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:EMS.View.NewEMSView"
+      xmlns:localControl="clr-namespace:EMS.MyControl"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="Monitor_PCSPage">
-
+      d:DesignHeight="900" d:DesignWidth="1600"
+      Title="Monitor_PCSPage"
+      Background="#FAFAFA">
+    <Page.Resources>
+        <!--DC侧支路概览-->
+        <Style x:Key="NormalText"
+               TargetType="TextBlock">
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="Foreground"
+                    Value="#6C6C6C" />
+            <Setter Property="Margin"
+                    Value="10,0,0,0" />
+        </Style>
+        <Style x:Key="HighlightText"
+               TargetType="TextBlock"
+               BasedOn="{StaticResource NormalText}">
+            <Setter Property="FontWeight"
+                    Value="Bold" />
+            <Setter Property="Foreground"
+                    Value="#1890FF" />
+            <Setter Property="FontSize"
+                    Value="20" />
+        </Style>
+        <!--内容StackPanel-->
+        <Style x:Key="ContentPanel"
+               TargetType="StackPanel">
+            <Setter Property="Orientation"
+                    Value="Horizontal" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+        </Style>
+    </Page.Resources>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="7*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="6*"/>
+        </Grid.ColumnDefinitions>
+        <!--1、DC侧支路1概览-->
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Border Background="white"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="3*" />
+                        <RowDefinition Height="3*" />
+                    </Grid.RowDefinitions>
+                    <localControl:TitleBorder Grid.ColumnSpan="4" Text="DC侧支路1概览" />
+                    <Grid Grid.Row="1" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="78"/>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                            <TextBlock Text="DC侧支路1："/>
+                            <TextBlock Text="{Binding DC_RunningState}"
+                                       Margin="10,0,0,0"
+                                       Foreground="#1890FF"
+                                       FontWeight="Bold" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="2"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="DC侧支路1启停状态"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" />
+                            <Border Width="20"
+                                    Height="20"
+                                    Background="{Binding DC_StartOrStopState}"
+                                    CornerRadius="75"
+                                    Margin="20,0,0,0" />
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="2" Margin="0,15,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <!--直流功率-->
+                        <Border Grid.Column="0"  >
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="4*" />
+                                    <RowDefinition Height="6*" />
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0"
+                                            Grid.Column="0"
+                                            Orientation="Horizontal"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center">
+                                    <TextBlock Text="直流功率"
+                                               Style="{StaticResource NormalText}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="1"
+                                            Grid.Column="1"
+                                            Orientation="Horizontal"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center">
+                                    <TextBlock Text="{Binding DC_power}"
+                                               Style="{StaticResource HighlightText}" />
+                                    <TextBlock Text="kW"
+                                               Style="{StaticResource NormalText}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <!--直流电压-->
+                        <Border Grid.Column="1"
+                                BorderBrush="#EFEFEF"
+                                BorderThickness="1,0,1,0">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="4*" />
+                                    <RowDefinition Height="6*" />
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0"
+                                            Grid.Column="0"
+                                            Orientation="Horizontal"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center">
+                                    <TextBlock Text="直流电压"
+                                               Style="{StaticResource NormalText}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="1"
+                                            Grid.Column="1"
+                                            Orientation="Horizontal"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center">
+                                    <TextBlock Text="{Binding DC_Voltage}"
+                                               Style="{StaticResource HighlightText}" />
+                                    <TextBlock Text="V"
+                                               Style="{StaticResource NormalText}" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <!--直流电流-->
+                        <Border Grid.Column="2">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="4*" />
+                                    <RowDefinition Height="6*" />
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0"
+                                            Grid.Column="0"
+                                            Orientation="Horizontal"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center">
+                                    <TextBlock Text="直流电流"
+                                               Style="{StaticResource NormalText}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="1"
+                                            Grid.Column="1"
+                                            Orientation="Horizontal"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center">
+                                    <TextBlock Text="{Binding DC_Current}"
+                                               Style="{StaticResource HighlightText}" />
+                                    <TextBlock Text="A"
+                                               Style="{StaticResource NormalText}" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <Grid Grid.Row="3"
+                          Margin="0,15,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <!--累计充电电量-->
+                        <Border Grid.Column="0">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="4*" />
+                                    <RowDefinition Height="6*" />
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0"
+                                            Grid.Column="0"
+                                            Orientation="Horizontal"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center">
+                                    <TextBlock Text="累计充电电量"
+                                               Style="{StaticResource NormalText}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="1"
+                                            Grid.Column="1"
+                                            Orientation="Horizontal"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center">
+                                    <TextBlock Text="{Binding DC_CumulativeChargePower}"
+                                               Style="{StaticResource HighlightText}" />
+                                    <TextBlock Text="kWh"
+                                               Style="{StaticResource NormalText}" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <!--累计放电电量-->
+                        <Border Grid.Column="1"
+                                BorderBrush="#EFEFEF"
+                                BorderThickness="1,0,1,0">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="4*" />
+                                    <RowDefinition Height="6*" />
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0"
+                                            Grid.Column="0"
+                                            Orientation="Horizontal"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center">
+                                    <TextBlock Text="累计放电电量"
+                                               Style="{StaticResource NormalText}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="1"
+                                            Grid.Column="1"
+                                            Orientation="Horizontal"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center">
+                                    <TextBlock Text="{Binding DC_CumulativeDischargePower}"
+                                               Style="{StaticResource HighlightText}" />
+                                    <TextBlock Text="kWh"
+                                               Style="{StaticResource NormalText}" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <!--BUS侧电压-->
+                        <Border Grid.Column="2">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="4*" />
+                                    <RowDefinition Height="6*" />
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0"
+                                            Grid.Column="0"
+                                            Orientation="Horizontal"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center">
+                                    <TextBlock Text="BUS侧电压"
+                                               Style="{StaticResource NormalText}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="1"
+                                            Grid.Column="1"
+                                            Orientation="Horizontal"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center">
+                                    <TextBlock Text="{Binding DC_BUSVoltage}"
+                                               Style="{StaticResource HighlightText}" />
+                                    <TextBlock Text="V"
+                                               Style="{StaticResource NormalText}" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+        <!--2、PCS总览-->
+        <Grid Grid.Row="0"
+              Grid.Column="1">
+            <Border Background="white"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                   
+                    <localControl:TitleBorder Grid.ColumnSpan="4" Text="PCS总览" />
+                    <!--温度信息-->
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <localControl:IconBorder Grid.ColumnSpan="4"
+                                                 FIcon_Text="&#xe62e;"
+                                                 FIconTextBlock_Text="温度信息"
+                                                 FIconBorder_Background="#FFECCF"
+                                                 FIcon_Foreground="#FFA12F" />
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ContentPanel}">
+                            <TextBlock Text="模块温度:" />
+                            <TextBlock Text="{Binding ModuleTemp}"
+                                       Margin="10,0,10,0" />
+                            <TextBlock Text="℃" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="2"
+                                    Style="{StaticResource ContentPanel}">
+                            <TextBlock Text="环境温度:" />
+                            <TextBlock Text="{Binding EnvironmentTemp}"
+                                       Margin="10,0,10,0" />
+                            <TextBlock Text="℃" />
+                        </StackPanel>
+                    </Grid>
+                    <!--PCS控制状态-->
+                    <Grid Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <localControl:IconBorder Grid.ColumnSpan="4"
+                                                 FIcon_Text="&#xe61d;"
+                                                 FIconTextBlock_Text="PCS控制状态"
+                                                 FIconBorder_Background="#E8FFFB"
+                                                 FIcon_Foreground="#1FCAC6" />
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ContentPanel}">
+                            <TextBlock Text="本地手动控制" />
+                            <Border Width="15"
+                                    Height="15"
+                                    Background="{Binding IsManualControl}"
+                                    CornerRadius="75"
+                                    Margin="20,0,0,0" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="2"
+                                    Style="{StaticResource ContentPanel}">
+                            <TextBlock Text="本地自动控制" />
+                            <Border Width="15"
+                                    Height="15"
+                                    Background="{Binding IsAutomation}"
+                                    CornerRadius="75"
+                                    Margin="20,0,0,0" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="3"
+                                    Style="{StaticResource ContentPanel}">
+                            <TextBlock Text="远程控制" />
+                            <Border Width="15"
+                                    Height="15"
+                                    Background="{Binding IsRemoteControl}"
+                                    CornerRadius="75"
+                                    Margin="20,0,0,0" />
+                        </StackPanel>
+                    </Grid>
+                    <!--PCS状态-->
+                    <Grid Grid.Row="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <localControl:IconBorder Grid.ColumnSpan="4"
+                                                 FIcon_Text="&#xe634;"
+                                                 FIconTextBlock_Text="PCS状态"
+                                                 FIconBorder_Background="#E8F3FF"
+                                                 FIcon_Foreground="#2A6BFF" />
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ContentPanel}">
+                            <TextBlock Text="告警状态" />
+                            <Border Width="15"
+                                    Height="15"
+                                    Background="{Binding IsAlarmStatus}"
+                                    CornerRadius="75"
+                                    Margin="20,0,0,0" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="2"
+                                    Style="{StaticResource ContentPanel}">
+                            <TextBlock Text="故障状态" />
+                            <Border Width="15"
+                                    Height="15"
+                                    Background="{Binding IsMalfunction}"
+                                    CornerRadius="75"
+                                    Margin="20,0,0,0" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="3"
+                                    Style="{StaticResource ContentPanel}">
+                            <TextBlock Text="上电初始化状态" />
+                            <Border Width="15"
+                                    Height="15"
+                                    Background="{Binding IsPowerOn}"
+                                    CornerRadius="75"
+                                    Margin="20,0,0,0" />
+                        </StackPanel>
+                    </Grid>
+                    <!--END-->
+                </Grid>
+            </Border>
+        </Grid>
+        <!--3、DC模块状态-->
+        <Grid Grid.Row="1"
+              Grid.Column="0">
+            <Border Background="white"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <localControl:TitleBorder Grid.ColumnSpan="4"
+                                              Text="DC模块状态" />
+                    <Grid Grid.Row="1">
+                        <DataGrid x:Name="dataGrid"
+                                  Margin="0,20,0,0"
+                                  AutoGenerateColumns="False"
+                                  CanUserSortColumns="False"
+                                  IsReadOnly="True"
+                                  HeadersVisibility="Column"
+                                  GridLinesVisibility="None"
+                                  EnableRowVirtualization="True"
+                                  EnableColumnVirtualization="True"
+                                  Background="White"
+                                  BorderBrush="#F1F1F1"
+                                  BorderThickness="1"
+                                  SelectedItem="{Binding Selected1}"
+                                 >
+                            <DataGrid.ColumnHeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="HorizontalContentAlignment"
+                                            Value="Center" />
+                                    <Setter Property="Background"
+                                            Value="#F1F1F1" />
+                                    <Setter Property="FontWeight"
+                                            Value="Bold" />
+                                    <Setter Property="Height"
+                                            Value="40" />
+                                    <Setter Property="FontSize"
+                                            Value="16" />
+                                </Style>
+                            </DataGrid.ColumnHeaderStyle>
+                            <DataGrid.RowStyle>
+                                <Style TargetType="{x:Type DataGridRow}">
+                                    <Setter Property="Background"
+                                            Value="White" />
+                                    <Setter Property="Margin"
+                                            Value="0,10,0,10" />
+                                </Style>
+                            </DataGrid.RowStyle>
+                            <DataGrid.CellStyle>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Setter Property="HorizontalAlignment"
+                                            Value="Center" />
+                                    <Setter Property="FontSize"
+                                            Value="14" />
+                                </Style>
+                            </DataGrid.CellStyle>
+                           
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="*"
+                                                    Binding="{Binding OrderNumber}"
+                                                    Header="序号" />
+                                <DataGridTextColumn Width="*"
+                                                    Binding="{Binding Name}"
+                                                    Header="名称" />
+                                <DataGridTextColumn Width="*"
+                                                    Binding="{Binding Status}"
+                                                    Header="运行状态">
+                                    <DataGridTextColumn.CellStyle>
+                                        <Style TargetType="{x:Type DataGridCell}">
+                                            <Setter Property="HorizontalAlignment"
+                                                    Value="Center" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Status}"
+                                                             Value="在线">
+                                                    <Setter Property="Foreground"
+                                                            Value="#1890FF" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status}"
+                                                             Value="运行">
+                                                    <Setter Property="Foreground"
+                                                            Value="#33CD35" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status}"
+                                                             Value="告警">
+                                                    <Setter Property="Foreground"
+                                                            Value="#FFA12F" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status}"
+                                                             Value="故障">
+                                                    <Setter Property="Foreground"
+                                                            Value="#EE6666" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status}"
+                                                             Value="离线">
+                                                    <Setter Property="Foreground"
+                                                            Value="#9A9A9A" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGridTextColumn.CellStyle>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+        <!--4、PCS故障-->
+        <Grid Grid.Row="1"
+              Grid.Column="1">
+            <Border Background="white"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <localControl:TitleBorder Grid.ColumnSpan="7"
+                                              Text="PCS故障" />
+                    <!--DC模块告警-->
+                    <Grid Grid.Row="1" Margin="0,5,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.ColumnSpan="7"
+                                    Orientation="Horizontal"
+                                    Margin="20,0,0,0">
+                            <localControl:IconBorder FIcon_Text="&#xec35;"
+                                                     FIconTextBlock_Text="DC模块告警"
+                                                     FIconBorder_Background="#F5E8FF"
+                                                     FIcon_Foreground="#8041D5" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl2 Text="环境温度过高"
+                                                       IsTrue="{Binding parameter1_1}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="2"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl2 Text="U2通信异常"
+                                                       IsTrue="{Binding parameter1_2}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="3"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl2 Text="柜温探头故障"
+                                                       IsTrue="{Binding parameter1_3}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="4"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl2 Text="环温探头故障"
+                                                       IsTrue="{Binding parameter1_4}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="5"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl2 Text="校准参数异常"
+                                                       IsTrue="{Binding parameter1_5}" />
+                        </StackPanel>
+                    </Grid>
+                    <!--DC模块故障-->
+                    <Grid Grid.Row="2" Margin="0,5,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.ColumnSpan="7"
+                                    Orientation="Horizontal"
+                                    Margin="20,0,0,0">
+                            <localControl:IconBorder FIcon_Text="&#xe7c2;"
+                                                     FIconTextBlock_Text="DC模块故障"
+                                                     FIconBorder_Background="#E8FFFB"
+                                                     FIcon_Foreground="#1FCAC6" />
+                        </StackPanel>
+                        <!--1-->
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text="直流高压侧过压"
+                                                       IsTrue="{Binding parameter2_1_1}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="2"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text="直流高压侧欠压"
+                                                       IsTrue="{Binding parameter2_1_2}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="3"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text="直流低压侧过压"
+                                                       IsTrue="{Binding parameter2_1_3}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="4"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text=" 直流低压侧欠压"
+                                                       IsTrue="{Binding parameter2_1_4}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="5"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text="直流低压侧过流"
+                                                       IsTrue="{Binding parameter2_1_5}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="6"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text="重启过多"
+                                                       IsTrue="{Binding parameter2_1_6}" />
+                        </StackPanel>
+                        <!--2-->
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text="直流低压侧继电器短路"
+                                                       IsTrue="{Binding parameter2_2_1}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="2"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text="光伏能量不足"
+                                                       IsTrue="{Binding parameter2_2_2}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="3"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text="电池电量不足"
+                                                       IsTrue="{Binding parameter2_2_3}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="4"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text="BMS故障或直流高压侧开关断开"
+                                                       IsTrue="{Binding parameter2_2_4}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="5"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text="机柜温度过高"
+                                                       IsTrue="{Binding parameter2_2_5}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="6"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text="模块电流不平衡"
+                                                       IsTrue="{Binding parameter2_2_6}" />
+                        </StackPanel>
+                        <!--3-->
+                        <StackPanel Grid.Row="3"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text="直流低压侧开关断开"
+                                                       IsTrue="{Binding parameter2_3_1}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="3"
+                                    Grid.Column="2"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text="24V辅助电源故障"
+                                                       IsTrue="{Binding parameter2_3_2}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="3"
+                                    Grid.Column="3"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text="紧急停机"
+                                                       IsTrue="{Binding parameter2_3_3}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="3"
+                                    Grid.Column="4"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text="  模块温度过温"
+                                                       IsTrue="{Binding parameter2_3_4}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="3"
+                                    Grid.Column="5"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text="风扇故障"
+                                                       IsTrue="{Binding parameter2_3_5}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="3"
+                                    Grid.Column="6"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text="直流低压侧继电器开路"
+                                                       IsTrue="{Binding parameter2_3_6}" />
+                        </StackPanel>
+                        <!--4-->
+                        <StackPanel Grid.Row="4"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text="保险故障"
+                                                       IsTrue="{Binding parameter2_4_1}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="4"
+                                    Grid.Column="2"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text="DSP初始化故障"
+                                                       IsTrue="{Binding parameter2_4_2}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="4"
+                                    Grid.Column="3"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text="直流低压侧软启动失败"
+                                                       IsTrue="{Binding parameter2_4_3}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="4"
+                                    Grid.Column="4"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text="CANA通讯故障"
+                                                       IsTrue="{Binding parameter2_4_4}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="4"
+                                    Grid.Column="5"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text="直流高压侧继电器开路"
+                                                       IsTrue="{Binding parameter2_4_5}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="4"
+                                    Grid.Column="6"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text="直流高压侧软启动失败"
+                                                       IsTrue="{Binding parameter2_4_6}" />
+                        </StackPanel>
+                        <!--5-->
+                        <StackPanel Grid.Row="5"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text="DSP版本故障"
+                                                       IsTrue="{Binding parameter2_5_1}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="5"
+                                    Grid.Column="2"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text="CPLD版本故障"
+                                                       IsTrue="{Binding parameter2_5_2}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="5"
+                                    Grid.Column="3"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text="参数不匹配"
+                                                       IsTrue="{Binding parameter2_5_3}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="5"
+                                    Grid.Column="4"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text="硬件版本故障"
+                                                       IsTrue="{Binding parameter2_5_4}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="5"
+                                    Grid.Column="5"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text="485通讯故障"
+                                                       IsTrue="{Binding parameter2_5_5}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="5"
+                                    Grid.Column="6"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text=" CANB通讯故障"
+                                                       IsTrue="{Binding parameter2_5_6}" />
+                        </StackPanel>
+                        <!--6-->
+                        <StackPanel Grid.Row="6"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text="模块重号故障"
+                                                       IsTrue="{Binding parameter2_6_1}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="6"
+                                    Grid.Column="2"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text="15V辅助电源故障"
+                                                       IsTrue="{Binding parameter2_6_2}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="6"
+                                    Grid.Column="3"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text="直流高压侧继电器短路"
+                                                       IsTrue="{Binding parameter2_6_3}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="6"
+                                    Grid.Column="4"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text="BMS电压异常"
+                                                       IsTrue="{Binding parameter2_6_4}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="6"
+                                    Grid.Column="5"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text=" BMS电流异常"
+                                                       IsTrue="{Binding parameter2_6_5}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="6"
+                                    Grid.Column="6"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text="BMS温度异常"
+                                                       IsTrue="{Binding parameter2_6_6}" />
+                        </StackPanel>
+                        <!--7-->
+                        <StackPanel Grid.Row="7"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl3 Text="BMS关机故障"
+                                                       IsTrue="{Binding parameter2_7_1}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="7"
+                                    Grid.Column="2"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl3 Text="绝缘检测异常"
+                                                       IsTrue="{Binding parameter2_7_2}" />
+                        </StackPanel>
+                    </Grid>
+                    <!--PDS告警-->
+                    <Grid Grid.Row="3"
+                          Margin="0,5,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.ColumnSpan="7"
+                                    Orientation="Horizontal"
+                                    Margin="20,0,0,0">
+                            <localControl:IconBorder FIcon_Text="&#xec35;"
+                                                     FIconTextBlock_Text="PDS告警"
+                                                     FIconBorder_Background="#FFECCF"
+                                                     FIcon_Foreground="#FF7D00" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl2 Text="防雷器告警"
+                                                       IsTrue="{Binding parameter3_1}" />
+                        </StackPanel>
+                    </Grid>
+                    <!--PDS故障-->
+                    <Grid Grid.Row="4"
+                          Margin="0,5,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.ColumnSpan="7"
+                                    Orientation="Horizontal"
+                                    Margin="20,0,0,0">
+                            <localControl:IconBorder FIcon_Text="&#xe7c2;"
+                                                     FIconTextBlock_Text="DC模块告警"
+                                                     FIconBorder_Background="#F8C0C0"
+                                                     FIcon_Foreground="#EE6666"
+                                                     />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <localControl:WarnControl2 Text="软件版本故障"
+                                                       IsTrue="{Binding parameter4_1}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="2"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl2 Text="DSP初始化故障"
+                                                       IsTrue="{Binding parameter4_2}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="3"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl2 Text="BMS故障"
+                                                       IsTrue="{Binding parameter4_3}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="4"
+                                    Style="{StaticResource ContentPanel}">
+                            <localControl:WarnControl2 Text="紧急停机"
+                                                       IsTrue="{Binding parameter4_4}" />
+                        </StackPanel>
+                    </Grid>
+                    <!--END-->
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </Page>

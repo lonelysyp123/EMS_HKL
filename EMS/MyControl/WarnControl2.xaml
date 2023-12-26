@@ -9,14 +9,16 @@
     <Grid>
         <!--BMU告警橙色-->
         <Border BorderThickness="1"
-                Padding="5"
                 CornerRadius="5"
                 Width="130"
                 Height="30"
+                Padding="5,0,5,0"
                 BorderBrush="{Binding BorderColor, RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Background="{Binding BorderBackground, RelativeSource={RelativeSource AncestorType=UserControl}}">
             <TextBlock HorizontalAlignment="Center"
                        VerticalAlignment="Center"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center"
                        Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}}"
                        Foreground="{Binding TextColor, RelativeSource={RelativeSource AncestorType=UserControl}}" />
         </Border>
