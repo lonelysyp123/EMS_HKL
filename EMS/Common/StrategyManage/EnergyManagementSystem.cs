@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TNCN.EMS.Common.StrategyManage;
 
 namespace EMS.Model
 {
@@ -79,10 +80,7 @@ namespace EMS.Model
         private BmsManager _bms_manager;
         private object _database_manager;
         private object _cloud_manager;
-        
-
-
-
+        private MqttClientManager mqttClientManager;
 
         private static EnergyManagementSystem _globalInstance;
 
@@ -97,14 +95,15 @@ namespace EMS.Model
         public BmsManager BmsManager { get { return _bms_manager; } }
         public PCSManager PcsManager { get { return _pcs_manager; } }
         public SmartMeterManager SmartMeterManager { get { return _smart_meter_manager; } }
+        public MqttClientManager MqttClientManager { get { return mqttClientManager; } }
         public EnergyManagementSystem()
         {
-           
             _operationThread = null;
             _bms_manager = new BmsManager();
             _controller = new EmsController();
             _pcs_manager =new PCSManager();
             _smart_meter_manager = new SmartMeterManager();
+            mqttClientManager = new MqttClientManager();
         }
 
         public void Initialization(object _pcs_manager, object _smart_meter_manager, object _database_manager, object _cloud_manager)

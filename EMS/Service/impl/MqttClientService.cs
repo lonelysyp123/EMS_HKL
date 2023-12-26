@@ -48,7 +48,7 @@ namespace TNCN.EMS.Service
         public void DisconnectMqttClient() {
             mqttClient.DisconnectAsync();
         }
-        public void StartMqttClient(MqttConnectInfoModel mqttConnectInfo)
+        private void StartMqttClient(MqttConnectInfoModel mqttConnectInfo)
         {
             this.mqttConnectInfo = mqttConnectInfo;
             var optionsBuilder = new MqttClientOptionsBuilder()

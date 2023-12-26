@@ -215,15 +215,20 @@
     </ApplicationDefinition>
     <Compile Include="Api\BmsApi.cs" />
     <Compile Include="Api\ElectricityMeterApi.cs" />
+    <Compile Include="Api\MqttClientApi.cs" />
     <Compile Include="Api\PcsApi.cs" />
     <Compile Include="Api\StrategyApi.cs" />
     <Compile Include="Common\LogUtils.cs" />
     <Compile Include="Common\Modbus\ModbusRequest.cs" />
-    <Compile Include="Common\Mqtt\MqttClientService.cs" />
-    <Compile Include="Common\Mqtt\MqttConnectOption.cs" />
+    <Compile Include="Common\Mqtt\BatteryCell.cs" />
+    <Compile Include="Common\Mqtt\BCMU.cs" />
+    <Compile Include="Common\Mqtt\BcmuAlarmParameter.cs" />
+    <Compile Include="Common\Mqtt\BcmuSetParameter.cs" />
+    <Compile Include="Common\Mqtt\BMU.cs" />
     <Compile Include="Common\StrategyManage\EmsController.cs" />
     <Compile Include="Common\StrategyManage\IntraDayScheduler.cs" />
     <Compile Include="Common\SingletonBase.cs" />
+    <Compile Include="Common\StrategyManage\MqttClientManager.cs" />
     <Compile Include="Common\Util\ConcurrentQueueLength.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

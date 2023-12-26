@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using TNCN.EMS.Model;
 using log4net;
 using TNCN.EMS.Common.Util;
+using TNCN.EMS.Common.Mqtt;
+using Newtonsoft.Json;
 
 namespace TestEMS.ApiTest
 {
@@ -17,7 +19,8 @@ namespace TestEMS.ApiTest
         ILog ilog = LogManager.GetLogger(typeof(MqttTest));
 
         [TestMethod]
-        public void TestPublishMessage() {
+        public void TestPublishMessage()
+        {
             List<string> topics = new List<string>();
             topics.Add("/tncn/test/cf/thing/event/property/post_reply");
             topics.Add("/tncn/test/cf/thing/service/property/set");
@@ -40,7 +43,8 @@ namespace TestEMS.ApiTest
             MqttClientService mqttClientService = new MqttClientService();
             mqttClientService.StartMqttClient(mqttConnectInfo);
 
-            for (int i=0;i < 3;i++) {
+            for (int i = 0; i < 3; i++)
+            {
                 if (mqttClientService.IsConnected())
                 {
                     mqttClientService.DisconnectMqttClient();
@@ -53,6 +57,15 @@ namespace TestEMS.ApiTest
             }
 
             Assert.IsTrue(mqttClientService.IsAlarm() == true);
+        }
+
+        [TestMethod]
+        public void TestJson()
+        {
+            battery_cell batteryCell = new battery_cell();
+            batteryCell.id = 1;
+            batteryCell.soc = 22;
+            ilog.Debug(JsonConvert.SerializeObject(batteryCell));
         }
     }
 }
