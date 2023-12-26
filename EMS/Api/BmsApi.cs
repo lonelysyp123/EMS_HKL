@@ -17,6 +17,20 @@ namespace EMS.Api
             return item.GetNextBMSDataForMqtt();
         }
 
+        public static BatteryTotalModel[] GetNextBMSData()
+        {
+            DateTime dateTime = DateTime.Now;
+            List<BatteryTotalViewModel> viewmodels = EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList;
+            List<BatteryTotalModel> models = new List<BatteryTotalModel>();
+            for (int i = 0; i < viewmodels.Count; i++)
+            {
+                var item = viewmodels[i].GetNextBMSDataForMqtt();
+                item.CurrentTime = dateTime;
+                models.Add(item);
+            }
+            return models.ToArray();
+        }
+
         /// <summary>
         /// 得到BMS信息
         /// </summary>
