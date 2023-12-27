@@ -107,6 +107,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="HandyControl, Version=3.4.0.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b, processorArchitecture=MSIL">
+      <HintPath>..\packages\HandyControl.3.4.0\lib\net48\HandyControl.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.15\lib\net45\log4net.dll</HintPath>
     </Reference>
@@ -411,9 +414,6 @@
     <Compile Include="View\NewEMSView\System_MqttSetterPage.xaml.cs">
       <DependentUpon>System_MqttSetterPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\NewEMSView\test.xaml.cs">
-      <DependentUpon>test.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\ParameterSettingView.xaml.cs">
       <DependentUpon>ParameterSettingView.xaml</DependentUpon>
     </Compile>
@@ -595,10 +595,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\NewEMSView\System_MqttSetterPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\NewEMSView\test.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

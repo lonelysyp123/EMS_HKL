@@ -97,11 +97,13 @@
                         <Button Content="应    用"
                                 Width="100"
                                 Height="35"
+                                Foreground="White"
                                 FontWeight="Bold"
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
                                 IsEnabled="{Binding IsEnabled_BMS}"
-                                Command="{Binding Command_BMS}"/>
+                                Command="{Binding Command_BMS}"
+                                Click="Button_Click_1" />
                     </StackPanel>
                 </Grid>
             </Border>
@@ -159,11 +161,13 @@
                         <Button Content="应    用"
                                 Width="100"
                                 Height="35"
+                                Foreground="white"
                                 FontWeight="Bold"
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
                                 IsEnabled="{Binding IsEnabled_PCS}"
-                                Command="{Binding Command_PCS}"/>
+                                Command="{Binding Command_PCS}"
+                                Click="Button_Click" />
                     </StackPanel>
                 </Grid>
             </Border>
@@ -251,6 +255,7 @@
                                 Width="100"
                                 Height="35"
                                 FontWeight="Bold"
+                                Foreground="white"
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
                                 IsEnabled="{Binding IsEnabled_Ammeter}"
@@ -289,6 +294,7 @@
                         <Button Content="校    对"
                                 Width="100"
                                 Height="35"
+                                Foreground="white"
                                 FontWeight="Bold"
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
@@ -326,6 +332,7 @@
                                 Width="100"
                                 Height="35"
                                 FontWeight="Bold"
+                                Foreground="white"
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
                                 Margin="20,0,0,0"

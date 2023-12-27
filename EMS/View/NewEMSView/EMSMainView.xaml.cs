@@ -1,5 +1,7 @@
-﻿using System;
+﻿using HandyControl.Controls;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +19,7 @@ namespace EMS.View.NewEMSView
     /// <summary>
     /// EMSMainView.xaml 的交互逻辑
     /// </summary>
-    public partial class EMSMainView : Window
+    public partial class EMSMainView : System.Windows.Window
     {
         public EMSMainView()
         {

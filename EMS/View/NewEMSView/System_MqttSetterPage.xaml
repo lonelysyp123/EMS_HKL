@@ -112,14 +112,16 @@
                     <Button Content="保    存"
                             Width="100"
                             Height="35"
+                            Foreground="white"
                             FontWeight="Bold"
                             Background="#1890FF"
                             BorderThickness="0,0,0,0"
                             IsEnabled="{Binding IsEnabled_Save}"
-                            Command="{Binding Save}" />
+                            Command="{Binding Save}"/>
                     <Button Content="连    接"
                             Width="100"
                             Height="35"
+                            Foreground="white"
                             FontWeight="Bold"
                             Background="#1890FF"
                             BorderThickness="0,0,0,0"

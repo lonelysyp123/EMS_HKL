@@ -4,9 +4,210 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EMS.View.NewEMSView"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        Title="EMSMainView" Height="450" Width="800">
+        Title="EMSMainView"
+        Height="1080"
+        Width="1920"
+        Background="#FAFAFA">
+    <Window.Resources>
+        <!--图标-->
+        <Style x:Key="TextBlockFabricIcons"
+               TargetType="TextBlock">
+            <Setter Property="FontSize"
+                    Value="16" />
+            <Setter Property="Foreground"
+                    Value="#909399" />
+            <Setter Property="FontFamily"
+                    Value="pack://application:,,,/EMS;component/Resource/Iconfont/#iconfont" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+        </Style>
+        <!--菜单栏-->
+        <Style x:Key="SideMenuItemStyle" TargetType="{x:Type hc:SideMenuItem}">
+            <Setter Property="Background"
+                    Value="#405673" />
+            
+        </Style>
+    </Window.Resources>
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="1600"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!--1、logo-->
+        <Grid Grid.Row="0"
+              Grid.Column="0"
+              Background="#405673">
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Margin="10,0,0,0">
+                <Image Source="pack://application:,,,/EMS;component/Resource/Image/TNLOGO.png"
+                       Width="40"
+                       Stretch="Fill"
+                       Cursor=""
+                       Height="40" />
+                <TextBlock Text="TN-EMS"
+                           Foreground="White"
+                           FontSize="24"
+                           Margin="20,0,0,0"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center">
+                </TextBlock>
+            </StackPanel>
+        </Grid>
+        <!--2、导航栏-->
+        <Grid Grid.Row="0"
+              Grid.Column="1">
+        </Grid>
+        <!--3、侧边菜单栏-->
+        <Grid Grid.Row="1"
+              Grid.Column="0">
+            <hc:SideMenu BorderThickness="0"
+                         Background="#405673"
+                         Width="320">
+                <hc:Interaction.Triggers>
+                    <hc:EventTrigger EventName="SelectionChanged">
+                        <hc:EventToCommand Command="{Binding SwitchItemCmd}"
+                                           PassEventArgsToCommand="True" />
+                    </hc:EventTrigger>
+                </hc:Interaction.Triggers>
+                <!--首页-->
+                <hc:SideMenuItem Header="首页"
+                                 Background="#405673"
+                                 Foreground="white"
+                                 FontWeight="Bold"
+                                 VerticalAlignment="Center"
+                                 Margin="50,0,0,0"
+                                 Command="{Binding SelectCmd}">
+                    <hc:SideMenuItem.Icon>
+                        <TextBlock Text="&#xe606;"
+                                   Style="{StaticResource TextBlockFabricIcons}" />
+                    </hc:SideMenuItem.Icon>
+                </hc:SideMenuItem>
+                <!--监控界面-->
+                <hc:SideMenuItem Header="监控界面"
+                                 Style="{StaticResource SideMenuItemStyle}">
+                    <hc:SideMenuItem.Icon>
+                        <TextBlock Text="&#xe606;"
+                                   Style="{StaticResource TextBlockFabricIcons}" />
+                    </hc:SideMenuItem.Icon>
+                    <hc:SideMenuItem Header="BMS">
+                        <hc:SideMenuItem.Icon>
+                            <TextBlock Text="&#xf314;"
+                                       Style="{StaticResource TextBlockFabricIcons}" />
+                        </hc:SideMenuItem.Icon>
+                    </hc:SideMenuItem>
+                    <hc:SideMenuItem Header="PCS">
+                        <hc:SideMenuItem.Icon>
+                            <TextBlock Text="&#xf444;"
+                                       Style="{StaticResource TextBlockFabricIcons}" />
+                        </hc:SideMenuItem.Icon>
+                    </hc:SideMenuItem>
+                    <hc:SideMenuItem Header="电表">
+                        <hc:SideMenuItem.Icon>
+                            <TextBlock Text="&#xf6bf;"
+                                       Style="{StaticResource TextBlockFabricIcons}" />
+                        </hc:SideMenuItem.Icon>
+                    </hc:SideMenuItem>
+                </hc:SideMenuItem>
+                <!--数据分析-->
+                <hc:SideMenuItem Header="数据分析">
+                    <hc:SideMenuItem.Icon>
+                        <TextBlock Text="&#xe606;"
+                                   Style="{StaticResource TextBlockFabricIcons}" />
+                    </hc:SideMenuItem.Icon>
+                    <hc:SideMenuItem Header="BMS">
+                        <hc:SideMenuItem.Icon>
+                            <TextBlock Text="&#xf30e;"
+                                       Style="{StaticResource TextBlockFabricIcons}" />
+                        </hc:SideMenuItem.Icon>
+                    </hc:SideMenuItem>
+                    <hc:SideMenuItem Header="PCS">
+                        <hc:SideMenuItem.Icon>
+                            <TextBlock Text="&#xf293;"
+                                       Style="{StaticResource TextBlockFabricIcons}" />
+                        </hc:SideMenuItem.Icon>
+                    </hc:SideMenuItem>
+                    <hc:SideMenuItem Header="电表">
+                        <hc:SideMenuItem.Icon>
+                            <TextBlock Text="&#xf298;"
+                                       Style="{StaticResource TextBlockFabricIcons}" />
+                        </hc:SideMenuItem.Icon>
+                    </hc:SideMenuItem>
+                </hc:SideMenuItem>
+                <!--故障日志-->
+                <hc:SideMenuItem Header="故障日志">
+                    <hc:SideMenuItem.Icon>
+                        <TextBlock Text="&#xe606;"
+                                   Style="{StaticResource TextBlockFabricIcons}" />
+                    </hc:SideMenuItem.Icon>
+                </hc:SideMenuItem>
+                <!--策略管理-->
+                <hc:SideMenuItem Header="策略管理">
+                    <hc:SideMenuItem.Icon>
+                        <TextBlock Text="&#xe606;"
+                                   Style="{StaticResource TextBlockFabricIcons}" />
+                    </hc:SideMenuItem.Icon>
+                    <hc:SideMenuItem Header="策略配置">
+                        <hc:SideMenuItem.Icon>
+                            <TextBlock Text="&#xf28f;"
+                                       Style="{StaticResource TextBlockFabricIcons}" />
+                        </hc:SideMenuItem.Icon>
+                    </hc:SideMenuItem>
+                    <hc:SideMenuItem Header="策略曲线">
+                        <hc:SideMenuItem.Icon>
+                            <TextBlock Text="&#xf3b3;"
+                                       Style="{StaticResource TextBlockFabricIcons}" />
+                        </hc:SideMenuItem.Icon>
+                    </hc:SideMenuItem>
+                    <hc:SideMenuItem Header="保护参数">
+                        <hc:SideMenuItem.Icon>
+                            <TextBlock Text="&#xe8f1;"
+                                       Style="{StaticResource TextBlockFabricIcons}" />
+                        </hc:SideMenuItem.Icon>
+                    </hc:SideMenuItem>
+                </hc:SideMenuItem>
+                <!--系统管理-->
+                <hc:SideMenuItem Header="系统管理">
+                    <hc:SideMenuItem.Icon>
+                        <TextBlock Text="&#xe606;"
+                                   Style="{StaticResource TextBlockFabricIcons}" />
+                    </hc:SideMenuItem.Icon>
+                    <hc:SideMenuItem Header="设备详情">
+                        <hc:SideMenuItem.Icon>
+                            <TextBlock Text="&#xf28f;"
+                                       Style="{StaticResource TextBlockFabricIcons}" />
+                        </hc:SideMenuItem.Icon>
+                    </hc:SideMenuItem>
+                    <hc:SideMenuItem Header="设备配置">
+                        <hc:SideMenuItem.Icon>
+                            <TextBlock Text="&#xf3b3;"
+                                       Style="{StaticResource TextBlockFabricIcons}" />
+                        </hc:SideMenuItem.Icon>
+                    </hc:SideMenuItem>
+                    <hc:SideMenuItem Header="云端设置">
+                        <hc:SideMenuItem.Icon>
+                            <TextBlock Text="&#xe8f1;"
+                                       Style="{StaticResource TextBlockFabricIcons}" />
+                        </hc:SideMenuItem.Icon>
+                    </hc:SideMenuItem>
+                </hc:SideMenuItem>
+            </hc:SideMenu>
+            <!--END-->
+        </Grid>
+        <!--4、页面部分-->
+        <Grid Grid.Row="1"
+              Grid.Column="1">
+            <Frame x:Name="NewEMSMainbody"
+                   NavigationUIVisibility="Hidden"></Frame>
+        </Grid>
     </Grid>
 </Window>
