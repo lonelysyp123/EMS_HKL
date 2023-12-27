@@ -243,6 +243,9 @@
     <Compile Include="Model\SerialPortSettingsModel.cs" />
     <Compile Include="Model\SubscribeMessageModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
+    <Compile Include="MyControl\BCMUConnectGraph.xaml.cs">
+      <DependentUpon>BCMUConnectGraph.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MyControl\CheckedButton.xaml.cs">
       <DependentUpon>CheckedButton.xaml</DependentUpon>
     </Compile>
@@ -440,6 +443,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MyControl\Battery.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControl\BCMUConnectGraph.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
