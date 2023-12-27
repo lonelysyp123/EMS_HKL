@@ -118,17 +118,14 @@ namespace EMS.ViewModel
 
         public PCSMainViewModel()
         {
-            
-
-
             _pcsModel = new PCSModel();
             EnergyManagementSystem.GlobalInstance.PcsManager.SetPCS(_pcsModel);
 
 
             ConnectCommand = new RelayCommand(Connect);
             DisConnectCommand = new RelayCommand(DisConnect);
-            StartDaqCommand = new RelayCommand(StartDataAcquisition);
-            StopDaqCommand = new RelayCommand(StopDataAcquisition);
+            //StartDaqCommand = new RelayCommand(StartDataAcquisition);
+            //StopDaqCommand = new RelayCommand(StopDataAcquisition);
 
             _pcsModel.MonitorModel.VisDCFault = Visibility.Hidden;
             _pcsModel.MonitorModel.VisPDSFault = Visibility.Hidden;
@@ -178,7 +175,7 @@ namespace EMS.ViewModel
                 MainWindowPCSConnectState = "未连接";
                 MainWindowPCSConnectColor = new SolidColorBrush(Colors.Red);
 
-                MessageBox.Show("请输入正确的IP地址");
+                MessageBox.Show("连接失败");
             }
         }
 
@@ -190,17 +187,25 @@ namespace EMS.ViewModel
                 {
                     MessageBox.Show("请连接");
                 }
-                else if (IsConnected && !IsRead)
+                else
                 {
                     _pcsModel.Disconnect();
 
                     MainWindowPCSConnectState = "未连接";
                     MainWindowPCSConnectColor = new SolidColorBrush(Colors.Red);
                 }
-                else if (IsConnected && IsRead)
-                {
-                    MessageBox.Show("请停止采集");
-                }
+                //else if (IsConnected && !IsRead)
+                //{
+
+                //    _pcsModel.Disconnect();
+
+                //    MainWindowPCSConnectState = "未连接";
+                //    MainWindowPCSConnectColor = new SolidColorBrush(Colors.Red);
+                //}
+                //else if (IsConnected && IsRead)
+                //{
+                //    MessageBox.Show("请停止采集");
+                //}
             }
             catch (Exception ex)
             {
@@ -208,29 +213,29 @@ namespace EMS.ViewModel
             }
         }
 
-        public void StartDataAcquisition()
-        {
-            if (!IsConnected)
-            {
-                MessageBox.Show("请连接");
-            }
-            else
-            {
-                _pcsModel.StartDataAcquisition();
-            }
-        }
+        //public void StartDataAcquisition()
+        //{
+        //    if (!IsConnected)
+        //    {
+        //        MessageBox.Show("请连接");
+        //    }
+        //    else
+        //    {
+        //        _pcsModel.StartDataAcquisition();
+        //    }
+        //}
 
-        public void StopDataAcquisition()
-        {
-            if (IsRead)
-            {
-                _pcsModel.StopDataAcquisition();
-            }
-            else
-            {
-                MessageBox.Show("请开始采集");
-            }
-        }
+        //public void StopDataAcquisition()
+        //{
+        //    if (IsRead)
+        //    {
+        //        _pcsModel.StopDataAcquisition();
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("请开始采集");
+        //    }
+        //}
 
         private void SyncBUSVolInfo()
         {

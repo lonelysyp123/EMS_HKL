@@ -35,10 +35,14 @@
         <StackPanel Orientation="Horizontal"  Background="Black">
             <Button Content=" 连接" Command="{Binding ConnectCommand}"/>
             <Button Content=" 断开连接" Command="{Binding DisConnectCommand}" Margin="10 0 0 0"/>
-            <Button Content=" 开始采集" Command="{Binding StartDaqCommand}" Margin="10 0 0 0 "/>
-            <Button Content=" 停止采集" Command="{Binding StopDaqCommand}" Margin="10 0 0 0"/>
+            <!--<Button Content=" 开始采集" Command="{Binding StartDaqCommand}" Margin="10 0 0 0 "/>
+            <Button Content=" 停止采集" Command="{Binding StopDaqCommand}" Margin="10 0 0 0"/>-->
             <Image x:Name="Image1" Source="{Binding ConnectImageSource}" Height="20" Width="20" Margin="20 0 20 0"/>
-            <Image x:Name="Image2" Source="{Binding DataAcquisitionImageSource}" Height="20" Width="20"/>
+            <!--<Image x:Name="Image2" Source="{Binding DataAcquisitionImageSource}" Height="20" Width="20"/>-->
+            <TextBlock Text="{Binding MonitorSoftCode}" />
+            <TextBlock Text="{Binding DcSoftCode}"  />
+            <TextBlock Text="{Binding U2SoftCode}" />
+            <TextBlock Text="{Binding CabSerialNumber}"/>
         </StackPanel>
 
         <TabControl Grid.Row="1" FontSize="25" >
@@ -71,6 +75,8 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
@@ -218,23 +224,7 @@
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="White" Text="BUS侧电压：" Grid.Row="5" Grid.Column="3" Margin="0 20 0 20"/>
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="{Binding DcBranch1BUSVol}" Grid.Row="5" Grid.Column="4" Margin="0 20 0 20"/>
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="V" Grid.Row="5" Grid.Column="5" Margin="0 20 0 20" FontSize="30"/>
-                        </Grid>
 
-                        <Grid Grid.Column="2">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            
-                            <TextBlock Text="{Binding MonitorSoftCode}"  Grid.Row="1"/>
-                            
-                            <TextBlock Text="{Binding DcSoftCode}"  Grid.Row="2"/>
-                            
-                            <TextBlock Text="{Binding U2SoftCode}" Grid.Row="3"/>
-                            <TextBlock Text="{Binding CabSerialNumber}" Grid.Row="4"/>
                             
                         </Grid>
                     </Grid>
@@ -255,6 +245,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
                             <ColumnDefinition />
                             <ColumnDefinition />
                             <ColumnDefinition />
@@ -280,6 +271,11 @@
                             <TextBlock VerticalAlignment="Center" Foreground="White" Text="环境温度：" />
                             <TextBlock VerticalAlignment="Center" Foreground="White" Text="{Binding AmbientTemperature}" Width="60" />
                             <TextBlock Width="50" VerticalAlignment="Center" Foreground="White" Text="℃" FontSize="30"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" Grid.ColumnSpan="2">
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="机柜序列号："/>
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="{Binding CabSerialNumber}" />
                         </StackPanel>
 
                         <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Margin="40 0 0 0">

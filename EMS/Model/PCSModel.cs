@@ -5,9 +5,11 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+
 
 
 namespace EMS.Model
@@ -117,6 +119,10 @@ namespace EMS.Model
                 _modbusClient = new ModbusClient(ip, port);
                 _modbusClient.Connect();
                 IsConnected = true;
+                _dataAcquisitionThread = new Thread(ReadInfo);
+                _dataAcquisitionThread.IsBackground = true;
+                _dataAcquisitionThread.Start();
+                IsRead = true;
             }
             catch (Exception ex)
             {
@@ -124,11 +130,11 @@ namespace EMS.Model
                 Logger.Info(ex.ToString());
                 throw ex;
             }
-            
         }
 
         public void Disconnect()
         {
+            IsRead = false;
             if (!_isConnected) return;
             _modbusClient.Disconnect();
             IsConnected = false;
@@ -169,25 +175,24 @@ namespace EMS.Model
                     valueAddress = PcsCommandAdressEnum.PowerValueSet;
                     break;
             }
-
             _modbusClient.WriteFunc(PcsId, modeAddress, modeValue);
             _modbusClient.WriteFunc(PcsId, valueAddress, controlValue);
         }
 
-        public void StartDataAcquisition()
-        {
-            _dataAcquisitionThread = new Thread(ReadInfo);
-            _dataAcquisitionThread.IsBackground = true;
-            IsRead = true;
-            _dataAcquisitionThread.Start();
-        }
-        public void StopDataAcquisition()
-        {
-            if (IsRead)
-            {
-                IsRead = false;
-            }
-        }
+        //public void StartDataAcquisition()
+        //{
+        //    _dataAcquisitionThread = new Thread(ReadInfo);
+        //    _dataAcquisitionThread.IsBackground = true;
+        //    IsRead = true;
+        //    _dataAcquisitionThread.Start();
+        //}
+        //public void StopDataAcquisition()
+        //{
+        //    if (IsRead)
+        //    {
+        //        IsRead = false;
+        //    }
+        //}
 
         public void SyncBUSVolInfo()
         {
