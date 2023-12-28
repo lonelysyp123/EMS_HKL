@@ -654,7 +654,9 @@ namespace EMS.ViewModel
             {
                 if(TotalList.TryTake(out BatteryTotalModel CurrentBatteryTotalModel))
                 {
-                    TotalListForMqtt.Add((BatteryTotalModel)CurrentBatteryTotalModel.Clone());
+                    var model = (BatteryTotalModel)CurrentBatteryTotalModel.Clone();
+                    model.BCMUID = TotalID;
+                    TotalListForMqtt.Add(model);
                     // 把数据分发给需要显示的内容
                     App.Current.Dispatcher.Invoke(() =>
                     {
