@@ -50,7 +50,6 @@ namespace EMS.ViewModel
         {
             if (electricityMeterModel.Close())
             {
-                EnergyManagementSystem.GlobalInstance.SmartMeterManager.RemoveDev(electricityMeterModel);
                 Logger.Info("Close Serial Port("+ electricityMeterModel.Configuaration.SelectedCommPort + ")");
             }
             else
@@ -63,13 +62,58 @@ namespace EMS.ViewModel
         {
             if (electricityMeterModel.Open())
             {
-                EnergyManagementSystem.GlobalInstance.SmartMeterManager.AddDev(electricityMeterModel);
                 Logger.Info("Open Serial Port(" + electricityMeterModel.Configuaration.SelectedCommPort + ")");
             }
             else
             {
                 Logger.Info("Open Serial Port(" + electricityMeterModel.Configuaration.SelectedCommPort + ") Failed");
             }
+        }
+
+        public ThreePhaseValue GetThreePhaseVoltage()
+        {
+            var item = new ThreePhaseValue();
+            item.PhaseA = electricityMeterModel.Voltage_A;
+            item.PhaseB = electricityMeterModel.Voltage_B;
+            item.PhaseC = electricityMeterModel.Voltage_C;
+            return item;
+        }
+
+        public ThreePhaseValue GetThreePhaseElectric()
+        {
+            var item = new ThreePhaseValue();
+            item.PhaseA = electricityMeterModel.Electric_A;
+            item.PhaseB = electricityMeterModel.Electric_B;
+            item.PhaseC = electricityMeterModel.Electric_C;
+            return item;
+        }
+
+        public ThreePhaseValue GetThreePhaseActivePower()
+        {
+            var item = new ThreePhaseValue();
+            item.PhaseA = electricityMeterModel.ActivePower_A;
+            item.PhaseB = electricityMeterModel.ActivePower_B;
+            item.PhaseC = electricityMeterModel.ActivePower_C;
+            return item;
+        }
+
+        public ThreePhaseValue GetThreePhaseReactivePower()
+        {
+            var item = new ThreePhaseValue();
+            item.PhaseA = electricityMeterModel.ReactivePower_A;
+            item.PhaseB = electricityMeterModel.ReactivePower_B;
+            item.PhaseC = electricityMeterModel.ReactivePower_C;
+            return item;
+        }
+
+        public double GetRealPowerTotal()
+        {
+            return electricityMeterModel.ActivePower_Total;
+        }
+
+        public double GetReactivePowerTotal()
+        {
+            return electricityMeterModel.ReactivePower_Total;
         }
     }
 }

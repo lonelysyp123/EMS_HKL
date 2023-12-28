@@ -1,7 +1,9 @@
 ﻿using EMS.Api;
 using EMS.Common.StrategyManage;
 using EMS.ViewModel;
+using MQTTnet.Internal;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -15,19 +17,19 @@ namespace EMS.Model
 {
     public class SmartMeterManager 
     {
-        private List<ElectricityMeterModel> _smartMeters;
-        public List<ElectricityMeterModel> SmartMeters { get { return _smartMeters; } } //封装，不能set
+        private List<ElectricMeterViewModel> _smartMeters;
+        public List<ElectricMeterViewModel> SmartMeters { get { return _smartMeters; } } //封装，不能set
 
-        public void AddDev(ElectricityMeterModel item)
+        public void AddDev(ElectricMeterViewModel item)
         {
             if (_smartMeters == null)
             {
-                _smartMeters = new List<ElectricityMeterModel>();
+                _smartMeters = new List<ElectricMeterViewModel>();
             }
             _smartMeters.Add(item);
         }
 
-        public void RemoveDev(ElectricityMeterModel item)
+        public void RemoveDev(ElectricMeterViewModel item)
         {
             if (_smartMeters != null && _smartMeters.Count > 0)
             {
@@ -60,10 +62,10 @@ namespace EMS.Model
     public class BmsManager
     {
         //
-        private List<BatteryTotalViewModel> _bmsTotalList;
-        public List<BatteryTotalViewModel> BmsTotalList { get { return _bmsTotalList; } } //封装，不能set
+        private ObservableCollection<BatteryTotalViewModel> _bmsTotalList;
+        public ObservableCollection<BatteryTotalViewModel> BmsTotalList { get { return _bmsTotalList; } } //封装，不能set
         
-        public void SetBMSList(List<BatteryTotalViewModel> totallist)
+        public void SetBMSList(ObservableCollection<BatteryTotalViewModel> totallist)
         {
             _bmsTotalList = totallist;
         }

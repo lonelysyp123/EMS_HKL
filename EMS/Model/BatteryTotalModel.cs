@@ -184,6 +184,8 @@ namespace EMS.Model
         public ushort BatteryCount { set; get; }
         public ushort SeriesCount = 3;
         public ushort BatteriesCountInSeries = 14;
+        public DateTime CurrentTime;
+        public string BCMUID;
 
         public List<BatterySeriesModel> Series { get; set; }
 
@@ -195,6 +197,11 @@ namespace EMS.Model
                 BatterySeriesModel series = new BatterySeriesModel(BatteriesCountInSeries);
                 Series.Add(series);
             }
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
     }
 }

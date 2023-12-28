@@ -1,0 +1,75 @@
+﻿using BMS.ViewModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace BMS.View
+{
+    /// <summary>
+    /// AddDevView.xaml 的交互逻辑
+    /// </summary>
+    public partial class AddDevView : Window
+    {
+        public bool IsPCS = false;
+        public bool IsBCMU = true;
+        public AddDevView()
+        {
+            InitializeComponent();
+            TCPGrid.Visibility = Visibility.Visible;
+            PCSGrid.Visibility = Visibility.Collapsed;
+
+        }
+
+
+
+        private void ConfirmBtn_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
+            this.Close();
+        }
+
+        private void CancelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
+            this.Close();
+        }
+
+        private void ChooseTCP_Click(object sender, RoutedEventArgs e)
+        {
+            TCPGrid.Visibility = Visibility.Visible;
+            PCSGrid.Visibility = Visibility.Collapsed;
+            IsBCMU = true;
+            IsPCS = false;
+        }
+
+        private void ChoosePCS_Click(object sender, RoutedEventArgs e)
+        {
+            PCSGrid.Visibility = Visibility.Visible;
+            TCPGrid.Visibility = Visibility.Collapsed;
+            IsBCMU = false;
+            IsPCS = true;
+        }
+
+        private void BCMUID_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            TextBox textBox = new TextBox();
+            bool result = int.TryParse(e.Text, out int value);
+            if (result == false || value > 6 || value < 1)
+            {
+
+                MessageBox.Show("请输入1-6");
+                e.Handled = true;
+            }
+        }
+    }
+}

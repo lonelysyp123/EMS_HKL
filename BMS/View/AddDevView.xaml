@@ -1,0 +1,85 @@
+﻿<Window x:Class="BMS.View.AddDevView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:trl="clr-namespace:BMS.MyControl"
+        xmlns:local="clr-namespace:BMS.View"
+        mc:Ignorable="d"
+        Title="AddDevView" Height="400" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+
+            <RowDefinition Height="6*"/>
+            <RowDefinition Height="6*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
+            <RadioButton Content="BCMU" x:Name="BCMURaB" IsChecked="True" Margin="10 5" Click="ChooseTCP_Click"></RadioButton>
+            <RadioButton x:Name="PCSRaB" Content="PCS" Margin="10 5" Click="ChoosePCS_Click"  IsChecked="False" ></RadioButton>
+        </StackPanel>
+
+        <Grid Grid.Row="1" x:Name="TCPGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+
+                <TextBlock Text="BCMUID(1~6)" VerticalAlignment="Center" Margin="10 0 0 0" />
+
+                <TextBox  x:Name="BCMUID" Width="80" VerticalAlignment="Center" BorderThickness="1" 
+                              PreviewTextInput="BCMUID_PreviewTextInput"/>
+
+
+
+            </Grid>
+            <Grid Grid.Row="1">
+
+                <TextBlock Text="IP" VerticalAlignment="Center" Margin="10 0 0 0"></TextBlock>
+
+                <trl:IPInput x:Name="IPText" Width="150" VerticalAlignment="Center"></trl:IPInput>
+            </Grid>
+            <Grid Grid.Row="2">
+                <TextBlock Text="Port" VerticalAlignment="Center" Margin="10 0 0 0"></TextBlock>
+                <TextBox x:Name="TCPPort" Width="150" BorderThickness="1" VerticalAlignment="Center"></TextBox>
+            </Grid>
+
+
+
+        </Grid>
+        <Grid Grid.Row="1" x:Name="PCSGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="27*"/>
+                    <ColumnDefinition Width="73*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="PCS IP" VerticalAlignment="Center" Margin="10,0,0,0" Grid.ColumnSpan="2"></TextBlock>
+                <trl:IPInput x:Name="IPText2" Width="140" VerticalAlignment="Center" Grid.Column="1" Margin="17,0,125,0"></trl:IPInput>
+
+            </Grid>
+            <Grid Grid.Row="1">
+                <TextBlock Text="Port" VerticalAlignment="Center" Margin="10 0 0 0"></TextBlock>
+                <TextBox x:Name="TCPPort2" Width="150" BorderThickness="1" VerticalAlignment="Center"></TextBox>
+            </Grid>
+
+
+
+        </Grid>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button VerticalAlignment="Center" HorizontalAlignment="Center" Height="40" Width="100" Content="确认" Click="ConfirmBtn_Click"></Button>
+            <Button Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Height="40" Width="100" Content="取消" Click="CancelBtn_Click"></Button>
+        </Grid>
+    </Grid>
+</Window>

@@ -514,8 +514,8 @@ namespace EMS.ViewModel
 
         #region Command
 
-        public RelayCommand ConnectDevCommand { get; set; }
-        public RelayCommand DisconnectDevCommand { get; set; }
+        //public RelayCommand ConnectDevCommand { get; set; }
+        //public RelayCommand DisconnectDevCommand { get; set; }
 
         #endregion
 
@@ -587,17 +587,17 @@ namespace EMS.ViewModel
         public List<BatterySeriesViewModel> batterySeriesViewModelList { get; private set; }
         public DevControlViewModel devControlViewModel;
         public ParameterSettingViewModel parameterSettingViewModel;
-        private ConcurrentQueue<BatteryTotalModel> TotalList;
+        private BlockingCollection<BatteryTotalModel> TotalList;
+        private BlockingCollection<BatteryTotalModel> TotalListForMqtt;
         public BatteryTotalModel CurrentBatteryTotalModel { get; private set; }
         private BMSDataService service;
 
         public BatteryTotalViewModel(string ip, string port)
         {
-            ConnectDevCommand = new RelayCommand(ConnectDev);
-            DisconnectDevCommand = new RelayCommand(DisconnectDev);
             IP = ip;
             Port = port;
-            TotalList = new ConcurrentQueue<BatteryTotalModel>();
+            TotalList = new BlockingCollection<BatteryTotalModel>(new ConcurrentQueue<BatteryTotalModel>(), 300);
+            TotalListForMqtt = new BlockingCollection<BatteryTotalModel>(new ConcurrentQueue<BatteryTotalModel>(),300);
             batterySeriesViewModelList = new List<BatterySeriesViewModel>();
             for (int i = 0; i < 3; i++)
             {
@@ -614,25 +614,29 @@ namespace EMS.ViewModel
 
         private void ServiceStateCallBack(bool isConnected, bool isDaqData)
         {
-            IsConnected = isConnected;
-            IsDaqData = isDaqData;
+            App.Current.Dispatcher.Invoke(()=>{
+                IsConnected = isConnected;
+                IsDaqData = isDaqData;
+            });
         }
 
+        [RelayCommand]
         public void DisconnectDev()
         {
-            service.Disconnect();
+            if(!service.Disconnect())
+            {
+                MessageBox.Show("断开连接失败");
+            }
         }
 
-        public void ConnectDev()
+        [RelayCommand]
+        public async void ConnectDev()
         {
-            service.Connect();
-            devControlViewModel = new DevControlViewModel(service);
-            devControlViewModel.InitBCMUInfo(3, 14);
-            parameterSettingViewModel = new ParameterSettingViewModel(service, TotalID);
-
-            if (IsDaqData)
+            if(await service.ConnectAsync())
             {
-                StartDaqData();
+                devControlViewModel = new DevControlViewModel(service);
+                devControlViewModel.InitBCMUInfo(3, 14);
+                parameterSettingViewModel = new ParameterSettingViewModel(service, TotalID);
             }
         }
 
@@ -648,8 +652,11 @@ namespace EMS.ViewModel
         {
             while (IsDaqData)
             {
-                if(TotalList.TryDequeue(out BatteryTotalModel CurrentBatteryTotalModel))
+                if(TotalList.TryTake(out BatteryTotalModel CurrentBatteryTotalModel))
                 {
+                    var model = (BatteryTotalModel)CurrentBatteryTotalModel.Clone();
+                    model.BCMUID = TotalID;
+                    TotalListForMqtt.Add(model);
                     // 把数据分发给需要显示的内容
                     App.Current.Dispatcher.Invoke(() =>
                     {
@@ -665,6 +672,18 @@ namespace EMS.ViewModel
                 {
                     Thread.Sleep(500);
                 }
+            }
+        }
+
+        public BatteryTotalModel GetNextBMSDataForMqtt()
+        {
+            if (TotalListForMqtt.TryTake(out BatteryTotalModel item))
+            {
+                return item;
+            }
+            else
+            {
+                return null;
             }
         }
 

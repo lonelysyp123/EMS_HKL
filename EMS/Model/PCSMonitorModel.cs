@@ -12,6 +12,7 @@ namespace EMS.Model
 {
     public class PCSMonitorModel:ViewModelBase
     {
+        #region DependencyProperty
         /// <summary>
         /// DC模块故障信息
         /// </summary>
@@ -694,7 +695,7 @@ namespace EMS.Model
                 SetProperty(ref _visPDSAlarm, value);
             }
         }
-
+        #endregion
 
     }
 }

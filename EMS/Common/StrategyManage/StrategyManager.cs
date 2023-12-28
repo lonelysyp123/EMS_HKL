@@ -43,12 +43,6 @@ namespace EMS.ViewModel
         /// <returns>手动模式下用户设定的控制指令</returns>
         public BessCommand GetManualCommand() { return new BessCommand(); }
 
-        /// <summary>
-        ///  得到智能电表的注入有功功率，需要是三相总功率，找丁冠文讨论转换事宜
-        /// </summary>
-        /// <returns>当前AC交流侧电表的三相总功率</returns>
-        public double GetACSmartMeterPower() { return 0; }
-
 
         public double GetReversePowerflowProtectionThreshold() { return 0; } // 逆功率保护用户设置的阈值
 

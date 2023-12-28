@@ -1,13 +1,18 @@
-﻿using EMS.Common.Modbus.ModbusTCP;
+﻿using EMS.Common;
+using EMS.Common.Modbus.ModbusTCP;
 using EMS.Model;
+using Modbus.Device;
 using OxyPlot.Series;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls.WebParts;
 using System.Windows;
 using System.Windows.Markup;
 
@@ -15,9 +20,6 @@ namespace EMS.Service
 {
     public class BMSDataService
     {
-        public string IP { get; private set; }
-        public string Port { get; private set; }
-
         private bool _isConnected;
         public bool IsConnected
         { 
@@ -38,7 +40,7 @@ namespace EMS.Service
             get => _isDaqData;
             private set
             {
-                if( _isDaqData != value)
+                if (_isDaqData != value)
                 {
                     _isDaqData = value;
                     OnChangeState(_isConnected, _isDaqData);
@@ -46,19 +48,16 @@ namespace EMS.Service
             }
         }
 
-        public ModbusClient Client { get; private set; }
+        private string IP;
+        private int Port;
+        private TcpClient _client;
+        private ModbusMaster _master;
         private Action<bool, bool> OnChangeState;
 
         public BMSDataService() 
         {
-
-        }
-
-        public void SetCommunicationConfig(string ip, string port, ConcurrentQueue<BatteryTotalModel> obj)
-        {
-            IP = ip;
-            Port = port;
-            batteryTotalModels = obj;
+            CommunicationProtectTr = new Thread(CommunicationProtect);
+            CommunicationProtectTr.IsBackground = true;
         }
 
         public void RegisterState(Action<bool, bool> action)
@@ -66,41 +65,106 @@ namespace EMS.Service
             OnChangeState = action;
         }
 
-        public void Connect()
+        public void SetCommunicationConfig(string ip, string port, BlockingCollection<BatteryTotalModel> obj)
         {
-            if (!IsConnected)
-            {
-                if (int.TryParse(Port, out int port))
-                {
-                    Client = new ModbusClient(IP, port);
-                    Client.Connect();
-                    IsConnected = true;
-                }
-            }
+            IP = ip;
+            int.TryParse(port, out Port);
+            batteryTotalModels = obj;
         }
 
-        public void Disconnect()
+        public bool Connect()
         {
-            if (IsConnected)
+            try
             {
-                if (Client != null)
+                if (!IsConnected)
                 {
-                    Client.Disconnect();
-                    IsConnected = false;
+                    _client = new TcpClient();
+                    _client.Connect(IPAddress.Parse(IP), Port);
+                    _master = ModbusIpMaster.CreateIp(_client);
+                    IsConnected = true;
+
+                    // 采集状态
+                    if (IsDaqData)
+                    {
+                        StartDaqData();
+                    }
+                    return true;
                 }
             }
+            catch (Exception ex)
+            {
+                LogUtils.Error(ex.ToString());
+            }
+            return false;
+        }
+
+        public async Task<bool> ConnectAsync()
+        {
+            try
+            {
+                if (!IsConnected)
+                {
+                    _client = new TcpClient();
+                    await _client.ConnectAsync(IPAddress.Parse(IP), Port);
+                    _master = ModbusIpMaster.CreateIp(_client);
+                    IsConnected = true;
+
+                    // 采集状态
+                    if (IsDaqData)
+                    {
+                        StartDaqData();
+                    }
+
+                    return true;
+                }
+            }
+            catch (SocketException)
+            {
+                LogUtils.Error("未应答");
+            }
+            catch(TimeoutException)
+            {
+                LogUtils.Error("TCP链接超时");
+            }
+            return false;
+        }
+
+        public bool Disconnect()
+        {
+            try
+            {
+                if (IsConnected)
+                {
+                    if(IsDaqData)
+                    {
+                        StopDaqData();
+                    }
+                    _master.Transport.Dispose();
+                    _client.Close();
+                    _client.Dispose();
+                    IsConnected = false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LogUtils.Error(ex.ToString());
+            }
+            return false;
         }
 
         public void StartDaqData()
         {
-            if(batteryTotalModels == null)
+            if (IsConnected)
             {
-                batteryTotalModels = new ConcurrentQueue<BatteryTotalModel>();
+                if (!IsDaqData)
+                {
+                    IsDaqData = true;
+                    Thread th = new Thread(DaqDataTh);
+                    th.IsBackground = true;
+                    th.Start();
+                }
             }
-            IsDaqData = true;
-            Thread th = new Thread(DaqDataTh);
-            th.IsBackground = true;
-            th.Start();
         }
 
         private int DaqTimeSpan = 1;
@@ -109,7 +173,7 @@ namespace EMS.Service
             DaqTimeSpan = value;
         }
 
-        public ConcurrentQueue<BatteryTotalModel> batteryTotalModels;
+        public BlockingCollection<BatteryTotalModel> batteryTotalModels;
         private void DaqDataTh()
         {
             while (IsConnected && IsDaqData)
@@ -119,19 +183,102 @@ namespace EMS.Service
                     Thread.Sleep(DaqTimeSpan * 1000);
 
                     byte[] BCMUData = new byte[90];
-                    Array.Copy(Client.ReadFunc(11000, 45), 0, BCMUData, 0, 90);
+                    Array.Copy(ReadFunc(11000, 45), 0, BCMUData, 0, 90);
                     byte[] BMUIDData = new byte[48];
-                    Array.Copy(Client.ReadFunc(11045, 24), 0, BMUIDData, 0, 48);
+                    Array.Copy(ReadFunc(11045, 24), 0, BMUIDData, 0, 48);
                     byte[] BMUData = new byte[744];
-                    Array.Copy(Client.ReadFunc(10000, 120), 0, BMUData, 0, 240);
-                    Array.Copy(Client.ReadFunc(10120, 120), 0, BMUData, 240, 240);
-                    Array.Copy(Client.ReadFunc(10240, 120), 0, BMUData, 480, 240);
-                    Array.Copy(Client.ReadFunc(10360, 12), 0, BMUData, 720, 24);
-                    batteryTotalModels.Enqueue(DataDecode(BCMUData, BMUIDData, BMUData));
+                    Array.Copy(ReadFunc(10000, 120), 0, BMUData, 0, 240);
+                    Array.Copy(ReadFunc(10120, 120), 0, BMUData, 240, 240);
+                    Array.Copy(ReadFunc(10240, 120), 0, BMUData, 480, 240);
+                    Array.Copy(ReadFunc(10360, 12), 0, BMUData, 720, 24);
+                    batteryTotalModels.TryAdd(DataDecode(BCMUData, BMUIDData, BMUData));
                 }
                 catch (Exception)
                 {
-                    throw;
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 通用读取函数
+        /// </summary>
+        /// <param name="address">寄存器地址</param>
+        /// <param name="num">读取位数</param>
+        /// <returns>读取值</returns>
+        private byte[] ReadFunc(ushort address, ushort num)
+        {
+            try
+            {
+                ushort[] holding_register = _master.ReadHoldingRegisters(0, address, num);
+                byte[] ret = new byte[holding_register.Length * 2];
+                for (int i = 0; i < holding_register.Length; i++)
+                {
+                    var objs = BitConverter.GetBytes(holding_register[i]);
+                    ret[i * 2] = objs[0];
+                    ret[i * 2 + 1] = objs[1];
+                }
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                LogUtils.Warn("读取数据失败", ex);
+                if (!_client.Connected && !IsCommunicationProtectState)
+                {
+                    if (CommunicationCheck())
+                    {
+                        return ReadFunc(address, num);
+                    }
+                }
+
+                return new byte[num * 2];
+            }
+        }
+
+        private static int reconnectInterval = 150; // ms
+        private static int maxReconnectTimes = 3;
+        private int reconnectCount = 0;
+        private bool IsCommunicationProtectState = false;
+        private Thread CommunicationProtectTr;
+        private bool CommunicationCheck()
+        {
+            while (true)
+            {
+                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(reconnectInterval))
+                {
+                    _master = ModbusIpMaster.CreateIp(_client);
+                    reconnectCount = 0;
+                    return true;
+                }
+                else
+                {
+                    reconnectCount++;
+                    if (reconnectCount > maxReconnectTimes)
+                    {
+                        IsCommunicationProtectState = true;
+                        IsConnected = false;
+                        CommunicationProtectTr.Start();
+                        return false;
+                    }
+                }
+            }
+        }
+
+        private static int reconnectIntervalLong =60 * 1000 * 5; // ms
+        private void CommunicationProtect()
+        {
+            while (!IsConnected)
+            {
+                Thread.Sleep(reconnectIntervalLong);
+                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(reconnectInterval))
+                {
+                    _master = ModbusIpMaster.CreateIp(_client);
+                    IsConnected = true;
+                    LogUtils.Debug("保护机制重连成功，设备上线");
+                }
+                else
+                {
+                    LogUtils.Debug("保护机制重连失败");
                 }
             }
         }
@@ -259,7 +406,7 @@ namespace EMS.Service
 
         public int[] ReadNetInfo()
         {
-            byte[] data = Client.ReadFunc(40301, 6);
+            byte[] data = ReadFunc(40301, 6);
             int ipaddr1 = BitConverter.ToUInt16(data, 0);
             int ipaddr2 = BitConverter.ToUInt16(data, 2);
             int ma1 = BitConverter.ToUInt16(data, 4);
@@ -277,12 +424,30 @@ namespace EMS.Service
             int ma2 = (viewmodel.Mask4 << 8) | viewmodel.Mask3;
             int gw1 = (viewmodel.Gateway2 << 8) | viewmodel.Gateway1;
             int gw2 = (viewmodel.Gateway4 << 8) | viewmodel.Gateway3;
-            Client.WriteFunc(40301, (ushort)ipaddr1);
-            Client.WriteFunc(40302, (ushort)ipaddr2);
-            Client.WriteFunc(40303, (ushort)ma1);
-            Client.WriteFunc(40304, (ushort)ma2);
-            Client.WriteFunc(40305, (ushort)gw1);
-            Client.WriteFunc(40306, (ushort)gw2);
+            WriteFunc(40301, (ushort)ipaddr1);
+            WriteFunc(40302, (ushort)ipaddr2);
+            WriteFunc(40303, (ushort)ma1);
+            WriteFunc(40304, (ushort)ma2);
+            WriteFunc(40305, (ushort)gw1);
+            WriteFunc(40306, (ushort)gw2);
+        }
+
+        /// <summary>
+        /// 通用写入函数
+        /// </summary>
+        /// <param name="address">寄存器</param>
+        /// <param name="value">写入值</param>
+        private void WriteFunc(ushort address, ushort value)
+        {
+            try
+            {
+                _master.WriteSingleRegister(0, address, value);
+            }
+            catch (Exception ex)
+            {
+                LogUtils.Error(ex.ToString());
+                throw ex;
+            }
         }
 
         private Int32[] OpenObjs = { 0xAB00, 0xAC00, 0xAD00 };
@@ -295,7 +460,7 @@ namespace EMS.Service
                     if (index - 1 < 3)
                     {
                         UInt16 data = (UInt16)(OpenObjs[index - 1] + openchannel);
-                        Client.WriteFunc(40100, (ushort)data);
+                        WriteFunc(40100, (ushort)data);
                         return;
                     }
                 }
@@ -313,7 +478,7 @@ namespace EMS.Service
                     if (index - 1 < 3)
                     {
                         UInt16 data = (UInt16)(CloseObjs[index-1]);
-                        Client.WriteFunc(40101, (ushort)data);
+                        WriteFunc(40101, (ushort)data);
                         return;
                     }
                 }
@@ -325,11 +490,11 @@ namespace EMS.Service
         {
             if (SelectedBalanceMode == "自动模式")
             {
-                Client.WriteFunc(40102, 0xBC11);
+                WriteFunc(40102, 0xBC11);
             }
             else if (SelectedBalanceMode == "远程模式")
             {
-                Client.WriteFunc(40102, 0xBC22);
+                WriteFunc(40102, 0xBC22);
             }
             else
             {
@@ -339,17 +504,17 @@ namespace EMS.Service
 
         public void FWUpdate()
         {
-            Client.WriteFunc(40104, 0xBBAA);
+            WriteFunc(40104, 0xBBAA);
         }
 
         public void InNet()
         {
-            Client.WriteFunc(40103, 0xBB11);
+            WriteFunc(40103, 0xBB11);
         }
 
         public string[] ReadBCMUIDINFO()
         {
-            byte[] data = Client.ReadFunc(40307, 16);
+            byte[] data = ReadFunc(40307, 16);
             StringBuilder BCMUNameBuilder = new StringBuilder();
             for (int i = 0; i < 16; i++)
             {
@@ -394,7 +559,7 @@ namespace EMS.Service
                 {
                     asciiCode2 = (BCMUFullSName[i + 1]) << 8;
                     int nameof = asciiCode | asciiCode2;
-                    Client.WriteFunc((ushort)(40315 + indexSN), (ushort)nameof);
+                    WriteFunc((ushort)(40315 + indexSN), (ushort)nameof);
                     indexSN++;
                 }
             }
@@ -406,7 +571,7 @@ namespace EMS.Service
                 {
                     int asciiCode2 = (BCMUFullName[i + 1]) << 8;
                     int nameof = asciiCode | asciiCode2;
-                    Client.WriteFunc((ushort)(40307 + indexN), (ushort)nameof);
+                    WriteFunc((ushort)(40307 + indexN), (ushort)nameof);
                     indexN++;
                 }
             }
@@ -420,7 +585,7 @@ namespace EMS.Service
             }
             else if (SelectedDataCollectionMode == "仿真模式")
             {
-                Client.WriteFunc(40105, 0xAA55);
+                WriteFunc(40105, 0xAA55);
             }
             else
             {
@@ -430,12 +595,30 @@ namespace EMS.Service
 
         public byte[] ReadBCMUInfo()
         {
-            return Client.ReadFunc(40200, 34);
+            return ReadFunc(40200, 34);
         }
 
         public void SyncBCMUInfo(ushort[] values)
         {
-            Client.WriteFunc(40200, values);
+            WriteFunc(40200, values);
+        }
+
+        /// <summary>
+        /// 通用批量写入函数
+        /// </summary>
+        /// <param name="address">寄存器地址</param>
+        /// <param name="values">写入值</param>
+        public void WriteFunc(ushort address, ushort[] values)
+        {
+            try
+            {
+                _master.WriteMultipleRegisters(0, address, values);
+            }
+            catch (Exception ex)
+            {
+                LogUtils.Error(ex.ToString());
+                throw ex;
+            }
         }
     }
 }
