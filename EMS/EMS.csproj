@@ -248,6 +248,7 @@
     <Compile Include="Service\impl\MqttClientService.cs" />
     <Compile Include="Service\IMqttClientService.cs" />
     <Compile Include="Service\ModbusTCPDataService.cs" />
+    <Compile Include="Service\SmartMeterDataService.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmandFaultInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmParameterSettingInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSControlInfoManage.cs" />
