@@ -145,6 +145,8 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
         }
 
+       
+
         public bool ReadFunc(byte slave, ushort address, ushort num, ref byte[] value)
         {
             try

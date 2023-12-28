@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TNCN.EMS.Common.Util;
 using TNCN.EMS.Model;
 
-namespace EMS.Service
+namespace TNCN.EMS.Service
 {
     public interface IMqttClientService
     {

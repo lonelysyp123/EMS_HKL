@@ -101,7 +101,7 @@ namespace TNCN.EMS.Service
                 mqttClient.SubscribeAsync(topic, MqttQualityOfServiceLevel.AtLeastOnce);
             });
 
-            Task task = new Task(Publish);
+            Task task = new Task(() => { Publish(); });
             task.Start();
 
             return Task.CompletedTask;
@@ -136,44 +136,52 @@ namespace TNCN.EMS.Service
         /// <param name="data">发布消息的字节流</param>
         private void Publish()
         {
-            PublishMessageModel publishMessageModel;
-            if (publishMessageModels.TryDequeue(out publishMessageModel)) {
-                for (int i = 0; i < 3; i++)
+            while (true) {
+                PublishMessageModel publishMessageModel;
+                if (publishMessageModels.TryDequeue(out publishMessageModel) && publishMessageModel != null)
                 {
-                    if (this.isConnected)
+                    for (int i = 0; i < 3; i++)
                     {
-                        var message = new MqttApplicationMessage
+                        if (this.isConnected)
                         {
-                            Topic = publishMessageModel.Topic,
-                            Payload = publishMessageModel.Payload,
-                            QualityOfServiceLevel = MqttQualityOfServiceLevel.AtLeastOnce,
-                            Retain = false  // 服务端是否保留消息。true为保留，如果有新的订阅者连接，就会立马收到该消息。
-                        };
+                            var message = new MqttApplicationMessage
+                            {
+                                Topic = publishMessageModel.Topic,
+                                Payload = publishMessageModel.Payload,
+                                QualityOfServiceLevel = MqttQualityOfServiceLevel.AtLeastOnce,
+                                Retain = false  // 服务端是否保留消息。true为保留，如果有新的订阅者连接，就会立马收到该消息。
+                            };
 
-                        try
-                        {
-                            mqttClient.PublishAsync(message);
-                        }
-                        catch (Exception ex)
-                        {
-                            ilog.Error(ex.Message);
-                            if (ex is MqttCommunicationException) {
-                                this.isConnected = false;
+                            try
+                            {
+                                mqttClient.PublishAsync(message);
+                            }
+                            catch (Exception ex)
+                            {
+                                ilog.Error(ex.Message);
+                                if (ex is MqttCommunicationException)
+                                {
+                                    this.isConnected = false;
+                                }
                             }
                         }
+                        else
+                        {
+                            Thread.Sleep(1000);
+                        }
                     }
-                    else
+
+                    if (!this.isConnected)
                     {
-                        Thread.Sleep(1000);
+                        mqttClient.ReconnectAsync();
+                        publishMessageModels.Enqueue(publishMessageModel);
                     }
                 }
-
-                if (! this.isConnected)
-                {
-                    mqttClient.ReconnectAsync();
-                    publishMessageModels.Enqueue(publishMessageModel);
+                else {
+                    Thread.Sleep(10);
                 }
             }
+            
         }
 
         public bool IsAlarm()

@@ -13,14 +13,38 @@ namespace EMS.ViewModel
     public class AssistanceStrategyViewModel : ViewModelBase
     {
         //BMS数据处理方法，生成告警
-        public ObservableCollection<string> RecheckStrategy()
+        public ObservableCollection<string> RecheckStrategy(string bcmuid)
         {
-            string bcmuid1 = "BCMU(1)";
-            string bcmuid2 = "BCMU(2)";
-            string bcmuid3 = "BCMU(3)";
-            string bcmuid4 = "BCMU(4)";
-            string bcmuid5 = "BCMU(5)";
-            string bcmuid6 = "BCMU(6)";
+            string bcmuid1 = null;
+            string bcmuid2 = null;
+            string bcmuid3 = null;
+            string bcmuid4 = null;
+            string bcmuid5 = null;
+            string bcmuid6 = null;
+            if (bcmuid == "BCMU(1)")
+            {
+                bcmuid1 = bcmuid;
+            }
+            if (bcmuid == "BCMU(2)")
+            {
+                bcmuid2 = bcmuid;
+            }
+            if (bcmuid == "BCMU(3)")
+            {
+                bcmuid3 = bcmuid;
+            }
+            if (bcmuid == "BCMU(4)")
+            {
+                bcmuid4 = bcmuid;
+            }
+            if (bcmuid == "BCMU(5)")
+            {
+                bcmuid5 = bcmuid;
+            }
+            if (bcmuid == "BCMU(6)")
+            {
+                bcmuid6 = bcmuid;
+            }
 
             //定义告警信息字符串数据集合
             ObservableCollection<string> INFOAS = new ObservableCollection<string>();
