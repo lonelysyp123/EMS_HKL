@@ -206,7 +206,7 @@ namespace EMS.Service
         /// <param name="address">寄存器地址</param>
         /// <param name="num">读取位数</param>
         /// <returns>读取值</returns>
-        public byte[] ReadFunc(ushort address, ushort num)
+        private byte[] ReadFunc(ushort address, ushort num)
         {
             try
             {
@@ -240,7 +240,7 @@ namespace EMS.Service
         private int reconnectCount = 0;
         private bool IsCommunicationProtectState = false;
         private Thread CommunicationProtectTr;
-        public bool CommunicationCheck()
+        private bool CommunicationCheck()
         {
             while (true)
             {
@@ -437,7 +437,7 @@ namespace EMS.Service
         /// </summary>
         /// <param name="address">寄存器</param>
         /// <param name="value">写入值</param>
-        public void WriteFunc(ushort address, ushort value)
+        private void WriteFunc(ushort address, ushort value)
         {
             try
             {

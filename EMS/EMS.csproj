@@ -251,8 +251,10 @@
     <Compile Include="Model\SubscribeMessageModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
     <Compile Include="Service\BMSDataService.cs" />
+    <Compile Include="Service\IDataService.cs" />
     <Compile Include="Service\impl\MqttClientService.cs" />
     <Compile Include="Service\IMqttClientService.cs" />
+    <Compile Include="Service\ModbusTCPDataService.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmandFaultInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmParameterSettingInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSControlInfoManage.cs" />
