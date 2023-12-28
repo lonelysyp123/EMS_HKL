@@ -949,11 +949,11 @@ namespace EMS.ViewModel
                 }
 
             }
-            AssistanceStrategyViewModel ASSISTINFO = new AssistanceStrategyViewModel();
-            ObservableCollection<string> RECHECKINFO = ASSISTINFO.RecheckStrategy();
-            ObservableCollection<string> MERGEINFO = new ObservableCollection<string>(INFO.Concat(RECHECKINFO).Distinct());
-            AlarmStateBCMU = MERGEINFO;
-            //AlarmStateBCMU = INFO;
+            //AssistanceStrategyViewModel ASSISTINFO = new AssistanceStrategyViewModel();
+            //ObservableCollection<string> RECHECKINFO = ASSISTINFO.RecheckStrategy();
+            //ObservableCollection<string> MERGEINFO = new ObservableCollection<string>(INFO.Concat(RECHECKINFO).Distinct());
+            //AlarmStateBCMU = MERGEINFO;
+            AlarmStateBCMU = INFO;
             List<string> list = new List<string>();
 
             if (colorvalue == 1)
