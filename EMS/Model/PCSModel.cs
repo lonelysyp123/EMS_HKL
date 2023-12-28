@@ -18,7 +18,6 @@ namespace EMS.Model
     {
         private int DataAcquireTimeSpan = 1;
         private DcStatusModel _dcStatusModel;
-
         
         private bool _isConnected;
         /// <summary>
@@ -61,7 +60,7 @@ namespace EMS.Model
         /// <summary>
         /// 采集状态
         /// </summary>
-        public bool IsRead 
+        public bool IsRead
         { 
             get =>_isRead;
             private set
@@ -1009,9 +1008,9 @@ namespace EMS.Model
 
             ParSettingModel = new PCSParSettingModel();
 
-            _dcStatusModel=new DcStatusModel();
+            _dcStatusModel = new DcStatusModel(); 
 
-            Logger=LogManager.GetLogger(typeof(PCSModel));
+            Logger =LogManager.GetLogger(typeof(PCSModel));
         }
     }
     public enum PcsCommandAdressEnum

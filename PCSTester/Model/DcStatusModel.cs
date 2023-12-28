@@ -1,17 +1,14 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media;
-using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace PCSTester.ViewModel
+namespace PCSTester.Model
 {
-    public class DCStatusViewModel : ObservableObject
+    public class DcStatusModel : ObservableObject
     {
-
-
         /// <summary>
         /// 模块在线地址状态读取
         /// </summary>

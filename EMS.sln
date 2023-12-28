@@ -8,9 +8,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestEMS", "TestEMS\TestEMS.csproj", "{D0B73D99-CCBE-4E12-8C5B-C2CB3F586ADC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCSTester", "PCSTester\PCSTester.csproj", "{D27E1302-A7CB-42BF-B143-40AE196B907E}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3FA9E629-23AC-49E0-AA24-1D55DBAA191A} = {3FA9E629-23AC-49E0-AA24-1D55DBAA191A}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMS", "BMS\BMS.csproj", "{4B11AD31-018F-4392-B0B5-BBC60D325B2A}"
 	ProjectSection(ProjectDependencies) = postProject
