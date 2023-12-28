@@ -239,6 +239,7 @@
     <Compile Include="Model\BatterySeriesModel.cs" />
     <Compile Include="Model\BatteryStrategyModel.cs" />
     <Compile Include="Model\BatteryTotalModel.cs" />
+    <Compile Include="Model\DcStatusModel.cs" />
     <Compile Include="Model\MqttConnectInfoModel.cs" />
     <Compile Include="Model\PCSModel.cs" />
     <Compile Include="Model\PCSMonitorModel.cs" />
@@ -269,7 +270,6 @@
     <Compile Include="ViewModel\BatteryTotalViewModel.cs" />
     <Compile Include="ViewModel\BatteryViewModel.cs" />
     <Compile Include="ViewModel\AssistanceStrategyViewModel.cs" />
-    <Compile Include="ViewModel\DCStatusViewModel.cs" />
     <Compile Include="ViewModel\DevControlViewModel.cs" />
     <Compile Include="MyControl\Battery.xaml.cs">
       <DependentUpon>Battery.xaml</DependentUpon>
@@ -323,7 +323,6 @@
     <Compile Include="ViewModel\NewEMSViewModel\System_MqttSetterPageModel.cs" />
     <Compile Include="ViewModel\ParameterSettingViewModel.cs" />
     <Compile Include="ViewModel\PCSMainViewModel.cs" />
-    <Compile Include="ViewModel\PCSMonitorViewModel.cs" />
     <Compile Include="ViewModel\PCSSettingViewModel.cs" />
     <Compile Include="Common\StrategyManage\StrategyManager.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />

@@ -33,6 +33,7 @@ namespace EMS
         
         PCSMainViewModel pCSMainViewModel;
         StrategyControl strategyControlMainView;
+        PCSModel pcsModel;
         public MainWindow()
         {
             InitializeComponent();
@@ -43,6 +44,7 @@ namespace EMS
 
             viewmodel = new MainViewModel();
             pCSMainViewModel = new PCSMainViewModel();
+            pcsModel = new PCSModel();
 
             this.DataContext = viewmodel;
             DevListView.DataContext = viewmodel.DisplayContent;

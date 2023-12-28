@@ -154,7 +154,6 @@ namespace EMS.ViewModel
 
         public void DaqImageButtonChange()
         {
-           
             BitmapImage bi;
             if (DisplayContent.IsStartDaqData)
             {
