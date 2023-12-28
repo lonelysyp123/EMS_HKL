@@ -28,7 +28,10 @@ namespace EMS.ViewModel
             get => _batteryTotalViewModelList;
             set
             {
-                SetProperty(ref _batteryTotalViewModelList, value);
+                if(SetProperty(ref _batteryTotalViewModelList, value))
+                {
+                    EnergyManagementSystem.GlobalInstance.BmsManager.SetBMSList(_batteryTotalViewModelList.ToList());
+                }
             }
         }
 
