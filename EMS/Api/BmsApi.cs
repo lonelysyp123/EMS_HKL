@@ -1,6 +1,8 @@
 ﻿using EMS.Model;
+using EMS.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,28 +10,55 @@ using System.Threading.Tasks;
 namespace EMS.Api
 {
 
-    public class BmsApi
+    public static class BmsApi
     {
+        public static BatteryTotalModel GetNextBMSData(string bcmuid)
+        {
+            var item = EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList.ToList().Find(x => x.TotalID == bcmuid);
+            return item.GetNextBMSDataForMqtt();
+        }
+
+        public static BatteryTotalModel[] GetNextBMSData()
+        {
+            DateTime dateTime = DateTime.Now;
+            List<BatteryTotalViewModel> viewmodels = EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList.ToList();
+            List<BatteryTotalModel> models = new List<BatteryTotalModel>();
+            for (int i = 0; i < viewmodels.Count; i++)
+            {
+                var item = viewmodels[i].GetNextBMSDataForMqtt();
+                if (item != null)
+                {
+                    item.CurrentTime = dateTime;
+                    models.Add(item);
+                }
+            }
+            return models.ToArray();
+        }
+
         /// <summary>
         /// 得到BMS信息
         /// </summary>
         /// <returns></returns>
-        public static List<BatteryTotalBase> GetBMSTotalInfo()//得到所有BMS信息
+        public static List<BatteryTotalViewModel> GetBMSTotalInfo()
         {
-            return EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList;
+            return EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList.ToList();
         }
-        public static BatteryTotalBase GetBMSTotalInfo(string bcmuid)//得到单簇信息
+
+        public static BatteryTotalViewModel GetBMSTotalInfo(string bcmuid)
         {// 这个函数如果经常被调用，可以考虑重构成Dictionary
-            List<BatteryTotalBase>totallist= EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList;
+            List<BatteryTotalViewModel> totallist= EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList.ToList();
             
-            foreach(var total in totallist)
+            if(totallist != null)
             {
-                if(total.TotalID == bcmuid)
+                foreach (var total in totallist)
                 {
-                    return total;
-                  
+                    if (total.TotalID == bcmuid)
+                    {
+                        return total;
+
+                    }
+
                 }
-              
             }
             return null;
         }
@@ -39,7 +68,7 @@ namespace EMS.Api
         /// <returns></returns>
         public static List<string> GetTotalAlarmInfo()
         {
-            List<BatteryTotalBase> totallist = EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList;//获取所有电池数据
+            List<BatteryTotalViewModel> totallist = EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList.ToList();//获取所有电池数据
             List<string>totalalarminfo = new List<string>();
             foreach(var total in totallist)
             {
@@ -50,10 +79,10 @@ namespace EMS.Api
                 bcmufault = total.FaultyStateBCMU.ToList();
                 totalalarminfo.AddRange(bcmualarm);
                 totalalarminfo.AddRange((bcmufault));//BCMU数据得到
-                for (int i = 0;i<total.Series.Count;i++)
+                for (int i = 0;i<total.batterySeriesViewModelList.Count;i++)
                 {
                     List<string> bmufault = new List<string>();
-                    bmufault = total.Series[i].FaultyStateBMU.ToList();
+                    bmufault = total.batterySeriesViewModelList[i].FaultyStateBMU.ToList();
                     totalalarminfo.AddRange(bmufault);//BMU数据得到
                 }
                 
@@ -69,8 +98,8 @@ namespace EMS.Api
         /// <returns></returns>
         public static List<double> GetTotalSOC()
         {
-            List<BatteryTotalBase> batteryTotalBases = new List<BatteryTotalBase>();
-            batteryTotalBases = EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList;
+            List<BatteryTotalViewModel> batteryTotalBases = new List<BatteryTotalViewModel>();
+            batteryTotalBases = EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList.ToList();
             List<double> SOCTotalList = new List<double>();
             foreach (var total in batteryTotalBases)
             {
@@ -92,12 +121,11 @@ namespace EMS.Api
             List<double> sOCTotalList = GetTotalSOC();
             return sOCTotalList.Max();
         }
+
         public static double GetAvgSOC()
-    {
+        {
             List<double> sOCTotalList = GetTotalSOC();
             return sOCTotalList.Average();
         }
-
-      
     }
 }

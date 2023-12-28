@@ -14,7 +14,7 @@
         <TextBlock Grid.Row="0" x:Name="BatteryNum2" Foreground="White" Text="{Binding BatteryNumber}" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontWeight ="Bold" FontSize="9"/>
         <Image x:Name="BatteryIcon" Source="../Resource/Image/Battery0.png" Grid.Row="1">
             <Image.ToolTip>
-                <ToolTip Background="#7F5D5D5D">
+                <ToolTip Background="#FF5D5D5D">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition/>

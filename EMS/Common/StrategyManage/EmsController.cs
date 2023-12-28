@@ -16,18 +16,22 @@ namespace EMS.Common.StrategyManage
         /// <summary>
         /// 策略是否开启
         /// </summary>
-        public bool _isAutomaticMode { get; set; }
-        public bool _hasDailyPatternEnabled { get; set; }
-        public bool _hasMaxDemandControlEnabled { get; set; }
-        public bool _hasReversePowerflowProtectionEnabled { get; set; }
+        private bool _isAutomaticMode;
+        private bool _hasDailyPatternEnabled;
+        private bool _hasMaxDemandControlEnabled;
+        private bool _hasReversePowerflowProtectionEnabled;
         private bool _hasContigencyCheckEnabled;
-        private bool _isFaultMode;
 
-        public double _maxDemandPower { get; set; }
-        public double _maxDemandPowerDescendRate { get; set; }
-        public double _reversePowerThreshold { get; set; }
-        public double _reversePowerLowestThreshold { get; set; }
-        public double _reversePowerDescendRate { get; set; }
+        public bool IsAutomaticMode { get { return _isAutomaticMode; } }
+        public bool HasDailyPatternEnabled { get { return _hasDailyPatternEnabled; } }
+        public bool HasMaxDemandControlEnabled { get { return _hasMaxDemandControlEnabled; } }
+        public bool HasReversePowerflowProtectionEnabled { get { return  _hasReversePowerflowProtectionEnabled; } }
+
+        private double _maxDemandPower;
+        private double _maxDemandPowerDescendRate;
+        private double _reversePowerThreshold;
+        private double _reversePowerLowestThreshold;
+        private double _reversePowerDescendRate;
 
         private BessCommand _currentCommand;
         private IntraDayScheduler _scheduler;
@@ -35,7 +39,50 @@ namespace EMS.Common.StrategyManage
         private DateTime _lastActiveTimestamp; // used to indicate the system operation thread is still alive.
         public List<BatteryStrategyModel> DailyPattern { get; set; }
 
+        public void SetMode(bool automationMode, bool maxDemandpowermode, bool reversePowermode, bool dailyPatternMode)
+        {
 
+            _hasMaxDemandControlEnabled = maxDemandpowermode;
+            _isAutomaticMode = automationMode;
+            _hasReversePowerflowProtectionEnabled = reversePowermode;
+            _hasDailyPatternEnabled = dailyPatternMode;
+        }
+
+        public List<bool> GetMode()
+        {
+            List<bool> result = new List<bool>()
+            {
+                _isAutomaticMode,
+                _hasDailyPatternEnabled,
+                _hasMaxDemandControlEnabled,
+                _hasReversePowerflowProtectionEnabled
+            };
+            return result;
+        }
+
+        public void SetMaxDemandThreshold(double maxdemandpower, double descendrate)
+        {
+            _maxDemandPower = maxdemandpower;
+            _maxDemandPowerDescendRate = descendrate;
+        }
+        public void GetMaxDemandThreshhold(out double maxdemandpower, out double descendrate)
+        {
+            descendrate = _maxDemandPowerDescendRate;
+            maxdemandpower = _maxDemandPower;
+        }
+
+        public void SetReversePowerThreshold(double threshold, double lowestthreshhold, double descendrate)
+        {
+            _reversePowerThreshold = threshold;
+            _reversePowerLowestThreshold = lowestthreshhold;
+            _reversePowerDescendRate = descendrate;
+        }
+        public void GetReversePowerThreshold(out double threshold, out double lowestthreshold, out double descendrate)
+        {
+            threshold = _reversePowerThreshold;
+            lowestthreshold = _reversePowerLowestThreshold;
+            descendrate = _reversePowerDescendRate;
+        }
         public Dictionary<int, List<BatteryStrategyModel>> DailyPatterns { get; set; }
         public bool IsFaultMode { get { return _contingencyStatus == ContingencyStatusEnum.Level2 || _contingencyStatus == ContingencyStatusEnum.Level3; } }
         public EmsController()
@@ -48,7 +95,6 @@ namespace EMS.Common.StrategyManage
             _currentCommand = null;
             _scheduler = new IntraDayScheduler();
             _contingencyStatus = ContingencyStatusEnum.Normal;
-
         }
 
         public IntraDayScheduler Scheduler { get { return _scheduler; } }
@@ -81,7 +127,7 @@ namespace EMS.Common.StrategyManage
                             controlValue = newCommand.Value;
                             strategy = newCommand.BatteryStrategy;
                         }
-                        double netPowerInjection = StrategyManager.Instance.GetACSmartMeterPower();
+                        double netPowerInjection = ElectricityMeterApi.GetRealPowerTotal();
 
                         double pcsPower = PcsApi.PcsGetDcSidePower();
                         double load = netPowerInjection + pcsPower;

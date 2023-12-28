@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EMS.Service;
 
 namespace EMS.ViewModel
 {
@@ -394,29 +395,25 @@ namespace EMS.ViewModel
                 SetProperty(ref _isoRLowLimitLv1, value);
             }
         }
-
       
         public RelayCommand ReadDBInfoCommand { get; set; }
         public RelayCommand SyncInfoCommand { get; set; }
         public RelayCommand ReadBCMUInfoCommand { get; set; }
-        private ModbusClient ModbusClient;
-        string BCMUid;
-        public ParameterSettingViewModel(ModbusClient client,string bcmuid)
+        private BMSDataService DevService;
+        private string BCMUid;
+        public ParameterSettingViewModel(BMSDataService service,string bcmuid)
         {
-            ModbusClient = client;
+            DevService = service;
             BCMUid = bcmuid;
            
             ReadDBInfoCommand = new RelayCommand(ReadDBInfo);
             SyncInfoCommand = new RelayCommand(SyncInfo);
             ReadBCMUInfoCommand = new RelayCommand(ReadBCMUInfo);
-           
         }
 
         private void ReadBCMUInfo()
         {
-            
-            byte[] data = new byte[68];
-            data = ModbusClient.ReadFunc(40200, 34);
+            byte[] data = DevService.ReadBCMUInfo();
             ClusterVolUpLimitLv1 = BitConverter.ToUInt16(data, 0)*0.1;
             ClusterVolUpLimitLv2 = BitConverter.ToUInt16(data, 2)*0.1;
             ClusterVolUpLimitLv3 = BitConverter.ToUInt16(data, 4)*0.1;
@@ -506,7 +503,6 @@ namespace EMS.ViewModel
                 manage.Insert(model);
             }
 
-            
             ushort[] values =
             {
                 (ushort)(ClusterVolUpLimitLv1*10),
@@ -543,10 +539,8 @@ namespace EMS.ViewModel
                 (ushort)(SOCLowLimitLv2*10),
                 (ushort)(SOCLowLimitLv3*10),
                 (ushort)IsoRLowLimitLv1
-        };
-            ModbusClient.WriteFunc(40200, values);
-
-
+            };
+            DevService.SyncBCMUInfo(values);
         }
 
         private void ReadDBInfo()
@@ -594,12 +588,6 @@ namespace EMS.ViewModel
                     ClusterVolLowLimitLv3 = entity.ClusterVolLow3;
                 }
             }
-
-
         }
-
-        
-
-
     }
 }

@@ -214,27 +214,40 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Api\BmsApi.cs" />
+    <Compile Include="Api\ElectricityMeterApi.cs" />
     <Compile Include="Api\PcsApi.cs" />
     <Compile Include="Api\StrategyApi.cs" />
+    <Compile Include="Common\LogUtils.cs" />
     <Compile Include="Common\Modbus\ModbusRequest.cs" />
     <Compile Include="Common\Mqtt\MqttClientService.cs" />
     <Compile Include="Common\Mqtt\MqttConnectOption.cs" />
     <Compile Include="Common\StrategyManage\EmsController.cs" />
     <Compile Include="Common\StrategyManage\IntraDayScheduler.cs" />
     <Compile Include="Common\SingletonBase.cs" />
+    <Compile Include="Common\Util\ConcurrentQueueLength.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\BatteryModel.cs" />
+    <Compile Include="Model\BatterySeriesModel.cs" />
     <Compile Include="Model\BatteryStrategyModel.cs" />
-    <Compile Include="Model\DcStatusModel.cs" />
+    <Compile Include="Model\BatteryTotalModel.cs" />
+    <Compile Include="Model\MqttConnectInfoModel.cs" />
     <Compile Include="Model\PCSModel.cs" />
     <Compile Include="Model\PCSMonitorModel.cs" />
     <Compile Include="Model\PCSParSettingModel.cs" />
     <Compile Include="Common\StrategyManage\EnergyManagementSystem.cs" />
     <Compile Include="Model\BMSParameterSettingModel.cs" />
     <Compile Include="Model\ElectricityMeterModel.cs" />
+    <Compile Include="Model\PublishMessageModel.cs" />
     <Compile Include="Model\SerialPortSettingsModel.cs" />
+    <Compile Include="Model\SubscribeMessageModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
+    <Compile Include="Service\BMSDataService.cs" />
+    <Compile Include="Service\IDataService.cs" />
+    <Compile Include="Service\impl\MqttClientService.cs" />
+    <Compile Include="Service\IMqttClientService.cs" />
+    <Compile Include="Service\ModbusTCPDataService.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmandFaultInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmParameterSettingInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSControlInfoManage.cs" />
@@ -245,6 +258,11 @@
     <Compile Include="Storage\DB\Models\PCSControlSettingModel.cs" />
     <Compile Include="Storage\DB\Models\PCSInfoModel.cs" />
     <Compile Include="Storage\DB\Models\PCSStrategyDailyPatternInfoModel.cs" />
+    <Compile Include="ViewModel\BatterySeriesViewModel.cs" />
+    <Compile Include="ViewModel\BatteryTotalViewModel.cs" />
+    <Compile Include="ViewModel\BatteryViewModel.cs" />
+    <Compile Include="ViewModel\AssistanceStrategyViewModel.cs" />
+    <Compile Include="ViewModel\DCStatusViewModel.cs" />
     <Compile Include="ViewModel\DevControlViewModel.cs" />
     <Compile Include="MyControl\Battery.xaml.cs">
       <DependentUpon>Battery.xaml</DependentUpon>
@@ -272,9 +290,6 @@
     <Compile Include="Storage\DB\ORMContext.cs" />
     <Compile Include="Storage\DB\SqliteConfiguration.cs" />
     <Compile Include="Storage\DB\DBManage\SeriesBatteryInfoManage.cs" />
-    <Compile Include="Model\BatteryBase.cs" />
-    <Compile Include="Model\BatterySeriesBase.cs" />
-    <Compile Include="Model\BatteryTotalBase.cs" />
     <Compile Include="Storage\File\BatteryModelForFile.cs" />
     <Compile Include="Storage\File\FileHelper.cs" />
     <Compile Include="ViewModel\DataAnalysisViewModel.cs" />
@@ -284,6 +299,21 @@
     <Compile Include="ViewModel\DisplayContentViewModel.cs" />
     <Compile Include="ViewModel\ElectricMeterViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\Analysis_BMSPageModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\Analysis_PCSPageModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\Analysis_SmartMeterPageModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\FaultLogPageModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\HomePageModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\Monitor_BMSPageModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\Monitor_BMS_BCMUPageModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\Monitor_PCSPageModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\Monitor_SmartMeterPageModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\Strategy_AnalysisPageModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\Strategy_ProtectSetterPageModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\Strategy_SetterPageModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\System_DevInfoPageModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\System_DevSetterPageModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\System_MqttSetterPageModel.cs" />
     <Compile Include="ViewModel\ParameterSettingViewModel.cs" />
     <Compile Include="ViewModel\PCSMainViewModel.cs" />
     <Compile Include="ViewModel\PCSSettingViewModel.cs" />
@@ -312,6 +342,54 @@
     </Compile>
     <Compile Include="View\ElectricMeterView.xaml.cs">
       <DependentUpon>ElectricMeterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewEMSView\Analysis_BMSPage.xaml.cs">
+      <DependentUpon>Analysis_BMSPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewEMSView\Analysis_PCSPage.xaml.cs">
+      <DependentUpon>Analysis_PCSPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewEMSView\Analysis_SmartMeterPage.xaml.cs">
+      <DependentUpon>Analysis_SmartMeterPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewEMSView\EMSMainView.xaml.cs">
+      <DependentUpon>EMSMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewEMSView\FaultLogPage.xaml.cs">
+      <DependentUpon>FaultLogPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewEMSView\Monitor_BMS_BCMUPage.xaml.cs">
+      <DependentUpon>Monitor_BMS_BCMUPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewEMSView\Monitor_BMSPage.xaml.cs">
+      <DependentUpon>Monitor_BMSPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewEMSView\HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewEMSView\Monitor_PCSPage.xaml.cs">
+      <DependentUpon>Monitor_PCSPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewEMSView\Monitor_SmartMeterPage.xaml.cs">
+      <DependentUpon>Monitor_SmartMeterPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewEMSView\Strategy_AnalysisPage.xaml.cs">
+      <DependentUpon>Strategy_AnalysisPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewEMSView\Strategy_ProtectSetterPage.xaml.cs">
+      <DependentUpon>Strategy_ProtectSetterPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewEMSView\Strategy_SetterPage.xaml.cs">
+      <DependentUpon>Strategy_SetterPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewEMSView\System_DevInfoPage.xaml.cs">
+      <DependentUpon>System_DevInfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewEMSView\System_DevSetterPage.xaml.cs">
+      <DependentUpon>System_DevSetterPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewEMSView\System_MqttSetterPage.xaml.cs">
+      <DependentUpon>System_MqttSetterPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ParameterSettingView.xaml.cs">
       <DependentUpon>ParameterSettingView.xaml</DependentUpon>
@@ -402,6 +480,70 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ElectricMeterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewEMSView\Analysis_BMSPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewEMSView\Analysis_PCSPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewEMSView\Analysis_SmartMeterPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewEMSView\EMSMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewEMSView\FaultLogPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewEMSView\Monitor_BMS_BCMUPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewEMSView\Monitor_BMSPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewEMSView\HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewEMSView\Monitor_PCSPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewEMSView\Monitor_SmartMeterPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewEMSView\Strategy_AnalysisPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewEMSView\Strategy_ProtectSetterPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewEMSView\Strategy_SetterPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewEMSView\System_DevInfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewEMSView\System_DevSetterPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewEMSView\System_MqttSetterPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

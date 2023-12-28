@@ -40,6 +40,19 @@ namespace EMS.Api
 
         public static List<string> GetPCSFaultInfo() { return null; }
 
+        public static bool SetPCSHalt()
+        {
+            try
+            {
+                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.PCSClose();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw (ex);
+            } 
+        }
         /// <summary>
         /// 获取监视器所有数据
         /// </summary>
@@ -49,13 +62,26 @@ namespace EMS.Api
             return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel;
         }
 
-        /// <summary>
-        /// 获取参数设置界面所有展现在界面上的数据
-        /// </summary>
-        /// <returns></returns>
-        public static PCSParSettingModel PCSGetParSettingInfo()
-        {
-            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.ParSettingModel;
+        public static bool SetPCSStart()
+            {
+                try
+                {
+                    EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.PCSOpen();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                    throw (ex);
+                }
+            }
+            /// <summary>
+            /// 获取参数设置界面所有展现在界面上的数据
+            /// </summary>
+            /// <returns></returns>
+            public static PCSParSettingModel PCSGetParSettingInfo()
+                {
+                    return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.ParSettingModel;
         }
 
         /// <summary>
@@ -89,6 +115,19 @@ namespace EMS.Api
             return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.DcBranch1DCPower;
         }
 
+        public static bool SetPCSSystemClearFault()
+        {
+            try
+            {
+                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.PCSSystemClearFault();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw (ex);
+            }
+        }
         /// <summary>
         /// 获取侧支路电流
         /// </summary>
@@ -233,50 +272,5 @@ namespace EMS.Api
                 throw (ex);
             }
         }
-
-
-        public static bool SetPCSHalt()
-        {
-            try
-            {
-                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.PCSClose();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-                throw (ex);
-            }
-        }
-
-        public static bool SetPCSStart()
-        {
-            try
-            {
-                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.PCSOpen();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-                throw (ex);
-            }
-        }
-
-        public static bool SetPCSSystemClearFault()
-        {
-            try
-            {
-                EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.PCSSystemClearFault();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-                throw (ex);
-            }
-        }
-
-
     }
 }

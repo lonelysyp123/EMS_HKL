@@ -63,7 +63,7 @@
                 </Border>
             </Grid>
         </Grid>
-        <Grid x:Name="MainBody" MouseUp="MainBody_MouseUp" Grid.Row="1">
+        <Grid x:Name="MainBody" Grid.Row="1">
 
             <Grid.RowDefinitions>
                 <RowDefinition/>

@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3FA9E629-23AC-49E0-AA24-1D55DBAA191A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EMSCommon</RootNamespace>
+    <AssemblyName>EMSCommon</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.15\lib\net45\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MQTTnet, Version=4.2.1.781, Culture=neutral, PublicKeyToken=fdb7629f2e364a63, processorArchitecture=MSIL">
+      <HintPath>..\packages\MQTTnet.4.2.1.781\lib\net48\MQTTnet.dll</HintPath>
+    </Reference>
+    <Reference Include="NModbus4, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NModbus4.2.1.0\lib\net40\NModbus4.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLite.CodeFirst, Version=1.7.0.34, Culture=neutral, PublicKeyToken=eb96ba0a78d831a7, processorArchitecture=MSIL">
+      <HintPath>..\packages\SQLite.CodeFirst.1.7.0.34\lib\net45\SQLite.CodeFirst.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.118.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.118.0\lib\net46\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.118.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.118.0\lib\net46\System.Data.SQLite.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.118.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.118.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\CAN\CANClient.cs" />
+    <Compile Include="Common\Log\LogUtils.cs" />
+    <Compile Include="Common\Modbus\ModbusClient.cs" />
+    <Compile Include="Common\Modbus\ModbusRequest.cs" />
+    <Compile Include="Common\Mqtt\MqttClientService.cs" />
+    <Compile Include="Common\Mqtt\MqttConnectOption.cs" />
+    <Compile Include="Common\SingletonBase.cs" />
+    <Compile Include="Common\Util\ConcurrentQueueLength.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Storage\DB\DBManage\AlarmandFaultInfoManage.cs" />
+    <Compile Include="Storage\DB\DBManage\AlarmParameterSettingInfoManage.cs" />
+    <Compile Include="Storage\DB\DBManage\DBManage.cs" />
+    <Compile Include="Storage\DB\DBManage\DevConnectInfoManage.cs" />
+    <Compile Include="Storage\DB\DBManage\IManage.cs" />
+    <Compile Include="Storage\DB\DBManage\PCSControlInfoManage.cs" />
+    <Compile Include="Storage\DB\DBManage\PCSInfoManage.cs" />
+    <Compile Include="Storage\DB\DBManage\PCSStrategyDailyPatternInfoManage.cs" />
+    <Compile Include="Storage\DB\DBManage\SeriesBatteryInfoManage.cs" />
+    <Compile Include="Storage\DB\DBManage\TotalBatteryInfoManage.cs" />
+    <Compile Include="Storage\DB\Models\AlarmandFaultInfoModel.cs" />
+    <Compile Include="Storage\DB\Models\AlarmParameterSettingModel.cs" />
+    <Compile Include="Storage\DB\Models\DaqConfigurationModel.cs" />
+    <Compile Include="Storage\DB\Models\DevConnectInfoModel.cs" />
+    <Compile Include="Storage\DB\Models\PCSControlSettingModel.cs" />
+    <Compile Include="Storage\DB\Models\PCSInfoModel.cs" />
+    <Compile Include="Storage\DB\Models\PCSStrategyDailyPatternInfoModel.cs" />
+    <Compile Include="Storage\DB\Models\SeriesBatteryInfoModel.cs" />
+    <Compile Include="Storage\DB\Models\TotalBatteryInfoModel.cs" />
+    <Compile Include="Storage\DB\ORMContext.cs" />
+    <Compile Include="Storage\DB\SqliteConfiguration.cs" />
+    <Compile Include="Storage\File\BatteryModelForFile.cs" />
+    <Compile Include="Storage\File\FileHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Balanced.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Battery0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Battery100.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Battery25.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Battery50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Battery75.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\BCMUList.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\BMS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Charge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\DataControlBorder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\DevList1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\DevList2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Discharge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\InNet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\LeftImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\LeftListGreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\ListBorder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\MainBackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Mainbody.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\menu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\menu1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\OffConnect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\OffDaq.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Offline.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\OffRecord.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\OnConnect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\OnDaq.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Online.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\OnRecord.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\OutNet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\PCSMachine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\SepBac.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Set.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\SetGroupBox.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Stewing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\TNLOGO.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\topback.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\topImage.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.118.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.118.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <Import Project="..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.118.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.118.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
+</Project>

@@ -1,7 +1,9 @@
 ﻿using EMS.Api;
 using EMS.Common.StrategyManage;
 using EMS.ViewModel;
+using MQTTnet.Internal;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -13,15 +15,30 @@ using System.Threading.Tasks;
 
 namespace EMS.Model
 {
-
-    public class SmartMeter
+    public class SmartMeterManager 
     {
-        private double _voltage;
-        public double Voltage { get; set; }
+        private List<ElectricMeterViewModel> _smartMeters;
+        public List<ElectricMeterViewModel> SmartMeters { get { return _smartMeters; } } //封装，不能set
 
-        public void readVoltage() { }
+        public void AddDev(ElectricMeterViewModel item)
+        {
+            if (_smartMeters == null)
+            {
+                _smartMeters = new List<ElectricMeterViewModel>();
+            }
+            _smartMeters.Add(item);
+        }
 
-        public double GetVoltage() { return _voltage; }
+        public void RemoveDev(ElectricMeterViewModel item)
+        {
+            if (_smartMeters != null && _smartMeters.Count > 0)
+            {
+                if (_smartMeters.Contains(item))
+                {
+                    _smartMeters.Remove(item);
+                }
+            }
+        }
     }
   
     public class PCSManager
@@ -41,20 +58,14 @@ namespace EMS.Model
             _pcsmainViewModel = pcsMainViewModel;
         }
     }
-       
-
-
-    public class SmartMeterManager
-    {
-        private List<object> smart_meters;
-    }
+    
     public class BmsManager
     {
         //
-        private List<BatteryTotalBase> _bmsTotalList;
-        public List<BatteryTotalBase> BmsTotalList { get { return _bmsTotalList; } } //封装，不能set
+        private ObservableCollection<BatteryTotalViewModel> _bmsTotalList;
+        public ObservableCollection<BatteryTotalViewModel> BmsTotalList { get { return _bmsTotalList; } } //封装，不能set
         
-        public void SetBMSList(List<BatteryTotalBase> totallist)
+        public void SetBMSList(ObservableCollection<BatteryTotalViewModel> totallist)
         {
             _bmsTotalList = totallist;
         }
@@ -65,8 +76,8 @@ namespace EMS.Model
     {
         private Thread _operationThread;
         private EmsController _controller;
+        private SmartMeterManager _smart_meter_manager;
         private PCSManager _pcs_manager;
-        private object _smart_meter_manager;
         private BmsManager _bms_manager;
         private object _database_manager;
         private object _cloud_manager;
@@ -87,14 +98,15 @@ namespace EMS.Model
         public EmsController Controller { get { return _controller; } }
         public BmsManager BmsManager { get { return _bms_manager; } }
         public PCSManager PcsManager { get { return _pcs_manager; } }
+        public SmartMeterManager SmartMeterManager { get { return _smart_meter_manager; } }
         public EnergyManagementSystem()
         {
            
             _operationThread = null;
             _bms_manager = new BmsManager();
             _controller = new EmsController();
-
             _pcs_manager =new PCSManager();
+            _smart_meter_manager = new SmartMeterManager();
         }
 
         public void Initialization(object _pcs_manager, object _smart_meter_manager, object _database_manager, object _cloud_manager)

@@ -24,7 +24,8 @@ namespace EMS.Common.Modbus.ModbusTCP
         private Thread ProcessRequestThread;
         private ConcurrentQueue<ModbusRequest> RequestQueue;
         private bool _isConnected = false;
-
+        //public bool IsConnected { get => _isConnected; }
+        //private Thread CommunicationProtectTr;
         /// <summary>
         /// 以TCP格式生成ModbusClient实例
         /// </summary>
@@ -34,7 +35,8 @@ namespace EMS.Common.Modbus.ModbusTCP
         {
             _ip = IP;
             _port = Port;
-
+            //CommunicationProtectTr = new Thread(CommunicationProtect);
+            //CommunicationProtectTr.IsBackground = true;
             RequestQueue = new ConcurrentQueue<ModbusRequest>();
             ProcessRequestThread = new Thread(ProcessRequest);
         }
@@ -77,8 +79,6 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
         }
 
-
-
         /// <summary>
         /// 连接服务器
         /// </summary>
@@ -94,6 +94,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.ToString());
                 throw ex;
             }
         }
@@ -112,6 +113,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.ToString());
                 throw ex;
             }
         }
@@ -138,7 +140,8 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
-                throw ex;
+                LogUtils.Warn("读取数据失败", ex);
+                return new byte[num * 2];
             }
         }
 
@@ -171,6 +174,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.ToString());
                 return false;
             }
         }
@@ -195,6 +199,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.ToString());
                 return null;
             }
         }
@@ -238,6 +243,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.ToString());
                 throw ex;
             }
         }
@@ -256,6 +262,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.ToString());
                 return false;
             }
         }
@@ -280,6 +287,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.ToString());
                 return false;
             }
         }
@@ -314,6 +322,7 @@ namespace EMS.Common.Modbus.ModbusTCP
             }
             catch (Exception ex)
             {
+                LogUtils.Error(ex.ToString());
                 throw ex;
             }
         }
