@@ -443,11 +443,13 @@
                     <localControl:TitleBorder Grid.ColumnSpan="4"
                                               Text="DC模块状态" />
                     <Grid Grid.Row="1">
-                        <DataGrid x:Name="dataGrid"
+                        <DataGrid x:Name="DCDataGrid"
                                   Margin="0,20,0,0"
                                   AutoGenerateColumns="False"
                                   CanUserSortColumns="False"
                                   IsReadOnly="True"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
                                   HeadersVisibility="Column"
                                   GridLinesVisibility="None"
                                   EnableRowVirtualization="True"
@@ -455,7 +457,8 @@
                                   Background="White"
                                   BorderBrush="#F1F1F1"
                                   BorderThickness="1"
-                                  SelectedItem="{Binding Selected1}"
+                                  ItemsSource="{Binding DCModuleStatus}"
+                                  SelectedItem="{Binding Selected_DCModuleStatus}"
                                  >
                             <DataGrid.ColumnHeaderStyle>
                                 <Style TargetType="DataGridColumnHeader">
@@ -466,17 +469,15 @@
                                     <Setter Property="FontWeight"
                                             Value="Bold" />
                                     <Setter Property="Height"
-                                            Value="40" />
+                                            Value="30" />
                                     <Setter Property="FontSize"
-                                            Value="16" />
+                                            Value="14" />
                                 </Style>
                             </DataGrid.ColumnHeaderStyle>
                             <DataGrid.RowStyle>
                                 <Style TargetType="{x:Type DataGridRow}">
                                     <Setter Property="Background"
                                             Value="White" />
-                                    <Setter Property="Margin"
-                                            Value="0,10,0,10" />
                                 </Style>
                             </DataGrid.RowStyle>
                             <DataGrid.CellStyle>
@@ -583,32 +584,32 @@
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl2 Text="环境温度过高"
-                                                       IsTrue="{Binding parameter1_1}" />
+                                                       IsTrue="{Binding DCWarn_1}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
                                     Grid.Column="2"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl2 Text="U2通信异常"
-                                                       IsTrue="{Binding parameter1_2}" />
+                                                       IsTrue="{Binding DCWarn_2}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
                                     Grid.Column="3"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl2 Text="柜温探头故障"
-                                                       IsTrue="{Binding parameter1_3}" />
+                                                       IsTrue="{Binding DCWarn_3}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
                                     Grid.Column="4"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl2 Text="环温探头故障"
-                                                       IsTrue="{Binding parameter1_4}" />
+                                                       IsTrue="{Binding DCWarn_4}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
                                     Grid.Column="5"
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl2 Text="校准参数异常"
-                                                       IsTrue="{Binding parameter1_5}" />
+                                                       IsTrue="{Binding DCWarn_5}" />
                         </StackPanel>
                     </Grid>
                     <!--DC模块故障-->
@@ -646,39 +647,39 @@
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text="直流高压侧过压"
-                                                       IsTrue="{Binding parameter2_1_1}" />
+                                                       IsTrue="{Binding DCFault_1}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
                                     Grid.Column="2"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text="直流高压侧欠压"
-                                                       IsTrue="{Binding parameter2_1_2}" />
+                                                       IsTrue="{Binding DCFault_2}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
                                     Grid.Column="3"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text="直流低压侧过压"
-                                                       IsTrue="{Binding parameter2_1_3}" />
+                                                       IsTrue="{Binding DCFault_3}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
                                     Grid.Column="4"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text=" 直流低压侧欠压"
-                                                       IsTrue="{Binding parameter2_1_4}" />
+                                                       IsTrue="{Binding DCFault_4}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
                                     Grid.Column="5"
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text="直流低压侧过流"
-                                                       IsTrue="{Binding parameter2_1_5}" />
+                                                       IsTrue="{Binding DCFault_5}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
                                     Grid.Column="6"
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text="重启过多"
-                                                       IsTrue="{Binding parameter2_1_6}" />
+                                                       IsTrue="{Binding DCFault_6}" />
                         </StackPanel>
                         <!--2-->
                         <StackPanel Grid.Row="2"
@@ -686,39 +687,39 @@
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text="直流低压侧继电器短路"
-                                                       IsTrue="{Binding parameter2_2_1}" />
+                                                       IsTrue="{Binding DCFault_7}" />
                         </StackPanel>
                         <StackPanel Grid.Row="2"
                                     Grid.Column="2"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text="光伏能量不足"
-                                                       IsTrue="{Binding parameter2_2_2}" />
+                                                       IsTrue="{Binding DCFault_8}" />
                         </StackPanel>
                         <StackPanel Grid.Row="2"
                                     Grid.Column="3"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text="电池电量不足"
-                                                       IsTrue="{Binding parameter2_2_3}" />
+                                                       IsTrue="{Binding DCFault_9}" />
                         </StackPanel>
                         <StackPanel Grid.Row="2"
                                     Grid.Column="4"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text="BMS故障或直流高压侧开关断开"
-                                                       IsTrue="{Binding parameter2_2_4}" />
+                                                       IsTrue="{Binding DCFault_10}" />
                         </StackPanel>
                         <StackPanel Grid.Row="2"
                                     Grid.Column="5"
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text="机柜温度过高"
-                                                       IsTrue="{Binding parameter2_2_5}" />
+                                                       IsTrue="{Binding DCFault_11}" />
                         </StackPanel>
                         <StackPanel Grid.Row="2"
                                     Grid.Column="6"
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text="模块电流不平衡"
-                                                       IsTrue="{Binding parameter2_2_6}" />
+                                                       IsTrue="{Binding DCFault_12}" />
                         </StackPanel>
                         <!--3-->
                         <StackPanel Grid.Row="3"
@@ -726,39 +727,39 @@
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text="直流低压侧开关断开"
-                                                       IsTrue="{Binding parameter2_3_1}" />
+                                                       IsTrue="{Binding DCFault_13}" />
                         </StackPanel>
                         <StackPanel Grid.Row="3"
                                     Grid.Column="2"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text="24V辅助电源故障"
-                                                       IsTrue="{Binding parameter2_3_2}" />
+                                                       IsTrue="{Binding DCFault_14}" />
                         </StackPanel>
                         <StackPanel Grid.Row="3"
                                     Grid.Column="3"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text="紧急停机"
-                                                       IsTrue="{Binding parameter2_3_3}" />
+                                                       IsTrue="{Binding DCFault_15}" />
                         </StackPanel>
                         <StackPanel Grid.Row="3"
                                     Grid.Column="4"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text="  模块温度过温"
-                                                       IsTrue="{Binding parameter2_3_4}" />
+                                                       IsTrue="{Binding DCFault_16}" />
                         </StackPanel>
                         <StackPanel Grid.Row="3"
                                     Grid.Column="5"
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text="风扇故障"
-                                                       IsTrue="{Binding parameter2_3_5}" />
+                                                       IsTrue="{Binding DCFault_17}" />
                         </StackPanel>
                         <StackPanel Grid.Row="3"
                                     Grid.Column="6"
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text="直流低压侧继电器开路"
-                                                       IsTrue="{Binding parameter2_3_6}" />
+                                                       IsTrue="{Binding DCFault_18}" />
                         </StackPanel>
                         <!--4-->
                         <StackPanel Grid.Row="4"
@@ -766,39 +767,39 @@
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text="保险故障"
-                                                       IsTrue="{Binding parameter2_4_1}" />
+                                                       IsTrue="{Binding DCFault_19}" />
                         </StackPanel>
                         <StackPanel Grid.Row="4"
                                     Grid.Column="2"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text="DSP初始化故障"
-                                                       IsTrue="{Binding parameter2_4_2}" />
+                                                       IsTrue="{Binding DCFault_20}" />
                         </StackPanel>
                         <StackPanel Grid.Row="4"
                                     Grid.Column="3"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text="直流低压侧软启动失败"
-                                                       IsTrue="{Binding parameter2_4_3}" />
+                                                       IsTrue="{Binding DCFault_21}" />
                         </StackPanel>
                         <StackPanel Grid.Row="4"
                                     Grid.Column="4"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text="CANA通讯故障"
-                                                       IsTrue="{Binding parameter2_4_4}" />
+                                                       IsTrue="{Binding DCFault_22}" />
                         </StackPanel>
                         <StackPanel Grid.Row="4"
                                     Grid.Column="5"
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text="直流高压侧继电器开路"
-                                                       IsTrue="{Binding parameter2_4_5}" />
+                                                       IsTrue="{Binding DCFault_23}" />
                         </StackPanel>
                         <StackPanel Grid.Row="4"
                                     Grid.Column="6"
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text="直流高压侧软启动失败"
-                                                       IsTrue="{Binding parameter2_4_6}" />
+                                                       IsTrue="{Binding DCFault_24}" />
                         </StackPanel>
                         <!--5-->
                         <StackPanel Grid.Row="5"
@@ -806,39 +807,39 @@
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text="DSP版本故障"
-                                                       IsTrue="{Binding parameter2_5_1}" />
+                                                       IsTrue="{Binding DCFault_25}" />
                         </StackPanel>
                         <StackPanel Grid.Row="5"
                                     Grid.Column="2"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text="CPLD版本故障"
-                                                       IsTrue="{Binding parameter2_5_2}" />
+                                                       IsTrue="{Binding DCFault_26}" />
                         </StackPanel>
                         <StackPanel Grid.Row="5"
                                     Grid.Column="3"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text="参数不匹配"
-                                                       IsTrue="{Binding parameter2_5_3}" />
+                                                       IsTrue="{Binding DCFault_27}" />
                         </StackPanel>
                         <StackPanel Grid.Row="5"
                                     Grid.Column="4"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text="硬件版本故障"
-                                                       IsTrue="{Binding parameter2_5_4}" />
+                                                       IsTrue="{Binding DCFault_28}" />
                         </StackPanel>
                         <StackPanel Grid.Row="5"
                                     Grid.Column="5"
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text="485通讯故障"
-                                                       IsTrue="{Binding parameter2_5_5}" />
+                                                       IsTrue="{Binding DCFault_29}" />
                         </StackPanel>
                         <StackPanel Grid.Row="5"
                                     Grid.Column="6"
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text=" CANB通讯故障"
-                                                       IsTrue="{Binding parameter2_5_6}" />
+                                                       IsTrue="{Binding DCFault_30}" />
                         </StackPanel>
                         <!--6-->
                         <StackPanel Grid.Row="6"
@@ -846,39 +847,39 @@
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text="模块重号故障"
-                                                       IsTrue="{Binding parameter2_6_1}" />
+                                                       IsTrue="{Binding DCFault_31}" />
                         </StackPanel>
                         <StackPanel Grid.Row="6"
                                     Grid.Column="2"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text="15V辅助电源故障"
-                                                       IsTrue="{Binding parameter2_6_2}" />
+                                                       IsTrue="{Binding DCFault_32}" />
                         </StackPanel>
                         <StackPanel Grid.Row="6"
                                     Grid.Column="3"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text="直流高压侧继电器短路"
-                                                       IsTrue="{Binding parameter2_6_3}" />
+                                                       IsTrue="{Binding DCFault_33}" />
                         </StackPanel>
                         <StackPanel Grid.Row="6"
                                     Grid.Column="4"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text="BMS电压异常"
-                                                       IsTrue="{Binding parameter2_6_4}" />
+                                                       IsTrue="{Binding DCFault_34}" />
                         </StackPanel>
                         <StackPanel Grid.Row="6"
                                     Grid.Column="5"
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text=" BMS电流异常"
-                                                       IsTrue="{Binding parameter2_6_5}" />
+                                                       IsTrue="{Binding DCFault_35}" />
                         </StackPanel>
                         <StackPanel Grid.Row="6"
                                     Grid.Column="6"
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text="BMS温度异常"
-                                                       IsTrue="{Binding parameter2_6_6}" />
+                                                       IsTrue="{Binding DCFault_36}" />
                         </StackPanel>
                         <!--7-->
                         <StackPanel Grid.Row="7"
@@ -886,13 +887,13 @@
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl3 Text="BMS关机故障"
-                                                       IsTrue="{Binding parameter2_7_1}" />
+                                                       IsTrue="{Binding DCFault_37}" />
                         </StackPanel>
                         <StackPanel Grid.Row="7"
                                     Grid.Column="2"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl3 Text="绝缘检测异常"
-                                                       IsTrue="{Binding parameter2_7_2}" />
+                                                       IsTrue="{Binding DCFault_38}" />
                         </StackPanel>
                     </Grid>
                     <!--PDS告警-->
@@ -924,7 +925,7 @@
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl2 Text="防雷器告警"
-                                                       IsTrue="{Binding parameter3_1}" />
+                                                       IsTrue="{Binding PDSWarn}" />
                         </StackPanel>
                     </Grid>
                     <!--PDS故障-->
@@ -957,25 +958,25 @@
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <localControl:WarnControl2 Text="软件版本故障"
-                                                       IsTrue="{Binding parameter4_1}" />
+                                                       IsTrue="{Binding PDSFault_1}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
                                     Grid.Column="2"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl2 Text="DSP初始化故障"
-                                                       IsTrue="{Binding parameter4_2}" />
+                                                       IsTrue="{Binding PDSFault_2}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
                                     Grid.Column="3"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl2 Text="BMS故障"
-                                                       IsTrue="{Binding parameter4_3}" />
+                                                       IsTrue="{Binding PDSFault_3}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
                                     Grid.Column="4"
                                     Style="{StaticResource ContentPanel}">
                             <localControl:WarnControl2 Text="紧急停机"
-                                                       IsTrue="{Binding parameter4_4}" />
+                                                       IsTrue="{Binding PDSFault_4}" />
                         </StackPanel>
                     </Grid>
                     <!--END-->

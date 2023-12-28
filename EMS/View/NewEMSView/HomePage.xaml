@@ -215,7 +215,7 @@
                             <Ellipse Height="20"
                                      Width="20"
                                      Style="{StaticResource LightEllipse}"
-                                     Fill="{Binding StateFill_HeavyFaults}" />
+                                     Fill="{Binding StateFill_CrisisFaults}" />
                         </StackPanel>
                         <StackPanel Grid.Row="3"
                                     Grid.Column="0"

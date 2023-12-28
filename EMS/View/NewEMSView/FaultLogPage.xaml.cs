@@ -182,7 +182,7 @@ namespace EMS.View.NewEMSView
                     faultTime = "2023/12/19 10:00:00"
                 }
             );
-            datagrid.ItemsSource = list;
+            Datagrid.ItemsSource = list;
         }
     }
 }

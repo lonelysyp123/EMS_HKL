@@ -118,7 +118,7 @@
                     </Grid.ColumnDefinitions>
                     <localControl:TitleBorder Text="策略控制" Grid.ColumnSpan="4"/>
                     <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-                        <TextBlock Text="当前执行策略：" VerticalAlignment="Center" />
+                        <TextBlock Text="当前执行模式：" VerticalAlignment="Center" />
                         <TextBlock VerticalAlignment="Center"
                                    Text="{Binding TotalStrategyState}"
                                    Foreground="#009B0A"
@@ -248,8 +248,8 @@
                                 FontWeight="Bold"
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
-                                IsEnabled="{Binding IsEnabled_Reset}"
-                                Command="{Binding Save}" />
+                                IsEnabled="{Binding IsEnabled_ManualReset}"
+                                Command="{Binding CommandManualReset}" />
                         <Button Content="应    用"
                                 Width="100"
                                 Height="35"
@@ -258,8 +258,8 @@
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
                                 Margin="20,0,0,0"
-                                IsEnabled="{Binding IsEnabled_Apply}"
-                                Command="{Binding Connect}" />
+                                IsEnabled="{Binding IsEnabled_ManualApply}"
+                                Command="{Binding CommandManualApply}" />
                     </StackPanel>
                 </Grid>
             </Border>
@@ -295,10 +295,11 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <localControl:IconBorder Grid.ColumnSpan="5"
-                                                 FIcon_Text="&#xe996;"
+                                                 FIcon_Text="&#xe601;"
                                                  FIconTextBlock_Text="储能参数"
                                                  FIconBorder_Background="#FFECCF"
-                                                 FIcon_Foreground="#FF7D00"/>
+                                                 FIcon_Foreground="#FF7D00"
+                                                 Loaded="IconBorder_Loaded_1" />
                         <StackPanel Grid.Row="1"
                                     Grid.Column="1"
                                     Style="{StaticResource ContentPanel}"
@@ -306,7 +307,7 @@
                             <TextBlock Text="最大SOC(%):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding Port_Ammeter}"
+                            <TextBox Text="{Binding MaxSOC}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
@@ -316,7 +317,7 @@
                             <TextBlock Text="最小SOC(%):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding Port_Ammeter}"
+                            <TextBox Text="{Binding MinSOC}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
@@ -326,7 +327,7 @@
                             <TextBlock Text="当前最大允许充电功率(kW):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding Port_Ammeter}"
+                            <TextBox Text="{Binding MaxAllowChargingPower}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
@@ -336,7 +337,7 @@
                             <TextBlock Text="当前最大允许放电功率(kW):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding Port_Ammeter}"
+                            <TextBox Text="{Binding MaxAllowDishargingPower}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                         <StackPanel Grid.Row="2"
@@ -346,7 +347,7 @@
                             <TextBlock Text="储能充电效率(%):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding Port_Ammeter}"
+                            <TextBox Text="{Binding EnergyChargingEfficiency}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                         <StackPanel Grid.Row="2"
@@ -356,7 +357,7 @@
                             <TextBlock Text="储能放电效率(%):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding Port_Ammeter}"
+                            <TextBox Text="{Binding EnergyDishargingEfficiency}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                         <StackPanel Grid.Row="2"
@@ -366,7 +367,7 @@
                             <TextBlock Text="储能初始能量(kWh):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding Port_Ammeter}"
+                            <TextBox Text="{Binding AvailableCapacity}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                         <StackPanel Grid.Row="2"
@@ -395,7 +396,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <localControl:IconBorder Grid.ColumnSpan="5"
-                                                 FIcon_Text="&#xe606;"
+                                                 FIcon_Text="&#xe649;"
                                                  FIconTextBlock_Text="需量控制"
                                                  FIconBorder_Background="#E8FFFB"
                                                  FIcon_Foreground="#1FCAC6" />
@@ -406,7 +407,7 @@
                             <TextBlock Text="需量控制容量(kW):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding Port_Ammeter}"
+                            <TextBox Text="{Binding DemandControlapacity}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
@@ -416,7 +417,7 @@
                             <TextBlock Text="下设比例(%):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding Port_Ammeter}"
+                            <TextBox Text="{Binding LowerProportion_Demand}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                     </Grid>
@@ -446,7 +447,7 @@
                             <TextBlock Text="逆功率保护限制(kW):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding Port_Ammeter}"
+                            <TextBox Text="{Binding ProtectionLimit}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
@@ -456,7 +457,7 @@
                             <TextBlock Text="逆功率保护动作限值(kW):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding Port_Ammeter}"
+                            <TextBox Text="{Binding ProtectionActionLimit}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
@@ -466,7 +467,7 @@
                             <TextBlock Text="下设比例(%):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding Port_Ammeter}"
+                            <TextBox Text="{Binding LowerProportion_InversePower}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                         <StackPanel Grid.Row="2"
@@ -480,8 +481,8 @@
                                     FontWeight="Bold"
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
-                                    IsEnabled="{Binding IsEnabled_Reset}"
-                                    Command="{Binding Save}" />
+                                    IsEnabled="{Binding IsEnabled_AutoReset}"
+                                    Command="{Binding CommandAutoReset}" />
                             <Button Content="应    用"
                                     Width="100"
                                     Height="35"
@@ -490,8 +491,8 @@
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
                                     Margin="20,0,0,0"
-                                    IsEnabled="{Binding IsEnabled_Apply}"
-                                    Command="{Binding Connect}" />
+                                    IsEnabled="{Binding IsEnabled_AutoApply}"
+                                    Command="{Binding CommandAutoApply}" />
                         </StackPanel>
                     </Grid>
                 </Grid>

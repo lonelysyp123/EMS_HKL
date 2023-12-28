@@ -182,7 +182,7 @@
                                     Orientation="Horizontal"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Left">
-                            <TextBlock Text="BCMU1:" />
+                            <TextBlock Text="BCMU4:" />
                             <TextBlock Text="{Binding Version_Software_BCUM4}"
                                        Margin="20,0,0,0" />
                         </StackPanel>
@@ -191,7 +191,7 @@
                                     Orientation="Horizontal"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Left">
-                            <TextBlock Text="BCMU2:" />
+                            <TextBlock Text="BCMU5:" />
                             <TextBlock Text="{Binding Version_Software_BCUM5}"
                                        Margin="20,0,0,0" />
                         </StackPanel>
@@ -200,7 +200,7 @@
                                     Orientation="Horizontal"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Left">
-                            <TextBlock Text="BCMU3:" />
+                            <TextBlock Text="BCMU6:" />
                             <TextBlock Text="{Binding Version_Software_BCUM6}"
                                        Margin="20,0,0,0" />
                         </StackPanel>
@@ -257,7 +257,7 @@
                                     Orientation="Horizontal"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Left">
-                            <TextBlock Text="BCMU1:" />
+                            <TextBlock Text="BCMU4:" />
                             <TextBlock Text="{Binding Version_Hardware_BCUM4}"
                                        Margin="20,0,0,0" />
                         </StackPanel>
@@ -266,7 +266,7 @@
                                     Orientation="Horizontal"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Left">
-                            <TextBlock Text="BCMU2:" />
+                            <TextBlock Text="BCMU5:" />
                             <TextBlock Text="{Binding Version_Hardware_BCUM5}"
                                        Margin="20,0,0,0" />
                         </StackPanel>
@@ -275,7 +275,7 @@
                                     Orientation="Horizontal"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Left">
-                            <TextBlock Text="BCMU3:" />
+                            <TextBlock Text="BCMU6:" />
                             <TextBlock Text="{Binding Version_Hardware_BCUM6}"
                                        Margin="20,0,0,0" />
                         </StackPanel>

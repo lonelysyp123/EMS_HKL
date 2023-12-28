@@ -298,7 +298,7 @@
                                 <TextBlock Text="最大放电功率:" />
                                 <TextBlock Text="{Binding MaxAmpPower}"
                                            Margin="10,0,10,0" />
-                                <TextBlock Text="kWh" />
+                                <TextBlock Text="kW" />
                             </StackPanel>
                             <StackPanel Grid.Row="1"
                                         Grid.Column="2"
@@ -341,7 +341,7 @@
                                 <TextBlock Text="最大充电功率:" />
                                 <TextBlock Text="{Binding MaxChargingPower}"
                                            Margin="10,0,10,0" />
-                                <TextBlock Text="kWh" />
+                                <TextBlock Text="kW" />
                             </StackPanel>
                             <StackPanel Grid.Row="1"
                                         Grid.Column="2"
@@ -462,75 +462,75 @@
                                         Grid.Column="1"
                                         Style="{StaticResource ContentPanel}"
                                         HorizontalAlignment="Left">
-                                <localControl:WarnControl AlertLevel="{Binding parameter4_1}"
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_1}"
                                                           AlertText="告警" />
                             </StackPanel>
                             <StackPanel Grid.Row="1"
                                         Grid.Column="2"
                                         Style="{StaticResource ContentPanel}">
-                                <localControl:WarnControl AlertLevel="{Binding parameter4_2}"
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_2}"
                                                           AlertText="告警" />
                             </StackPanel>
                             <StackPanel Grid.Row="1"
                                         Grid.Column="3"
                                         Style="{StaticResource ContentPanel}">
-                                <localControl:WarnControl AlertLevel="{Binding parameter4_3}"
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_3}"
                                                           AlertText="告警" />
                             </StackPanel>
                             <StackPanel Grid.Row="1"
                                         Grid.Column="4"
                                         Style="{StaticResource ContentPanel}">
-                                <localControl:WarnControl AlertLevel="{Binding parameter4_4}"
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_4}"
                                                           AlertText="告警" />
                             </StackPanel>
                             <StackPanel Grid.Row="2"
                                         Grid.Column="1"
                                         Style="{StaticResource ContentPanel}"
                                         HorizontalAlignment="Left">
-                                <localControl:WarnControl AlertLevel="{Binding parameter4_5}"
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_5}"
                                                           AlertText="告警" />
                             </StackPanel>
                             <StackPanel Grid.Row="2"
                                         Grid.Column="2"
                                         Style="{StaticResource ContentPanel}">
-                                <localControl:WarnControl AlertLevel="{Binding parameter4_6}"
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_6}"
                                                           AlertText="告警" />
                             </StackPanel>
                             <StackPanel Grid.Row="2"
                                         Grid.Column="3"
                                         Style="{StaticResource ContentPanel}">
-                                <localControl:WarnControl AlertLevel="{Binding parameter4_7}"
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_7}"
                                                           AlertText="告警" />
                             </StackPanel>
                             <StackPanel Grid.Row="2"
                                         Grid.Column="4"
                                         Style="{StaticResource ContentPanel}">
-                                <localControl:WarnControl AlertLevel="{Binding parameter4_8}"
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_8}"
                                                           AlertText="告警" />
                             </StackPanel>
                             <StackPanel Grid.Row="3"
                                         Grid.Column="1"
                                         Style="{StaticResource ContentPanel}"
                                         HorizontalAlignment="Left">
-                                <localControl:WarnControl AlertLevel="{Binding parameter4_9}"
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_9}"
                                                           AlertText="告警" />
                             </StackPanel>
                             <StackPanel Grid.Row="3"
                                         Grid.Column="2"
                                         Style="{StaticResource ContentPanel}">
-                                <localControl:WarnControl AlertLevel="{Binding parameter4_10}"
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_10}"
                                                           AlertText="告警" />
                             </StackPanel>
                             <StackPanel Grid.Row="3"
                                         Grid.Column="3"
                                         Style="{StaticResource ContentPanel}">
-                                <localControl:WarnControl AlertLevel="{Binding parameter4_11}"
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_11}"
                                                           AlertText="告警" />
                             </StackPanel>
                             <StackPanel Grid.Row="3"
                                         Grid.Column="4"
                                         Style="{StaticResource ContentPanel}">
-                                <localControl:WarnControl AlertLevel="{Binding parameter4_12}"
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_12}"
                                                           AlertText="告警" />
                             </StackPanel>
                         </Grid>
@@ -559,75 +559,75 @@
                                         Style="{StaticResource ContentPanel}"
                                         HorizontalAlignment="Left">
                                 <localControl:WarnControl3 Text="1"
-                                                           IsTrue="{Binding parameter1}" />
+                                                           IsTrue="{Binding Fault_BCMU_1}" />
                             </StackPanel>
                             <StackPanel Grid.Row="1"
                                         Grid.Column="2"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl3 Text="1"
-                                                           IsTrue="{Binding parameter2}" />
+                                                           IsTrue="{Binding Fault_BCMU_2}" />
                             </StackPanel>
                             <StackPanel Grid.Row="1"
                                         Grid.Column="3"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl3 Text="1"
-                                                           IsTrue="{Binding parameter3}" />
+                                                           IsTrue="{Binding Fault_BCMU_3}" />
                             </StackPanel>
                             <StackPanel Grid.Row="1"
                                         Grid.Column="4"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl3 Text="1"
-                                                           IsTrue="{Binding parameter4}" />
+                                                           IsTrue="{Binding Fault_BCMU_4}" />
                             </StackPanel>
                             <StackPanel Grid.Row="2"
                                         Grid.Column="1"
                                         Style="{StaticResource ContentPanel}"
                                         HorizontalAlignment="Left">
                                 <localControl:WarnControl3 Text="1"
-                                                           IsTrue="{Binding parameter5}" />
+                                                           IsTrue="{Binding Fault_BCMU_5}" />
                             </StackPanel>
                             <StackPanel Grid.Row="2"
                                         Grid.Column="2"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl3 Text="1"
-                                                           IsTrue="{Binding parameter6}" />
+                                                           IsTrue="{Binding Fault_BCMU_6}" />
                             </StackPanel>
                             <StackPanel Grid.Row="2"
                                         Grid.Column="3"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl3 Text="1"
-                                                           IsTrue="{Binding parameter7}" />
+                                                           IsTrue="{Binding Fault_BCMU_7}" />
                             </StackPanel>
                             <StackPanel Grid.Row="2"
                                         Grid.Column="4"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl3 Text="1"
-                                                           IsTrue="{Binding parameter8}" />
+                                                           IsTrue="{Binding Fault_BCMU_8}" />
                             </StackPanel>
                             <StackPanel Grid.Row="3"
                                         Grid.Column="1"
                                         Style="{StaticResource ContentPanel}"
                                         HorizontalAlignment="Left">
                                 <localControl:WarnControl3 Text="1"
-                                                           IsTrue="{Binding parameter9}" />
+                                                           IsTrue="{Binding Fault_BCMU_9}" />
                             </StackPanel>
                             <StackPanel Grid.Row="3"
                                         Grid.Column="2"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl3 Text="1"
-                                                           IsTrue="{Binding parameter10}" />
+                                                           IsTrue="{Binding Fault_BCMU_10}" />
                             </StackPanel>
                             <StackPanel Grid.Row="3"
                                         Grid.Column="3"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl3 Text="1"
-                                                           IsTrue="{Binding parameter11}" />
+                                                           IsTrue="{Binding Fault_BCMU_11}" />
                             </StackPanel>
                             <StackPanel Grid.Row="3"
                                         Grid.Column="4"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl3 Text="1"
-                                                           IsTrue="{Binding parameter12}" />
+                                                           IsTrue="{Binding Fault_BCMU_12}" />
                             </StackPanel>
                         </Grid>
                     </Grid>
@@ -663,12 +663,12 @@
                                 <TextBlock Text="簇选择:"
                                            VerticalAlignment="Center" />
                                 <ComboBox  Height="25"
-                                           Width="60"
+                                           Width="100"
                                            Margin="10,0,10,0"
                                            Background="White"
                                            Foreground="Black"
-                                           ItemsSource="{Binding ItemsSource}"
-                                           SelectedItem="{Binding SelectedItem}"
+                                           ItemsSource="{Binding Cluster}"
+                                           SelectedItem="{Binding SelectedCluster}"
                                            BorderThickness="1,1,1,1">
                                 </ComboBox>
                             </StackPanel>
@@ -716,75 +716,75 @@
                                         Style="{StaticResource ContentPanel}"
                                         HorizontalAlignment="Left">
                                 <localControl:WarnControl2 Text="单体低压告警"
-                                                           IsTrue="{Binding parameter2_1}" />
+                                                           IsTrue="{Binding Wran_BMU_1}" />
                             </StackPanel>
                             <StackPanel Grid.Row="1"
                                         Grid.Column="2"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl2 Text="单体高压告警"
-                                                           IsTrue="{Binding parameter2_2}" />
+                                                           IsTrue="{Binding Wran_BMU_2}" />
                             </StackPanel>
                             <StackPanel Grid.Row="1"
                                         Grid.Column="3"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl2 Text="放电低压告警"
-                                                           IsTrue="{Binding parameter2_3}" />
+                                                           IsTrue="{Binding Wran_BMU_3}" />
                             </StackPanel>
                             <StackPanel Grid.Row="1"
                                         Grid.Column="4"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl2 Text="充电高压告警"
-                                                           IsTrue="{Binding parameter2_4}" />
+                                                           IsTrue="{Binding Wran_BMU_4}" />
                             </StackPanel>
                             <StackPanel Grid.Row="2"
                                         Grid.Column="1"
                                         Style="{StaticResource ContentPanel}"
                                         HorizontalAlignment="Left">
                                 <localControl:WarnControl2 Text="充电低温告警"
-                                                           IsTrue="{Binding parameter2_5}" />
+                                                           IsTrue="{Binding Wran_BMU_5}" />
                             </StackPanel>
                             <StackPanel Grid.Row="2"
                                         Grid.Column="2"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl2 Text="充电高温告警"
-                                                           IsTrue="{Binding parameter2_6}" />
+                                                           IsTrue="{Binding Wran_BMU_6}" />
                             </StackPanel>
                             <StackPanel Grid.Row="2"
                                         Grid.Column="3"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl2 Text="放电低温告警"
-                                                           IsTrue="{Binding parameter2_7}" />
+                                                           IsTrue="{Binding Wran_BMU_7}" />
                             </StackPanel>
                             <StackPanel Grid.Row="2"
                                         Grid.Column="4"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl2 Text="放电高温告警"
-                                                           IsTrue="{Binding parameter2_8}" />
+                                                           IsTrue="{Binding Wran_BMU_8}" />
                             </StackPanel>
                             <StackPanel Grid.Row="3"
                                         Grid.Column="1"
                                         Style="{StaticResource ContentPanel}"
                                         HorizontalAlignment="Left">
                                 <localControl:WarnControl2 Text="充电过流告警"
-                                                           IsTrue="{Binding parameter2_9}" />
+                                                           IsTrue="{Binding Wran_BMU_9}" />
                             </StackPanel>
                             <StackPanel Grid.Row="3"
                                         Grid.Column="2"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl2 Text="放电过流告警"
-                                                           IsTrue="{Binding parameter2_10}" />
+                                                           IsTrue="{Binding Wran_BMU_10}" />
                             </StackPanel>
                             <StackPanel Grid.Row="3"
                                         Grid.Column="3"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl2 Text="模块低压告警"
-                                                           IsTrue="{Binding parameter2_11}" />
+                                                           IsTrue="{Binding Wran_BMU_11}" />
                             </StackPanel>
                             <StackPanel Grid.Row="3"
                                         Grid.Column="4"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl2 Text="模块高压告警"
-                                                           IsTrue="{Binding parameter2_12}" />
+                                                           IsTrue="{Binding Wran_BMU_12}" />
                             </StackPanel>
                         </Grid>
                         <!--BMU故障状态-->
@@ -815,69 +815,69 @@
                                         Style="{StaticResource ContentPanel}"
                                         HorizontalAlignment="Left">
                                 <localControl:WarnControl3 Text="电压传感器异常"
-                                                           IsTrue="{Binding parameter3_1}" />
+                                                           IsTrue="{Binding Fault_BMU_1}" />
                             </StackPanel>
                             <StackPanel Grid.Row="1"
                                         Grid.Column="2"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl3 Text="温度传感器异常"
-                                                           IsTrue="{Binding parameter3_2}" />
+                                                           IsTrue="{Binding Fault_BMU_2}" />
                             </StackPanel>
                             <StackPanel Grid.Row="1"
                                         Grid.Column="3"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl3 Text="内部通讯故障"
-                                                           IsTrue="{Binding parameter3_3}" />
+                                                           IsTrue="{Binding Fault_BMU_3}" />
                             </StackPanel>
                             <StackPanel Grid.Row="1"
                                         Grid.Column="4"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl3 Text="输入过压故障"
-                                                           IsTrue="{Binding parameter3_4}" />
+                                                           IsTrue="{Binding Fault_BMU_4}" />
                             </StackPanel>
                             <StackPanel Grid.Row="2"
                                         Grid.Column="1"
                                         Style="{StaticResource ContentPanel}"
                                         HorizontalAlignment="Left">
                                 <localControl:WarnControl3 Text="输入反接故障"
-                                                           IsTrue="{Binding parameter3_5}" />
+                                                           IsTrue="{Binding Fault_BMU_5}" />
                             </StackPanel>
                             <StackPanel Grid.Row="2"
                                         Grid.Column="2"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl3 Text="继电器故障"
-                                                           IsTrue="{Binding parameter3_6}" />
+                                                           IsTrue="{Binding Fault_BMU_6}" />
                             </StackPanel>
                             <StackPanel Grid.Row="2"
                                         Grid.Column="3"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl3 Text="电池损坏故障"
-                                                           IsTrue="{Binding parameter3_7}" />
+                                                           IsTrue="{Binding Fault_BMU_7}" />
                             </StackPanel>
                             <StackPanel Grid.Row="2"
                                         Grid.Column="4"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl3 Text="关机电路异常"
-                                                           IsTrue="{Binding parameter3_8}" />
+                                                           IsTrue="{Binding Fault_BMU_8}" />
                             </StackPanel>
                             <StackPanel Grid.Row="3"
                                         Grid.Column="1"
                                         Style="{StaticResource ContentPanel}"
                                         HorizontalAlignment="Left">
                                 <localControl:WarnControl3 Text="BCMIC异常"
-                                                           IsTrue="{Binding parameter3_9}" />
+                                                           IsTrue="{Binding Fault_BMU_9}" />
                             </StackPanel>
                             <StackPanel Grid.Row="3"
                                         Grid.Column="2"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl3 Text="内部总线异常"
-                                                           IsTrue="{Binding parameter3_10}" />
+                                                           IsTrue="{Binding Fault_BMU_10}" />
                             </StackPanel>
                             <StackPanel Grid.Row="3"
                                         Grid.Column="3"
                                         Style="{StaticResource ContentPanel}">
                                 <localControl:WarnControl3 Text="开机自检异常"
-                                                           IsTrue="{Binding parameter3_11}" />
+                                                           IsTrue="{Binding Fault_BMU_11}" />
                             </StackPanel>
 
                         </Grid>

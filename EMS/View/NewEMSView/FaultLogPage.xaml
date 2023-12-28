@@ -45,21 +45,29 @@
         <!--DataGrid表头样式-->
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="FontSize"
-                    Value="16"></Setter>
+                    Value="20"></Setter>
             <Setter Property="FontWeight"
                     Value="Bold"></Setter>
             <Setter Property="Height"
-                    Value="35"></Setter>
+                    Value="45"></Setter>
             <Setter Property="Background"
-                    Value="#C1C1C1"></Setter>
+                    Value="#F1F1F1"></Setter>
             <Setter Property="BorderThickness"
-                    Value="0,0,1,1"></Setter>
+                    Value="0,0,0,0"></Setter>
             <Setter Property="BorderBrush"
                     Value="LightGray"></Setter>
             <Setter Property="HorizontalContentAlignment"
                     Value="Center"></Setter>
         </Style>
 
+        <!--DataGrid行样式-->
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background"
+                    Value="White" />
+            <Setter Property="Margin"
+                    Value="0,10,0,10" />
+        </Style>
+        
         <!--DataGrid表体样式-->
         <Style TargetType="DataGridCell">
             <Setter Property="Background"
@@ -90,40 +98,47 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="6*" />
-            <RowDefinition Height="1*" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid  Grid.Row="1"
                Grid.Column="0"
                Margin="20 10">
 
-            <DataGrid x:Name="datagrid"
+            <DataGrid x:Name="Datagrid"
                       SelectionMode="Extended"
                       IsReadOnly="True"
-                      AutoGenerateColumns="False">
+                      BorderBrush="#F1F1F1"
+                      BorderThickness="1,1,1,1"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      GridLinesVisibility="None"
+                      AutoGenerateColumns="False"
+                      ItemsSource="{Binding FaultLogData}"
+                      SelectedItem="{Binding SelectedFaultLogData}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="*"
                                         Header="序号"
-                                        Binding="{Binding faultNumber}" />
+                                        Binding="{Binding FaultNumber}" />
                     <DataGridTextColumn Width="*"
                                         Header="设备"
-                                        Binding="{Binding faultDevice}" />
+                                        Binding="{Binding FaultDevice}" />
                     <DataGridTextColumn Width="*"
                                         Header="ID"
-                                        Binding="{Binding faultId}" />
+                                        Binding="{Binding FaultId}" />
                     <DataGridTextColumn Width="*"
                                         Header="模块"
-                                        Binding="{Binding faultModule}" />
+                                        Binding="{Binding FaultModule}" />
                     <DataGridTextColumn Width="*"
                                         Header="故障名称"
-                                        Binding="{Binding faultName}" />
+                                        Binding="{Binding FaultName}" />
                     <DataGridTextColumn Width="*"
                                         Header="等级"
-                                        Binding="{Binding faultGrade}" />
+                                        Binding="{Binding FaultGrade}" />
                     <DataGridTextColumn Width="*"
                                         Header="时间"
-                                        Binding="{Binding faultTime}" />
+                                        Binding="{Binding FaultTime}" />
 
                 </DataGrid.Columns>
             </DataGrid>
@@ -131,8 +146,8 @@
         <Grid  Grid.Row="2"
                Grid.Column="0"
                HorizontalAlignment="Right">
-            <hc:Pagination MaxPageCount="{Binding maxPageCount}"
-                           PageIndex="{Binding pageIndex}"
+            <hc:Pagination MaxPageCount="{Binding MaxPageCount}"
+                           PageIndex="{Binding PageIndex}"
                            DataCountPerPage="10"
                            IsJumpEnabled="True" />
             <!--<hc:Pagination MaxPageCount="10" PageIndex="1" DataCountPerPage="10" IsJumpEnabled="True"/>-->

@@ -44,7 +44,7 @@ namespace EMS.View.NewEMSView
                 new Item { OrderNumber = 10, Name = "DC模块组：模块10", Status = "离线" }
             };
 
-            dataGrid.ItemsSource = Items;
+            DCDataGrid.ItemsSource = Items;
         }
     }
 
