@@ -128,6 +128,9 @@
     <Reference Include="MQTTnet, Version=4.2.1.781, Culture=neutral, PublicKeyToken=fdb7629f2e364a63, processorArchitecture=MSIL">
       <HintPath>..\packages\MQTTnet.4.2.1.781\lib\net48\MQTTnet.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NModbus4, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NModbus4.2.1.0\lib\net40\NModbus4.dll</HintPath>
     </Reference>
@@ -222,7 +225,6 @@
     <Compile Include="Common\Modbus\ModbusRequest.cs" />
     <Compile Include="Common\Mqtt\BatteryCell.cs" />
     <Compile Include="Common\Mqtt\BCMU.cs" />
-    <Compile Include="Common\Mqtt\BcmuAlarmParameter.cs" />
     <Compile Include="Common\Mqtt\BcmuSetParameter.cs" />
     <Compile Include="Common\Mqtt\BMU.cs" />
     <Compile Include="Common\StrategyManage\EmsController.cs" />

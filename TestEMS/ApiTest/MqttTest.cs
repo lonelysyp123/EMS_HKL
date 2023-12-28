@@ -62,10 +62,6 @@ namespace TestEMS.ApiTest
         [TestMethod]
         public void TestJson()
         {
-            battery_cell batteryCell = new battery_cell();
-            batteryCell.id = 1;
-            batteryCell.soc = 22;
-            ilog.Debug(JsonConvert.SerializeObject(batteryCell));
         }
     }
 }
