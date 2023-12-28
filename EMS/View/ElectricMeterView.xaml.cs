@@ -29,14 +29,13 @@ namespace EMS.View
             viewmodel = new ElectricMeterViewModel();
             EnergyManagementSystem.GlobalInstance.SmartMeterManager.AddDev(viewmodel);
             this.DataContext = viewmodel;
-            RealTimeData.DataContext = viewmodel.electricityMeterModel;
-            CommConfiguaration.DataContext = viewmodel.electricityMeterModel.Configuaration;
+            CommConfiguaration.DataContext = viewmodel.Configuaration;
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
             EnergyManagementSystem.GlobalInstance.SmartMeterManager.RemoveDev(viewmodel);
-            viewmodel.electricityMeterModel.Close();
+            viewmodel.CloseSerialPort();
         }
     }
 }
