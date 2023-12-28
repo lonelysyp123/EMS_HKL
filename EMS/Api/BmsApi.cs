@@ -23,17 +23,17 @@ namespace EMS.Api
             DateTime dateTime = DateTime.Now;
             List<BatteryTotalViewModel> viewmodels = EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList.ToList();
             List<BatteryTotalModel> models = new List<BatteryTotalModel>();
-            if (viewmodels != null) {
-                for (int i = 0; i < viewmodels.Count; i++)
+            for (int i = 0; i < viewmodels.Count; i++)
+            {
+                var item = viewmodels[i].GetNextBMSDataForMqtt();
+                if (item != null)
                 {
-                    var item = viewmodels[i].GetNextBMSDataForMqtt();
                     item.CurrentTime = dateTime;
                     models.Add(item);
                 }
-                return models.ToArray();
             }
 
-            return null;
+            return models.ToArray();
         }
 
         /// <summary>

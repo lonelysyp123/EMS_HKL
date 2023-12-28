@@ -16,6 +16,7 @@ namespace TNCN.EMS.Common.Mqtt
         public List<BatteryCell> battery_cells { get; set; }
 
         public BMU(BatterySeriesModel batterySeriesModel) {
+            this.battery_cells = new List<BatteryCell>();
             this.id = batterySeriesModel.BMUID;
             this.alarm_state = batterySeriesModel.AlarmStateFlagBMU;
             this.faulty_state = batterySeriesModel.FaultyStateFlagBMU;
