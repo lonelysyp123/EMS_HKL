@@ -31,11 +31,11 @@ namespace EMS.Service
                     _isConnected = value;
                     OnChangeState(_isConnected, _isDaqData);
                 }
-            } 
+            }
         }
 
         private bool _isDaqData;
-        public bool IsDaqData 
+        public bool IsDaqData
         { 
             get => _isDaqData;
             private set
@@ -54,7 +54,7 @@ namespace EMS.Service
         private ModbusMaster _master;
         private Action<bool, bool> OnChangeState;
 
-        public BMSDataService() 
+        public BMSDataService()
         {
             CommunicationProtectTr = new Thread(CommunicationProtect);
             CommunicationProtectTr.IsBackground = true;
