@@ -128,7 +128,7 @@ namespace EMS.Common.Modbus.ModbusTCP
         {
             try
             {
-                ushort[] holding_register = _master.ReadHoldingRegisters(1, address, num);
+                ushort[] holding_register = _master.ReadHoldingRegisters(0, address, num);
                 byte[] ret = new byte[holding_register.Length * 2];
                 for (int i = 0; i < holding_register.Length; i++)
                 {
@@ -228,7 +228,7 @@ namespace EMS.Common.Modbus.ModbusTCP
         {
             try
             {
-                _master.WriteSingleRegister(1, address, value);
+                _master.WriteSingleRegister(0, address, value);
             }
             catch (Exception ex)
             {
