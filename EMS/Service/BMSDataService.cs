@@ -19,10 +19,10 @@ namespace EMS.Service
         public string Port { get; private set; }
 
         private bool _isConnected;
-        public bool IsConnected 
+        public bool IsConnected
         { 
             get=>_isConnected; 
-            private set 
+            private set
             {
                 if(_isConnected != value)
                 {
@@ -35,7 +35,7 @@ namespace EMS.Service
         private bool _isDaqData;
         public bool IsDaqData 
         { 
-            get => _isDaqData; 
+            get => _isDaqData;
             private set
             {
                 if( _isDaqData != value)
@@ -131,7 +131,6 @@ namespace EMS.Service
                 }
                 catch (Exception)
                 {
-
                     throw;
                 }
             }
