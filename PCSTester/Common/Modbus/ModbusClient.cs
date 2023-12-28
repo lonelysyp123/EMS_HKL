@@ -145,18 +145,7 @@ namespace PCSTester.Common.Modbus.ModbusTCP
             }
         }
 
-        public ushort[] ReadFunc1(ushort address,ushort num)
-        {
-            try
-            {
-                ushort[] ret = _master.ReadHoldingRegisters(1, address, num);
-                return ret;
-            }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
-        }
+        
 
         public bool ReadFunc(byte slave, ushort address, ushort num, ref byte[] value)
         {
