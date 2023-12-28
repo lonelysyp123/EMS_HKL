@@ -3,6 +3,7 @@ using EMS.Common.StrategyManage;
 using EMS.ViewModel;
 using MQTTnet.Internal;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -61,10 +62,10 @@ namespace EMS.Model
     public class BmsManager
     {
         //
-        private List<BatteryTotalViewModel> _bmsTotalList;
-        public List<BatteryTotalViewModel> BmsTotalList { get { return _bmsTotalList; } } //封装，不能set
+        private ObservableCollection<BatteryTotalViewModel> _bmsTotalList;
+        public ObservableCollection<BatteryTotalViewModel> BmsTotalList { get { return _bmsTotalList; } } //封装，不能set
         
-        public void SetBMSList(List<BatteryTotalViewModel> totallist)
+        public void SetBMSList(ObservableCollection<BatteryTotalViewModel> totallist)
         {
             _bmsTotalList = totallist;
         }
