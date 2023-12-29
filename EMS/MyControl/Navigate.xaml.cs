@@ -1,7 +1,5 @@
-﻿using HandyControl.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,57 +11,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EMS.View.NewEMSView
+namespace EMS.MyControl
 {
     /// <summary>
-    /// EMSMainView.xaml 的交互逻辑
+    /// Navigate.xaml 的交互逻辑
     /// </summary>
-    public partial class EMSMainView : System.Windows.Window
+    public partial class Navigate : UserControl
     {
-        public EMSMainView()
+        public Navigate()
         {
             InitializeComponent();
-        }
-
-
-        private Page CurrentPage
-        {
-            get => PageContent.Content as Page;
-            set
-            {
-                PageContent.Content = value;
-            }
-        }
-        private void Navigation(Page page)
-        {
-            CurrentPage = page;
-        }
-
-        private void MonitorViewMenu_SubPCS_Click(object sender, RoutedEventArgs e)
-        {
-            Navigation(new Monitor_PCSPage());
-        }
-
-        private void MonitorViewMenu_SubSM_Click(object sender, RoutedEventArgs e)
-        {
-            Navigation(new Monitor_SmartMeterPage());
-        }
-
-        private void BMS_SubBMU1_Click(object sender, RoutedEventArgs e)
-        {
-            Navigation(new Monitor_BMS_BCMUPage());
-        }
-
-        private void BMS_SubBMU2_Click(object sender, RoutedEventArgs e)
-        {
-            Navigation(new Monitor_BMS_BCMUPage());
-        }
-
-        private void BMS_SubBMU3_Click(object sender, RoutedEventArgs e)
-        {
-            Navigation(new Monitor_BMS_BCMUPage());
         }
 
         private void ToggleButton_Checked(object sender, RoutedEventArgs e)
@@ -80,7 +40,6 @@ namespace EMS.View.NewEMSView
                 MonitorViewMenu_SubPCS.Visibility = Visibility.Collapsed;
                 MonitorViewMenu_SubSM.Visibility = Visibility.Collapsed;
             }
-            Navigation(new Monitor_BMSPage());
         }
 
         private void MonitorViewMenu_SubBMS_Checked(object sender, RoutedEventArgs e)
@@ -97,7 +56,36 @@ namespace EMS.View.NewEMSView
                 BMS_SubBMU2.Visibility = Visibility.Collapsed;
                 BMS_SubBMU3.Visibility = Visibility.Collapsed;
             }
-            Navigation(new Monitor_BMSPage());
+        }
+
+        private void AnalysisViewMenu_SubBMS_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AnalysisViewMenu_SubPCS_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AnalysisViewMenu_SubSmartMeter_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void StrategyViewMenu_Setter_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void StrategyViewMenu_Analysis_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AnalysisViewMenu_ProtectSetter_Checked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

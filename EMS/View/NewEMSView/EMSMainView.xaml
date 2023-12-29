@@ -4,13 +4,74 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EMS.View.NewEMSView"
-        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:localControl="clr-namespace:EMS.MyControl"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:views="clr-namespace:EMS.View.NewEMSView"
+       
+        xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
         mc:Ignorable="d"
         Title="EMSMainView"
         Height="1080"
         Width="1920"
         Background="#FAFAFA">
     <Window.Resources>
+        <!--侧边菜单栏-->
+        <Style x:Key="MaterialDesignExpanderToggleButtonWithOutFlag"
+               TargetType="{x:Type ToggleButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border Background="Transparent">
+                            <wpf:PackIcon Name="ExpandPath"
+                                          Width="24"
+                                          Height="24"
+                                          Visibility="Hidden">
+                            </wpf:PackIcon>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="MaterialDesignHorizontalHeaderWithOutFlagStyle"
+               TargetType="{x:Type ToggleButton}">
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="Foreground"
+                    Value="White" />
+            <Setter Property="FontWeight"
+                    Value="Bold" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border Background="{TemplateBinding Background}"
+                                Padding="{Binding Path=(wpf:ExpanderAssist.HorizontalHeaderPadding), RelativeSource={RelativeSource AncestorType=Expander, AncestorLevel=1}}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="16" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Grid.Column="0"
+                                                  VerticalAlignment="Center"
+                                                  Content="{TemplateBinding Content}"
+                                                  ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                  ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
+                                <ToggleButton Name="ExpanderButton"
+                                              Grid.Column="2"
+                                              VerticalAlignment="Center"
+                                              Foreground="{TemplateBinding Foreground}"
+                                              RenderTransformOrigin="0.5 0.5"
+                                              IsChecked="{Binding Path=IsChecked, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                              Style="{StaticResource MaterialDesignExpanderToggleButtonWithOutFlag}">
+                                </ToggleButton>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <!--图标-->
         <Style x:Key="TextBlockFabricIcons"
                TargetType="TextBlock">
@@ -22,11 +83,6 @@
                     Value="Center" />
             <Setter Property="HorizontalAlignment"
                     Value="Center" />
-        </Style>
-        <!--菜单栏-->
-        <Style x:Key="SideMenuItemStyle" TargetType="{x:Type hc:SideMenuItem}">
-            <Setter Property="Background"
-                    Value="#405673" />
         </Style>
     </Window.Resources>
     <Grid>
@@ -67,7 +123,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <hc:DateTimePicker IsEnabled="False" HorizontalAlignment="Right" Margin="0,0,20,0"/>
+            <!--<hc:DateTimePicker IsEnabled="False" HorizontalAlignment="Right" Margin="0,0,20,0"/>-->
             <Menu Grid.Column="1"
                   VerticalAlignment="Center"
                   Background="Transparent">
@@ -111,145 +167,52 @@
         </Grid>
         <!--3、侧边菜单栏-->
         <Grid Grid.Row="1"
-              Grid.Column="0">
-            <hc:SideMenu BorderThickness="0"
-                         Background="#405673"
-                         Width="320">
-                <hc:Interaction.Triggers>
-                    <hc:EventTrigger EventName="SelectionChanged">
-                        <hc:EventToCommand Command="{Binding SwitchItemCmd}"
-                                           PassEventArgsToCommand="True" />
-                    </hc:EventTrigger>
-                </hc:Interaction.Triggers>
-                <!--首页-->
-                <hc:SideMenuItem Header="首页"
-                                 Background="#405673"
-                                 Foreground="white"
-                                 FontWeight="Bold"
-                                 VerticalAlignment="Center"
-                                 Margin="50,0,0,0"
-                                 Command="{Binding SelectCmd}">
-                    <hc:SideMenuItem.Icon>
-                        <TextBlock Text="&#xe606;"
-                                   Style="{StaticResource TextBlockFabricIcons}" />
-                    </hc:SideMenuItem.Icon>
-                </hc:SideMenuItem>
-                <!--监控界面-->
-                <hc:SideMenuItem Header="监控界面"
-                                 Style="{StaticResource SideMenuItemStyle}">
-                    <hc:SideMenuItem.Icon>
-                        <TextBlock Text="&#xe606;"
-                                   Style="{StaticResource TextBlockFabricIcons}" />
-                    </hc:SideMenuItem.Icon>
-                    <hc:SideMenuItem Header="BMS">
-                        <hc:SideMenuItem.Icon>
-                            <TextBlock Text="&#xf314;"
-                                       Style="{StaticResource TextBlockFabricIcons}" />
-                        </hc:SideMenuItem.Icon>
-                    </hc:SideMenuItem>
-                    <hc:SideMenuItem Header="PCS">
-                        <hc:SideMenuItem.Icon>
-                            <TextBlock Text="&#xf444;"
-                                       Style="{StaticResource TextBlockFabricIcons}" />
-                        </hc:SideMenuItem.Icon>
-                    </hc:SideMenuItem>
-                    <hc:SideMenuItem Header="电表">
-                        <hc:SideMenuItem.Icon>
-                            <TextBlock Text="&#xf6bf;"
-                                       Style="{StaticResource TextBlockFabricIcons}" />
-                        </hc:SideMenuItem.Icon>
-                    </hc:SideMenuItem>
-                </hc:SideMenuItem>
-                <!--数据分析-->
-                <hc:SideMenuItem Header="数据分析">
-                    <hc:SideMenuItem.Icon>
-                        <TextBlock Text="&#xe606;"
-                                   Style="{StaticResource TextBlockFabricIcons}" />
-                    </hc:SideMenuItem.Icon>
-                    <hc:SideMenuItem Header="BMS">
-                        <hc:SideMenuItem.Icon>
-                            <TextBlock Text="&#xf30e;"
-                                       Style="{StaticResource TextBlockFabricIcons}" />
-                        </hc:SideMenuItem.Icon>
-                    </hc:SideMenuItem>
-                    <hc:SideMenuItem Header="PCS">
-                        <hc:SideMenuItem.Icon>
-                            <TextBlock Text="&#xf293;"
-                                       Style="{StaticResource TextBlockFabricIcons}" />
-                        </hc:SideMenuItem.Icon>
-                    </hc:SideMenuItem>
-                    <hc:SideMenuItem Header="电表">
-                        <hc:SideMenuItem.Icon>
-                            <TextBlock Text="&#xf298;"
-                                       Style="{StaticResource TextBlockFabricIcons}" />
-                        </hc:SideMenuItem.Icon>
-                    </hc:SideMenuItem>
-                </hc:SideMenuItem>
-                <!--故障日志-->
-                <hc:SideMenuItem Header="故障日志">
-                    <hc:SideMenuItem.Icon>
-                        <TextBlock Text="&#xe606;"
-                                   Style="{StaticResource TextBlockFabricIcons}" />
-                    </hc:SideMenuItem.Icon>
-                </hc:SideMenuItem>
-                <!--策略管理-->
-                <hc:SideMenuItem Header="策略管理">
-                    <hc:SideMenuItem.Icon>
-                        <TextBlock Text="&#xe606;"
-                                   Style="{StaticResource TextBlockFabricIcons}" />
-                    </hc:SideMenuItem.Icon>
-                    <hc:SideMenuItem Header="策略配置">
-                        <hc:SideMenuItem.Icon>
-                            <TextBlock Text="&#xf28f;"
-                                       Style="{StaticResource TextBlockFabricIcons}" />
-                        </hc:SideMenuItem.Icon>
-                    </hc:SideMenuItem>
-                    <hc:SideMenuItem Header="策略曲线">
-                        <hc:SideMenuItem.Icon>
-                            <TextBlock Text="&#xf3b3;"
-                                       Style="{StaticResource TextBlockFabricIcons}" />
-                        </hc:SideMenuItem.Icon>
-                    </hc:SideMenuItem>
-                    <hc:SideMenuItem Header="保护参数">
-                        <hc:SideMenuItem.Icon>
-                            <TextBlock Text="&#xe8f1;"
-                                       Style="{StaticResource TextBlockFabricIcons}" />
-                        </hc:SideMenuItem.Icon>
-                    </hc:SideMenuItem>
-                </hc:SideMenuItem>
-                <!--系统管理-->
-                <hc:SideMenuItem Header="系统管理">
-                    <hc:SideMenuItem.Icon>
-                        <TextBlock Text="&#xe606;"
-                                   Style="{StaticResource TextBlockFabricIcons}" />
-                    </hc:SideMenuItem.Icon>
-                    <hc:SideMenuItem Header="设备详情">
-                        <hc:SideMenuItem.Icon>
-                            <TextBlock Text="&#xf28f;"
-                                       Style="{StaticResource TextBlockFabricIcons}" />
-                        </hc:SideMenuItem.Icon>
-                    </hc:SideMenuItem>
-                    <hc:SideMenuItem Header="设备配置">
-                        <hc:SideMenuItem.Icon>
-                            <TextBlock Text="&#xf3b3;"
-                                       Style="{StaticResource TextBlockFabricIcons}" />
-                        </hc:SideMenuItem.Icon>
-                    </hc:SideMenuItem>
-                    <hc:SideMenuItem Header="云端设置">
-                        <hc:SideMenuItem.Icon>
-                            <TextBlock Text="&#xe8f1;"
-                                       Style="{StaticResource TextBlockFabricIcons}" />
-                        </hc:SideMenuItem.Icon>
-                    </hc:SideMenuItem>
-                </hc:SideMenuItem>
-            </hc:SideMenu>
+              Grid.Column="0"
+              Background="#405673">
+            <StackPanel>
+                <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
+                              Content="监控界面"
+                              Click="ToggleButton_Checked"></ToggleButton>
+                <ToggleButton x:Name="MonitorViewMenu_SubBMS"
+                              Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
+                              Content="BMS"
+                              Click="MonitorViewMenu_SubBMS_Checked"
+                              Visibility="Collapsed"></ToggleButton>
+                <ToggleButton x:Name="BMS_SubBMU1"
+                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                              Content="BMU1"
+                              Visibility="Collapsed"
+                              Click="BMS_SubBMU1_Click"></ToggleButton>
+                <ToggleButton x:Name="BMS_SubBMU2"
+                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                              Content="BMU2"
+                              Visibility="Collapsed"
+                              Click="BMS_SubBMU2_Click"></ToggleButton>
+                <ToggleButton x:Name="BMS_SubBMU3"
+                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                              Content="BMU3"
+                              Visibility="Collapsed"
+                              Click="BMS_SubBMU3_Click"></ToggleButton>
+                <ToggleButton x:Name="MonitorViewMenu_SubPCS"
+                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                              Content="PCS"
+                              Visibility="Collapsed"
+                              Click="MonitorViewMenu_SubPCS_Click"></ToggleButton>
+                <ToggleButton x:Name="MonitorViewMenu_SubSM"
+                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                              Content="SM"
+                              Visibility="Collapsed"
+                              Click="MonitorViewMenu_SubSM_Click"></ToggleButton>
+                <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                              Content="故障日志"></ToggleButton>
+            </StackPanel>
             <!--END-->
         </Grid>
         <!--4、页面部分-->
         <Grid Grid.Row="1"
               Grid.Column="1">
-            <Frame x:Name="NewEMSMainbody"
-                   NavigationUIVisibility="Hidden"></Frame>
+            <Frame x:Name="PageContent"
+                   NavigationUIVisibility="Hidden" Content="{Binding CurrentPage}"></Frame>
         </Grid>
     </Grid>
 </Window>

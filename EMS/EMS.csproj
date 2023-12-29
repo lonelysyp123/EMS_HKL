@@ -125,6 +125,9 @@
     <Reference Include="MaterialDesignColors, Version=2.1.4.0, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.2.1.4\lib\net462\MaterialDesignColors.dll</HintPath>
     </Reference>
+    <Reference Include="MaterialDesignThemes.MahApps, Version=0.3.0.0, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignThemes.MahApps.0.3.0\lib\net462\MaterialDesignThemes.MahApps.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialDesignThemes.Wpf, Version=4.9.0.0, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.4.9.0\lib\net462\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
@@ -260,6 +263,9 @@
     </Compile>
     <Compile Include="MyControl\IconBorder.xaml.cs">
       <DependentUpon>IconBorder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControl\Navigate.xaml.cs">
+      <DependentUpon>Navigate.xaml</DependentUpon>
     </Compile>
     <Compile Include="MyControl\TitleBorder.xaml.cs">
       <DependentUpon>TitleBorder.xaml</DependentUpon>
@@ -481,6 +487,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MyControl\IPInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControl\Navigate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
