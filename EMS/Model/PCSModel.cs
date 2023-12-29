@@ -17,7 +17,7 @@ namespace EMS.Model
     public class PCSModel : ViewModelBase
     {
         private int DataAcquireTimeSpan = 1;
-        private DcStatusModel _dcStatusModel;
+        public DcStatusModel dcStatusModel;
         
         private bool _isConnected;
         /// <summary>
@@ -213,16 +213,16 @@ namespace EMS.Model
             }
         }
 
-        public void ReadCMTimeOut()
-        {
-            if (IsConnected)
-            {
-                byte[] data = ModbusClient.ReadFunc(56006, 3);
-                ParSettingModel.BMSCMInterruptionTimeOut = BitConverter.ToUInt16(data, 0);
-                ParSettingModel.Remote485CMInterruptonTimeOut = BitConverter.ToUInt16(data, 2);
-                ParSettingModel.RemoteTCPCMInterruptionTimeOut = BitConverter.ToUInt16(data, 4);
-            }
-        }
+        //public void ReadCMTimeOut()
+        //{
+        //    if (IsConnected)
+        //    {
+        //        byte[] data = ModbusClient.ReadFunc(56006, 3);
+        //        ParSettingModel.BMSCMInterruptionTimeOut = BitConverter.ToUInt16(data, 0);
+        //        ParSettingModel.Remote485CMInterruptonTimeOut = BitConverter.ToUInt16(data, 2);
+        //        ParSettingModel.RemoteTCPCMInterruptionTimeOut = BitConverter.ToUInt16(data, 4);
+        //    }
+        //}
 
         //public void SyncCMTimeOut()
         //{
@@ -314,10 +314,10 @@ namespace EMS.Model
                 try
                 {
                     byte[] dcState = ModbusClient.ReadFunc(53026, 7);
-                    _dcStatusModel.ModuleOnLineFlag = BitConverter.ToUInt16(dcState, 0);
-                    _dcStatusModel.ModuleRunFlag = BitConverter.ToUInt16(dcState, 4);
-                    _dcStatusModel.ModuleAlarmFlag = BitConverter.ToUInt16(dcState, 8);
-                    _dcStatusModel.ModuleFaultFlag = BitConverter.ToUInt16(dcState, 12);
+                    dcStatusModel.ModuleOnLineFlag = BitConverter.ToUInt16(dcState, 0);
+                    dcStatusModel.ModuleRunFlag = BitConverter.ToUInt16(dcState, 4);
+                    dcStatusModel.ModuleAlarmFlag = BitConverter.ToUInt16(dcState, 8);
+                    dcStatusModel.ModuleFaultFlag = BitConverter.ToUInt16(dcState, 12);
                     //_dcStatusModel.ModuleAlarmFlag= dcState[0];
                     //_dcStatusModel.ModuleRunFlag = dcState[2];
                     //_dcStatusModel.ModuleAlarmFlag = dcState[4];
@@ -434,10 +434,10 @@ namespace EMS.Model
             int runvalue;
             int alarmvalue;
             int faultvalue;
-            onlinevalue = _dcStatusModel.ModuleOnLineFlag;
-            runvalue = _dcStatusModel.ModuleRunFlag;
-            alarmvalue = _dcStatusModel.ModuleAlarmFlag;
-            faultvalue = _dcStatusModel.ModuleFaultFlag;
+            onlinevalue = dcStatusModel.ModuleOnLineFlag;
+            runvalue = dcStatusModel.ModuleRunFlag;
+            alarmvalue = dcStatusModel.ModuleAlarmFlag;
+            faultvalue = dcStatusModel.ModuleFaultFlag;
 
             //DC模组1状态
             if ((onlinevalue & 0x0001) != 0 && (runvalue & 0x0001) == 0 && (alarmvalue & 0x0001) == 0 && (faultvalue & 0x0001) == 0)
@@ -1008,7 +1008,7 @@ namespace EMS.Model
 
             ParSettingModel = new PCSParSettingModel();
 
-            _dcStatusModel = new DcStatusModel(); 
+            dcStatusModel = new DcStatusModel(); 
 
             Logger =LogManager.GetLogger(typeof(PCSModel));
         }

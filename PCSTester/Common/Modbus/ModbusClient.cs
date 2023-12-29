@@ -142,6 +142,7 @@ namespace PCSTester.Common.Modbus.ModbusTCP
             {
                 //LogUtils.Warn("读取数据失败", ex);
                 return new byte[num * 2];
+                throw ex;
             }
         }
 
