@@ -17,7 +17,7 @@ namespace EMS.Model
     public class PCSModel : ViewModelBase
     {
         private int DataAcquireTimeSpan = 1;
-        public DcStatusModel dcStatusModel;
+        
         
         private bool _isConnected;
         /// <summary>
@@ -314,10 +314,10 @@ namespace EMS.Model
                 try
                 {
                     byte[] dcState = ModbusClient.ReadFunc(53026, 7);
-                    dcStatusModel.ModuleOnLineFlag = BitConverter.ToUInt16(dcState, 0);
-                    dcStatusModel.ModuleRunFlag = BitConverter.ToUInt16(dcState, 4);
-                    dcStatusModel.ModuleAlarmFlag = BitConverter.ToUInt16(dcState, 8);
-                    dcStatusModel.ModuleFaultFlag = BitConverter.ToUInt16(dcState, 12);
+                    MonitorModel.ModuleOnLineFlag = BitConverter.ToUInt16(dcState, 0);
+                    MonitorModel.ModuleRunFlag = BitConverter.ToUInt16(dcState, 4);
+                    MonitorModel.ModuleAlarmFlag = BitConverter.ToUInt16(dcState, 8);
+                    MonitorModel.ModuleFaultFlag = BitConverter.ToUInt16(dcState, 12);
                     //_dcStatusModel.ModuleAlarmFlag= dcState[0];
                     //_dcStatusModel.ModuleRunFlag = dcState[2];
                     //_dcStatusModel.ModuleAlarmFlag = dcState[4];
@@ -434,10 +434,10 @@ namespace EMS.Model
             int runvalue;
             int alarmvalue;
             int faultvalue;
-            onlinevalue = dcStatusModel.ModuleOnLineFlag;
-            runvalue = dcStatusModel.ModuleRunFlag;
-            alarmvalue = dcStatusModel.ModuleAlarmFlag;
-            faultvalue = dcStatusModel.ModuleFaultFlag;
+            onlinevalue = MonitorModel.ModuleOnLineFlag;
+            runvalue = MonitorModel.ModuleRunFlag;
+            alarmvalue = MonitorModel.ModuleAlarmFlag;
+            faultvalue = MonitorModel.ModuleFaultFlag;
 
             //DC模组1状态
             if ((onlinevalue & 0x0001) != 0 && (runvalue & 0x0001) == 0 && (alarmvalue & 0x0001) == 0 && (faultvalue & 0x0001) == 0)
@@ -1007,8 +1007,6 @@ namespace EMS.Model
             MonitorModel = new PCSMonitorModel();
 
             ParSettingModel = new PCSParSettingModel();
-
-            dcStatusModel = new DcStatusModel(); 
 
             Logger =LogManager.GetLogger(typeof(PCSModel));
         }

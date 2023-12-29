@@ -166,10 +166,10 @@ namespace EMS.Service
             PCSModel item = new PCSModel();
             if (dcstate !=null)
             {
-                item.dcStatusModel.ModuleOnLineFlag = BitConverter.ToUInt16(dcstate, 0);
-                item.dcStatusModel.ModuleRunFlag = BitConverter.ToUInt16(dcstate, 4);
-                item.dcStatusModel.ModuleAlarmFlag = BitConverter.ToUInt16(dcstate, 8);
-                item.dcStatusModel.ModuleFaultFlag = BitConverter.ToUInt16(dcstate, 12);
+                item.MonitorModel.ModuleOnLineFlag = BitConverter.ToUInt16(dcstate, 0);
+                item.MonitorModel.ModuleRunFlag = BitConverter.ToUInt16(dcstate, 4);
+                item.MonitorModel.ModuleAlarmFlag = BitConverter.ToUInt16(dcstate, 8);
+                item.MonitorModel.ModuleFaultFlag = BitConverter.ToUInt16(dcstate, 12);
             }
             if (pcsdata != null)
             {
@@ -313,12 +313,18 @@ namespace EMS.Service
             return WriteFunc(slave, (ushort)address, (ushort)value);
         }
 
-        public void SyncBUSVolInfo(ushort[] busvolvalues)
+
+
+        /// <summary>
+        /// 同步BUS侧电压阈值
+        /// </summary>
+        /// <param name="busvolvalues">BUS侧电压阈值数组</param>
+        public void SyncBUSVolInfo(double[] busvolvalues)
         {
-            WriteFunc(PcsId, PcsCommandAdressEnum.HigherVolThreshold, busvolvalues[1] * 10);
-            WriteFunc(PcsId, PcsCommandAdressEnum.LowerVolThreshold, busvolvalues[2] * 10);
-            WriteFunc(PcsId, PcsCommandAdressEnum.HigherVolSetting, busvolvalues[3] * 10);
-            WriteFunc(PcsId, PcsCommandAdressEnum.LowerVolSetting, busvolvalues[4] * 10);
+            WriteFunc(PcsId, PcsCommandAdressEnum.HigherVolThreshold, (ushort)(busvolvalues[1] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.LowerVolThreshold, (ushort)(busvolvalues[2] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.HigherVolSetting, (ushort)(busvolvalues[3] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.LowerVolSetting, (ushort)(busvolvalues[4] * 10));
         }
 
         public byte[] ReadBUSVolInfo()
@@ -342,15 +348,15 @@ namespace EMS.Service
         /// 同步DC侧分支值
         /// </summary>
         /// <param name="dcbranch1values">DC侧支路分支值数组</param>
-        public void SyncDCBranchInfo(ushort[] dcbranch1values)
+        public void SyncDCBranchInfo(double[] dcbranch1values)
         {
-            WriteFunc(PcsId, PcsCommandAdressEnum.BatteryLowerVolThreshold, dcbranch1values[1] * 10);
-            WriteFunc(PcsId, PcsCommandAdressEnum.EndOfDischargeVol, dcbranch1values[2] * 10);
-            WriteFunc(PcsId, PcsCommandAdressEnum.MutiStrCurRegulationPar, dcbranch1values[3]);
-            WriteFunc(PcsId, PcsCommandAdressEnum.BatteryToppingCharVol, dcbranch1values[4] * 10);
-            WriteFunc(PcsId, PcsCommandAdressEnum.EndOfCharCur, dcbranch1values[5] * 10);
-            WriteFunc(PcsId, PcsCommandAdressEnum.MaxCharCur, dcbranch1values[6] * 10);
-            WriteFunc(PcsId, PcsCommandAdressEnum.MaxDischarCur, dcbranch1values[7] * 10);
+            WriteFunc(PcsId, PcsCommandAdressEnum.BatteryLowerVolThreshold, (ushort)(dcbranch1values[1] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.EndOfDischargeVol, (ushort)(dcbranch1values[2] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.MutiStrCurRegulationPar, (ushort)(dcbranch1values[3]));
+            WriteFunc(PcsId, PcsCommandAdressEnum.BatteryToppingCharVol, (ushort)(dcbranch1values[4] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.EndOfCharCur, (ushort)(dcbranch1values[5] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.MaxCharCur, (ushort)(dcbranch1values[6] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.MaxDischarCur, (ushort)(dcbranch1values[7] * 10));
         }
 
         public byte[] ReadDCBranchInfo()
@@ -379,7 +385,7 @@ namespace EMS.Service
         /// </summary>
         /// <param name="pcsmancharset">设置值</param>
         /// <param name="pcsmancharmodelset">设置模式</param>
-        public void ManChar(double pcsmancharset,string pcsmancharmodelset)
+        public void ManChar(string pcsmancharmodelset,double pcsmancharset)
         {
             if (pcsmancharmodelset == "设置电流调节")
             {
