@@ -264,9 +264,6 @@
     <Compile Include="MyControl\IconBorder.xaml.cs">
       <DependentUpon>IconBorder.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MyControl\Navigate.xaml.cs">
-      <DependentUpon>Navigate.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MyControl\TitleBorder.xaml.cs">
       <DependentUpon>TitleBorder.xaml</DependentUpon>
     </Compile>
@@ -487,10 +484,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MyControl\IPInput.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MyControl\Navigate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
