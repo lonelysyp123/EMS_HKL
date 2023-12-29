@@ -50,7 +50,7 @@ namespace EMS.MyControl
             set { SetValue(FIcon_ForegroundProperty, value); }
         }
         public static readonly DependencyProperty FIcon_ForegroundProperty =
-            DependencyProperty.Register("FIcon_Foreground", typeof(string), typeof(IconBorder), new PropertyMetadata("Colors.Green"));
+            DependencyProperty.Register("FIcon_Foreground", typeof(string), typeof(IconBorder), new PropertyMetadata("#00FF00"));
 
         //字体图标背景
         public string FIconBorder_Background
@@ -59,7 +59,7 @@ namespace EMS.MyControl
             set { SetValue(FIconBorder_BackgroundProperty, value); }
         }
         public static readonly DependencyProperty FIconBorder_BackgroundProperty =
-            DependencyProperty.Register("FIconBorder_Background", typeof(string), typeof(IconBorder), new PropertyMetadata("Colors.Orange"));
+            DependencyProperty.Register("FIconBorder_Background", typeof(string), typeof(IconBorder), new PropertyMetadata("#FFA500"));
 
 
     }

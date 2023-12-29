@@ -38,22 +38,36 @@
         <!--侧边栏图标-->
         <Style x:Key="MaterialDesignExpanderToggleButtonWithOutFlag"
                TargetType="{x:Type ToggleButton}">
-            <Setter Property="Background"
-                    Value="#1F2D3D" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ToggleButton}">
                         <Border Background="Transparent">
-                            <wpf:PackIcon Name="ExpandPath"
-                                          Width="24"
-                                          Height="24" Visibility="Hidden"
-                                          >
+                            <wpf:PackIcon Name="ExpandPath" Width="24" Height="24" Foreground="{TemplateBinding Foreground}" Kind="ChevronDown" Opacity="0.38" RenderTransformOrigin="0.5 0.5" Visibility="Hidden">
+                                <wpf:PackIcon.RenderTransform>
+                                    <RotateTransform x:Name="ExpandPathRotateTransform" />
+                                </wpf:PackIcon.RenderTransform>
                             </wpf:PackIcon>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+        <!--<Style x:Key="MaterialDesignExpanderToggleButton" 
+               TargetType="{x:Type ToggleButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border Background="Transparent">
+                            <wpf:PackIcon Name="ExpandPath" Width="24" Height="24" Foreground="{TemplateBinding Foreground}" Kind="ChevronDown" Opacity="0.38" RenderTransformOrigin="0.5 0.5">
+                                <wpf:PackIcon.RenderTransform>
+                                    <RotateTransform x:Name="ExpandPathRotateTransform" />
+                                </wpf:PackIcon.RenderTransform>
+                            </wpf:PackIcon>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>-->
         <!--无下拉框一级菜单样式-->
         <Style x:Key="MaterialDesignHorizontalHeaderWithOutFlagStyle"
                BasedOn="{StaticResource CommonStyle}"
@@ -61,8 +75,8 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ToggleButton}">
-                        <Border Background="{TemplateBinding Background}"
-                                Padding="{Binding Path=(wpf:ExpanderAssist.HorizontalHeaderPadding), RelativeSource={RelativeSource AncestorType=Expander, AncestorLevel=1}}">
+                        <Border x:Name="BD2" Background="{TemplateBinding Background}"
+                                >
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -105,7 +119,7 @@
                                         Value="#1890FF" />
                             </Trigger>
                             <Trigger Property="IsChecked"
-                                     Value="false">
+                                     Value="False">
                                 <Setter Property="Background"
                                         Value="#405673" />
                                 <Setter Property="Foreground"
@@ -117,14 +131,14 @@
             </Setter>
         </Style>
         <!--有下拉框一级菜单样式-->
-        <Style x:Key="MaterialDesignHeaderStyle"
+        <Style x:Key="MaterialDesignHorizontalHeaderStyle"
                TargetType="ToggleButton"
                BasedOn="{StaticResource CommonStyle}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ToggleButton}">
-                        <Border Background="{TemplateBinding Background}"
-                                Padding="{Binding Path=(wpf:ExpanderAssist.HorizontalHeaderPadding), RelativeSource={RelativeSource AncestorType=Expander, AncestorLevel=1}}">
+                        <Border x:Name="BD1" Background="{TemplateBinding Background}"
+                                >
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -153,7 +167,7 @@
                                               Foreground="{TemplateBinding Foreground}"
                                               RenderTransformOrigin="0.5 0.5"
                                               IsChecked="{Binding Path=IsChecked, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                              Style="{StaticResource MaterialDesignHorizontalHeaderStyle}">
+                                              Style="{StaticResource MaterialDesignExpanderToggleButton}">
                                 </ToggleButton>
                             </Grid>
                         </Border>
@@ -167,11 +181,11 @@
                                         Value="#1890FF" />
                             </Trigger>
                             <Trigger Property="IsChecked"
-                                     Value="false">
+                                     Value="False">
                                 <Setter Property="Background"
                                         Value="#405673" />
                                 <Setter Property="Foreground"
-                                        Value="White" />
+                                        Value="#FFFFFF" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -278,75 +292,77 @@
         <Grid Grid.Row="1"
               Grid.Column="0"
               Background="#405673">
-            <StackPanel Margin="0,50,0,0">
+            <StackPanel Margin="0,50,0,0" x:Name="NavigationTool">
                 <!--首页-->
                 <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Click="HomeViewMenu_Checked"
                               Content="首页"
                               Uid="&#xe7c8;"
-                              Loaded="SubMenuItem_Checked"></ToggleButton>
+                              Loaded="ToggleButton_Loaded" ></ToggleButton>
                 <!--监控界面-->
-                <ToggleButton Style="{StaticResource MaterialDesignHeaderStyle}"
+                <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
                               Content="监控界面"
                               Uid="&#xea8b;"
+                              x:Name="MonitorViewMenu"
                               Click="MonitorViewMenu_Checked"
                               Loaded="ToggleButton_Loaded" />
                 <ToggleButton x:Name="MonitorViewMenu_BMS"
-                              Style="{StaticResource MaterialDesignHeaderStyle}"
+                              Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
                               Content="BMS"
                               Uid="&#xe677;"
                               Click="MonitorViewMenu_BMS_Checked"
                               Visibility="Collapsed"
-                              Loaded="SubMenuItem_Checked" />
+                              Loaded="ToggleButton_LoadedForLevel2" />
                 <ToggleButton x:Name="BMS_SubBMU1"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="BMU1"
                               Click="BMS_SubBMU1_Checked"
                               Visibility="Collapsed"
-                              Loaded="SubMenuItem_Checked" />
+                              />
                 <ToggleButton x:Name="BMS_SubBMU2"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="BMU2"
                               Visibility="Collapsed"
-                              Loaded="SubMenuItem_Checked" />
+                              />
                 <ToggleButton x:Name="BMS_SubBMU3"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="BMU3"
                               Visibility="Collapsed"
-                              Loaded="SubMenuItem_Checked"/>
+                              />
                 <ToggleButton x:Name="BMS_SubBMU4"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="BMU4"
                               Visibility="Collapsed"
-                              Loaded="SubMenuItem_Checked"/>
+                              />
                 <ToggleButton x:Name="BMS_SubBMU5"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="BMU5"
                               Visibility="Collapsed"
-                              Loaded="SubMenuItem_Checked"/>
+                              />
                 <ToggleButton x:Name="BMS_SubBMU6"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="BMU6"
                               Visibility="Collapsed"
-                              Loaded="SubMenuItem_Checked" />
+                              />
                 <ToggleButton x:Name="MonitorViewMenu_PCS"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="PCS"
                               Uid="&#xe610;"
                               Click="MonitorViewMenu_PCS_Checked"
                               Visibility="Collapsed"
-                              Loaded="SubMenuItem_Checked" />
+                                />
                 <ToggleButton x:Name="MonitorViewMenu_SM"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="电表"
                               Uid="&#xe6a7;"
                               Click="MonitorViewMenu_SM_Checked"
                               Visibility="Collapsed"
-                              Loaded="SubMenuItem_Checked"/>
+                               />
                 <!--数据分析-->
-                <ToggleButton Style="{StaticResource MaterialDesignHeaderStyle}"
+                <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
                               Content="数据分析"
                               Uid="&#xe608;"
+                              x:Name="AnalysisViewMenu"
                               Click="AnalysisViewMenu_Checked"
                               Loaded="ToggleButton_Loaded" />
                 <ToggleButton x:Name="AnalysisViewMenu_BMS"
@@ -354,32 +370,33 @@
                               Content="BMS"
                               Uid="&#xe603;"
                               Click="AnalysisViewMenu_BMS_Checked"
-                              Loaded="SubMenuItem_Checked"
+                               
                               Visibility="Collapsed" />
                 <ToggleButton x:Name="AnalysisViewMenu_PCS"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="PCS"
                               Uid="&#xe851;"
                               Click="AnalysisViewMenu_PCS_Checked"
-                              Loaded="SubMenuItem_Checked"
+                               
                               Visibility="Collapsed" />
                 <ToggleButton x:Name="AnalysisViewMenu_SmartMeter"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="电表"
                               Uid="&#xe694;"
                               Click="AnalysisViewMenu_SmartMeter_Checked"
-                              Loaded="SubMenuItem_Checked"
+                               
                               Visibility="Collapsed" />
                 <!--故障日志-->
                 <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="故障日志"
                               Uid="&#xe78e;"
-                              Loaded="SubMenuItem_Checked"
-                              Click="FaultViewMenu_Checked" />
+                              Click="FaultViewMenu_Checked" 
+                              Loaded="ToggleButton_Loaded" />
                 <!--策略管理-->
-                <ToggleButton Style="{StaticResource MaterialDesignHeaderStyle}"
+                <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
                               Content="策略管理"
                               Uid="&#xe64b;"
+                              x:Name="StrategyViewMenu"
                               Click="StrategyViewMenu_Checked"
                               Loaded="ToggleButton_Loaded" />
                 <ToggleButton x:Name="StrategyViewMenu_Setter"
@@ -387,26 +404,27 @@
                               Content="策略配置"
                               Uid="&#xe61a;"
                               Click="StrategyViewMenu_Setter_Checked"
-                              Loaded="SubMenuItem_Checked"
+                               
                               Visibility="Collapsed" />
                 <ToggleButton x:Name="StrategyViewMenu_Analysis"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="策略曲线"
                               Uid="&#xe64a;"
                               Click="StrategyViewMenu_Analysis_Checked"
-                              Loaded="SubMenuItem_Checked"
+                               
                               Visibility="Collapsed" />
-                <ToggleButton x:Name="AnalysisViewMenu_ProtectSetter"
+                <ToggleButton x:Name="StrategyViewMenu_ProtectSetter"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="保护参数"
                               Uid="&#xe6db;"
-                              Click="AnalysisViewMenu_ProtectSetter_Checked"
-                              Loaded="SubMenuItem_Checked"
+                              Click="StrategyViewMenu_ProtectSetter_Checked"
+                               
                               Visibility="Collapsed" />
                 <!--系统管理-->
-                <ToggleButton Style="{StaticResource MaterialDesignHeaderStyle}"
+                <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
                               Content="系统管理"
                               Uid="&#xea41;"
+                              x:Name="SystemViewMenu"
                               Click="SystemViewMenu_Checked"
                               Loaded="ToggleButton_Loaded" />
                 <ToggleButton x:Name="SystemViewMenu_DevInfo"
@@ -414,21 +432,21 @@
                               Content="设备详情"
                               Uid="&#xe7d6;"
                               Click="SystemViewMenu_DevInfo_Checked"
-                              Loaded="SubMenuItem_Checked"
+                               
                               Visibility="Collapsed" />
                 <ToggleButton x:Name="SystemViewMenu_DevSetter"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="设备配置"
                               Uid="&#xe726;"
                               Click="SystemViewMenu_DevSetter_Checked"
-                              Loaded="SubMenuItem_Checked"
+                               
                               Visibility="Collapsed" />
                 <ToggleButton x:Name="SystemViewMenu_MqttSetter"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="云端设置"
                               Uid="&#xea53;"
                               Click="StrategyViewMenu_Setter_Checked"
-                              Loaded="SubMenuItem_Checked"
+                               
                               Visibility="Collapsed" />
 
             </StackPanel>

@@ -33,18 +33,40 @@ namespace EMS.View.NewEMSView
             get => PageContent.Content as Page;
             set
             {
-                PageContent.Content = value;
+                if(PageContent.Content != null)
+                {
+                    if ((PageContent.Content as Page).GetType() != value.GetType())
+                    {
+                        PageContent.Content = value;
+                    }
+                }
+                else
+                {
+                    PageContent.Content = value;
+                }
             }
         }
-        private void Navigation(Page page)
+        private void Navigation(Page page, ToggleButton button, ToggleButton parent = null, ToggleButton grandpa = null)
         {
+            UnCheckedOperation(button, parent, grandpa);
             CurrentPage = page;
         }
 
+        private void UnCheckedOperation(ToggleButton button, ToggleButton parent = null, ToggleButton grandpa = null)
+        {
+            foreach(var item in NavigationTool.Children)
+            {
+                if ((item as ToggleButton) != button && (item as ToggleButton) != parent && (item as ToggleButton) != grandpa)
+                {
+                    (item as ToggleButton).IsChecked = false;
+                }
+            }
+        }
 
         private void HomeViewMenu_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new HomePage());
+            //UnCheckedOperation(sender as ToggleButton);
+            Navigation(new HomePage(), sender as ToggleButton);
         }
 
         private void MonitorViewMenu_Checked(object sender, RoutedEventArgs e)
@@ -61,7 +83,7 @@ namespace EMS.View.NewEMSView
                 MonitorViewMenu_PCS.Visibility = Visibility.Collapsed;
                 MonitorViewMenu_SM.Visibility = Visibility.Collapsed;
             }
-            Navigation(new Monitor_BMSPage());
+            Navigation(new Monitor_BMSPage(), sender as ToggleButton);
         }
 
         private void MonitorViewMenu_BMS_Checked(object sender, RoutedEventArgs e)
@@ -84,21 +106,21 @@ namespace EMS.View.NewEMSView
                 BMS_SubBMU5.Visibility = Visibility.Collapsed;
                 BMS_SubBMU6.Visibility = Visibility.Collapsed;
             }
-            Navigation(new Monitor_BMSPage());
+            Navigation(new Monitor_BMSPage(), sender as ToggleButton, MonitorViewMenu);
         }
         private void BMS_SubBMU1_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Monitor_BMS_BCMUPage());
+            Navigation(new Monitor_BMS_BCMUPage(), sender as ToggleButton, MonitorViewMenu_BMS, MonitorViewMenu);
         }
 
         private void MonitorViewMenu_PCS_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Monitor_PCSPage());
+            Navigation(new Monitor_PCSPage(), sender as ToggleButton, MonitorViewMenu);
         }
 
         private void MonitorViewMenu_SM_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Monitor_SmartMeterPage());
+            Navigation(new Monitor_SmartMeterPage(), sender as ToggleButton, MonitorViewMenu);
 
         }
 
@@ -116,12 +138,12 @@ namespace EMS.View.NewEMSView
                 AnalysisViewMenu_PCS.Visibility = Visibility.Collapsed;
                 AnalysisViewMenu_SmartMeter.Visibility = Visibility.Collapsed;
             }
-            Navigation(new Analysis_BMSPage());
+            Navigation(new Analysis_BMSPage(), sender as ToggleButton);
         }
 
         private void FaultViewMenu_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new FaultLogPage());
+            Navigation(new FaultLogPage(), sender as ToggleButton);
         }
 
         private void StrategyViewMenu_Checked(object sender, RoutedEventArgs e)
@@ -130,15 +152,15 @@ namespace EMS.View.NewEMSView
             {
                 StrategyViewMenu_Setter.Visibility = Visibility.Visible;
                 StrategyViewMenu_Analysis.Visibility = Visibility.Visible;
-                AnalysisViewMenu_ProtectSetter.Visibility = Visibility.Visible;
+                StrategyViewMenu_ProtectSetter.Visibility = Visibility.Visible;
             }
             else
             {
                 StrategyViewMenu_Setter.Visibility = Visibility.Collapsed;
                 StrategyViewMenu_Analysis.Visibility = Visibility.Collapsed;
-                AnalysisViewMenu_ProtectSetter.Visibility = Visibility.Collapsed;
+                StrategyViewMenu_ProtectSetter.Visibility = Visibility.Collapsed;
             }
-            Navigation(new Strategy_SetterPage());
+            Navigation(new Strategy_SetterPage(), sender as ToggleButton);
         }
 
         private void SystemViewMenu_Checked(object sender, RoutedEventArgs e)
@@ -155,96 +177,97 @@ namespace EMS.View.NewEMSView
                 SystemViewMenu_DevSetter.Visibility = Visibility.Collapsed;
                 SystemViewMenu_MqttSetter.Visibility = Visibility.Collapsed;
             }
-            Navigation(new Strategy_SetterPage());
+            Navigation(new Strategy_SetterPage(), sender as ToggleButton);
         }
 
         private void AnalysisViewMenu_BMS_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Analysis_BMSPage());
+            Navigation(new Analysis_BMSPage(), sender as ToggleButton, AnalysisViewMenu);
         }
 
         private void AnalysisViewMenu_PCS_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Analysis_PCSPage());
+            Navigation(new Analysis_PCSPage(), sender as ToggleButton, AnalysisViewMenu);
         }
 
         private void AnalysisViewMenu_SmartMeter_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Analysis_SmartMeterPage());
+            Navigation(new Analysis_SmartMeterPage(), sender as ToggleButton, AnalysisViewMenu);
         }
 
         private void StrategyViewMenu_Setter_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Strategy_SetterPage());
+            Navigation(new Strategy_SetterPage(), sender as ToggleButton, StrategyViewMenu);
         }
 
         private void StrategyViewMenu_Analysis_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Strategy_AnalysisPage());
+            Navigation(new Strategy_AnalysisPage(), sender as ToggleButton, StrategyViewMenu);
         }
 
-        private void AnalysisViewMenu_ProtectSetter_Checked(object sender, RoutedEventArgs e)
+        private void StrategyViewMenu_ProtectSetter_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Strategy_ProtectSetterPage());
+            Navigation(new Strategy_ProtectSetterPage(), sender as ToggleButton, StrategyViewMenu);
         }
 
         private void SystemViewMenu_DevInfo_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new System_DevInfoPage());
+            Navigation(new System_DevInfoPage(), sender as ToggleButton, SystemViewMenu);
         }
 
         private void SystemViewMenu_DevSetter_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new System_DevSetterPage());
+            Navigation(new System_DevSetterPage(), sender as ToggleButton, SystemViewMenu);
         }
 
         private void SystemViewMenu_MqttSetter_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new System_MqttSetterPage());
+            Navigation(new System_MqttSetterPage(), sender as ToggleButton, SystemViewMenu);
         }
 
         //只展开一个下拉框
-        private List<ToggleButton> _toggleButtons = new List<ToggleButton>();
         private void ToggleButton_Loaded(object sender, RoutedEventArgs e)
         {
             var toggleButton = (ToggleButton)sender;
-            _toggleButtons.Add(toggleButton);
             toggleButton.Checked += ToggleButton_Checked;
-            toggleButton.Unchecked += ToggleButton_Unchecked;
-        }
-        private void ToggleButton_Checked(object sender, RoutedEventArgs e)
-        {
-            
-            foreach (var toggleButton in _toggleButtons)
-            {
-                if (toggleButton != sender)
-                {
-                    toggleButton.IsChecked = false;
-                    MonitorViewMenu_BMS.Visibility = Visibility.Collapsed;
-                    MonitorViewMenu_PCS.Visibility = Visibility.Collapsed;
-                    MonitorViewMenu_SM.Visibility = Visibility.Collapsed;
-                    BMS_SubBMU1.Visibility = Visibility.Collapsed;
-                    BMS_SubBMU2.Visibility = Visibility.Collapsed;
-                    BMS_SubBMU3.Visibility = Visibility.Collapsed;
-                    BMS_SubBMU4.Visibility = Visibility.Collapsed;
-                    BMS_SubBMU5.Visibility = Visibility.Collapsed;
-                    BMS_SubBMU6.Visibility = Visibility.Collapsed;
-                    AnalysisViewMenu_BMS.Visibility = Visibility.Collapsed;
-                    AnalysisViewMenu_PCS.Visibility = Visibility.Collapsed;
-                    AnalysisViewMenu_SmartMeter.Visibility = Visibility.Collapsed;
-                    StrategyViewMenu_Setter.Visibility = Visibility.Collapsed;
-                    StrategyViewMenu_Analysis.Visibility = Visibility.Collapsed;
-                    AnalysisViewMenu_ProtectSetter.Visibility = Visibility.Collapsed;
-                    SystemViewMenu_DevInfo.Visibility = Visibility.Collapsed;
-                    SystemViewMenu_DevSetter.Visibility = Visibility.Collapsed;
-                    SystemViewMenu_MqttSetter.Visibility = Visibility.Collapsed;
-                }
-            }
         }
 
-        private void ToggleButton_Unchecked(object sender, RoutedEventArgs e)
+        private void ToggleButton_Checked(object sender, RoutedEventArgs e)
         {
-            // 不需要特别处理，因为当其他ToggleButton被选中时，这个ToggleButton会自动变为未选中状态
+            MonitorViewMenu_BMS.Visibility = Visibility.Collapsed;
+            MonitorViewMenu_PCS.Visibility = Visibility.Collapsed;
+            MonitorViewMenu_SM.Visibility = Visibility.Collapsed;
+            BMS_SubBMU1.Visibility = Visibility.Collapsed;
+            BMS_SubBMU2.Visibility = Visibility.Collapsed;
+            BMS_SubBMU3.Visibility = Visibility.Collapsed;
+            BMS_SubBMU4.Visibility = Visibility.Collapsed;
+            BMS_SubBMU5.Visibility = Visibility.Collapsed;
+            BMS_SubBMU6.Visibility = Visibility.Collapsed;
+            AnalysisViewMenu_BMS.Visibility = Visibility.Collapsed;
+            AnalysisViewMenu_PCS.Visibility = Visibility.Collapsed;
+            AnalysisViewMenu_SmartMeter.Visibility = Visibility.Collapsed;
+            StrategyViewMenu_Setter.Visibility = Visibility.Collapsed;
+            StrategyViewMenu_Analysis.Visibility = Visibility.Collapsed;
+            StrategyViewMenu_ProtectSetter.Visibility = Visibility.Collapsed;
+            SystemViewMenu_DevInfo.Visibility = Visibility.Collapsed;
+            SystemViewMenu_DevSetter.Visibility = Visibility.Collapsed;
+            SystemViewMenu_MqttSetter.Visibility = Visibility.Collapsed;
+        }
+
+        private void ToggleButton_LoadedForLevel2(object sender, RoutedEventArgs e)
+        {
+            var toggleButton = (ToggleButton)sender;
+            toggleButton.Unchecked += ToggleButton_UncheckedForLevel2;
+        }
+
+        private void ToggleButton_UncheckedForLevel2(object sender, RoutedEventArgs e)
+        {
+            BMS_SubBMU1.Visibility = Visibility.Collapsed;
+            BMS_SubBMU2.Visibility = Visibility.Collapsed;
+            BMS_SubBMU3.Visibility = Visibility.Collapsed;
+            BMS_SubBMU4.Visibility = Visibility.Collapsed;
+            BMS_SubBMU5.Visibility = Visibility.Collapsed;
+            BMS_SubBMU6.Visibility = Visibility.Collapsed;
         }
 
         //退出
@@ -270,21 +293,21 @@ namespace EMS.View.NewEMSView
 
 
         //标题变色
-        private ToggleButton _currentSelectedSubMenu = null;
-        private void SubMenuItem_Checked(object sender, RoutedEventArgs e)
-        {
-            var button = (ToggleButton)sender;
+        //private ToggleButton _currentSelectedSubMenu = null;
+        //private void SubMenuItem_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    var button = (ToggleButton)sender;
 
-            if (_currentSelectedSubMenu != null && _currentSelectedSubMenu != button)
-            {
-                // 重置之前选中的按钮颜色
-                _currentSelectedSubMenu.Foreground = Brushes.White;
-                _currentSelectedSubMenu.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#405673"));
-            }
-            // 设置当前选中的按钮颜色为蓝色
-            button.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1809FF"));
-            button.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1F2D3D"));
-            _currentSelectedSubMenu = button;
-        }
+        //    if (_currentSelectedSubMenu != null && _currentSelectedSubMenu != button)
+        //    {
+        //        // 重置之前选中的按钮颜色
+        //        _currentSelectedSubMenu.Foreground = Brushes.White;
+        //        _currentSelectedSubMenu.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#405673"));
+        //    }
+        //    // 设置当前选中的按钮颜色为蓝色
+        //    button.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1809FF"));
+        //    button.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1F2D3D"));
+        //    _currentSelectedSubMenu = button;
+        //}
     }
 }
