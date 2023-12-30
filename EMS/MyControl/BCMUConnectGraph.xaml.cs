@@ -13,21 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EMS.View.NewEMSView
+namespace EMS.MyControl
 {
     /// <summary>
-    /// Page1.xaml 的交互逻辑
+    /// BCMUConnectGraph.xaml 的交互逻辑
     /// </summary>
-    public partial class Monitor_BMS_BCMUPage : Page
+    public partial class BCMUConnectGraph : UserControl
     {
-        public Monitor_BMS_BCMUPage()
+        public BCMUConnectGraph()
         {
             InitializeComponent();
-        }
-
-        private void IconBorder_Loaded(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
