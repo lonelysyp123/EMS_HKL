@@ -343,6 +343,7 @@
     <Compile Include="ViewModel\NewEMSViewModel\Analysis_BMSPageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\Analysis_PCSPageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\Analysis_SmartMeterPageModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\EMSMainViewModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\FaultLogPageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\HomePageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\Monitor_BMSPageModel.cs" />
