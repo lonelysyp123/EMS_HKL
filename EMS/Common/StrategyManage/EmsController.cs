@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TNCN.EMS.Common.Mqtt;
 
 namespace EMS.Common.StrategyManage
 {
@@ -27,11 +28,13 @@ namespace EMS.Common.StrategyManage
         public bool HasMaxDemandControlEnabled { get { return _hasMaxDemandControlEnabled; } }
         public bool HasReversePowerflowProtectionEnabled { get { return  _hasReversePowerflowProtectionEnabled; } }
 
-        private double _maxDemandPower;
+        private double _maxDemandPower; //负载侧最大功率极限：通常为负载侧变压器额定功率
         private double _maxDemandPowerDescendRate;
         private double _reversePowerThreshold;
         private double _reversePowerLowestThreshold;
         private double _reversePowerDescendRate;
+        private double _dcBusConnectionChargingPowerFactor = .1;
+    
 
         private BessCommand _currentCommand;
         private IntraDayScheduler _scheduler;
@@ -41,7 +44,6 @@ namespace EMS.Common.StrategyManage
 
         public void SetMode(bool automationMode, bool maxDemandpowermode, bool reversePowermode, bool dailyPatternMode)
         {
-
             _hasMaxDemandControlEnabled = maxDemandpowermode;
             _isAutomaticMode = automationMode;
             _hasReversePowerflowProtectionEnabled = reversePowermode;
@@ -104,7 +106,6 @@ namespace EMS.Common.StrategyManage
             ContingencyCheck();
             UpdateMode();
             NormalOperation();
-
             _lastActiveTimestamp = DateTime.Now;
             Thread.Sleep(StrategyManager.Instance.GetSystemSamplePeriod());
         }
@@ -181,6 +182,42 @@ namespace EMS.Common.StrategyManage
                     PcsApi.SendPcsCommand(manualCommand);
                 }
             }
+        }
+
+        public void BmsConnect2DcBus(List<string> bcmuIds)
+        {
+            double chargingPower = 0;
+            BatteryStrategyEnum strategy = BatteryStrategyEnum.Standby;
+            if (!PcsApi.IsPcsNormal()) throw new Exception("PCS处于故障状态无法并网"); // 检查PCS状态，确保PCS通信连接，无故障，
+            int numClusters = bcmuIds.Count;// 得到目前有几簇电池
+            List<Tuple<double,string>>voltageBcmuIdPairs = new List<Tuple<double,string>>();
+            foreach (string bcmuId in bcmuIds)
+            {
+                double voltage = BmsApi.GetNextBMSData(bcmuId).TotalVoltage; // 得到每一簇的电压
+                Tuple<double, string> voltageBcmuIdPair = new Tuple<double, string>(voltage, bcmuId); // 将电压和bcmuId以Tuple的形式组成List
+                voltageBcmuIdPairs.Add(voltageBcmuIdPair);
+            }
+            voltageBcmuIdPairs.Sort((x, y) => x.Item1.CompareTo(y.Item1));// 将电压从低到高排序
+            for (int i = 0; i < numClusters-1; i++) {
+                chargingPower = 0;
+                strategy = BatteryStrategyEnum.Standby;
+                PcsApi.SendPcsCommand(new BessCommand(chargingPower, strategy)); // 将PCS设置成待机状态。
+                string currentBcmuId = voltageBcmuIdPairs[i].Item2;
+                BmsApi.Connect2DcBus(currentBcmuId);// 将当前簇并网
+                string nextBcmuId = voltageBcmuIdPairs[i+1].Item2; 
+                strategy = BatteryStrategyEnum.ConstantPowerCharge; //设定并网充电方式为恒功率充电
+                chargingPower = BmsApi.GetNormalPowerCapacity() * _dcBusConnectionChargingPowerFactor; //计算并网充电功率
+                PcsApi.SendPcsCommand(new BessCommand(chargingPower, strategy)); // 对PCS下发指令进行并网充电
+                while (BmsApi.GetNextBMSData(currentBcmuId).TotalVoltage < BmsApi.GetNextBMSData(nextBcmuId).TotalVoltage) // 对其充电将DC母线电压增加到第二簇的水平
+                {
+                    Thread.Sleep(StrategyManager.Instance.GetSystemSamplePeriod());
+                }
+
+            }
+            BmsApi.Connect2DcBus(voltageBcmuIdPairs[numClusters-1].Item2);// 将最后一簇并网
+            chargingPower = 0;
+            strategy = BatteryStrategyEnum.Standby;
+            PcsApi.SendPcsCommand(new BessCommand(chargingPower, strategy)); // 并网完成后将PCS恢复成待机状态
         }
 
         private BessCommand ContingencyAdjustment(BessCommand command)
