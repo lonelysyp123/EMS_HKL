@@ -323,27 +323,27 @@
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="BMU2"
                               Visibility="Collapsed"
-                              />
+                              Click="BMS_SubBMU1_Checked"/>
                 <ToggleButton x:Name="BMS_SubBMU3"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="BMU3"
                               Visibility="Collapsed"
-                              />
+                              Click="BMS_SubBMU1_Checked"/>
                 <ToggleButton x:Name="BMS_SubBMU4"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="BMU4"
                               Visibility="Collapsed"
-                              />
+                              Click="BMS_SubBMU1_Checked"/>
                 <ToggleButton x:Name="BMS_SubBMU5"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="BMU5"
                               Visibility="Collapsed"
-                              />
+                              Click="BMS_SubBMU1_Checked"/>
                 <ToggleButton x:Name="BMS_SubBMU6"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="BMU6"
                               Visibility="Collapsed"
-                              />
+                              Click="BMS_SubBMU1_Checked"/>
                 <ToggleButton x:Name="MonitorViewMenu_PCS"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
                               Content="PCS"
