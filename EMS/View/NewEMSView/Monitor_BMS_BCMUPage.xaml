@@ -1,14 +1,920 @@
 ﻿<Page x:Class="EMS.View.NewEMSView.Monitor_BMS_BCMUPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:EMS.View.NewEMSView"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="Monitor_BMS_BCMUPage">
-
+      xmlns:localControl="clr-namespace:EMS.MyControl"
+      mc:Ignorable="d"
+      d:DesignHeight="900"
+      d:DesignWidth="1600"
+      Title="Monitor_BMS_BCMUPage"
+      Background="#FAFAFA">
+    <Page.Resources>
+        <!--内容StackPanel-->
+        <Style x:Key="ContentPanel"
+               TargetType="StackPanel">
+            <Setter Property="Orientation"
+                    Value="Horizontal" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+        </Style>
+    </Page.Resources>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <!--1、离网控制-->
+        <Grid Grid.Row="0">
+            <Border Background="white"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <localControl:TitleBorder Text="离并网控制" />
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="0"
+                                Style="{StaticResource ContentPanel}"
+                                HorizontalAlignment="Left"
+                                Margin="25,20,0,0">
+                        <TextBlock Text="离网控制："
+                                   VerticalAlignment="Center" />
+                        <localControl:CheckedButton Text="离    网"
+                                                    BackgroundColor="#BBBBBB"
+                                                    ForegroundColor="white"
+                                                    CheckedBackgroundColor="#1890FF"
+                                                    CheckedForegroundColor="White"
+                                                    Margin="10,0,0,0"
+                                                    IsEnabled="{Binding IsOffGrid}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}"
+                                HorizontalAlignment="Left"
+                                Margin="25,20,0,0">
+                        <TextBlock Text="并网控制："
+                                   VerticalAlignment="Center" />
+                        <localControl:CheckedButton Text="并    网"
+                                                    BackgroundColor="#BBBBBB"
+                                                    ForegroundColor="white"
+                                                    CheckedBackgroundColor="#1890FF"
+                                                    CheckedForegroundColor="White"
+                                                    Margin="10,0,0,0"
+                                                    IsEnabled="{Binding IsConnectedGrid}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <!--2、BCMU信息-->
+            <Grid Grid.Row="0"
+                  Grid.Column="0">
+                <Border Background="white"
+                        Margin="20,10,0,0"
+                        Padding="20,15"
+                        CornerRadius="15">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition  Height="Auto" />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition  Height="2*" />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <localControl:TitleBorder Text="BCMU信息" />
+                        <!--电网连接状态-->
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <localControl:IconBorder Grid.ColumnSpan="4"
+                                                     FIcon_Text="&#xe6ab;"
+                                                     FIconTextBlock_Text="电网连接状态"
+                                                     FIconBorder_Background="#F5E8FF"
+                                                     FIcon_Foreground="#8041D5" />
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}"
+                                        HorizontalAlignment="Left">
+                                <TextBlock Text="离网" />
+                                <Border Width="15"
+                                        Height="15"
+                                        Background="{Binding OffGrid}"
+                                        CornerRadius="75"
+                                        Margin="20,0,0,0" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="并网" />
+                                <Border Width="15"
+                                        Height="15"
+                                        Background="{Binding ConnectedGrid}"
+                                        CornerRadius="75"
+                                        Margin="20,0,0,0" />
+                            </StackPanel>
+                        </Grid>
+                        <!--电池簇状态-->
+                        <Grid Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <localControl:IconBorder Grid.ColumnSpan="4"
+                                                     FIcon_Text="&#xe601;"
+                                                     FIconTextBlock_Text="电池簇状态"
+                                                     FIconBorder_Background="#E8FFFB"
+                                                     FIcon_Foreground="#1FCAC6" />
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}"
+                                        HorizontalAlignment="Left">
+                                <TextBlock Text="静置" />
+                                <Border Width="15"
+                                        Height="15"
+                                        Background="{Binding Battery_Stand}"
+                                        CornerRadius="75"
+                                        Margin="20,0,0,0" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="充电" />
+                                <Border Width="15"
+                                        Height="15"
+                                        Background="{Binding Battery_Charging}"
+                                        CornerRadius="75"
+                                        Margin="20,0,0,0" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="放电" />
+                                <Border Width="15"
+                                        Height="15"
+                                        Background="{Binding Battery_Discharge}"
+                                        CornerRadius="75"
+                                        Margin="20,0,0,0" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="4"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="离网" />
+                                <Border Width="15"
+                                        Height="15"
+                                        Background="{Binding Battery_OffGrid}"
+                                        CornerRadius="75"
+                                        Margin="20,0,0,0" />
+                            </StackPanel>
+                        </Grid>
+                        <!--基本信息-->
+                        <Grid Grid.Row="3">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <localControl:IconBorder Grid.ColumnSpan="4"
+                                                     FIcon_Text="&#xe65c;"
+                                                     FIconTextBlock_Text="基本信息"
+                                                     FIconBorder_Background="#E8F3FF"
+                                                     FIcon_Foreground="#2A6BFF" />
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="剩余SOC:" />
+                                <TextBlock Text="{Binding RemainingSOC}"
+                                           Margin="10,0,10,0" />
+                                <TextBlock Text="%" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="簇电压:" />
+                                <TextBlock Text="{Binding ClusterVoltage}"
+                                           Margin="10,0,10,0" />
+                                <TextBlock Text="V" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="当前电流:" />
+                                <TextBlock Text="{Binding PresentCurrent}"
+                                           Margin="10,0,10,0" />
+                                <TextBlock Text="A" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}"
+                                        HorizontalAlignment="Left">
+                                <TextBlock Text="最高单体电压:" />
+                                <TextBlock Text="{Binding MaxCellVoltage}"
+                                           Margin="10,0,10,0" />
+                                <TextBlock Text="V" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="最低单体电压:" />
+                                <TextBlock Text="{Binding MinCellVoltage}"
+                                           Margin="10,0,10,0" />
+                                <TextBlock Text="V" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="最高温度:" />
+                                <TextBlock Text="{Binding MaxTemperature}"
+                                           Margin="10,0,10,0" />
+                                <TextBlock Text="℃" />
+                            </StackPanel>
+                        </Grid>
+                        <!--放电信息-->
+                        <Grid Grid.Row="4">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <localControl:IconBorder Grid.ColumnSpan="5"
+                                                     FIcon_Text="&#xe74b;"
+                                                     FIconTextBlock_Text="放电信息"
+                                                     FIconBorder_Background="#FFECCF"
+                                                     FIcon_Foreground="#FF7D00"
+                                                     Margin="0,0,0,22"
+                                                     Grid.RowSpan="2" />
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="最大放电功率:" />
+                                <TextBlock Text="{Binding MaxAmpPower}"
+                                           Margin="10,0,10,0" />
+                                <TextBlock Text="kW" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="累计放电量:" />
+                                <TextBlock Text="{Binding CumulativeDischarge}"
+                                           Margin="10,0,10,0" />
+                                <TextBlock Text="kWh" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="单次放电量：" />
+                                <TextBlock Text="{Binding SingleDischarge}"
+                                           Margin="10,0,10,0" />
+                                <TextBlock Text="kWh" />
+                            </StackPanel>
+                        </Grid>
+                        <!--充电信息-->
+                        <Grid Grid.Row="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <localControl:IconBorder Grid.ColumnSpan="4"
+                                                     FIcon_Text="&#xe74e;"
+                                                     FIconTextBlock_Text="充电信息"
+                                                     FIconBorder_Background="#E8FFFB"
+                                                     FIcon_Foreground="#1FCAC6" />
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}"
+                                        HorizontalAlignment="Left">
+                                <TextBlock Text="最大充电功率:" />
+                                <TextBlock Text="{Binding MaxChargingPower}"
+                                           Margin="10,0,10,0" />
+                                <TextBlock Text="kW" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="累计充电量:" />
+                                <TextBlock Text="{Binding CumulativeCharge}"
+                                           Margin="10,0,10,0" />
+                                <TextBlock Text="kWh" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="单次充电量：" />
+                                <TextBlock Text="{Binding SingleCharge}"
+                                           Margin="10,0,10,0" />
+                                <TextBlock Text="kWh" />
+                            </StackPanel>
+                        </Grid>
+                        <!--高压盒信息-->
+                        <Grid Grid.Row="6">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <localControl:IconBorder Grid.ColumnSpan="4"
+                                                     FIcon_Text="&#xe62a;"
+                                                     FIconTextBlock_Text="高压盒信息"
+                                                     FIconBorder_Background="#E8F3FF"
+                                                     FIcon_Foreground="#2A6BFF" />
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}"
+                                        HorizontalAlignment="Left">
+                                <TextBlock Text="T1:" />
+                                <TextBlock Text="{Binding Temperature1}"
+                                           Margin="10,0,10,0" />
+                                <TextBlock Text="℃" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="T2:" />
+                                <TextBlock Text="{Binding Temperature2}"
+                                           Margin="10,0,10,0" />
+                                <TextBlock Text="℃" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="T3：" />
+                                <TextBlock Text="{Binding Temperature3}"
+                                           Margin="10,0,10,0" />
+                                <TextBlock Text="℃" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="4"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="T4：" />
+                                <TextBlock Text="{Binding Temperature4}"
+                                           Margin="10,0,10,0" />
+                                <TextBlock Text="℃" />
+                            </StackPanel>
+                        </Grid>
+                        <!--end-->
+                    </Grid>
+                </Border>
+            </Grid>
+            <!--3、BCMU告警-->
+            <Grid Grid.Row="1"
+                  Grid.Column="0">
+                <Border Background="white"
+                        Margin="20,10,0,15"
+                        Padding="20,15"
+                        CornerRadius="15">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <localControl:TitleBorder Text="BCMU告警" />
+                        <!--告警状态-->
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.ColumnSpan="4"
+                                        Orientation="Horizontal">
+                                <localControl:IconBorder FIcon_Text="&#xec35;"
+                                                         FIconTextBlock_Text="告警状态"
+                                                         FIconBorder_Background="#FFECCF"
+                                                         FIcon_Foreground="#FF7D00" />
+                                <TextBlock Text="（一级告警为黄色，二级告警为橙色，三级告警为红色）"
+                                           VerticalAlignment="Center"
+                                           Foreground="#9A9A9A"
+                                           FontWeight="Bold"
+                                           FontSize="12"
+                                           Margin="10,0,0,0" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}"
+                                        HorizontalAlignment="Left">
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_1}"
+                                                          AlertText="告警" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_2}"
+                                                          AlertText="告警" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_3}"
+                                                          AlertText="告警" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="4"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_4}"
+                                                          AlertText="告警" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}"
+                                        HorizontalAlignment="Left">
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_5}"
+                                                          AlertText="告警" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_6}"
+                                                          AlertText="告警" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_7}"
+                                                          AlertText="告警" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="4"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_8}"
+                                                          AlertText="告警" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}"
+                                        HorizontalAlignment="Left">
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_9}"
+                                                          AlertText="告警" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_10}"
+                                                          AlertText="告警" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_11}"
+                                                          AlertText="告警" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3"
+                                        Grid.Column="4"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_12}"
+                                                          AlertText="告警" />
+                            </StackPanel>
+                        </Grid>
+                        <!--故障状态-->
+                        <Grid Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <localControl:IconBorder Grid.ColumnSpan="4"
+                                                     FIcon_Text="&#xe7c2;"
+                                                     FIconTextBlock_Text="故障状态"
+                                                     FIconBorder_Background="#F8C4C4"
+                                                     FIcon_Foreground="#EE6666" />
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}"
+                                        HorizontalAlignment="Left">
+                                <localControl:WarnControl3 Text="1"
+                                                           IsTrue="{Binding Fault_BCMU_1}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl3 Text="1"
+                                                           IsTrue="{Binding Fault_BCMU_2}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl3 Text="1"
+                                                           IsTrue="{Binding Fault_BCMU_3}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="4"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl3 Text="1"
+                                                           IsTrue="{Binding Fault_BCMU_4}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}"
+                                        HorizontalAlignment="Left">
+                                <localControl:WarnControl3 Text="1"
+                                                           IsTrue="{Binding Fault_BCMU_5}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl3 Text="1"
+                                                           IsTrue="{Binding Fault_BCMU_6}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl3 Text="1"
+                                                           IsTrue="{Binding Fault_BCMU_7}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="4"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl3 Text="1"
+                                                           IsTrue="{Binding Fault_BCMU_8}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}"
+                                        HorizontalAlignment="Left">
+                                <localControl:WarnControl3 Text="1"
+                                                           IsTrue="{Binding Fault_BCMU_9}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl3 Text="1"
+                                                           IsTrue="{Binding Fault_BCMU_10}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl3 Text="1"
+                                                           IsTrue="{Binding Fault_BCMU_11}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3"
+                                        Grid.Column="4"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl3 Text="1"
+                                                           IsTrue="{Binding Fault_BCMU_12}" />
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
+            <!--4、BMU信息-->
+            <Grid Grid.RowSpan="2"
+                  Grid.Column="1">
+                <Border Background="white"
+                        Margin="20,10,20,0"
+                        Padding="20,15"
+                        CornerRadius="15">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="3*" />
+                            <RowDefinition Height="3*" />
+                            <RowDefinition Height="3*" />
+                        </Grid.RowDefinitions>
+                        <localControl:TitleBorder Text="BMU信息" />
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}"
+                                        HorizontalAlignment="Left">
+                                <TextBlock Text="簇选择:"
+                                           VerticalAlignment="Center" />
+                                <ComboBox  Height="25"
+                                           Width="100"
+                                           Margin="10,0,10,0"
+                                           Background="White"
+                                           Foreground="Black"
+                                           ItemsSource="{Binding Cluster}"
+                                           SelectedItem="{Binding SelectedCluster}"
+                                           BorderThickness="1,1,1,1">
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="充电累计容量:" />
+                                <TextBlock Text="{Binding AccChargingCapacity}"
+                                           Margin="10,0,10,0" />
+                                <TextBlock Text="AH" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <TextBlock Text="充电通道:" />
+                                <TextBlock Text="{Binding Channel}"
+                                           Margin="10,0,10,0" />
+                            </StackPanel>
+                        </Grid>
+                        <!--BMU告警状态-->
+                        <Grid Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.ColumnSpan="4"
+                                        Orientation="Horizontal"
+                                        Margin="20,0,0,0">
+                                <localControl:IconBorder FIcon_Text="&#xec35;"
+                                                         FIconTextBlock_Text="告警状态"
+                                                         FIconBorder_Background="#FFECCF"
+                                                         FIcon_Foreground="#FF7D00" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}"
+                                        HorizontalAlignment="Left">
+                                <localControl:WarnControl2 Text="单体低压告警"
+                                                           IsTrue="{Binding Wran_BMU_1}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl2 Text="单体高压告警"
+                                                           IsTrue="{Binding Wran_BMU_2}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl2 Text="放电低压告警"
+                                                           IsTrue="{Binding Wran_BMU_3}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="4"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl2 Text="充电高压告警"
+                                                           IsTrue="{Binding Wran_BMU_4}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}"
+                                        HorizontalAlignment="Left">
+                                <localControl:WarnControl2 Text="充电低温告警"
+                                                           IsTrue="{Binding Wran_BMU_5}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl2 Text="充电高温告警"
+                                                           IsTrue="{Binding Wran_BMU_6}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl2 Text="放电低温告警"
+                                                           IsTrue="{Binding Wran_BMU_7}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="4"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl2 Text="放电高温告警"
+                                                           IsTrue="{Binding Wran_BMU_8}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}"
+                                        HorizontalAlignment="Left">
+                                <localControl:WarnControl2 Text="充电过流告警"
+                                                           IsTrue="{Binding Wran_BMU_9}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl2 Text="放电过流告警"
+                                                           IsTrue="{Binding Wran_BMU_10}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl2 Text="模块低压告警"
+                                                           IsTrue="{Binding Wran_BMU_11}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3"
+                                        Grid.Column="4"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl2 Text="模块高压告警"
+                                                           IsTrue="{Binding Wran_BMU_12}" />
+                            </StackPanel>
+                        </Grid>
+                        <!--BMU故障状态-->
+                        <Grid Grid.Row="3">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.ColumnSpan="4"
+                                        Orientation="Horizontal"
+                                        Margin="20,0,0,0">
+                                <localControl:IconBorder FIcon_Text="&#xe7c2;"
+                                                         FIconTextBlock_Text="故障信息"
+                                                         FIconBorder_Background="#F8C4C4"
+                                                         FIcon_Foreground="#EE6666" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}"
+                                        HorizontalAlignment="Left">
+                                <localControl:WarnControl3 Text="电压传感器异常"
+                                                           IsTrue="{Binding Fault_BMU_1}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl3 Text="温度传感器异常"
+                                                           IsTrue="{Binding Fault_BMU_2}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl3 Text="内部通讯故障"
+                                                           IsTrue="{Binding Fault_BMU_3}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="4"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl3 Text="输入过压故障"
+                                                           IsTrue="{Binding Fault_BMU_4}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}"
+                                        HorizontalAlignment="Left">
+                                <localControl:WarnControl3 Text="输入反接故障"
+                                                           IsTrue="{Binding Fault_BMU_5}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl3 Text="继电器故障"
+                                                           IsTrue="{Binding Fault_BMU_6}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl3 Text="电池损坏故障"
+                                                           IsTrue="{Binding Fault_BMU_7}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2"
+                                        Grid.Column="4"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl3 Text="关机电路异常"
+                                                           IsTrue="{Binding Fault_BMU_8}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ContentPanel}"
+                                        HorizontalAlignment="Left">
+                                <localControl:WarnControl3 Text="BCMIC异常"
+                                                           IsTrue="{Binding Fault_BMU_9}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl3 Text="内部总线异常"
+                                                           IsTrue="{Binding Fault_BMU_10}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3"
+                                        Grid.Column="3"
+                                        Style="{StaticResource ContentPanel}">
+                                <localControl:WarnControl3 Text="开机自检异常"
+                                                           IsTrue="{Binding Fault_BMU_11}" />
+                            </StackPanel>
+
+                        </Grid>
+                        <!--BMU电池信息-->
+                        <Grid Grid.Row="4">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.ColumnSpan="9">
+                                <localControl:IconBorder FIcon_Text="&#xe7a3;"
+                                                         FIconTextBlock_Text="电池信息"
+                                                         FIconBorder_Background="#E8F3FF"
+                                                         FIcon_Foreground="#2A6BFF" />
+                            </StackPanel>
+                            <StackPanel x:Name="BMU_Battery"
+                                        Grid.Row="1"
+                                        Style="{StaticResource ContentPanel}">
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
+            <!--END-->
+        </Grid>
+        <!--End-->
     </Grid>
 </Page>

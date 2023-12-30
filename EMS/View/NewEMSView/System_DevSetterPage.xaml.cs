@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,19 @@ namespace EMS.View.NewEMSView
         public System_DevSetterPage()
         {
             InitializeComponent();
+        }
+
+        private void UploadFile(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "All Files (*.*)|*.*"; // 设置文件筛选器
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string filePath = openFileDialog.FileName;
+                // 在这里处理选中的文件路径
+                //this.FilePathTextBox.Text = filePath;
+            }
         }
     }
 }
