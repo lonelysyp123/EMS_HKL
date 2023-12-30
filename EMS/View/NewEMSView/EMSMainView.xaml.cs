@@ -1,7 +1,9 @@
-﻿using HandyControl.Controls;
+﻿using EMS.ViewModel.NewEMSViewModel;
+using HandyControl.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,9 +24,11 @@ namespace EMS.View.NewEMSView
     /// </summary>
     public partial class EMSMainView : System.Windows.Window
     {
+        private EMSMainViewModel viewmodel;
         public EMSMainView()
         {
             InitializeComponent();
+            viewmodel = new EMSMainViewModel();
         }
 
 
@@ -83,7 +87,7 @@ namespace EMS.View.NewEMSView
                 MonitorViewMenu_PCS.Visibility = Visibility.Collapsed;
                 MonitorViewMenu_SM.Visibility = Visibility.Collapsed;
             }
-            Navigation(new Monitor_BMSPage(), sender as ToggleButton);
+            Navigation(new Monitor_BMSPage(viewmodel.Monitor_BMSPageModel), sender as ToggleButton);
         }
 
         private void MonitorViewMenu_BMS_Checked(object sender, RoutedEventArgs e)
@@ -106,7 +110,7 @@ namespace EMS.View.NewEMSView
                 BMS_SubBMU5.Visibility = Visibility.Collapsed;
                 BMS_SubBMU6.Visibility = Visibility.Collapsed;
             }
-            Navigation(new Monitor_BMSPage(), sender as ToggleButton, MonitorViewMenu);
+            Navigation(new Monitor_BMSPage(viewmodel.Monitor_BMSPageModel), sender as ToggleButton, MonitorViewMenu);
         }
         private void BMS_SubBMU1_Checked(object sender, RoutedEventArgs e)
         {

@@ -96,9 +96,9 @@
                 </Canvas>
             </Grid>
             <Grid Grid.Row="1">
-                <localControl:BCMUConnectGraph />
+                <localControl:BCMUConnectGraph x:Name="BMU1Control"/>
             </Grid>
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="2" x:Name="BMU1Info">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />

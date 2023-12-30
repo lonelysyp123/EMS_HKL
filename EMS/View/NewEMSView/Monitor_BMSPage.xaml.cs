@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMS.ViewModel.NewEMSViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,14 +21,11 @@ namespace EMS.View.NewEMSView
     /// </summary>
     public partial class Monitor_BMSPage : Page
     {
-        public Monitor_BMSPage()
+        public Monitor_BMSPage(Monitor_BMSPageModel viewmodel)
         {
             InitializeComponent();
-        }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
+            this.DataContext = viewmodel;
         }
     }
 }
