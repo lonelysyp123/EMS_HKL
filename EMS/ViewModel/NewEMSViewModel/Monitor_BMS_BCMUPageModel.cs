@@ -71,6 +71,8 @@ namespace EMS.ViewModel.NewEMSViewModel
                 SetProperty(ref alarmcolor, value);
             }
         }
+
+
         #endregion
 
         #region Command
@@ -85,6 +87,7 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public Monitor_BMS_BCMUPageModel()
         {
+
         }
 
 

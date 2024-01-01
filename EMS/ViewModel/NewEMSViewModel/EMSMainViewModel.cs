@@ -24,18 +24,20 @@ namespace EMS.ViewModel.NewEMSViewModel
         public System_DevSetterPageModel System_DevSetterPageModel { get; private set; }
         public System_MqttSetterPageModel System_MqttSetterPageModel { get; private set; }
 
-        public BMSDataService[] services { get; private set; }
+        public BMSDataService[] bmsServices { get; private set; }
 
         private static int TotalCount = 6;
         public EMSMainViewModel()
         {
-            Monitor_BMSPageModel = new Monitor_BMSPageModel(services);
-
-            services = new BMSDataService[TotalCount];
-            for (int i = 0; i < services.Length; i++)
+            Monitor_BMSPageModel = new Monitor_BMSPageModel();
+            bmsServices = new BMSDataService[TotalCount];
+            for (int i = 0; i < bmsServices.Length; i++)
             {
-                services[i] = new BMSDataService();
+                bmsServices[i] = new BMSDataService();
+                bmsServices[i].RegisterState(Monitor_BMSPageModel.ServiceDataCallBack);
             }
+
+
         }
 
     }
