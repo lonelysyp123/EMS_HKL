@@ -26,6 +26,18 @@ namespace EMS.View.NewEMSView
             InitializeComponent();
 
             this.DataContext = viewmodel;
+            BMU1Flag.DataContext = viewmodel.bmuViewModels[0];
+            BMU2Flag.DataContext = viewmodel.bmuViewModels[1];
+            BMU3Flag.DataContext = viewmodel.bmuViewModels[2];
+            BMU4Flag.DataContext = viewmodel.bmuViewModels[3];
+            BMU5Flag.DataContext = viewmodel.bmuViewModels[4];
+            BMU6Flag.DataContext = viewmodel.bmuViewModels[5];
+            BMU1Info.DataContext = viewmodel.bmuViewModels[0];
+            BMU2Info.DataContext = viewmodel.bmuViewModels[1];
+            BMU3Info.DataContext = viewmodel.bmuViewModels[2];
+            BMU4Info.DataContext = viewmodel.bmuViewModels[3];
+            BMU5Info.DataContext = viewmodel.bmuViewModels[4];
+            BMU6Info.DataContext = viewmodel.bmuViewModels[5];
         }
     }
 }

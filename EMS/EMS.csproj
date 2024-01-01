@@ -242,6 +242,8 @@
     <Compile Include="Common\Mqtt\BMU.cs" />
     <Compile Include="Common\Mqtt\Pcs.cs" />
     <Compile Include="Common\Mqtt\SmartMeter.cs" />
+    <Compile Include="Common\NavigationService.cs" />
+    <Compile Include="Common\StrategyManage\BMSDevManager.cs" />
     <Compile Include="Common\StrategyManage\EmsController.cs" />
     <Compile Include="Common\StrategyManage\IntraDayScheduler.cs" />
     <Compile Include="Common\SingletonBase.cs" />

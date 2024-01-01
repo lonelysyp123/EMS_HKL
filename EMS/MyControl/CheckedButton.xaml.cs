@@ -68,5 +68,9 @@ namespace EMS.MyControl
         }
         public static readonly DependencyProperty CheckedForegroundColorProperty =
             DependencyProperty.Register("CheckedForegroundColor", typeof(Brush), typeof(CheckedButton), new PropertyMetadata(Brushes.White));
+
+        [CommonDependencyProperty]
+        public static readonly DependencyProperty CommandProperty;
+
     }
 }

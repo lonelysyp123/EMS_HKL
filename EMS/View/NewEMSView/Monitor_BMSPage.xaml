@@ -96,7 +96,7 @@
                 </Canvas>
             </Grid>
             <Grid Grid.Row="1">
-                <localControl:BCMUConnectGraph x:Name="BMU1Control"/>
+                <localControl:BCMUConnectGraph x:Name="BMU1Flag"/>
             </Grid>
             <Grid Grid.Row="2" x:Name="BMU1Info">
                 <Grid.RowDefinitions>
@@ -108,37 +108,37 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
-                           Text="{Binding SOC_BCMU1}"
+                           Text="{Binding SOC_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="1"
-                           Text="{Binding ClusterVoltage_BCMU1}"
+                           Text="{Binding ClusterVoltage_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="2"
-                           Text="{Binding PresentCurrent_BCMU1}"
+                           Text="{Binding PresentCurrent_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="3"
-                           Text="{Binding MaxCellVoltage_BCMU1}"
+                           Text="{Binding MaxCellVoltage_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="4"
-                           Text="{Binding MinCellVoltage_BCMU1}"
+                           Text="{Binding MinCellVoltage_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="5"
-                           Text="{Binding MaxTemperature_BCMU1}"
+                           Text="{Binding MaxTemperature_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
@@ -165,9 +165,9 @@
                 </Canvas>
             </Grid>
             <Grid Grid.Row="1">
-                <localControl:BCMUConnectGraph />
+                <localControl:BCMUConnectGraph x:Name="BMU2Flag"/>
             </Grid>
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="2" x:Name="BMU2Info">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
@@ -177,37 +177,37 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
-                           Text="{Binding SOC_BCMU2}"
+                           Text="{Binding SOC_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="1"
-                           Text="{Binding ClusterVoltage_BCMU2}"
+                           Text="{Binding ClusterVoltage_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="2"
-                           Text="{Binding PresentCurrent_BCMU2}"
+                           Text="{Binding PresentCurrent_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="3"
-                           Text="{Binding MaxCellVoltage_BCMU2}"
+                           Text="{Binding MaxCellVoltage_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="4"
-                           Text="{Binding MinCellVoltage_BCMU2}"
+                           Text="{Binding MinCellVoltage_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="5"
-                           Text="{Binding MaxTemperature_BCMU2}"
+                           Text="{Binding MaxTemperature_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
@@ -241,9 +241,9 @@
                 </Canvas>
             </Grid>
             <Grid Grid.Row="1">
-                <localControl:BCMUConnectGraph />
+                <localControl:BCMUConnectGraph x:Name="BMU3Flag"/>
             </Grid>
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="2" x:Name="BMU3Info">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
@@ -253,37 +253,37 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
-                           Text="{Binding SOC_BCMU3}"
+                           Text="{Binding SOC_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="1"
-                           Text="{Binding ClusterVoltage_BCMU3}"
+                           Text="{Binding ClusterVoltage_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="2"
-                           Text="{Binding PresentCurrent_BCMU3}"
+                           Text="{Binding PresentCurrent_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="3"
-                           Text="{Binding MaxCellVoltage_BCMU3}"
+                           Text="{Binding MaxCellVoltage_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="4"
-                           Text="{Binding MinCellVoltage_BCMU3}"
+                           Text="{Binding MinCellVoltage_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="5"
-                           Text="{Binding MaxTemperature_BCMU3}"
+                           Text="{Binding MaxTemperature_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
@@ -310,9 +310,9 @@
                 </Canvas>
             </Grid>
             <Grid Grid.Row="1">
-                <localControl:BCMUConnectGraph />
+                <localControl:BCMUConnectGraph x:Name="BMU4Flag"/>
             </Grid>
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="2" x:Name="BMU4Info">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
@@ -322,37 +322,37 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
-                           Text="{Binding SOC_BCMU4}"
+                           Text="{Binding SOC_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="1"
-                           Text="{Binding ClusterVoltage_BCMU4}"
+                           Text="{Binding ClusterVoltage_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="2"
-                           Text="{Binding PresentCurrent_BCMU4}"
+                           Text="{Binding PresentCurrent_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="3"
-                           Text="{Binding MaxCellVoltage_BCMU4}"
+                           Text="{Binding MaxCellVoltage_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="4"
-                           Text="{Binding MinCellVoltage_BCMU4}"
+                           Text="{Binding MinCellVoltage_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="5"
-                           Text="{Binding MaxTemperature_BCMU4}"
+                           Text="{Binding MaxTemperature_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
@@ -379,9 +379,9 @@
                 </Canvas>
             </Grid>
             <Grid Grid.Row="1">
-                <localControl:BCMUConnectGraph />
+                <localControl:BCMUConnectGraph x:Name="BMU5Flag"/>
             </Grid>
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="2" x:Name="BMU5Info">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
@@ -391,37 +391,37 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
-                           Text="{Binding SOC_BCMU5}"
+                           Text="{Binding SOC_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="1"
-                           Text="{Binding ClusterVoltage_BCMU5}"
+                           Text="{Binding ClusterVoltage_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="2"
-                           Text="{Binding PresentCurrent_BCMU5}"
+                           Text="{Binding PresentCurrent_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="3"
-                           Text="{Binding MaxCellVoltage_BCMU5}"
+                           Text="{Binding MaxCellVoltage_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="4"
-                           Text="{Binding MinCellVoltage_BCMU5}"
+                           Text="{Binding MinCellVoltage_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="5"
-                           Text="{Binding MaxTemperature_BCMU5}"
+                           Text="{Binding MaxTemperature_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
@@ -448,9 +448,9 @@
                 </Canvas>
             </Grid>
             <Grid Grid.Row="1">
-                <localControl:BCMUConnectGraph />
+                <localControl:BCMUConnectGraph x:Name="BMU6Flag"/>
             </Grid>
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="2" x:Name="BMU6Info">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
@@ -460,37 +460,37 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
-                           Text="{Binding SOC_BCMU6}"
+                           Text="{Binding SOC_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="1"
-                           Text="{Binding ClusterVoltage_BCMU6}"
+                           Text="{Binding ClusterVoltage_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="2"
-                           Text="{Binding PresentCurrent_BCMU6}"
+                           Text="{Binding PresentCurrent_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="3"
-                           Text="{Binding MaxCellVoltage_BCMU6}"
+                           Text="{Binding MaxCellVoltage_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="4"
-                           Text="{Binding MinCellVoltage_BCMU6}"
+                           Text="{Binding MinCellVoltage_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
                 <TextBlock Grid.Row="5"
-                           Text="{Binding MaxTemperature_BCMU6}"
+                           Text="{Binding MaxTemperature_BCMU}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="18"

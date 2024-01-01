@@ -29,6 +29,7 @@ namespace EMS.View.NewEMSView
         {
             InitializeComponent();
             viewmodel = new EMSMainViewModel();
+
         }
 
 
@@ -114,7 +115,10 @@ namespace EMS.View.NewEMSView
         }
         private void BMS_SubBMU1_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Monitor_BMS_BCMUPage(), sender as ToggleButton, MonitorViewMenu_BMS, MonitorViewMenu);
+            var menu = sender as ToggleButton;
+            string str_index = menu.Name.Replace("BMS_SubBMU", "");
+            int index = int.Parse(str_index);
+            Navigation(new Monitor_BMS_BCMUPage(viewmodel.Monitor_BMSPageModel.bmuViewModels[index-1]), sender as ToggleButton, MonitorViewMenu_BMS, MonitorViewMenu);
         }
 
         private void MonitorViewMenu_PCS_Checked(object sender, RoutedEventArgs e)
