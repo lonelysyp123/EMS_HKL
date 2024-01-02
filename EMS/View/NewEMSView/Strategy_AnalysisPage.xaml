@@ -161,9 +161,9 @@
                                     IsEnabled="{Binding IsAutoStrategyBtnEnabled}" Click="Button_Click_1" />
                         </StackPanel>
                     </Grid>
-                    <DataGrid Grid.Row="3"
+                    <DataGrid
                               x:Name="DataGrid"
-                              Margin="60,0,60,00"
+                              Margin="860,-364,-740,152"
                               Background="white"
                               AutoGenerateColumns="False"
                               IsReadOnly="True"

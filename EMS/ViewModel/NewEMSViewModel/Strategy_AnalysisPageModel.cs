@@ -2,12 +2,21 @@
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
+    class DataModel
+    {
+        public int id { get; set; }
+        public string controlType { get; set; }
+        public double value { get; set; }
+        public string startTime { get; set; }
+    }
     public class Strategy_AnalysisPageModel: ObservableObject
     {        
         public RelayCommand BatteryStrategyAddRowCommand { get; set; }
@@ -87,11 +96,29 @@ namespace EMS.ViewModel.NewEMSViewModel
                 SetProperty(ref _value, value);
             }
         }
+
+        private DateTime _planTime;
+        public DateTime PlanTime
+        {
+            get => _planTime;
+            set
+            {
+                SetProperty(ref _planTime, value);
+            }
+        }
+
         #endregion
 
         private void BatteryStrategyAddRow()
-        { 
-            
+        {
+            int i = 1;
+            var newItem = new DataModel()
+            {
+                id = i++,
+                controlType = ControlTypeSelectedItem,
+                value = Value,
+                startTime = StartTime
+            };
         }
         private void BatteryStrategySend() 
         {
