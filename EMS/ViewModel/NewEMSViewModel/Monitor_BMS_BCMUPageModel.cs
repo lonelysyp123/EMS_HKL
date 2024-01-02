@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using EMS.Common;
 using EMS.Model;
+using EMS.MyControl;
 using EMS.View.NewEMSView;
 using System;
 using System.Collections.Generic;
@@ -75,67 +76,325 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string soc_BCMU;
-        public string SOC_BCMU
+        private string remainingSOC;
+        public string RemainingSOC
         {
-            get { return soc_BCMU; }
+            get { return remainingSOC; }
             set
             {
-                SetProperty(ref soc_BCMU, value);
+                SetProperty(ref remainingSOC, value);
             }
         }
 
-        private string clusterVoltage_BCMU;
-        public string ClusterVoltage_BCMU
+        private string clusterVoltage;
+        public string ClusterVoltage
         {
-            get { return clusterVoltage_BCMU; }
+            get { return clusterVoltage; }
             set
             {
-                SetProperty(ref clusterVoltage_BCMU, value);
+                SetProperty(ref clusterVoltage, value);
             }
         }
 
-        private string presentCurrent_BCMU;
-        public string PresentCurrent_BCMU
+        private string presentCurrent;
+        public string PresentCurrent
         {
-            get { return presentCurrent_BCMU; }
+            get { return presentCurrent; }
             set
             {
-                SetProperty(ref presentCurrent_BCMU, value);
+                SetProperty(ref presentCurrent, value);
             }
         }
 
-        private string maxCellVoltage_BCMU;
-        public string MaxCellVoltage_BCMU
+        private string maxCellVoltage;
+        public string MaxCellVoltage
         {
-            get { return maxCellVoltage_BCMU; }
+            get { return maxCellVoltage; }
             set
             {
-                SetProperty(ref maxCellVoltage_BCMU, value);
+                SetProperty(ref maxCellVoltage, value);
             }
         }
 
-        private string minCellVoltage_BCMU;
-        public string MinCellVoltage_BCMU
+        private string minCellVoltage;
+        public string MinCellVoltage
         {
-            get { return minCellVoltage_BCMU; }
+            get { return minCellVoltage; }
             set
             {
-                SetProperty(ref minCellVoltage_BCMU, value);
+                SetProperty(ref minCellVoltage, value);
             }
         }
 
-        private string maxTemperature_BCMU;
-        public string MaxTemperature_BCMU
+        private string maxTemperature;
+        public string MaxTemperature
         {
-            get { return maxTemperature_BCMU; }
+            get { return maxTemperature; }
             set
             {
-                SetProperty(ref maxTemperature_BCMU, value);
+                SetProperty(ref maxTemperature, value);
             }
         }
 
+        private bool isOffGrid;
+        public bool IsOffGrid
+        {
+            get { return isOffGrid; }
+            set
+            {
+                SetProperty(ref isOffGrid, value);
+            }
+        }
 
+        private bool isConnectedGrid;
+        public bool IsConnectedGrid
+        {
+            get { return isConnectedGrid; }
+            set
+            {
+                SetProperty(ref isConnectedGrid, value);
+            }
+        }
+
+        private SolidColorBrush offGrid;
+        public SolidColorBrush OffGrid
+        {
+            get { return offGrid; }
+            set
+            {
+                SetProperty(ref offGrid, value);
+            }
+        }
+
+        private SolidColorBrush connectedGrid;
+        public SolidColorBrush ConnectedGrid
+        {
+            get { return connectedGrid; }
+            set
+            {
+                SetProperty(ref connectedGrid, value);
+            }
+        }
+
+        private SolidColorBrush battery_Stand;
+        public SolidColorBrush Battery_Stand
+        {
+            get { return battery_Stand; }
+            set
+            {
+                SetProperty(ref battery_Stand, value);
+            }
+        }
+
+        private SolidColorBrush battery_Charging;
+        public SolidColorBrush Battery_Charging
+        {
+            get { return battery_Charging; }
+            set
+            {
+                SetProperty(ref battery_Charging, value);
+            }
+        }
+
+        private SolidColorBrush battery_Discharge;
+        public SolidColorBrush Battery_Discharge
+        {
+            get { return battery_Discharge; }
+            set
+            {
+                SetProperty(ref battery_Discharge, value);
+            }
+        }
+
+        private SolidColorBrush battery_OffGrid;
+        public SolidColorBrush Battery_OffGrid
+        {
+            get { return battery_OffGrid; }
+            set
+            {
+                SetProperty(ref battery_OffGrid, value);
+            }
+        }
+
+        private string maxAmpPower;
+        public string MaxAmpPower
+        {
+            get { return maxAmpPower; }
+            set
+            {
+                SetProperty(ref maxAmpPower, value);
+            }
+        }
+
+        private string cumulativeDischarge;
+        public string CumulativeDischarge
+        {
+            get { return cumulativeDischarge; }
+            set
+            {
+                SetProperty(ref cumulativeDischarge, value);
+            }
+        }
+
+        private string singleDischarge;
+        public string SingleDischarge
+        {
+            get { return singleDischarge; }
+            set
+            {
+                SetProperty(ref singleDischarge, value);
+            }
+        }
+
+        private string maxChargingPower;
+        public string MaxChargingPower
+        {
+            get { return maxChargingPower; }
+            set
+            {
+                SetProperty(ref maxChargingPower, value);
+            }
+        }
+
+        private string cumulativeCharge;
+        public string CumulativeCharge
+        {
+            get { return cumulativeCharge; }
+            set
+            {
+                SetProperty(ref cumulativeCharge, value);
+            }
+        }
+
+        private string singleCharge;
+        public string SingleCharge
+        {
+            get { return singleCharge; }
+            set
+            {
+                SetProperty(ref singleCharge, value);
+            }
+        }
+
+        private string temperature1;
+        public string Temperature1
+        {
+            get { return temperature1; }
+            set
+            {
+                SetProperty(ref temperature1, value);
+            }
+        }
+
+        private string temperature2;
+        public string Temperature2
+        {
+            get { return temperature2; }
+            set
+            {
+                SetProperty(ref temperature2, value);
+            }
+        }
+
+        private string temperature3;
+        public string Temperature3
+        {
+            get { return temperature3; }
+            set
+            {
+                SetProperty(ref temperature3, value);
+            }
+        }
+
+        private string temperature4;
+        public string Temperature4
+        {
+            get { return temperature4; }
+            set
+            {
+                SetProperty(ref temperature4, value);
+            }
+        }
+
+        private AlarmtLevels wran_BCMU_1;
+        public AlarmtLevels Wran_BCMU_1
+        {
+            get { return wran_BCMU_1; }
+            set
+            {
+                SetProperty(ref wran_BCMU_1, value);
+            }
+        }
+
+        private AlarmtLevels fault_BCMU_1;
+        public AlarmtLevels Fault_BCMU_1
+        {
+            get { return fault_BCMU_1; }
+            set
+            {
+                SetProperty(ref fault_BCMU_1, value);
+            }
+        }
+
+        private string[] cluster = new string[] {"A", "B", "C"};
+        public string[] Cluster
+        {
+            get { return cluster; }
+            set
+            {
+                SetProperty(ref cluster, value);
+            }
+        }
+
+        private string selectedCluster;
+        public string SelectedCluster
+        {
+            get { return selectedCluster; }
+            set
+            {
+                SetProperty(ref selectedCluster, value);
+            }
+        }
+
+        private string accChargingCapacity;
+        public string AccChargingCapacity
+        {
+            get { return accChargingCapacity; }
+            set
+            {
+                SetProperty(ref accChargingCapacity, value);
+            }
+        }
+
+        private string channel;
+        public string Channel
+        {
+            get { return channel; }
+            set
+            {
+                SetProperty(ref channel, value);
+            }
+        }
+
+        private AlarmtLevels wran_BMU_1;
+        public AlarmtLevels Wran_BMU_1
+        {
+            get { return wran_BMU_1; }
+            set
+            {
+                SetProperty(ref wran_BMU_1, value);
+            }
+        }
+
+        private AlarmtLevels fault_BMU_1;
+        public AlarmtLevels Fault_BMU_1
+        {
+            get { return fault_BMU_1; }
+            set
+            {
+                SetProperty(ref fault_BMU_1, value);
+            }
+        }
         #endregion
 
         #region Command
@@ -151,12 +410,12 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public void DataDistribution(BatteryTotalModel model, bool isconnected)
         {
-            SOC_BCMU = model.TotalSOC.ToString();
-            ClusterVoltage_BCMU = model.TotalVoltage.ToString();
-            PresentCurrent_BCMU = model.TotalCurrent.ToString();
-            MaxCellVoltage_BCMU = model.MaxVoltage.ToString();
-            MinCellVoltage_BCMU = model.MinVoltage.ToString();
-            MaxTemperature_BCMU = model.MaxTemperature.ToString();
+            RemainingSOC = model.TotalSOC.ToString();
+            ClusterVoltage = model.TotalVoltage.ToString();
+            PresentCurrent = model.TotalCurrent.ToString();
+            MaxCellVoltage = model.MaxVoltage.ToString();
+            MinCellVoltage = model.MinVoltage.ToString();
+            MaxTemperature = model.MaxTemperature.ToString();
 
             if (model.AlarmStateBCMU.Count > 0)
             {
@@ -176,18 +435,80 @@ namespace EMS.ViewModel.NewEMSViewModel
                 IsConnect = new SolidColorBrush(BMUColors.IsConnect_F);
             }
 
-            // 判断是否并离网
+            // 断路器？
             //IsVisible_SwitchOff;
             //IsVisible_SwitchOn;
 
-            // 判断充放电
+            // 充放电状态
             //IsVisible_DownArrow;
             //IsVisible_UpArrow;
+
+            // 并网离网状态
+            //IsOffGrid;
+            //IsConnectedGrid;
+            //OffGrid;
+            //ConnectedGrid;
+
+            // 电池簇状态
+            //Battery_Stand;
+            //Battery_Charging;
+            //Battery_Discharge;
+            //Battery_OffGrid;
+
+            // 充放电信息
+            //MaxAmpPower;
+            //CumulativeDischarge;
+            //SingleDischarge;
+            //MaxChargingPower;
+            //CumulativeCharge;
+            //SingleCharge;
+
+            Temperature1 = model.VolContainerTemperature1.ToString();
+            Temperature2 = model.VolContainerTemperature2.ToString();
+            Temperature3 = model.VolContainerTemperature3.ToString();
+            Temperature4 = model.VolContainerTemperature4.ToString();
+
+            TemperatureBCMU(model);
+            BMUInfo(model);
         }
 
         private void ToMonitor_BMS_BCMUPage()
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// BCMU故障告警信息解读
+        /// </summary>
+        /// <param name="obj">入参</param>
+        private void TemperatureBCMU(object obj)
+        {
+            //Wran_BCMU_1;
+            //Fault_BCMU_1;
+        }
+
+        /// <summary>
+        /// BMU信息解读
+        /// </summary>
+        /// <param name="obj">入参</param>
+        private void BMUInfo(object obj)
+        {
+            if (SelectedCluster == Cluster[0])
+            {
+                // 第一串电池信息解读
+                //AccChargingCapacity;
+                //Channel;
+                //Wran_BMU_1;
+                //Fault_BMU_1;
+            }
+            else if (SelectedCluster == Cluster[1])
+            {
+                // 第二串电池信息解读
+            }
+            else if (SelectedCluster == Cluster[2])
+            {
+                // 第三串电池信息解读
+            }
         }
     }
 }
