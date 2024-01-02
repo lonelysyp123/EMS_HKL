@@ -24,5 +24,6 @@ namespace EMS.View.NewEMSView
         {
             InitializeComponent();
         }
+
     }
 }

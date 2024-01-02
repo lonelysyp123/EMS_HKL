@@ -39,5 +39,6 @@ namespace EMS.View.NewEMSView
             BMU5Info.DataContext = viewmodel.bmuViewModels[4];
             BMU6Info.DataContext = viewmodel.bmuViewModels[5];
         }
+
     }
 }

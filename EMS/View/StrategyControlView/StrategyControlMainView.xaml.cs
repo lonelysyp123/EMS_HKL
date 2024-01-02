@@ -29,12 +29,7 @@ namespace EMS.View
             pCSSettingViewModel = new PCSSettingViewModel();
             this.DataContext = pCSSettingViewModel;
 
-        }          
+        }
 
-       
-
-        
-
-        
     }
 }

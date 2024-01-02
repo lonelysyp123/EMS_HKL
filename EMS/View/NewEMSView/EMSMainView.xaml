@@ -7,6 +7,7 @@
         xmlns:localControl="clr-namespace:EMS.MyControl"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:views="clr-namespace:EMS.View.NewEMSView"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
         mc:Ignorable="d"
         Title="EMSMainView"
@@ -243,7 +244,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <!--<hc:DateTimePicker IsEnabled="False" HorizontalAlignment="Right" Margin="0,0,20,0"/>-->
+            <hc:DateTimePicker IsEnabled="False" HorizontalAlignment="Right" Margin="0,0,20,0"/>
             <Menu Grid.Column="1"
                   VerticalAlignment="Center"
                   Background="Transparent">

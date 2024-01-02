@@ -81,8 +81,8 @@
                                    Margin="10,0,10,0"
                                    Background="White"
                                    Foreground="Black"
-                                   ItemsSource="{Binding ItemsSource}"
-                                   SelectedItem="{Binding SelectedItem}"
+                                   ItemsSource="{Binding BCMUInfo2}"
+                                   SelectedItem="{Binding SelectedItemBCMU}"
                                    BorderThickness="1,1,1,1">
                         </ComboBox>
                     </StackPanel>

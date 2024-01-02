@@ -455,7 +455,7 @@
                                                Style="{StaticResource SystemTextblockstyle}" />
                                     <TextBlock Grid.Row="2"
                                                Grid.Column="1"
-                                               Text="{Binding CumulativeCharge}"
+                                               Text="{Binding DcBranch1Char}"
                                                Style="{StaticResource SystemTextblockstyle}"
                                                FontSize="18"
                                                FontWeight="Bold" />
@@ -492,7 +492,7 @@
                                                Style="{StaticResource SystemTextblockstyle}" />
                                     <TextBlock Grid.Row="2"
                                                Grid.Column="1"
-                                               Text="{Binding CumulativeDischarge}"
+                                               Text="{Binding DcBranch1DisChar}"
                                                Style="{StaticResource SystemTextblockstyle}"
                                                FontSize="18"
                                                FontWeight="Bold" />
@@ -626,7 +626,7 @@
                                Foreground="Black" />
                     <TextBlock Canvas.Left="524"
                                Canvas.Top="503"
-                               Text="{Binding DC_Voltage}"
+                               Text="{Binding DcBranch1DCVol}"
                                FontSize="14"
                                FontWeight="Bold"
                                Foreground="#337CF0"
@@ -641,7 +641,7 @@
                                VerticalAlignment="Top" />
                     <TextBlock Canvas.Left="524"
                                Canvas.Top="540"
-                               Text="{Binding DC_Current}"
+                               Text="{Binding DcBranch1DCCur}"
                                FontSize="14"
                                FontWeight="Bold"
                                Foreground="#337CF0"
@@ -656,7 +656,7 @@
                                VerticalAlignment="Top" />
                     <TextBlock Canvas.Left="536"
                                Canvas.Top="575"
-                               Text="{Binding DC_Power}"
+                               Text="{Binding DcBranch1DCPower}"
                                FontSize="14"
                                FontWeight="Bold"
                                Foreground="#337CF0"

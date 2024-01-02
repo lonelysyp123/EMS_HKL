@@ -74,7 +74,7 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                             <TextBlock Text="DC侧支路1："/>
-                            <TextBlock Text="{Binding DC_RunningState}"
+                            <TextBlock Text="{Binding DcBranch1State1}"
                                        Margin="10,0,0,0"
                                        Foreground="#1890FF"
                                        FontWeight="Bold" />
@@ -89,7 +89,7 @@
                                        HorizontalAlignment="Center" />
                             <Border Width="20"
                                     Height="20"
-                                    Background="{Binding DC_StartOrStopState}"
+                                    Background="{Binding DcBranch1State2}"
                                     CornerRadius="75"
                                     Margin="20,0,0,0" />
                         </StackPanel>
@@ -120,7 +120,7 @@
                                             Orientation="Horizontal"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Center">
-                                    <TextBlock Text="{Binding DC_power}"
+                                    <TextBlock Text="{Binding DcBranch1DCPower}"
                                                Style="{StaticResource HighlightText}" />
                                     <TextBlock Text="kW"
                                                Style="{StaticResource NormalText}"/>
@@ -149,7 +149,7 @@
                                             Orientation="Horizontal"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Center">
-                                    <TextBlock Text="{Binding DC_Voltage}"
+                                    <TextBlock Text="{Binding DcBranch1DCVol}"
                                                Style="{StaticResource HighlightText}" />
                                     <TextBlock Text="V"
                                                Style="{StaticResource NormalText}" />
@@ -176,7 +176,7 @@
                                             Orientation="Horizontal"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Center">
-                                    <TextBlock Text="{Binding DC_Current}"
+                                    <TextBlock Text="{Binding DcBranch1DCCur}"
                                                Style="{StaticResource HighlightText}" />
                                     <TextBlock Text="A"
                                                Style="{StaticResource NormalText}" />
@@ -211,7 +211,7 @@
                                             Orientation="Horizontal"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Center">
-                                    <TextBlock Text="{Binding DC_CumulativeChargePower}"
+                                    <TextBlock Text="{Binding DcBranch1Char}"
                                                Style="{StaticResource HighlightText}" />
                                     <TextBlock Text="kWh"
                                                Style="{StaticResource NormalText}" />
@@ -240,7 +240,7 @@
                                             Orientation="Horizontal"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Center">
-                                    <TextBlock Text="{Binding DC_CumulativeDischargePower}"
+                                    <TextBlock Text="{Binding DcBranch1DisChar}"
                                                Style="{StaticResource HighlightText}" />
                                     <TextBlock Text="kWh"
                                                Style="{StaticResource NormalText}" />
@@ -267,7 +267,7 @@
                                             Orientation="Horizontal"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Center">
-                                    <TextBlock Text="{Binding DC_BUSVoltage}"
+                                    <TextBlock Text="{Binding DcBranch1BUSVol}"
                                                Style="{StaticResource HighlightText}" />
                                     <TextBlock Text="V"
                                                Style="{StaticResource NormalText}" />
@@ -315,7 +315,7 @@
                                     Grid.Column="1"
                                     Style="{StaticResource ContentPanel}">
                             <TextBlock Text="模块温度:" />
-                            <TextBlock Text="{Binding ModuleTemp}"
+                            <TextBlock Text="{Binding ModuleTemperature}"
                                        Margin="10,0,10,0" />
                             <TextBlock Text="℃" />
                         </StackPanel>
@@ -323,7 +323,7 @@
                                     Grid.Column="2"
                                     Style="{StaticResource ContentPanel}">
                             <TextBlock Text="环境温度:" />
-                            <TextBlock Text="{Binding EnvironmentTemp}"
+                            <TextBlock Text="{Binding AmbientTemperature}"
                                        Margin="10,0,10,0" />
                             <TextBlock Text="℃" />
                         </StackPanel>
@@ -351,7 +351,7 @@
                             <TextBlock Text="本地手动控制" />
                             <Border Width="15"
                                     Height="15"
-                                    Background="{Binding IsManualControl}"
+                                    Background="{Binding PCSStateColorManControl}"
                                     CornerRadius="75"
                                     Margin="20,0,0,0" />
                         </StackPanel>
@@ -361,7 +361,7 @@
                             <TextBlock Text="本地自动控制" />
                             <Border Width="15"
                                     Height="15"
-                                    Background="{Binding IsAutomation}"
+                                    Background="{Binding PCSStateColorAutoControl}"
                                     CornerRadius="75"
                                     Margin="20,0,0,0" />
                         </StackPanel>
@@ -371,7 +371,7 @@
                             <TextBlock Text="远程控制" />
                             <Border Width="15"
                                     Height="15"
-                                    Background="{Binding IsRemoteControl}"
+                                    Background="{Binding PCSStateColorRemoteControl}"
                                     CornerRadius="75"
                                     Margin="20,0,0,0" />
                         </StackPanel>
@@ -399,7 +399,7 @@
                             <TextBlock Text="告警状态" />
                             <Border Width="15"
                                     Height="15"
-                                    Background="{Binding IsAlarmStatus}"
+                                    Background="{Binding AlarmStateColorPCS}"
                                     CornerRadius="75"
                                     Margin="20,0,0,0" />
                         </StackPanel>
@@ -409,7 +409,7 @@
                             <TextBlock Text="故障状态" />
                             <Border Width="15"
                                     Height="15"
-                                    Background="{Binding IsMalfunction}"
+                                    Background="{Binding FaultStateColorPCS}"
                                     CornerRadius="75"
                                     Margin="20,0,0,0" />
                         </StackPanel>
@@ -419,7 +419,7 @@
                             <TextBlock Text="上电初始化状态" />
                             <Border Width="15"
                                     Height="15"
-                                    Background="{Binding IsPowerOn}"
+                                    Background="{Binding PowerOnInitStateColorPCS}"
                                     CornerRadius="75"
                                     Margin="20,0,0,0" />
                         </StackPanel>

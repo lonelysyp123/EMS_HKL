@@ -50,15 +50,18 @@
                                 HorizontalAlignment="Left"
                                 Margin="25,20,0,0">
                         <TextBlock Text="离网控制："
+                                   Margin="0,0,20,0"
                                    VerticalAlignment="Center" />
-                        <localControl:CheckedButton Text="离    网"
-                                                    BackgroundColor="#BBBBBB"
-                                                    ForegroundColor="white"
-                                                    CheckedBackgroundColor="#1890FF"
-                                                    CheckedForegroundColor="White"
-                                                    Margin="10,0,0,0"
-                                                    IsEnabled="{Binding IsOffGrid}" 
-                                                    />
+                        <Button Content="离    网"
+                                Width="80"
+                                FontSize="12"
+                                Height="30"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Background="#1890FF"
+                                BorderThickness="0,0,0,0"
+                                IsEnabled="{Binding IsOffGrid}"
+                                Command="{Binding Command_OffGrid}" />
                     </StackPanel>
                     <StackPanel Grid.Row="1"
                                 Grid.Column="1"
@@ -66,14 +69,18 @@
                                 HorizontalAlignment="Left"
                                 Margin="25,20,0,0">
                         <TextBlock Text="并网控制："
+                                   Margin="0,0,20,0"
                                    VerticalAlignment="Center" />
-                        <localControl:CheckedButton Text="并    网"
-                                                    BackgroundColor="#BBBBBB"
-                                                    ForegroundColor="white"
-                                                    CheckedBackgroundColor="#1890FF"
-                                                    CheckedForegroundColor="White"
-                                                    Margin="10,0,0,0"
-                                                    IsEnabled="{Binding IsConnectedGrid}" />
+                        <Button Content="并    网"
+                                Width="80"
+                                FontSize="12"
+                                Height="30"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Background="#1890FF"
+                                BorderThickness="0,0,0,0"
+                                IsEnabled="{Binding IsConnectedGrid}"
+                                Command="{Binding Command_ConnectedGrid}" />
                     </StackPanel>
                 </Grid>
             </Border>
@@ -171,7 +178,7 @@
                                 <TextBlock Text="静置" />
                                 <Border Width="15"
                                         Height="15"
-                                        Background="{Binding Battery_Stand}"
+                                        Background="{Binding StandStateBCMU}"
                                         CornerRadius="75"
                                         Margin="20,0,0,0" />
                             </StackPanel>
@@ -181,7 +188,7 @@
                                 <TextBlock Text="充电" />
                                 <Border Width="15"
                                         Height="15"
-                                        Background="{Binding Battery_Charging}"
+                                        Background="{Binding ChargeStateBCMU}"
                                         CornerRadius="75"
                                         Margin="20,0,0,0" />
                             </StackPanel>
@@ -191,7 +198,7 @@
                                 <TextBlock Text="放电" />
                                 <Border Width="15"
                                         Height="15"
-                                        Background="{Binding Battery_Discharge}"
+                                        Background="{Binding DisChargeStateBCMU}"
                                         CornerRadius="75"
                                         Margin="20,0,0,0" />
                             </StackPanel>
@@ -201,7 +208,7 @@
                                 <TextBlock Text="离网" />
                                 <Border Width="15"
                                         Height="15"
-                                        Background="{Binding Battery_OffGrid}"
+                                        Background="{Binding OffNetStateBCMU}"
                                         CornerRadius="75"
                                         Margin="20,0,0,0" />
                             </StackPanel>
@@ -297,7 +304,7 @@
                                         Grid.Column="1"
                                         Style="{StaticResource ContentPanel}">
                                 <TextBlock Text="最大放电功率:" />
-                                <TextBlock Text="{Binding MaxAmpPower}"
+                                <TextBlock Text="{Binding BatMaxDischgPower}"
                                            Margin="10,0,10,0" />
                                 <TextBlock Text="kW" />
                             </StackPanel>
@@ -305,7 +312,7 @@
                                         Grid.Column="2"
                                         Style="{StaticResource ContentPanel}">
                                 <TextBlock Text="累计放电量:" />
-                                <TextBlock Text="{Binding CumulativeDischarge}"
+                                <TextBlock Text="{Binding TotalDischgCoulomb}"
                                            Margin="10,0,10,0" />
                                 <TextBlock Text="kWh" />
                             </StackPanel>
@@ -313,7 +320,7 @@
                                         Grid.Column="3"
                                         Style="{StaticResource ContentPanel}">
                                 <TextBlock Text="单次放电量：" />
-                                <TextBlock Text="{Binding SingleDischarge}"
+                                <TextBlock Text="{Binding OneDischgCoulomb}"
                                            Margin="10,0,10,0" />
                                 <TextBlock Text="kWh" />
                             </StackPanel>
@@ -340,7 +347,7 @@
                                         Style="{StaticResource ContentPanel}"
                                         HorizontalAlignment="Left">
                                 <TextBlock Text="最大充电功率:" />
-                                <TextBlock Text="{Binding MaxChargingPower}"
+                                <TextBlock Text="{Binding BatMaxChgPower}"
                                            Margin="10,0,10,0" />
                                 <TextBlock Text="kW" />
                             </StackPanel>
@@ -348,7 +355,7 @@
                                         Grid.Column="2"
                                         Style="{StaticResource ContentPanel}">
                                 <TextBlock Text="累计充电量:" />
-                                <TextBlock Text="{Binding CumulativeCharge}"
+                                <TextBlock Text="{Binding TotalChgCoulomb}"
                                            Margin="10,0,10,0" />
                                 <TextBlock Text="kWh" />
                             </StackPanel>
@@ -356,7 +363,7 @@
                                         Grid.Column="3"
                                         Style="{StaticResource ContentPanel}">
                                 <TextBlock Text="单次充电量：" />
-                                <TextBlock Text="{Binding SingleCharge}"
+                                <TextBlock Text="{Binding OneChgCoulomb}"
                                            Margin="10,0,10,0" />
                                 <TextBlock Text="kWh" />
                             </StackPanel>
@@ -459,6 +466,7 @@
                                            FontSize="12"
                                            Margin="10,0,0,0" />
                             </StackPanel>
+                            <!--localControl:WarnControl三种告警AlertLevel绑定：Info,Warning,Error-->
                             <StackPanel Grid.Row="1"
                                         Grid.Column="1"
                                         Style="{StaticResource ContentPanel}"
@@ -661,9 +669,9 @@
                                         Grid.Column="1"
                                         Style="{StaticResource ContentPanel}"
                                         HorizontalAlignment="Left">
-                                <TextBlock Text="簇选择:"
+                                <TextBlock Text="组选择:"
                                            VerticalAlignment="Center" />
-                                <ComboBox  Height="25"
+                                <ComboBox  Height="30"
                                            Width="100"
                                            Margin="10,0,10,0"
                                            Background="White"
@@ -677,7 +685,7 @@
                                         Grid.Column="2"
                                         Style="{StaticResource ContentPanel}">
                                 <TextBlock Text="充电累计容量:" />
-                                <TextBlock Text="{Binding AccChargingCapacity}"
+                                <TextBlock Text="{Binding ChargeCapacitySum}"
                                            Margin="10,0,10,0" />
                                 <TextBlock Text="AH" />
                             </StackPanel>
@@ -685,7 +693,7 @@
                                         Grid.Column="3"
                                         Style="{StaticResource ContentPanel}">
                                 <TextBlock Text="充电通道:" />
-                                <TextBlock Text="{Binding Channel}"
+                                <TextBlock Text="{Binding ChargeChannelStateNumber}"
                                            Margin="10,0,10,0" />
                             </StackPanel>
                         </Grid>
