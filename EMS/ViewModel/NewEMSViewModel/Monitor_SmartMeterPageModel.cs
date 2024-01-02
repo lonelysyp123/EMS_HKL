@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
-    class Monitor_SmartMeterPageModel
+    public class Monitor_SmartMeterPageModel
     {
     }
 }

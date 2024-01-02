@@ -9,6 +9,7 @@ using log4net;
 using TNCN.EMS.Common.Util;
 using TNCN.EMS.Common.Mqtt;
 using Newtonsoft.Json;
+using Microsoft.VisualStudio.TestPlatform.Utilities.Helpers.Interfaces;
 
 namespace TestEMS.ApiTest
 {
@@ -60,8 +61,51 @@ namespace TestEMS.ApiTest
         }
 
         [TestMethod]
-        public void TestJson()
+        public void TestIniWrite()
         {
+            string filePath = "E:\\project\\temp\\EMS_HKL\\EMS\\Config\\SystemConfig.ini";
+            bool exists = File.Exists(filePath);
+            Assert.IsTrue(exists);
+            if (exists)
+            {
+                //IniFileHelper.Write("MQTT", "IP", "127.0.0.1", filePath);
+                //IniFileHelper.Write("MQTT", "Port", "1883", filePath);
+                //IniFileHelper.Write("MQTT", "UserName", "admin", filePath);
+                //IniFileHelper.Write("MQTT", "Password", "zhny2020", filePath);
+                //IniFileHelper.Write("MQTT", "ClientId", "tncn.ems.local", filePath);
+
+                string[] keys = { "IP", "Port", "UserName", "Password", "ClientId" };
+                string[] values = { "127.0.0.1", "1883", "admin", "zhny2020", "tncn.ems.local" };
+
+                IniFileHelper.AddSectionWithKeyValues("MQTT", keys.ToList(), values.ToList(), filePath);
+            }
         }
+
+        [TestMethod]
+        public void TestIniRead()
+        {
+            string filePath = "E:\\project\\temp\\EMS_HKL\\EMS\\Config\\SystemConfig.ini";
+            bool exists = File.Exists(filePath);
+            Assert.IsTrue(exists);
+            if (exists) {
+                string ip = IniFileHelper.Read("MQTT", "IP", filePath);
+                Assert.AreEqual(ip, "127.0.0.1", true);
+
+                string port = IniFileHelper.Read("MQTT", "Port", filePath);
+                Assert.AreEqual(port, port, "1883");
+
+                string userName = IniFileHelper.Read("MQTT", "UserName", filePath);
+                Assert.AreEqual(userName, "admin", true);
+
+                string password = IniFileHelper.Read("MQTT", "Password", filePath);
+                Assert.AreEqual(password, "zhny2020", true);
+
+                string clientId = IniFileHelper.Read("MQTT", "ClientId", filePath);
+                Assert.AreEqual(clientId, "tncn.ems.local", true);
+            }
+
+        }
+
+        
     }
 }

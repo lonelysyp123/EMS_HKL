@@ -48,11 +48,13 @@ namespace EMS.Service
             }
         }
 
+        private string ID;
         private string IP;
         private int Port;
         private TcpClient _client;
         private ModbusMaster _master;
         private Action<bool, bool> OnChangeState;
+        private Action<BatteryTotalModel, bool> OnChangeData;
 
         public BMSDataService()
         {
@@ -63,6 +65,11 @@ namespace EMS.Service
         public void RegisterState(Action<bool, bool> action)
         {
             OnChangeState = action;
+        }
+
+        public void RegisterState(Action<BatteryTotalModel, bool> action)
+        {
+            OnChangeData = action;
         }
 
         public void SetCommunicationConfig(string ip, string port, BlockingCollection<BatteryTotalModel> obj)
