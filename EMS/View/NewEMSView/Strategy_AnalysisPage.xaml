@@ -77,15 +77,16 @@
                     <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100"/>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
+                            <ColumnDefinition Width="360*" />
+                            <ColumnDefinition Width="49*" />
+                            <ColumnDefinition Width="311*"/>
+                            <ColumnDefinition Width="360*" />
+                            <ColumnDefinition Width="360*" />
                         </Grid.ColumnDefinitions>
                         <Border BorderThickness="2"
                                 BorderBrush="#1890FF"
                                 Grid.Row="0"
-                                Margin="20,10"
+                                Margin="20,10,20,10"
                                 CornerRadius="32"
                                 Opacity="0.3"
                                 Grid.ColumnSpan="6">
@@ -109,7 +110,7 @@
                         <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Grid.Column="2">
+                                    Grid.Column="2" Grid.ColumnSpan="2">
                             <TextBlock Text="控制类型:"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
@@ -127,7 +128,7 @@
                         <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Grid.Column="3">
+                                    Grid.Column="4">
                             <TextBlock Text="值:"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
@@ -138,26 +139,26 @@
                                       Foreground="Black"
                                       Background="White"
                                       Margin="20,10"
-                                      BorderThickness="1,1,1,1" />
+                                      BorderThickness="1,1,1,1" TextChanged="TextBox_TextChanged" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Grid.Column="4">
+                                    Grid.Column="5">
                             <Button VerticalAlignment="Center"
                                     HorizontalAlignment="Center"
                                     Content="+"
                                     FontSize="14"
                                     Background="#1890FF"
                                     Foreground="White"
-                                    Command="{Binding BatteryStrategyAddRowCommand}"/>
+                                    Command="{Binding BatteryStrategyAddRowCommand}" Click="Button_Click"/>
                             <Button Content="应用"
                                     Background="#1890FF"
                                     Foreground="White"
                                     Width="80"
                                     Margin="20,0,0,0"
                                     Command="{Binding BatteryStrategySendCommand}"
-                                    IsEnabled="{Binding IsAutoStrategyBtnEnabled}" />
+                                    IsEnabled="{Binding IsAutoStrategyBtnEnabled}" Click="Button_Click_1" />
                         </StackPanel>
                     </Grid>
                     <DataGrid Grid.Row="3"
@@ -288,13 +289,17 @@
                     <!--<UniformGrid Grid.Row="2">
                         <lvc:CartesianChart Series="{Binding ColunmSeriesCollection}"
                                             LegendLocation="Right">
-                            --><!--x轴--><!--
+                            -->
+                    <!--x轴-->
+                    <!--
                             <lvc:CartesianChart.AxisX>
                                 <lvc:Axis Labels="{Binding ColumnXLabels}">
 
                                 </lvc:Axis>
                             </lvc:CartesianChart.AxisX>
-                            --><!--y轴--><!--
+                            -->
+                    <!--y轴-->
+                    <!--
                             <lvc:CartesianChart.AxisY>
                                 <lvc:Axis>
 

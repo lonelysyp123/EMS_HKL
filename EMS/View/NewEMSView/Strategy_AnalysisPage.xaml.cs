@@ -20,102 +20,21 @@ namespace EMS.View.NewEMSView
     /// Page1.xaml 的交互逻辑
     /// </summary>
     /// 
-    public class PersonItem
-    {
-        public string StrategyNumber { get; set; }
-    }
     public partial class Strategy_AnalysisPage : Page
     {
         public Strategy_AnalysisPage()
         {
             InitializeComponent();
+        }
 
-            List<PersonItem> list = new List<PersonItem>();
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
 
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "1",
+        }
 
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "2",
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
 
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "3",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "4",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "5",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "6",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "7",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "8",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "9",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "10",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "11",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "12",
-                }
-            );
-            DataGrid.ItemsSource = list;
         }
     }
 }
