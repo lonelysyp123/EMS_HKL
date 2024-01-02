@@ -166,48 +166,48 @@ namespace EMS.Service
             PCSModel item = new PCSModel();
             if (dcstate !=null)
             {
-                item.MonitorModel.ModuleOnLineFlag = BitConverter.ToUInt16(dcstate, 0);
-                item.MonitorModel.ModuleRunFlag = BitConverter.ToUInt16(dcstate, 4);
-                item.MonitorModel.ModuleAlarmFlag = BitConverter.ToUInt16(dcstate, 8);
-                item.MonitorModel.ModuleFaultFlag = BitConverter.ToUInt16(dcstate, 12);
+                item.ModuleOnLineFlag = BitConverter.ToUInt16(dcstate, 0);
+                item.ModuleRunFlag = BitConverter.ToUInt16(dcstate, 4);
+                item.ModuleAlarmFlag = BitConverter.ToUInt16(dcstate, 8);
+                item.ModuleFaultFlag = BitConverter.ToUInt16(dcstate, 12);
             }
             if (pcsdata != null)
             {
-                item.MonitorModel.AlarmStateFlagDC1 = BitConverter.ToUInt16(pcsdata, 0);
-                item.MonitorModel.AlarmStateFlagDC2 = BitConverter.ToUInt16(pcsdata, 4);
-                item.MonitorModel.AlarmStateFlagDC3 = BitConverter.ToUInt16(pcsdata, 6);
-                item.MonitorModel.AlarmStateFlagPDS = BitConverter.ToUInt16(pcsdata, 8);
-                item.MonitorModel.ControlStateFlagPCS = BitConverter.ToUInt16(pcsdata, 10);
-                item.MonitorModel.StateFlagPCS = BitConverter.ToUInt16(pcsdata, 12);
-                item.MonitorModel.DcBranch1StateFlag1 = BitConverter.ToUInt16(pcsdata, 16);
-                item.MonitorModel.DcBranch1StateFlag2 = BitConverter.ToUInt16(pcsdata, 18);
+                item.AlarmStateFlagDC1 = BitConverter.ToUInt16(pcsdata, 0);
+                item.AlarmStateFlagDC2 = BitConverter.ToUInt16(pcsdata, 4);
+                item.AlarmStateFlagDC3 = BitConverter.ToUInt16(pcsdata, 6);
+                item.AlarmStateFlagPDS = BitConverter.ToUInt16(pcsdata, 8);
+                item.ControlStateFlagPCS = BitConverter.ToUInt16(pcsdata, 10);
+                item.StateFlagPCS = BitConverter.ToUInt16(pcsdata, 12);
+                item.DcBranch1StateFlag1 = BitConverter.ToUInt16(pcsdata, 16);
+                item.DcBranch1StateFlag2 = BitConverter.ToUInt16(pcsdata, 18);
             }
             if (temp != null)
             {
-                item.MonitorModel.ModuleTemperature = Math.Round(BitConverter.ToUInt16(temp, 0) * 0.1 - 20, 2);
-                item.MonitorModel.AmbientTemperature = Math.Round(BitConverter.ToUInt16(temp, 4) * 0.1 - 20, 2);
+                item.ModuleTemperature = Math.Round(BitConverter.ToUInt16(temp, 0) * 0.1 - 20, 2);
+                item.AmbientTemperature = Math.Round(BitConverter.ToUInt16(temp, 4) * 0.1 - 20, 2);
             }
             if (dcbranch1info!=null)
             {
-                item.MonitorModel.DcBranch1DCPower = Math.Round(BitConverter.ToUInt16(dcbranch1info, 0) * 0.1 - 1500, 2);
-                item.MonitorModel.DcBranch1DCVol = Math.Round(BitConverter.ToUInt16(dcbranch1info, 2) * 0.1, 2);
-                item.MonitorModel.DcBranch1DCCur = Math.Round(BitConverter.ToUInt16(dcbranch1info, 4) * 0.1 - 2000, 2);
-                item.MonitorModel.DcBranch1CharHigh = BitConverter.ToUInt16(dcbranch1info, 6);
-                item.MonitorModel.DcBranch1CharLow = BitConverter.ToUInt16(dcbranch1info, 8);
-                item.MonitorModel.DcBranch1DisCharHigh = BitConverter.ToUInt16(dcbranch1info, 10);
-                item.MonitorModel.DcBranch1DisCharLow = BitConverter.ToUInt16(dcbranch1info, 12);
-                item.MonitorModel.DcBranch1BUSVol = Math.Round(BitConverter.ToUInt16(dcbranch1info, 18) * 0.1, 2);
+                item.DcBranch1DCPower = Math.Round(BitConverter.ToUInt16(dcbranch1info, 0) * 0.1 - 1500, 2);
+                item.DcBranch1DCVol = Math.Round(BitConverter.ToUInt16(dcbranch1info, 2) * 0.1, 2);
+                item.DcBranch1DCCur = Math.Round(BitConverter.ToUInt16(dcbranch1info, 4) * 0.1 - 2000, 2);
+                item.DcBranch1CharHigh = BitConverter.ToUInt16(dcbranch1info, 6);
+                item.DcBranch1CharLow = BitConverter.ToUInt16(dcbranch1info, 8);
+                item.DcBranch1DisCharHigh = BitConverter.ToUInt16(dcbranch1info, 10);
+                item.DcBranch1DisCharLow = BitConverter.ToUInt16(dcbranch1info, 12);
+                item.DcBranch1BUSVol = Math.Round(BitConverter.ToUInt16(dcbranch1info, 18) * 0.1, 2);
             }
             if (serialnumber!=null)
             {
-                item.MonitorModel.SNAdress = new ushort[11];
+                item.SNAdress = new ushort[11];
                 for (int i = 0; i < 11; i++)
                 {
-                    item.MonitorModel.SNAdress[i] = BitConverter.ToUInt16(serialnumber, 2 * i);
+                    item.SNAdress[i] = BitConverter.ToUInt16(serialnumber, 2 * i);
                 }
-                item.MonitorModel.MonitorSoftCode = BitConverter.ToUInt16(serialnumber, 22);
-                item.MonitorModel.DcSoftCode = BitConverter.ToUInt16(serialnumber, 26);
-                item.MonitorModel.U2SoftCode = BitConverter.ToUInt16(serialnumber, 28);
+                item.MonitorSoftCode = BitConverter.ToUInt16(serialnumber, 22);
+                item.DcSoftCode = BitConverter.ToUInt16(serialnumber, 26);
+                item.U2SoftCode = BitConverter.ToUInt16(serialnumber, 28);
             }
             return item;
         }

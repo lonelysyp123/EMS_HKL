@@ -395,7 +395,7 @@
                                                  FIcon_Foreground="#2A6BFF" />
                         <StackPanel Grid.Row="1"
                                     Grid.Column="1"
-                                    Style="{StaticResource ContentPanel}">
+                                    Style="{StaticResource ContentPanel}" Margin="0,0,0,9" VerticalAlignment="Bottom">
                             <TextBlock Text="告警状态" />
                             <Border Width="15"
                                     Height="15"
@@ -409,7 +409,7 @@
                             <TextBlock Text="故障状态" />
                             <Border Width="15"
                                     Height="15"
-                                    Background="{Binding IsMalfunction}"
+                                    Background="{Binding IsFaultStatus}"
                                     CornerRadius="75"
                                     Margin="20,0,0,0" />
                         </StackPanel>
@@ -419,7 +419,7 @@
                             <TextBlock Text="上电初始化状态" />
                             <Border Width="15"
                                     Height="15"
-                                    Background="{Binding IsPowerOn}"
+                                    Background="{Binding IsInitStatus}"
                                     CornerRadius="75"
                                     Margin="20,0,0,0" />
                         </StackPanel>
