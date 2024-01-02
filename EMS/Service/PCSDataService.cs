@@ -54,13 +54,14 @@ namespace EMS.Service
 
         public static byte PcsId = 0;
 
-
-        private PCSModel pcsModel;
+        public BlockingCollection<PCSModel> pcsModels;
+        
 
         public PCSDataService()
         {
             CommunicationProtectTr = new Thread(CommunicationProtect);
             CommunicationProtectTr.IsBackground = true;
+            pcsModels = new BlockingCollection<PCSModel>(new ConcurrentQueue<PCSModel>(), 300);
         }
 
         public void RegisterState(Action<bool, bool> action)
@@ -68,11 +69,10 @@ namespace EMS.Service
             OnChangeState = action;
         }
 
-        public void SetCommunicationConfig(string ip, string port, PCSModel obj)
+        public void SetCommunicationConfig(string ip, string port)
         {
             IP = ip;
             int.TryParse(port, out Port);
-            pcsModel = obj;
         }
 
         public async Task<bool> ConnectAsync()
@@ -151,7 +151,7 @@ namespace EMS.Service
                     byte[] Temp = ReadFunc(53221, 3);
                     byte[] DCBranch1INFO = ReadFunc(53250, 10);
                     byte[] SerialNumber = ReadFunc(53579, 15);
-                    pcsModel = DataDecode(dcState, pcsData, Temp, DCBranch1INFO, SerialNumber);
+                    pcsModels.TryAdd(DataDecode(dcState, pcsData, Temp, DCBranch1INFO, SerialNumber));
                 }
                 catch (Exception)
                 {
