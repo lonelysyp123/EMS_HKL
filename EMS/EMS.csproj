@@ -233,6 +233,7 @@
     <Compile Include="Api\MqttClientApi.cs" />
     <Compile Include="Api\PcsApi.cs" />
     <Compile Include="Api\StrategyApi.cs" />
+    <Compile Include="Common\BMUColors.cs" />
     <Compile Include="Common\LogUtils.cs" />
     <Compile Include="Common\Modbus\ModbusRequest.cs" />
     <Compile Include="Common\Mqtt\BatteryCell.cs" />
@@ -241,6 +242,8 @@
     <Compile Include="Common\Mqtt\BMU.cs" />
     <Compile Include="Common\Mqtt\Pcs.cs" />
     <Compile Include="Common\Mqtt\SmartMeter.cs" />
+    <Compile Include="Common\NavigationService.cs" />
+    <Compile Include="Common\StrategyManage\BMSDevManager.cs" />
     <Compile Include="Common\StrategyManage\EmsController.cs" />
     <Compile Include="Common\StrategyManage\IntraDayScheduler.cs" />
     <Compile Include="Common\SingletonBase.cs" />
@@ -346,6 +349,7 @@
     <Compile Include="ViewModel\NewEMSViewModel\Analysis_BMSPageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\Analysis_PCSPageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\Analysis_SmartMeterPageModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\EMSMainViewModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\FaultLogPageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\HomePageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\Monitor_BMSPageModel.cs" />

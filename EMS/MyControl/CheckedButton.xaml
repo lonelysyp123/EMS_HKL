@@ -51,6 +51,6 @@
     </UserControl.Resources>
     <Grid>
         <ToggleButton Content="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                      Padding="5" />
+                      Padding="5"/>
     </Grid>
 </UserControl>

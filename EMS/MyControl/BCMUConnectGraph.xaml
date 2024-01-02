@@ -126,7 +126,7 @@
                     Style="{StaticResource FIconBtn}"
                     Canvas.Left="54"
                     Canvas.Top="293"
-                    Command="{Binding ToMonitor_BMS_BCMUPage}"
+                    Command="{Binding ToMonitor_BMS_BCMUPageCommand}"
                     CommandParameter="BCMU"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top" />
