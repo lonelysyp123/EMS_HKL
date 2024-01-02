@@ -367,7 +367,7 @@
                             <TextBlock Text="储能初始能量(kWh):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding AvailableCapacity}"
+                            <TextBox Text="{Binding InitialEnergyStorage}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                         <StackPanel Grid.Row="2"
@@ -377,7 +377,7 @@
                             <TextBlock Text="储能可用容量(kWh):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding Port_Ammeter}"
+                            <TextBox Text="{Binding AvailableEnergyStorageCapacity}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                     </Grid>
@@ -407,7 +407,7 @@
                             <TextBlock Text="需量控制容量(kW):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding DemandControlapacity}"
+                            <TextBox Text="{Binding DemandControlCapacity}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
@@ -417,7 +417,7 @@
                             <TextBlock Text="下设比例(%):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding LowerProportion_Demand}"
+                            <TextBox Text="{Binding LowerProportionDemand}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                     </Grid>
@@ -448,7 +448,7 @@
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
                             <TextBox Text="{Binding ProtectionLimit}"
-                                     Style="{StaticResource Input}" />
+                                     Style="{StaticResource Input}" TextChanged="TextBox_TextChanged" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
                                     Grid.Column="2"
