@@ -21,31 +21,32 @@ namespace EMS.ViewModel.NewEMSViewModel
             pcsservice = new PCSDataService();
         }
 
-        private void RefreshDataTh()
-        {
-            while (IsDaqData)
-            {
-                if (pcsservice.pcsModels.TryTake(out PCSModel CurrentPCSModel))
-                {
-                    var model = (PCSModel)CurrentPCSModel.Clone();
-                    SmartMeterModelList.Add(model);
-                    // 把数据分发给需要显示的内容
-                    App.Current.Dispatcher.Invoke(() =>
-                    {
-                        RefreshData(CurrentSmartMeterModel);
-                    });
+        //    private void RefreshDataTh()
+        //    {
+        //        while (IsDaqData)
+        //        {
+        //            if (pcsservice.pcsModels.TryTake(out PCSModel CurrentPCSModel))
+        //            {
+        //                var model = (PCSModel)CurrentPCSModel.Clone();
+        //                SmartMeterModelList.Add(model);
+        //                // 把数据分发给需要显示的内容
+        //                App.Current.Dispatcher.Invoke(() =>
+        //                {
+        //                    RefreshData(CurrentSmartMeterModel);
+        //                });
 
-                    if (IsRecordData)
-                    {
-                        SaveData(CurrentSmartMeterModel);
-                    }
-                }
-                else
-                {
-                    Thread.Sleep(500);
-                }
-            }
-        }
+        //                if (IsRecordData)
+        //                {
+        //                    SaveData(CurrentSmartMeterModel);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Thread.Sleep(500);
+        //            }
+        //        }
+        //    }
+        //}
     }
     public class Item
     {
