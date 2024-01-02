@@ -177,7 +177,7 @@ namespace EMS.View.NewEMSView
                 SystemViewMenu_DevSetter.Visibility = Visibility.Collapsed;
                 SystemViewMenu_MqttSetter.Visibility = Visibility.Collapsed;
             }
-            Navigation(new Strategy_SetterPage(), sender as ToggleButton);
+            Navigation(new System_DevInfoPage(), sender as ToggleButton);
         }
 
         private void AnalysisViewMenu_BMS_Checked(object sender, RoutedEventArgs e)
