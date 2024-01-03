@@ -471,7 +471,7 @@
                                         Grid.Column="1"
                                         Style="{StaticResource ContentPanel}"
                                         HorizontalAlignment="Left">
-                                <localControl:WarnControl AlertLevel="{Binding Wran_BCMU_1}"
+                                <localControl:WarnControl AlertLevel="Info"
                                                           AlertText="告警" />
                             </StackPanel>
                             <StackPanel Grid.Row="1"

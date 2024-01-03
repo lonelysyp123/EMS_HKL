@@ -1,4 +1,5 @@
 ﻿using EMS.ViewModel;
+using EMS.ViewModel.NewEMSViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,45 +17,17 @@ using System.Windows.Shapes;
 
 namespace EMS.View.NewEMSView
 {
-    /// <summary>
-    /// Page1.xaml 的交互逻辑
-    /// </summary>
     public partial class Analysis_SmartMeterPage : Page
     {
-        private DataAnalysisViewModel viewmodel;
         public Analysis_SmartMeterPage()
         {
             InitializeComponent();
+        }
 
-            viewmodel = new DataAnalysisViewModel();
+        public Analysis_SmartMeterPage(Analysis_SmartMeterPageModel viewmodel)
+        {
+            InitializeComponent();
             this.DataContext = viewmodel;
-        }
-
-        private void BatteryList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.AddedItems.Count > 0)
-            {
-                foreach (var item in e.AddedItems)
-                {
-                    viewmodel.SelectedBatteryList.Add((item as ListBoxItem).Content.ToString());
-                }
-            }
-
-            if (e.RemovedItems.Count > 0)
-            {
-                foreach (var item in e.RemovedItems)
-                {
-                    viewmodel.SelectedBatteryList.Remove((item as ListBoxItem).Content.ToString());
-
-                }
-            }
-
-            viewmodel.SwitchBatteryData();
-        }
-
-        private void DataTypeList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            viewmodel.SwitchBatteryData();
         }
     }
 }

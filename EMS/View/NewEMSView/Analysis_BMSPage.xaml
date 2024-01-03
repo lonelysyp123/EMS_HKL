@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:bh="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:localControl="clr-namespace:EMS.MyControl"
       xmlns:local="clr-namespace:EMS.View.NewEMSView"
       xmlns:trl="clr-namespace:EMS.MyControl"
@@ -40,10 +41,14 @@
                 <Grid>
                     <ListBox HorizontalAlignment="Center"
                              BorderThickness="0,0,0,0"
-                             SelectionChanged="DataTypeList_SelectionChanged"
                              SelectedItem="{Binding SelectedType}"
                              SelectedIndex="{Binding SelectedTypeIndex}"
                              Foreground="Black">
+                        <bh:Interaction.Triggers>
+                            <bh:EventTrigger EventName="SelectionChanged">
+                                <bh:InvokeCommandAction Command="{Binding DataTypeList_SelectionChanged}" />
+                            </bh:EventTrigger>
+                        </bh:Interaction.Triggers>
                         <ListBoxItem Content="Voltage"
                                      BorderThickness="1,1,1,1"
                                      Margin="0,10,0,0"
@@ -99,27 +104,39 @@
                                    Foreground="#1E1E1E"
                                    Margin="20,0,0,0"
                                    BorderThickness="0,0,0,0" />
-                            <ComboBox  Height="30"
+                            <!--<ComboBox  Height="30"
                                        Width="80"
                                        Background="White"
                                        Foreground="Black"
                                        ItemsSource="{Binding SourceTotal}"
                                        SelectedItem="{Binding SelectedTotal}"
                                        BorderThickness="1,1,1,1">
-                            </ComboBox>
+                            </ComboBox>-->
+                            <TextBox Width="80"
+                                     Height="30"
+                                     Background="White"
+                                     Foreground="Black"
+                                     BorderThickness="1,1,1,1"
+                                     Text="{Binding SelectedTotal}"></TextBox>
                             <Label Content="BMU:"
                                    VerticalAlignment="Center"
                                    Foreground="#1E1E1E"
                                    Margin="20,0,0,0"
                                    BorderThickness="0,0,0,0"></Label>
-                            <ComboBox  Height="30"
+                            <!--<ComboBox  Height="30"
                                        Width="80"
                                        Background="White"
                                        Foreground="Black"
                                        ItemsSource="{Binding SourceSeries}"
                                        SelectedItem="{Binding SelectedSeries}"
                                        BorderThickness="1,1,1,1">
-                            </ComboBox>
+                            </ComboBox>-->
+                            <TextBox Width="80"
+                                     Height="30"
+                                     Background="White"
+                                     Foreground="Black"
+                                     BorderThickness="1,1,1,1"
+                                     Text="{Binding SourceSeries}"></TextBox>
                             <Label Content="开始时间:"
                                    BorderThickness="0,0,0,0"
                                    VerticalAlignment="Center"
