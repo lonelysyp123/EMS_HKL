@@ -540,11 +540,11 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             MyReport report = new MyReport();
             ObservableCollection<MyData> data = new ObservableCollection<MyData>();//data显示数据类 x 横坐标 Y纵坐标
-            data.Add(new MyData() { X = 1, Y = 8 });
-            data.Add(new MyData() { X = 5, Y = 7 });
-            data.Add(new MyData() { X = 8, Y = 4 });
-            data.Add(new MyData() { X = 9, Y = 3 });
-            data.Add(new MyData() { X = 12, Y = 1 });
+            data.Add(new MyData() { X = "1", Y = 8 });
+            data.Add(new MyData() { X = "2", Y = 7 });
+            data.Add(new MyData() { X = "3", Y = 4 });
+            data.Add(new MyData() { X = "4", Y = 3 });
+            data.Add(new MyData() { X = "5", Y = 1 });
             report.Data = data;
 
             MyReports = new ObservableCollection<MyReport>();
@@ -559,7 +559,7 @@ namespace EMS.ViewModel.NewEMSViewModel
     }
     public class MyData
     {
-        public double X { get; set; }
+        public string X { get; set; }
         public double Y { get; set; }
     }
 }
