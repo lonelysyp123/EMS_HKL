@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,11 +20,11 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        /******/
-        //待补充command
-        /******/
+        #region Command
+        public RelayCommand Strategy_SetterPageCommand { get; private set; }
+        #endregion
 
-
+        #region AutoRunMode
         /*最大SOC*/
         private string maxSOC;
         public string MaxSOC
@@ -166,6 +167,16 @@ namespace EMS.ViewModel.NewEMSViewModel
                 SetProperty(ref lowerProportion_InversePower, value);
             }
         }
+        #endregion
 
+        public Strategy_SetterPageModel()
+        {
+
+        }
+
+        public void DataDistribution()
+        {
+
+        }
     }
 }
