@@ -128,7 +128,9 @@
                                 Content="模式切换"
                                 Foreground="White"
                                 VerticalAlignment="Center"
-                                Width="100"
+                                Width="80"
+                                Height="30"
+                                FontSize="12"
                                 Command="{Binding SwitchAutoManualCommand}">
                         </Button>
                     </StackPanel>
@@ -139,7 +141,7 @@
                                 VerticalAlignment="Center">
                         <TextBlock Text="充放电策略控制启停："
                                    VerticalAlignment="Center" />
-                        <ToggleButton Width="90"
+                        <ToggleButton Width="100"
                                       Height="30"
                                       Margin="20 0 0 0"
                                       Style="{DynamicResource ToggleButtonStyle}"
@@ -242,8 +244,9 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center">
                         <Button Content="重    置"
-                                Width="100"
-                                Height="35"
+                                Width="80"
+                                Height="30"
+                                FontSize="12"
                                 Foreground="white"
                                 FontWeight="Bold"
                                 Background="#1890FF"
@@ -251,8 +254,9 @@
                                 IsEnabled="{Binding IsEnabled_ManualReset}"
                                 Command="{Binding CommandManualReset}" />
                         <Button Content="应    用"
-                                Width="100"
-                                Height="35"
+                                Width="80"
+                                Height="30"
+                                FontSize="12"
                                 Foreground="white"
                                 FontWeight="Bold"
                                 Background="#1890FF"
@@ -367,7 +371,7 @@
                             <TextBlock Text="储能初始能量(kWh):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding AvailableCapacity}"
+                            <TextBox Text="{Binding InitialEnergyStorage}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                         <StackPanel Grid.Row="2"
@@ -377,7 +381,7 @@
                             <TextBlock Text="储能可用容量(kWh):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding Port_Ammeter}"
+                            <TextBox Text="{Binding AvailableEnergyStorageCapacity}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                     </Grid>
@@ -417,7 +421,7 @@
                             <TextBlock Text="下设比例(%):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding LowerProportion_Demand}"
+                            <TextBox Text="{Binding MaxDemandDescendRate}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                     </Grid>
@@ -444,10 +448,10 @@
                                     Grid.Column="1"
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
-                            <TextBlock Text="逆功率保护限制(kW):"
+                            <TextBlock Text="逆功率保护限值(kW):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding ProtectionLimit}"
+                            <TextBox Text="{Binding ReversePowerThreshold}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
@@ -457,7 +461,7 @@
                             <TextBlock Text="逆功率保护动作限值(kW):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding ProtectionActionLimit}"
+                            <TextBox Text="{Binding ReversePowerLowestThreshold}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"
@@ -467,7 +471,7 @@
                             <TextBlock Text="下设比例(%):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding LowerProportion_InversePower}"
+                            <TextBox Text="{Binding ReversePowerDescendRate}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                         <StackPanel Grid.Row="2"
@@ -475,8 +479,9 @@
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
                             <Button Content="重    置"
-                                    Width="100"
-                                    Height="35"
+                                    Width="80"
+                                    Height="30"
+                                    FontSize="12"
                                     Foreground="white"
                                     FontWeight="Bold"
                                     Background="#1890FF"
@@ -484,15 +489,16 @@
                                     IsEnabled="{Binding IsEnabled_AutoReset}"
                                     Command="{Binding CommandAutoReset}" />
                             <Button Content="应    用"
-                                    Width="100"
-                                    Height="35"
+                                    Width="80"
+                                    Height="30"
+                                    FontSize="12"
                                     Foreground="white"
                                     FontWeight="Bold"
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
                                     Margin="20,0,0,0"
-                                    IsEnabled="{Binding IsEnabled_AutoApply}"
-                                    Command="{Binding CommandAutoApply}" />
+                                    IsEnabled="{Binding IsAutoStrategyBtnEnabled}"
+                                    Command="{Binding ReversePowerSendCommand}" />
                         </StackPanel>
                     </Grid>
                 </Grid>

@@ -38,11 +38,12 @@
                     Padding="20,10"
                     CornerRadius="15">
                 <Grid>
-                    <ListBox SelectedItem="{Binding SelectedType}"
+                    <ListBox HorizontalAlignment="Center"
+                             BorderThickness="0,0,0,0"
+                             SelectionChanged="DataTypeList_SelectionChanged"
+                             SelectedItem="{Binding SelectedType}"
                              SelectedIndex="{Binding SelectedTypeIndex}"
-                             Foreground="White"
-                             HorizontalAlignment="Center"
-                             BorderThickness="0,0,0,0">
+                             Foreground="Black">
                         <ListBoxItem Content="Voltage"
                                      BorderThickness="1,1,1,1"
                                      Margin="0,10,0,0"
@@ -100,13 +101,14 @@
                                    Foreground="#1E1E1E"></Label>
                             <DatePicker x:Name="Test1"
                                         Width="100"
-                                        Height="25"
+                                        Height="30"
                                         Background="White"
                                         VerticalContentAlignment="Center"
                                         HorizontalAlignment="Center"
-                                        Text="{Binding StartTime1, Mode=TwoWay}"></DatePicker>
+                                        Text="{Binding StartTime1, Mode=TwoWay}"
+                                        BorderThickness="1,1,1,1"></DatePicker>
                             <trl:DateInput Width="90"
-                                           Height="25"
+                                           Height="30"
                                            Margin="5"
                                            DateText="{Binding StartTime2, Mode=TwoWay}"
                                            x:Name="Input1"></trl:DateInput>
@@ -115,27 +117,31 @@
                                    BorderThickness="0,0,0,0"
                                    VerticalAlignment="Center"
                                    Foreground="#1E1E1E"></Label>
-                            <DatePicker Name="Test2"
-                                        Height="25"
+                            <DatePicker Name="Test3"
+                                        Height="30"
                                         VerticalContentAlignment="Center"
                                         Text="{Binding EndTime1, Mode=TwoWay}"
                                         Foreground="Black"
                                         Width="100"
                                         Background="White"></DatePicker>
                             <trl:DateInput Width="90"
-                                           Height="25"
+                                           Height="30"
                                            Margin="5"
                                            DateText="{Binding EndTime2, Mode=TwoWay}" />
-                            <Button Content="查询"
+                            <Button Content="查    询"
                                     Command="{Binding QueryCommand}"
                                     Width="80"
+                                    Height="30"
+                                    FontSize="12"
                                     Margin="20,0,10,0"
                                     Foreground="White"
                                     Background="#1890FF"
                                     x:Name="QueryButton"></Button>
-                            <Button Content="导出"
+                            <Button Content="导    出"
                                     Command="{Binding ExportCommand}"
                                     Width="80"
+                                    Height="30"
+                                    FontSize="12"
                                     Margin="3"
                                     Foreground="White"
                                     Background="#1890FF"

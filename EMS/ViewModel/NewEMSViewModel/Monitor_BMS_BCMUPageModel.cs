@@ -176,103 +176,103 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private SolidColorBrush battery_Stand;
-        public SolidColorBrush Battery_Stand
+        private SolidColorBrush standStateBCMU;
+        public SolidColorBrush StandStateBCMU
         {
-            get { return battery_Stand; }
+            get { return standStateBCMU; }
             set
             {
-                SetProperty(ref battery_Stand, value);
+                SetProperty(ref standStateBCMU, value);
             }
         }
 
-        private SolidColorBrush battery_Charging;
-        public SolidColorBrush Battery_Charging
+        private SolidColorBrush chargeStateBCMU;
+        public SolidColorBrush ChargeStateBCMU
         {
-            get { return battery_Charging; }
+            get { return chargeStateBCMU; }
             set
             {
-                SetProperty(ref battery_Charging, value);
+                SetProperty(ref chargeStateBCMU, value);
             }
         }
 
-        private SolidColorBrush battery_Discharge;
-        public SolidColorBrush Battery_Discharge
+        private SolidColorBrush disChargeStateBCMU;
+        public SolidColorBrush DisChargeStateBCMU
         {
-            get { return battery_Discharge; }
+            get { return disChargeStateBCMU; }
             set
             {
-                SetProperty(ref battery_Discharge, value);
+                SetProperty(ref disChargeStateBCMU, value);
             }
         }
 
-        private SolidColorBrush battery_OffGrid;
-        public SolidColorBrush Battery_OffGrid
+        private SolidColorBrush offNetStateBCMU;
+        public SolidColorBrush OffNetStateBCMU
         {
-            get { return battery_OffGrid; }
+            get { return offNetStateBCMU; }
             set
             {
-                SetProperty(ref battery_OffGrid, value);
+                SetProperty(ref offNetStateBCMU, value);
             }
         }
 
-        private string maxAmpPower;
-        public string MaxAmpPower
+        private string batMaxDischgPower;
+        public string BatMaxDischgPower
         {
-            get { return maxAmpPower; }
+            get { return batMaxDischgPower; }
             set
             {
-                SetProperty(ref maxAmpPower, value);
+                SetProperty(ref batMaxDischgPower, value);
             }
         }
 
-        private string cumulativeDischarge;
-        public string CumulativeDischarge
+        private string totalDischgCoulomb;
+        public string TotalDischgCoulomb
         {
-            get { return cumulativeDischarge; }
+            get { return totalDischgCoulomb; }
             set
             {
-                SetProperty(ref cumulativeDischarge, value);
+                SetProperty(ref totalDischgCoulomb, value);
             }
         }
 
-        private string singleDischarge;
-        public string SingleDischarge
+        private string oneDischgCoulomb;
+        public string OneDischgCoulomb
         {
-            get { return singleDischarge; }
+            get { return oneDischgCoulomb; }
             set
             {
-                SetProperty(ref singleDischarge, value);
+                SetProperty(ref oneDischgCoulomb, value);
             }
         }
 
-        private string maxChargingPower;
-        public string MaxChargingPower
+        private string batMaxChgPower;
+        public string BatMaxChgPower
         {
-            get { return maxChargingPower; }
+            get { return batMaxChgPower; }
             set
             {
-                SetProperty(ref maxChargingPower, value);
+                SetProperty(ref batMaxChgPower, value);
             }
         }
 
-        private string cumulativeCharge;
-        public string CumulativeCharge
+        private string totalChgCoulomb;
+        public string TotalChgCoulomb
         {
-            get { return cumulativeCharge; }
+            get { return totalChgCoulomb; }
             set
             {
-                SetProperty(ref cumulativeCharge, value);
+                SetProperty(ref totalChgCoulomb, value);
             }
         }
 
-        private string singleCharge;
-        public string SingleCharge
+        private string oneChgCoulomb;
+        public string OneChgCoulomb
         {
-            get { return singleCharge; }
+            get { return oneChgCoulomb; }
             set
             {
-                SetProperty(ref singleCharge, value);
+                SetProperty(ref oneChgCoulomb, value);
             }
         }
 
@@ -356,23 +356,23 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string accChargingCapacity;
-        public string AccChargingCapacity
+        private string chargeCapacitySum;
+        public string ChargeCapacitySum
         {
-            get { return accChargingCapacity; }
+            get { return chargeCapacitySum; }
             set
             {
-                SetProperty(ref accChargingCapacity, value);
+                SetProperty(ref chargeCapacitySum, value);
             }
         }
 
-        private string channel;
-        public string Channel
+        private string chargeChannelStateNumber;
+        public string ChargeChannelStateNumber
         {
-            get { return channel; }
+            get { return chargeChannelStateNumber; }
             set
             {
-                SetProperty(ref channel, value);
+                SetProperty(ref chargeChannelStateNumber, value);
             }
         }
 
@@ -417,23 +417,23 @@ namespace EMS.ViewModel.NewEMSViewModel
             MinCellVoltage = model.MinVoltage.ToString();
             MaxTemperature = model.MaxTemperature.ToString();
 
-            if (model.AlarmStateBCMU.Count > 0)
-            {
-                Alarmcolor = new SolidColorBrush(BMUColors.Alarmcolor_T);
-            }
-            else
-            {
-                Alarmcolor = new SolidColorBrush(BMUColors.Alarmcolor_F);
-            }
+            //if (model.AlarmStateBCMU.Count > 0)
+            //{
+            //    Alarmcolor = new SolidColorBrush(BMUColors.Alarmcolor_T);
+            //}
+            //else
+            //{
+            //    Alarmcolor = new SolidColorBrush(BMUColors.Alarmcolor_F);
+            //}
 
-            if (isconnected)
-            {
-                IsConnect = new SolidColorBrush(BMUColors.IsConnect_T);
-            }
-            else
-            {
-                IsConnect = new SolidColorBrush(BMUColors.IsConnect_F);
-            }
+            //if (isconnected)
+            //{
+            //    IsConnect = new SolidColorBrush(BMUColors.IsConnect_T);
+            //}
+            //else
+            //{
+            //    IsConnect = new SolidColorBrush(BMUColors.IsConnect_F);
+            //}
 
             // 断路器？
             //IsVisible_SwitchOff;
@@ -450,18 +450,18 @@ namespace EMS.ViewModel.NewEMSViewModel
             //ConnectedGrid;
 
             // 电池簇状态
-            //Battery_Stand;
-            //Battery_Charging;
-            //Battery_Discharge;
-            //Battery_OffGrid;
+            //StandStateBCMU;
+            //ChargeStateBCMU;
+            //DisChargeStateBCMU;
+            //OffNetStateBCMU;
 
             // 充放电信息
-            //MaxAmpPower;
-            //CumulativeDischarge;
-            //SingleDischarge;
-            //MaxChargingPower;
-            //CumulativeCharge;
-            //SingleCharge;
+            //BatMaxDischgPower;
+            //TotalDischgCoulomb;
+            //OneDischgCoulomb;
+            //BatMaxChgPower;
+            //TotalChgCoulomb;
+            //OneChgCoulomb;
 
             Temperature1 = model.VolContainerTemperature1.ToString();
             Temperature2 = model.VolContainerTemperature2.ToString();

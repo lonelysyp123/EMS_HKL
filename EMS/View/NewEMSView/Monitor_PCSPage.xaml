@@ -395,7 +395,7 @@
                                                  FIcon_Foreground="#2A6BFF" />
                         <StackPanel Grid.Row="1"
                                     Grid.Column="1"
-                                    Style="{StaticResource ContentPanel}" Margin="0,0,0,9" VerticalAlignment="Bottom">
+                                    Style="{StaticResource ContentPanel}">
                             <TextBlock Text="告警状态" />
                             <Border Width="15"
                                     Height="15"
