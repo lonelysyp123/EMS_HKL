@@ -249,6 +249,7 @@
     <Compile Include="Common\SingletonBase.cs" />
     <Compile Include="Common\StrategyManage\MqttClientManager.cs" />
     <Compile Include="Common\Util\ConcurrentQueueLength.cs" />
+    <Compile Include="Common\Util\DateTimeUtil.cs" />
     <Compile Include="Common\Util\IniFileHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
