@@ -12,7 +12,7 @@ namespace EMS.ViewModel.NewEMSViewModel
     {
         public HomePageModel HomePageModel { get; private set; }
         public Monitor_BMSPageModel Monitor_BMSPageModel { get; private set;}
-        public Monitor_PCSPageModel Monitor_PCSPageViewModel { get; private set; }
+        public Monitor_PCSPageModel Monitor_PCSPageModel { get; private set; }
         public Monitor_SmartMeterPageModel Monitor_SmartMeterPageModel { get;private set; }
         public Analysis_BMSPageModel Analysis_BMSPageModel { get; private set;}
         public Analysis_PCSPageModel Analysis_PCSPageModel { get; private set;}
@@ -37,7 +37,6 @@ namespace EMS.ViewModel.NewEMSViewModel
                 bmsServices[i] = new BMSDataService();
                 bmsServices[i].RegisterState(Monitor_BMSPageModel.ServiceDataCallBack);
             }
-
 
 
         }
