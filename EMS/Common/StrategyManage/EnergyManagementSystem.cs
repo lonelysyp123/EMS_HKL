@@ -1,5 +1,6 @@
 ﻿using EMS.Api;
 using EMS.Common.StrategyManage;
+using EMS.Service;
 using EMS.ViewModel;
 using MQTTnet.Internal;
 using System;
@@ -44,20 +45,14 @@ namespace EMS.Model
   
     public class PCSManager
     {
-        private PCSModel _pcsmodel;
-        public PCSModel PCSModel { get { return _pcsmodel; } }
-        public void SetPCS(PCSModel pcsModel)
+        private PCSDataService _pcsDataService;
+        public PCSDataService PCSDataService { get { return _pcsDataService; } }
+        public void SetPCS(PCSDataService pcsdataservice)
         {
-            _pcsmodel = pcsModel;
+            _pcsDataService = pcsdataservice;
         }
 
-        private PCSMainViewModel _pcsmainViewModel;
-        public PCSMainViewModel PCSMainViewModel { get { return _pcsmainViewModel; } }
-
-        public void SetCommand(PCSMainViewModel pcsMainViewModel)
-        {
-            _pcsmainViewModel = pcsMainViewModel;
-        }
+        
     }
     
     public class BmsManager

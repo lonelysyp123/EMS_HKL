@@ -13,11 +13,11 @@ namespace EMS.Model
     public class PCSMonitorModel:ViewModelBase
     {
         #region DependencyProperty
+        
+        private ObservableCollection<string> _faultInfoDC;
         /// <summary>
         /// DC模块故障信息
         /// </summary>
-        private ObservableCollection<string> _faultInfoDC;
-
         public ObservableCollection<string> FaultInfoDC
         {
             get => _faultInfoDC;
@@ -27,11 +27,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private SolidColorBrush _faultColorDC;
         /// <summary>
         /// DC模块故障颜色
         /// </summary>
-        private SolidColorBrush _faultColorDC;
-
         public SolidColorBrush FaultColorDC
         {
             get => _faultColorDC;
@@ -41,11 +41,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private ObservableCollection<string> _alarmInfoDC;
         /// <summary>
         /// DC模块告警信息
         /// </summary>
-        private ObservableCollection<string> _alarmInfoDC;
-
         public ObservableCollection<string> AlarmInfoDC
         {
             get => _alarmInfoDC;
@@ -55,11 +55,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private SolidColorBrush _alarmColorDC;
         /// <summary>
         /// DC模块告警颜色
         /// </summary>
-        private SolidColorBrush _alarmColorDC;
-
         public SolidColorBrush AlarmColorDC
         {
             get => _alarmColorDC;
@@ -73,11 +73,11 @@ namespace EMS.Model
 
 
 
+        
+        private ObservableCollection<string> _faultInfoPDS;
         /// <summary>
         /// PDS故障信息
         /// </summary>
-        private ObservableCollection<string> _faultInfoPDS;
-
         public ObservableCollection<string> FaultInfoPDS
         {
             get => _faultInfoPDS;
@@ -87,11 +87,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private SolidColorBrush _faultColorPDS;
         /// <summary>
         /// PDS故障颜色
         /// </summary>
-        private SolidColorBrush _faultColorPDS;
-
         public SolidColorBrush FaultColorPDS
         {
             get => _faultColorPDS;
@@ -102,11 +102,11 @@ namespace EMS.Model
         }
 
 
+        
+        private ObservableCollection<string> _alarmInfoPDS;
         /// <summary>
         /// PDS告警信息
         /// </summary>
-        private ObservableCollection<string> _alarmInfoPDS;
-
         public ObservableCollection<string> AlarmInfoPDS
         {
             get => _alarmInfoPDS;
@@ -116,11 +116,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private SolidColorBrush _alarmColorPDS;
         /// <summary>
         /// PDS告警颜色
         /// </summary>
-        private SolidColorBrush _alarmColorPDS;
-
         public SolidColorBrush AlarmColorPDS
         {
             get => _alarmColorPDS;
@@ -133,11 +133,11 @@ namespace EMS.Model
 
 
 
+        
+        private SolidColorBrush _pCSStateColorManControl;
         /// <summary>
         /// PCS本地手动控制状态颜色
         /// </summary>
-        private SolidColorBrush _pCSStateColorManControl;
-
         public SolidColorBrush PCSStateColorManControl
         {
             get => _pCSStateColorManControl;
@@ -147,11 +147,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private SolidColorBrush _pCSStateColorAutoControl;
         /// <summary>
         /// PCS本地自动控制状态颜色
         /// </summary>
-        private SolidColorBrush _pCSStateColorAutoControl;
-
         public SolidColorBrush PCSStateColorAutoControl
         {
             get => _pCSStateColorAutoControl;
@@ -161,11 +161,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private SolidColorBrush _pCSStateColorRemoteControl;
         /// <summary>
         /// PCS远程控制状态颜色
         /// </summary>
-        private SolidColorBrush _pCSStateColorRemoteControl;
-
         public SolidColorBrush PCSStateColorRemoteControl
         {
             get => _pCSStateColorRemoteControl;
@@ -176,11 +176,11 @@ namespace EMS.Model
         }
 
 
+        
+        private SolidColorBrush _alarmStateColorPCS;
         /// <summary>
         /// PCS告警状态颜色
         /// </summary>
-        private SolidColorBrush _alarmStateColorPCS;
-
         public SolidColorBrush AlarmStateColorPCS
         {
             get => _alarmStateColorPCS;
@@ -190,11 +190,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private SolidColorBrush _faultStateColorPCS;
         /// <summary>
         /// PCS故障状态颜色
         /// </summary>
-        private SolidColorBrush _faultStateColorPCS;
-
         public SolidColorBrush FaultStateColorPCS
         {
             get => _faultStateColorPCS;
@@ -204,11 +204,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private SolidColorBrush _powerOnInitStateColorPCS;
         /// <summary>
         /// PCS上电初始化状态颜色
         /// </summary>
-        private SolidColorBrush _powerOnInitStateColorPCS;
-
         public SolidColorBrush PowerOnInitStateColorPCS
         {
             get => _powerOnInitStateColorPCS;
@@ -219,11 +219,11 @@ namespace EMS.Model
         }
 
 
+        
+        private double _moduleTemperature;
         /// <summary>
         /// 模块温度  精度0.1 偏移值-20
         /// </summary>
-        private double _moduleTemperature;
-
         public double ModuleTemperature
         {
             get => _moduleTemperature;
@@ -233,11 +233,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private double _ambientTemperature;
         /// <summary>
         /// 环境温度  精度0.1 偏移值-20
         /// </summary>
-        private double _ambientTemperature;
-
         public double AmbientTemperature
         {
             get => _ambientTemperature;
@@ -247,11 +247,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private string _dcBranch1State1;
         /// <summary>
         /// DC侧支路1状态1
         /// </summary>
-        private string _dcBranch1State1;
-
         public string DcBranch1State1
         {
             get => _dcBranch1State1;
@@ -261,11 +261,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private string _dcBranch1State2;
         /// <summary>
         /// DC侧支路1状态2  启停状态
         /// </summary>
-        private string _dcBranch1State2;
-
         public string DcBranch1State2
         {
             get => _dcBranch1State2;
@@ -276,11 +276,11 @@ namespace EMS.Model
         }
 
 
+        
+        private double _dcBranch1DCPower;
         /// <summary>
         /// DC侧支路1：直流功率
         /// </summary>
-        private double _dcBranch1DCPower;
-
         public double DcBranch1DCPower
         {
             get => _dcBranch1DCPower;
@@ -290,11 +290,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private double _dcBranch1DCVol;
         /// <summary>
         /// DC侧支路1：直流电压
         /// </summary>
-        private double _dcBranch1DCVol;
-
         public double DcBranch1DCVol
         {
             get => _dcBranch1DCVol;
@@ -304,11 +304,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private double _dcBranch1DCCur;
         /// <summary>
         /// DC侧支路1：直流电流
         /// </summary>
-        private double _dcBranch1DCCur;
-
         public double DcBranch1DCCur
         {
             get => _dcBranch1DCCur;
@@ -318,11 +318,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private double _dcBranch1BUSVol;
         /// <summary>
         /// DC侧支路1：BUS侧电压
         /// </summary>
-        private double _dcBranch1BUSVol;
-
         public double DcBranch1BUSVol
         {
             get => _dcBranch1BUSVol;
@@ -332,11 +332,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private uint _dcBranch1Char;
         /// <summary>
         /// DC侧支路1：直流累计充电电量
         /// </summary>
-        private uint _dcBranch1Char;
-
         public uint DcBranch1Char
         {
             get => _dcBranch1Char;
@@ -346,11 +346,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private uint _dcBranch1DisChar;
         /// <summary>
         /// DC侧支路1：直流累计放电电量
         /// </summary>
-        private uint _dcBranch1DisChar;
-
         public uint DcBranch1DisChar
         {
             get => _dcBranch1DisChar;
@@ -360,11 +360,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private string _module1Status1;
         /// <summary>
         /// 模组一状态
         /// </summary>
-        private string _module1Status1;
-
         public string Module1Status1
         {
             get => _module1Status1;
@@ -374,11 +374,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private string _module1Status2;
         /// <summary>
         /// 模组二状态
         /// </summary>
-        private string _module1Status2;
-
         public string Module1Status2
         {
             get => _module1Status2;
@@ -388,11 +388,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private string _module1Status3;
         /// <summary>
         /// 模组三状态
         /// </summary>
-        private string _module1Status3;
-
         public string Module1Status3
         {
             get => _module1Status3;
@@ -402,11 +402,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private string _module1Status4;
         /// <summary>
         /// 模组四状态
         /// </summary>
-        private string _module1Status4;
-
         public string Module1Status4
         {
             get => _module1Status4;
@@ -416,11 +416,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private string _module1Status5;
         /// <summary>
         /// 模组五状态
         /// </summary>
-        private string _module1Status5;
-
         public string Module1Status5
         {
             get => _module1Status5;
@@ -430,11 +430,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private string _module1Status6;
         /// <summary>
         /// 模组六状态
         /// </summary>
-        private string _module1Status6;
-
         public string Module1Status6
         {
             get => _module1Status6;
@@ -444,11 +444,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private string _module1Status7;
         /// <summary>
         /// 模组七状态
         /// </summary>
-        private string _module1Status7;
-
         public string Module1Status7
         {
             get => _module1Status7;
@@ -458,11 +458,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private string _module1Status8;
         /// <summary>
         /// 模组八状态
         /// </summary>
-        private string _module1Status8;
-
         public string Module1Status8
         {
             get => _module1Status8;
@@ -472,11 +472,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private string _module1Status9;
         /// <summary>
         /// 模组九状态
         /// </summary>
-        private string _module1Status9;
-
         public string Module1Status9
         {
             get => _module1Status9;
@@ -486,11 +486,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private string _module1Status10;
         /// <summary>
         /// 模组十状态
         /// </summary>
-        private string _module1Status10;
-
         public string Module1Status10
         {
             get => _module1Status10;
@@ -500,11 +500,11 @@ namespace EMS.Model
             }
         }
 
+        
+		private SolidColorBrush _module1StatusColor1;
         /// <summary>
 		/// 模组一状态颜色（蓝色=在线，绿色=运行，黄色=告警，红色=故障）
 		/// </summary>
-		private SolidColorBrush _module1StatusColor1;
-
         public SolidColorBrush Module1StatusColor1
         {
             get => _module1StatusColor1;
@@ -514,11 +514,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private SolidColorBrush _module1StatusColor2;
         /// <summary>
         /// 模组二状态颜色
         /// </summary>
-        private SolidColorBrush _module1StatusColor2;
-
         public SolidColorBrush Module1StatusColor2
         {
             get => _module1StatusColor2;
@@ -528,11 +528,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private SolidColorBrush _module1StatusColor3;
         /// <summary>
         /// 模组三状态颜色
         /// </summary>
-        private SolidColorBrush _module1StatusColor3;
-
         public SolidColorBrush Module1StatusColor3
         {
             get => _module1StatusColor3;
@@ -542,11 +542,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private SolidColorBrush _module1StatusColor4;
         /// <summary>
         /// 模组四状态颜色
         /// </summary>
-        private SolidColorBrush _module1StatusColor4;
-
         public SolidColorBrush Module1StatusColor4
         {
             get => _module1StatusColor4;
@@ -556,11 +556,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private SolidColorBrush _module1StatusColor5;
         /// <summary>
         /// 模组五状态颜色
         /// </summary>
-        private SolidColorBrush _module1StatusColor5;
-
         public SolidColorBrush Module1StatusColor5
         {
             get => _module1StatusColor5;
@@ -570,11 +570,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private SolidColorBrush _module1StatusColor6;
         /// <summary>
         /// 模组六状态颜色
         /// </summary>
-        private SolidColorBrush _module1StatusColor6;
-
         public SolidColorBrush Module1StatusColor6
         {
             get => _module1StatusColor6;
@@ -584,11 +584,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private SolidColorBrush _module1StatusColor7;
         /// <summary>
         /// 模组七状态颜色
         /// </summary>
-        private SolidColorBrush _module1StatusColor7;
-
         public SolidColorBrush Module1StatusColor7
         {
             get => _module1StatusColor7;
@@ -598,11 +598,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private SolidColorBrush _module1StatusColor8;
         /// <summary>
         /// 模组八状态颜色
         /// </summary>
-        private SolidColorBrush _module1StatusColor8;
-
         public SolidColorBrush Module1StatusColor8
         {
             get => _module1StatusColor8;
@@ -612,11 +612,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private SolidColorBrush _module1StatusColor9;
         /// <summary>
         /// 模组九状态颜色
         /// </summary>
-        private SolidColorBrush _module1StatusColor9;
-
         public SolidColorBrush Module1StatusColor9
         {
             get => _module1StatusColor9;
@@ -626,11 +626,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private SolidColorBrush _module1StatusColor10;
         /// <summary>
         /// 模组十状态颜色
         /// </summary>
-        private SolidColorBrush _module1StatusColor10;
-
         public SolidColorBrush Module1StatusColor10
         {
             get => _module1StatusColor10;
@@ -640,11 +640,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private Visibility _visDCFault;
         /// <summary>
         /// DC故障可见度
         /// </summary>
-        private Visibility _visDCFault;
-
         public Visibility VisDCFault
         {
             get => _visDCFault;
@@ -654,11 +654,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private Visibility _visPDSFault;
         /// <summary>
         /// PDS故障可见度
         /// </summary>
-        private Visibility _visPDSFault;
-
         public Visibility VisPDSFault
         {
             get => _visPDSFault;
@@ -668,11 +668,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private Visibility _visDCAlarm;
         /// <summary>
         /// DC告警可见度
         /// </summary>
-        private Visibility _visDCAlarm;
-
         public Visibility VisDCAlarm
         {
             get => _visDCAlarm;
@@ -682,11 +682,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private Visibility _visPDSAlarm;
         /// <summary>
         /// PDS告警可见度
         /// </summary>
-        private Visibility _visPDSAlarm;
-
         public Visibility VisPDSAlarm
         {
             get => _visPDSAlarm;
@@ -696,11 +696,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private int _alarmStateFlagDC1;
         /// <summary>
         /// DC模块异常1 DC模块异常有三个地址
         /// </summary>
-        private int _alarmStateFlagDC1;
-
         public int AlarmStateFlagDC1
         {
             get => _alarmStateFlagDC1;
@@ -711,11 +711,11 @@ namespace EMS.Model
         }
 
 
+        
+        private int _alarmStateFlagDC2;
         /// <summary>
         /// DC模块异常2
         /// </summary>
-        private int _alarmStateFlagDC2;
-
         public int AlarmStateFlagDC2
         {
             get => _alarmStateFlagDC2;
@@ -726,11 +726,11 @@ namespace EMS.Model
         }
 
 
+        
+        private int _alarmStateFlagDC3;
         /// <summary>
         /// DC模块异常3
         /// </summary>
-        private int _alarmStateFlagDC3;
-
         public int AlarmStateFlagDC3
         {
             get => _alarmStateFlagDC3;
@@ -741,11 +741,11 @@ namespace EMS.Model
         }
 
 
-        /// <summary>
+        
+        private int _alarmStateFlagPDS;
+        ///<summary>
         /// PDS异常信息
         /// </summary>
-        private int _alarmStateFlagPDS;
-
         public int AlarmStateFlagPDS
         {
             get => _alarmStateFlagPDS;
@@ -756,11 +756,11 @@ namespace EMS.Model
         }
 
 
+        
+        private int _controlStateFlagPCS;
         /// <summary>
         /// PCS控制状态读取
         /// </summary>
-        private int _controlStateFlagPCS;
-
         public int ControlStateFlagPCS
         {
             get => _controlStateFlagPCS;
@@ -771,11 +771,11 @@ namespace EMS.Model
         }
 
 
+        
+        private int _stateFlagPCS;
         /// <summary>
         /// PCS状态读取
         /// </summary>
-        private int _stateFlagPCS;
-
         public int StateFlagPCS
         {
             get => _stateFlagPCS;
@@ -786,11 +786,11 @@ namespace EMS.Model
         }
 
 
+        
+        private int _dcBranch1StateFlag1;
         /// <summary>
         /// DC侧支路1状态读取1 
         /// </summary>
-        private int _dcBranch1StateFlag1;
-
         public int DcBranch1StateFlag1
         {
             get => _dcBranch1StateFlag1;
@@ -801,11 +801,11 @@ namespace EMS.Model
         }
 
 
+        
+        private int _dcBranch1StateFlag2;
         /// <summary>
         /// DC侧支路1状态读取2  启停状态
         /// </summary>
-        private int _dcBranch1StateFlag2;
-
         public int DcBranch1StateFlag2
         {
             get => _dcBranch1StateFlag2;
@@ -816,11 +816,11 @@ namespace EMS.Model
         }
 
 
+        
+        private ushort _dcBranch1CharHigh;
         /// <summary>
         /// DC侧支路1：直流累计充电电量高两字节
         /// </summary>
-        private ushort _dcBranch1CharHigh;
-
         public ushort DcBranch1CharHigh
         {
             get => _dcBranch1CharHigh;
@@ -830,11 +830,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private ushort _dcBranch1CharLow;
         /// <summary>
         /// DC侧支路1：直流累计充电电量低两字节
         /// </summary>
-        private ushort _dcBranch1CharLow;
-
         public ushort DcBranch1CharLow
         {
             get => _dcBranch1CharLow;
@@ -846,11 +846,11 @@ namespace EMS.Model
 
 
 
+        
+        private ushort _dcBranch1DisCharHigh;
         /// <summary>
         /// DC侧支路1：直流累计放电电量高两字节
         /// </summary>
-        private ushort _dcBranch1DisCharHigh;
-
         public ushort DcBranch1DisCharHigh
         {
             get => _dcBranch1DisCharHigh;
@@ -860,11 +860,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private ushort _dcBranch1DisCharLow;
         /// <summary>
         /// DC侧支路1：直流累计放电电量低两字节
         /// </summary>
-        private ushort _dcBranch1DisCharLow;
-
         public ushort DcBranch1DisCharLow
         {
             get => _dcBranch1DisCharLow;
@@ -874,11 +874,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private ushort _monitorSoftCode;
         /// <summary>
         /// 监控软件代码
         /// </summary>
-        private ushort _monitorSoftCode;
-
         public ushort MonitorSoftCode
         {
             get => _monitorSoftCode;
@@ -888,11 +888,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private ushort _dcSoftCode;
         /// <summary>
         /// DC软件代码
         /// </summary>
-        private ushort _dcSoftCode;
-
         public ushort DcSoftCode
         {
             get => _dcSoftCode;
@@ -902,11 +902,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private ushort _u2SoftCode;
         /// <summary>
         /// U2软件代码
         /// </summary>
-        private ushort _u2SoftCode;
-
         public ushort U2SoftCode
         {
             get => _u2SoftCode;
@@ -916,11 +916,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private string _cabSerialNumber;
         /// <summary>
         /// 机柜序列号
         /// </summary>
-        private string _cabSerialNumber;
-
         public string CabSerialNumber
         {
             get => _cabSerialNumber;
@@ -931,17 +931,72 @@ namespace EMS.Model
         }
 
 
+        
+        private ushort[] _snAdress;
         /// <summary>
         /// 机柜序列号地址
         /// </summary>
-        private ushort[] _snAdress; 
-
         public ushort[] SNAdress
         {
             get => _snAdress;
             set
             {
                 SetProperty(ref _snAdress, value);
+            }
+        }
+
+        private int _moduleOnLineFlag;
+        /// <summary>
+        /// 模块在线地址状态读取
+        /// </summary>
+        public int ModuleOnLineFlag
+        {
+            get => _moduleOnLineFlag;
+            set
+            {
+                SetProperty(ref _moduleOnLineFlag, value);
+            }
+        }
+
+
+        private int _moduleRunFlag;
+        /// <summary>
+        /// 模块运行地址状态读取
+        /// </summary>
+        public int ModuleRunFlag
+        {
+            get => _moduleRunFlag;
+            set
+            {
+                SetProperty(ref _moduleRunFlag, value);
+            }
+        }
+
+
+        private int _moduleAlarmFlag;
+        /// <summary>
+        /// 模块告警地址状态读取
+        /// </summary>
+        public int ModuleAlarmFlag
+        {
+            get => _moduleAlarmFlag;
+            set
+            {
+                SetProperty(ref _moduleAlarmFlag, value);
+            }
+        }
+
+
+        private int _moduleFaultFlag;
+        /// <summary>
+        /// 模块故障地址状态读取
+        /// </summary>
+        public int ModuleFaultFlag
+        {
+            get => _moduleFaultFlag;
+            set
+            {
+                SetProperty(ref _moduleFaultFlag, value);
             }
         }
     }
