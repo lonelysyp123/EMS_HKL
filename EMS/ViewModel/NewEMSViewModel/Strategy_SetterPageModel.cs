@@ -116,13 +116,13 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /*需量控制容量*/
-        private double demandControlCapacity;
-        public double DemandControlCapacity
+        private double demandControlapacity;
+        public double DemandControlapacity
         {
-            get { return demandControlCapacity; }
+            get { return demandControlapacity; }
             set
             {
-                SetProperty(ref demandControlCapacity, value);
+                SetProperty(ref demandControlapacity, value);
             }
         }
 
