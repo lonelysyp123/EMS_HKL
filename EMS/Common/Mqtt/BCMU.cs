@@ -1,9 +1,11 @@
 ﻿using EMS.Model;
+using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TNCN.EMS.Common.Util;
 
 namespace TNCN.EMS.Common.Mqtt
 {
@@ -107,9 +109,44 @@ namespace TNCN.EMS.Common.Mqtt
         /// DC母线电压（电池堆电压）
         /// </summary>
         public double bms_pack_volt { get; set; }
+        /// <summary>
+        /// 数据采集时间
+        /// </summary>
+        public long time { get; set; }
 
         public List<BMU> bmus { get; set; }
+        public BCMU() {
+            this.bmus = new List<BMU>();
+            this.id = 1;
+            this.state = 1;
+            this.cl_batt_max_volt = 11.1;
+            this.cl_group_curr = 12.1;
+            this.cl_group_soc = 13.1;
+            this.cl_group_soh = 14.1;
+            this.cl_batt_avg_temp = 15.1;
+            this.cl_batt_min_volt = 16.1;
+            this.cl_batt_min_volt_cell = 11;
+            this.cl_batt_max_volt = 1.1;
+            this.cl_batt_max_volt_cell = 12;
+            this.cl_batt_min_temp = 1.3;
+            this.cl_batt_min_temp_sensor = 12;
+            this.cl_batt_max_temp = 12;
+            this.cl_batt_max_temp_sensor = 12;
+            this.cl_max_chg_power = 12;
+            this.cl_max_dischg_power = 12;
+            this.cl_single_chg_capacity = 12;
+            this.cl_dischg_cap = 12;
+            this.cl_accum_charge = 12;
+            this.cl_accum_dischg = 12;
+            this.cl_remaining_cap = 12;
+            this.cl_batt_avg_volt = 12;
+            this.cl_pos_ins_res = 12;
+            this.cl_neg_ins_res = 12;
+            this.bms_pack_volt = 12;
 
+            BMU bmu = new BMU();
+            bmus.Add(bmu);
+        }
         public BCMU(BatteryTotalModel batteryTotalModel) {
             this.bmus = new List<BMU>();
             this.state = batteryTotalModel.StateBCMU;
@@ -137,6 +174,7 @@ namespace TNCN.EMS.Common.Mqtt
             this.cl_pos_ins_res = batteryTotalModel.IResistanceRP;
             this.cl_neg_ins_res = batteryTotalModel.IResistanceRN;
             this.bms_pack_volt = batteryTotalModel.DCVoltage;
+            this.time = DateTimeUtil.ConvertDateTimeToLong(batteryTotalModel.CurrentTime);
 
             foreach (var series in batteryTotalModel.Series)
             {
