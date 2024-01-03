@@ -51,22 +51,28 @@ namespace EMS.Service
         private TcpClient _client;
         private ModbusMaster _master;
         private Action<bool, bool> OnChangeState;
+        private Action<PCSModel, bool> OnChangeDataState;
 
         public static byte PcsId = 0;
 
-        public BlockingCollection<PCSModel> pcsModels;
+        public PCSModel pcsModel;
         
 
         public PCSDataService()
         {
             CommunicationProtectTr = new Thread(CommunicationProtect);
             CommunicationProtectTr.IsBackground = true;
-            pcsModels = new BlockingCollection<PCSModel>(new ConcurrentQueue<PCSModel>(), 300);
+            
         }
 
         public void RegisterState(Action<bool, bool> action)
         {
             OnChangeState = action;
+        }
+
+        public void RegisterDataState(Action<PCSModel, bool> action)
+        {
+            OnChangeDataState = action; 
         }
 
         public void SetCommunicationConfig(string ip, string port)
@@ -151,7 +157,8 @@ namespace EMS.Service
                     byte[] Temp = ReadFunc(53221, 3);
                     byte[] DCBranch1INFO = ReadFunc(53250, 10);
                     byte[] SerialNumber = ReadFunc(53579, 15);
-                    pcsModels.TryAdd(DataDecode(dcState, pcsData, Temp, DCBranch1INFO, SerialNumber));
+                    pcsModel = DataDecode(dcState, pcsData, Temp, DCBranch1INFO, SerialNumber);
+                    OnChangeDataState(pcsModel, IsConnected);
                 }
                 catch (Exception)
                 {
@@ -395,6 +402,91 @@ namespace EMS.Service
             {
                 WriteFunc(PcsId, PcsCommandAdressEnum.PowerValueSet, (ushort)(pcsmancharset * 10));
             }
+        }
+
+
+        /// <summary>
+        /// PCS系统开机
+        /// </summary>
+        public void PCSOpen()
+        {
+            try
+            {
+                WriteFunc(PcsId, PcsCommandAdressEnum.PCSSystemOpen, 1);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// PCS系统关机
+        /// </summary>
+        public void PCSClose()
+        {
+            try
+            {
+                WriteFunc(PcsId, PcsCommandAdressEnum.PCSSystemClose, 1);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// PCS系统清除故障
+        /// </summary>
+        public void PCSSystemClearFault()
+        {
+            try
+            {
+                WriteFunc(PcsId, PcsCommandAdressEnum.PCSSystemClearFault, 1);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void SendPcsCommand(BessCommand command)
+        {
+            PcsCommandAdressEnum modeAddress = PcsCommandAdressEnum.CharModeSet;
+            int modeValue = 0;
+            PcsCommandAdressEnum valueAddress = PcsCommandAdressEnum.PowerValueSet;
+            int controlValue = 0;
+
+            switch (command.BatteryStrategy)
+            {
+                case BatteryStrategyEnum.Standby:
+                    modeValue = 1;
+                    valueAddress = PcsCommandAdressEnum.PowerValueSet;
+                    controlValue = 0;
+                    break;
+                case BatteryStrategyEnum.ConstantCurrentCharge:
+                    modeValue = 0;
+                    controlValue = Convert.ToInt32(Math.Abs(command.Value * 10));
+                    valueAddress = PcsCommandAdressEnum.CurrentValueSet;
+                    break;
+                case BatteryStrategyEnum.ConstantCurrentDischarge: //需要添加负值
+                    modeValue = 0;
+                    controlValue = Convert.ToInt32(Math.Abs(command.Value * 10) * -1);
+                    valueAddress = PcsCommandAdressEnum.CurrentValueSet;
+                    break;
+                case BatteryStrategyEnum.ConstantPowerCharge:
+                    modeValue = 1;
+                    controlValue = Convert.ToInt32(Math.Abs(command.Value * 10));
+                    valueAddress = PcsCommandAdressEnum.PowerValueSet;
+                    break;
+                case BatteryStrategyEnum.ConstantPowerDischarge:  //需要添加负值
+                    modeValue = 1;
+                    controlValue = Convert.ToInt32(Math.Abs(command.Value * 10) * -1);
+                    valueAddress = PcsCommandAdressEnum.PowerValueSet;
+                    break;
+            }
+            WriteFunc(PcsId, modeAddress, modeValue);
+            WriteFunc(PcsId, valueAddress, controlValue);
         }
     }
     public enum PcsCommandAdressEnum

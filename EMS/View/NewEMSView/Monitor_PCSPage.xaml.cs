@@ -25,13 +25,13 @@ namespace EMS.View.NewEMSView
     /// </summary>
     public partial class Monitor_PCSPage : Page
     {
-        Monitor_PCSPageViewModel viewModel;
+        Monitor_PCSPageModel viewModel;
         
         public Monitor_PCSPage()
         {
             InitializeComponent();
 
-            viewModel = new Monitor_PCSPageViewModel();
+            viewModel = new Monitor_PCSPageModel();
             this.DataContext = viewModel;
 
             // 初始化数据源

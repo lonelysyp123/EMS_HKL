@@ -354,7 +354,7 @@
     <Compile Include="ViewModel\NewEMSViewModel\HomePageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\Monitor_BMSPageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\Monitor_BMS_BCMUPageModel.cs" />
-    <Compile Include="ViewModel\NewEMSViewModel\Monitor_PCSPageViewModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\Monitor_PCSPageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\Monitor_SmartMeterPageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\Strategy_AnalysisPageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\Strategy_ProtectSetterPageModel.cs" />

@@ -443,98 +443,68 @@
                     <localControl:TitleBorder Grid.ColumnSpan="4"
                                               Text="DC模块状态" />
                     <Grid Grid.Row="1">
-                        <DataGrid x:Name="DCDataGrid"
-                                  Margin="0,20,0,0"
-                                  AutoGenerateColumns="False"
-                                  CanUserSortColumns="False"
-                                  IsReadOnly="True"
-                                  CanUserAddRows="False"
-                                  CanUserDeleteRows="False"
-                                  HeadersVisibility="Column"
-                                  GridLinesVisibility="None"
-                                  EnableRowVirtualization="True"
-                                  EnableColumnVirtualization="True"
-                                  Background="White"
-                                  BorderBrush="#F1F1F1"
-                                  BorderThickness="1"
-                                  ItemsSource="{Binding DCModuleStatus}"
-                                  SelectedItem="{Binding Selected_DCModuleStatus}"
-                                 >
-                            <DataGrid.ColumnHeaderStyle>
-                                <Style TargetType="DataGridColumnHeader">
-                                    <Setter Property="HorizontalContentAlignment"
-                                            Value="Center" />
-                                    <Setter Property="Background"
-                                            Value="#F1F1F1" />
-                                    <Setter Property="FontWeight"
-                                            Value="Bold" />
-                                    <Setter Property="Height"
-                                            Value="30" />
-                                    <Setter Property="FontSize"
-                                            Value="14" />
-                                </Style>
-                            </DataGrid.ColumnHeaderStyle>
-                            <DataGrid.RowStyle>
-                                <Style TargetType="{x:Type DataGridRow}">
-                                    <Setter Property="Background"
-                                            Value="White" />
-                                </Style>
-                            </DataGrid.RowStyle>
-                            <DataGrid.CellStyle>
-                                <Style TargetType="{x:Type DataGridCell}">
-                                    <Setter Property="HorizontalAlignment"
-                                            Value="Center" />
-                                    <Setter Property="FontSize"
-                                            Value="14" />
-                                </Style>
-                            </DataGrid.CellStyle>
-                           
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Width="*"
-                                                    Binding="{Binding OrderNumber}"
-                                                    Header="序号" />
-                                <DataGridTextColumn Width="*"
-                                                    Binding="{Binding Name}"
-                                                    Header="名称" />
-                                <DataGridTextColumn Width="*"
-                                                    Binding="{Binding Status}"
-                                                    Header="运行状态">
-                                    <DataGridTextColumn.CellStyle>
-                                        <Style TargetType="{x:Type DataGridCell}">
-                                            <Setter Property="HorizontalAlignment"
-                                                    Value="Center" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Status}"
-                                                             Value="在线">
-                                                    <Setter Property="Foreground"
-                                                            Value="#1890FF" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Status}"
-                                                             Value="运行">
-                                                    <Setter Property="Foreground"
-                                                            Value="#33CD35" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Status}"
-                                                             Value="告警">
-                                                    <Setter Property="Foreground"
-                                                            Value="#FFA12F" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Status}"
-                                                             Value="故障">
-                                                    <Setter Property="Foreground"
-                                                            Value="#EE6666" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Status}"
-                                                             Value="离线">
-                                                    <Setter Property="Foreground"
-                                                            Value="#9A9A9A" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </DataGridTextColumn.CellStyle>
-                                </DataGridTextColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Border Background="LightGray" CornerRadius="5" Margin="0 10 0 0">
+                            <TextBlock Text="序号" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <Border Background="LightGray" CornerRadius="5" Margin="0 10 0 0" Grid.Row="0" Grid.Column="1">
+                            <TextBlock Text="名称" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <Border Background="LightGray" CornerRadius="5" Margin="0 10 0 0" Grid.Row="0" Grid.Column="2">
+                            <TextBlock Text="状态" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        
+                        <TextBlock Text="1" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
+                        <TextBlock Text="2" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0"/>
+                        <TextBlock Text="3" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="3" Grid.Column="0"/>
+                        <TextBlock Text="4" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="4" Grid.Column="0"/>
+                        <TextBlock Text="5" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="5" Grid.Column="0"/>
+                        <TextBlock Text="6" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="6" Grid.Column="0"/>
+                        <TextBlock Text="7" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="7" Grid.Column="0"/>
+                        <TextBlock Text="8" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="8" Grid.Column="0"/>
+                        <TextBlock Text="9" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="9" Grid.Column="0"/>
+                        <TextBlock Text="10" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="10" Grid.Column="0"/>
+
+                        <TextBlock Text="DC模块组：模块1"  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
+                        <TextBlock Text="DC模块组：模块2"  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
+                        <TextBlock Text="DC模块组：模块3"  Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
+                        <TextBlock Text="DC模块组：模块4"  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
+                        <TextBlock Text="DC模块组：模块5"  Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
+                        <TextBlock Text="DC模块组：模块6"  Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
+                        <TextBlock Text="DC模块组：模块7"  Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
+                        <TextBlock Text="DC模块组：模块8"  Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
+                        <TextBlock Text="DC模块组：模块9"  Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
+                        <TextBlock Text="DC模块组：模块10"  Grid.Row="10" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
+
+                        <TextBlock Text="{Binding Module1Status1}"  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor1}" />
+                        <TextBlock Text="{Binding Module1Status2}"  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor2}" />
+                        <TextBlock Text="{Binding Module1Status3}"  Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor3}" />
+                        <TextBlock Text="{Binding Module1Status4}"  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor4}" />
+                        <TextBlock Text="{Binding Module1Status5}"  Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor5}" />
+                        <TextBlock Text="{Binding Module1Status6}"  Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor6}" />
+                        <TextBlock Text="{Binding Module1Status7}"  Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor7}" />
+                        <TextBlock Text="{Binding Module1Status8}"  Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor8}" />
+                        <TextBlock Text="{Binding Module1Status9}"  Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor9}" />
+                        <TextBlock Text="{Binding Module1Status10}"  Grid.Row="10" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor10}" />
                     </Grid>
                 </Grid>
             </Border>
@@ -692,7 +662,7 @@
                         <StackPanel Grid.Row="2"
                                     Grid.Column="2"
                                     Style="{StaticResource ContentPanel}">
-                            <localControl:WarnControl3 Text="光伏能量不足"
+                            <localControl:WarnControl3 Text="绝缘检测异常"
                                                        IsTrue="{Binding DCFault_8}" />
                         </StackPanel>
                         <StackPanel Grid.Row="2"
@@ -744,7 +714,7 @@
                         <StackPanel Grid.Row="3"
                                     Grid.Column="4"
                                     Style="{StaticResource ContentPanel}">
-                            <localControl:WarnControl3 Text="  模块温度过温"
+                            <localControl:WarnControl3 Text="模块温度过温"
                                                        IsTrue="{Binding DCFault_16}" />
                         </StackPanel>
                         <StackPanel Grid.Row="3"
@@ -838,7 +808,7 @@
                                     Grid.Column="6"
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
-                            <localControl:WarnControl3 Text=" CANB通讯故障"
+                            <localControl:WarnControl3 Text="CANB通讯故障"
                                                        IsTrue="{Binding DCFault_30}" />
                         </StackPanel>
                         <!--6-->
@@ -871,7 +841,7 @@
                                     Grid.Column="5"
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Left">
-                            <localControl:WarnControl3 Text=" BMS电流异常"
+                            <localControl:WarnControl3 Text="BMS电流异常"
                                                        IsTrue="{Binding DCFault_35}" />
                         </StackPanel>
                         <StackPanel Grid.Row="6"
@@ -889,12 +859,7 @@
                             <localControl:WarnControl3 Text="BMS关机故障"
                                                        IsTrue="{Binding DCFault_37}" />
                         </StackPanel>
-                        <StackPanel Grid.Row="7"
-                                    Grid.Column="2"
-                                    Style="{StaticResource ContentPanel}">
-                            <localControl:WarnControl3 Text="绝缘检测异常"
-                                                       IsTrue="{Binding DCFault_38}" />
-                        </StackPanel>
+                        
                     </Grid>
                     <!--PDS告警-->
                     <Grid Grid.Row="3"
@@ -948,7 +913,7 @@
                                     Orientation="Horizontal"
                                     Margin="20,0,0,0">
                             <localControl:IconBorder FIcon_Text="&#xe7c2;"
-                                                     FIconTextBlock_Text="DC模块告警"
+                                                     FIconTextBlock_Text="PDS故障"
                                                      FIconBorder_Background="#F8C0C0"
                                                      FIcon_Foreground="#EE6666"
                                                      />
