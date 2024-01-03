@@ -13,6 +13,10 @@ namespace EMS.Model
         public string BMUID { get; set; }
         public int AlarmStateFlagBMU {  get; set; }
         public int FaultyStateFlagBMU { get; set; }
+        public int VolFaultInfo { get; set; }
+        public int TempFaultInfo1 { get; set; }
+        public int TempFaultInfo2 { get; set; }
+        public int BalanceFaultFaultInfo { get; set; }
         public string ChargeChannelStateNumber {  get; set; }
         public ushort ChargeChannelState {  get; set; }
         public double ChargeCapacitySum { get; set; }
