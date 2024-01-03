@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TNCN.EMS.Common.Util;
 
 namespace TNCN.EMS.Common.Mqtt
 {
@@ -108,6 +109,10 @@ namespace TNCN.EMS.Common.Mqtt
         /// DC母线电压（电池堆电压）
         /// </summary>
         public double bms_pack_volt { get; set; }
+        /// <summary>
+        /// 数据采集时间
+        /// </summary>
+        public long time { get; set; }
 
         public List<BMU> bmus { get; set; }
         public BCMU() {
@@ -143,32 +148,33 @@ namespace TNCN.EMS.Common.Mqtt
             bmus.Add(bmu);
         }
         public BCMU(BatteryTotalModel batteryTotalModel) {
-            //this.bmus = new List<BMU>();
-            //this.state = batteryTotalModel.StateBCMU;
-            //this.cl_batt_max_volt = batteryTotalModel.TotalVoltage;
-            //this.cl_group_curr = batteryTotalModel.TotalCurrent;
-            //this.cl_group_soc = batteryTotalModel.TotalSOC;
-            //this.cl_group_soh = batteryTotalModel.TotalSOH;
-            //this.cl_batt_avg_temp = batteryTotalModel.AverageTemperature;
-            //this.cl_batt_min_volt = batteryTotalModel.MinVoltage;
-            //this.cl_batt_min_volt_cell = batteryTotalModel.MinVoltageIndex;
-            //this.cl_batt_max_volt = batteryTotalModel.MaxVoltage;
-            //this.cl_batt_max_volt_cell = batteryTotalModel.MaxVoltageIndex;
-            //this.cl_batt_min_temp = batteryTotalModel.MinTemperature;
-            //this.cl_batt_min_temp_sensor = batteryTotalModel.MinTemperatureIndex;
-            //this.cl_batt_max_temp = batteryTotalModel.MaxTemperature;
-            //this.cl_batt_max_temp_sensor = batteryTotalModel.MaxTemperatureIndex;
-            //this.cl_max_chg_power = batteryTotalModel.BatMaxChgPower;
-            //this.cl_max_dischg_power = batteryTotalModel.BatMaxDischgPower;
-            //this.cl_single_chg_capacity = batteryTotalModel.OneChgCoulomb;
-            //this.cl_dischg_cap = batteryTotalModel.OneDischgCoulomb;
-            //this.cl_accum_charge = batteryTotalModel.TotalChgCoulomb;
-            //this.cl_accum_dischg = batteryTotalModel.TotalDischgCoulomb;
-            //this.cl_remaining_cap = batteryTotalModel.RestCoulomb;
-            //this.cl_batt_avg_volt = batteryTotalModel.AvgVol;
-            //this.cl_pos_ins_res = batteryTotalModel.IResistanceRP;
-            //this.cl_neg_ins_res = batteryTotalModel.IResistanceRN;
-            //this.bms_pack_volt = batteryTotalModel.DCVoltage;                       
+            this.bmus = new List<BMU>();
+            this.state = batteryTotalModel.StateBCMU;
+            this.cl_batt_max_volt = batteryTotalModel.TotalVoltage;
+            this.cl_group_curr = batteryTotalModel.TotalCurrent;
+            this.cl_group_soc = batteryTotalModel.TotalSOC;
+            this.cl_group_soh = batteryTotalModel.TotalSOH;
+            this.cl_batt_avg_temp = batteryTotalModel.AverageTemperature;
+            this.cl_batt_min_volt = batteryTotalModel.MinVoltage;
+            this.cl_batt_min_volt_cell = batteryTotalModel.MinVoltageIndex;
+            this.cl_batt_max_volt = batteryTotalModel.MaxVoltage;
+            this.cl_batt_max_volt_cell = batteryTotalModel.MaxVoltageIndex;
+            this.cl_batt_min_temp = batteryTotalModel.MinTemperature;
+            this.cl_batt_min_temp_sensor = batteryTotalModel.MinTemperatureIndex;
+            this.cl_batt_max_temp = batteryTotalModel.MaxTemperature;
+            this.cl_batt_max_temp_sensor = batteryTotalModel.MaxTemperatureIndex;
+            this.cl_max_chg_power = batteryTotalModel.BatMaxChgPower;
+            this.cl_max_dischg_power = batteryTotalModel.BatMaxDischgPower;
+            this.cl_single_chg_capacity = batteryTotalModel.OneChgCoulomb;
+            this.cl_dischg_cap = batteryTotalModel.OneDischgCoulomb;
+            this.cl_accum_charge = batteryTotalModel.TotalChgCoulomb;
+            this.cl_accum_dischg = batteryTotalModel.TotalDischgCoulomb;
+            this.cl_remaining_cap = batteryTotalModel.RestCoulomb;
+            this.cl_batt_avg_volt = batteryTotalModel.AvgVol;
+            this.cl_pos_ins_res = batteryTotalModel.IResistanceRP;
+            this.cl_neg_ins_res = batteryTotalModel.IResistanceRN;
+            this.bms_pack_volt = batteryTotalModel.DCVoltage;
+            this.time = DateTimeUtil.ConvertDateTimeToLong(batteryTotalModel.CurrentTime);
 
             foreach (var series in batteryTotalModel.Series)
             {
