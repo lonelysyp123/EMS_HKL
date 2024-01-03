@@ -11,6 +11,7 @@ using System.Diagnostics.Contracts;
 using System.Collections.Concurrent;
 using System.Threading;
 using EMS.Model;
+using EMS.ViewModel;
 
 namespace EMS.Common.Modbus.ModbusTCP
 {
