@@ -1,0 +1,141 @@
+﻿<UserControl x:Class="EMS.MyControl.BCMUConnectGraph"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:EMS.MyControl"
+             mc:Ignorable="d"
+             d:DesignHeight="470"
+             d:DesignWidth="200"
+             Background="#FAFAFA">
+    <UserControl.Resources>
+        <!--开关图标-->
+        <Style x:Key="FIconTextBlock"
+               TargetType="TextBlock">
+            <Setter Property="FontFamily"
+                    Value="pack://application:,,,/EMS;component/Resource/Iconfont/#iconfont" />
+            <Setter Property="FontSize"
+                    Value="20" />
+        </Style>
+        <!--连接实线-->
+        <Style x:Key="FullLineColor"
+               TargetType="Line">
+            <Setter Property="StrokeStartLineCap"
+                    Value="Round" />
+            <Setter Property="StrokeThickness"
+                    Value="3" />
+            <Setter Property="Stroke"
+                    Value="#1890FF" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding  IsConnect}"
+                             Value="true">
+                    <Setter Property="Stroke"
+                            Value="Green" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding  IsConnect}"
+                             Value="false">
+                    <Setter Property="Stroke"
+                            Value="red" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <!--BCMU点击图标-->
+        <Style x:Key="FIconBtn"
+               TargetType="Button">
+            <Setter Property="FontFamily"
+                    Value="pack://application:,,,/EMS;component/Resource/Iconfont/#iconfont"></Setter>
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="Foreground"
+                    Value="#1890FF" />
+            <Setter Property="BorderThickness"
+                    Value="0,0,0,0" />
+            <Setter Property="FontSize"
+                    Value="90" />
+        </Style>
+        <!--告警故障图标-->
+        <Style x:Key="FIconAlarm"
+               TargetType="TextBlock">
+            <Setter Property="FontFamily"
+                    Value="pack://application:,,,/EMS;component/Resource/Iconfont/#iconfont"></Setter>
+            <Setter Property="FontSize"
+                    Value="40" />
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Canvas x:Name="Graph_BCMU1">
+            <Line x:Name="BCMUTopLine"
+                  X1="100"
+                  Y1="0"
+                  X2="100"
+                  Y2="80"
+                  Style="{DynamicResource FullLineColor}"
+                  Stroke="{Binding IsConnect}" />
+            <Line x:Name="BCMUBottomLine"
+                  X1="100"
+                  Y1="140"
+                  X2="100"
+                  Y2="300"
+                  Style="{DynamicResource FullLineColor}"
+                  Stroke="{Binding IsConnect}"
+                  StrokeDashArray="1,1" />
+            <!--开关二选一：绑定Visibility-->
+            <Border  Canvas.Left="74"
+                     Canvas.Top="81"
+                     BorderBrush="#AEAEAE"
+                     Background="#FAFAFA"
+                     BorderThickness="1,1,1,1"
+                     Visibility="{Binding IsVisible_SwitchOn}">
+                <TextBlock Text="&#xe604;"
+                           Style="{StaticResource FIconTextBlock}"
+                           Foreground="Green"
+                           FontSize="50" />
+            </Border>
+            <Border  Canvas.Left="70"
+                     Canvas.Top="81"
+                     Background="#FAFAFA"
+                     BorderBrush="#AEAEAE"
+                     BorderThickness="1,1,1,1"
+                     Visibility="{Binding IsVisible_SwitchOff}">
+                <TextBlock Text="&#xe605;"
+                           Style="{StaticResource FIconTextBlock}"
+                           Foreground="Red"
+                           FontSize="50" />
+            </Border>
+            <!--上箭头-->
+            <TextBlock Text="&#xeb6e;"
+                       Style="{StaticResource FIconTextBlock}"
+                       Foreground="Green"
+                       Canvas.Left="90"
+                       Canvas.Top="132"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Visibility="{Binding IsVisible_UpArrow}"
+                       RenderTransformOrigin="0.058,0.692" />
+            <!--下箭头-->
+            <TextBlock Text="&#xeb6d;"
+                       Style="{StaticResource FIconTextBlock}"
+                       Foreground="Green"
+                       Canvas.Left="90"
+                       Canvas.Top="285"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Visibility="{Binding IsVisible_DownArrow}" />
+            <!--点击跳转-->
+            <Button Content="&#xe8a4;"
+                    Style="{StaticResource FIconBtn}"
+                    Canvas.Left="54"
+                    Canvas.Top="293"
+                    Command="{Binding ToMonitor_BMS_BCMUPageCommand}"
+                    CommandParameter="BCMU"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top" />
+            <!--告警故障绑定Foreground颜色：默认无告警：#FAFAFA，告警：#FFA500，故障：#D81E06-->
+            <TextBlock Text="&#xec35;"
+                       Style="{StaticResource FIconAlarm}"
+                       Foreground="{Binding Alarmcolor}"
+                       Canvas.Left="80"
+                       Canvas.Top="390" />
+        </Canvas>
+    </Grid>
+</UserControl>

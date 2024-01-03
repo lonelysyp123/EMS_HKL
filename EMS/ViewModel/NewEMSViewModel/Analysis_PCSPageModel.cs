@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
-    class Analysis_PCSPageModel
+    public class Analysis_PCSPageModel
     {
     }
 }

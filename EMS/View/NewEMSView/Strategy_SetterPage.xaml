@@ -2,13 +2,508 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:EMS.View.NewEMSView"
+      xmlns:localControl="clr-namespace:EMS.MyControl"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="Strategy_SetterPage">
+      d:DesignHeight="900" d:DesignWidth="1600"
+      Title="Strategy_SetterPage"
+      Background="#FAFAFA">
+    <Page.Resources>
+        <!--开关按钮-->
+        <Style x:Key="ToggleButtonStyle"
+               TargetType="{x:Type ToggleButton}">
+            <Setter Property="Cursor"
+                    Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <Border x:Name="borderBack"
+                                    Width="70"
+                                    Background="#DCDFE6"
+                                    CornerRadius="15,15,15,15">
+                                <Border x:Name="borderFront"
+                                        Width="20"
+                                        Height="{Binding Width, RelativeSource={RelativeSource Self}}"
+                                        Background="White"
+                                        CornerRadius="15,15,15,15"
+                                        Margin="-30,0,0,0" />
+                            </Border>
+                        </StackPanel>
 
+                        <ControlTemplate.Resources>
+                            <Storyboard x:Key="CheckedAnimation">
+                                <ThicknessAnimation Storyboard.TargetName="borderFront"
+                                                    Storyboard.TargetProperty="Margin"
+                                                    To="0,0,-40,0"
+                                                    Duration="0:0:0.2" />
+                                <ColorAnimation Storyboard.TargetName="borderBack"
+                                                Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                                                To="#13CE66"
+                                                Duration="0:0:0.2" />
+                            </Storyboard>
+                            <Storyboard x:Key="UncheckedAnimation">
+                                <ThicknessAnimation Storyboard.TargetName="borderFront"
+                                                    Storyboard.TargetProperty="Margin"
+                                                    To="-40,0,0,0"
+                                                    Duration="0:0:0.2" />
+                                <ColorAnimation Storyboard.TargetName="borderBack"
+                                                Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                                                To="#DCDFE6"
+                                                Duration="0:0:0.2" />
+                            </Storyboard>
+                        </ControlTemplate.Resources>
+
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Checked">
+                                <BeginStoryboard Storyboard="{StaticResource CheckedAnimation}" />
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="Unchecked">
+                                <BeginStoryboard Storyboard="{StaticResource UncheckedAnimation}" />
+                            </EventTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--内容StackPanel-->
+        <Style x:Key="ContentPanel"
+               TargetType="StackPanel">
+            <Setter Property="Orientation"
+                    Value="Horizontal" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+        </Style>
+        <!--输入框-->
+        <Style x:Key="Input"
+               TargetType="TextBox">
+            <Setter Property="Width"
+                    Value="100" />
+            <Setter Property="Height"
+                    Value="30" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="Margin"
+                    Value="20,0,0,0" />
+        </Style>
+    </Page.Resources>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+        <!--1、策略控制-->
+        <Grid Grid.Row="0">
+            <Border Background="White"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <localControl:TitleBorder Text="策略控制" Grid.ColumnSpan="4"/>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <TextBlock Text="当前执行模式：" VerticalAlignment="Center" />
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="{Binding TotalStrategyState}"
+                                   Foreground="#009B0A"
+                                   FontWeight="Bold" Margin="20,0,30,0"/>
+                        <Button x:Name="ChangeModel"
+                                Background="#1890FF"
+                                Content="模式切换"
+                                Foreground="White"
+                                VerticalAlignment="Center"
+                                Width="80"
+                                Height="30"
+                                FontSize="12"
+                                Command="{Binding SwitchAutoManualCommand}">
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="1"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="充放电策略控制启停："
+                                   VerticalAlignment="Center" />
+                        <ToggleButton Width="100"
+                                      Height="30"
+                                      Margin="20 0 0 0"
+                                      Style="{DynamicResource ToggleButtonStyle}"
+                                      Cursor="Hand"
+                                      IsChecked="{Binding IsDailyPatternBtnOpen}"
+                                      IsEnabled="{Binding IsAutoStrategyBtnEnabled}"
+                                      Checked="ToggleButton_Checked">
+                        </ToggleButton>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="2"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="需量控制启停："
+                                   VerticalAlignment="Center" />
+                        <ToggleButton Width="90"
+                                      Height="30"
+                                      Margin="20 0 0 0"
+                                      Style="{DynamicResource ToggleButtonStyle}"
+                                      Cursor="Hand"
+                                      IsChecked="{Binding IsMaxDemandControlBtnOpen}"
+                                      IsEnabled="{Binding IsAutoStrategyBtnEnabled}">
+                        </ToggleButton>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="3"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="逆功率保护启停："
+                                   VerticalAlignment="Center" />
+                        <ToggleButton Width="90"
+                                      Height="30"
+                                      Margin="20 0 0 0"
+                                      Style="{DynamicResource ToggleButtonStyle}"
+                                      Cursor="Hand"
+                                      IsChecked="{Binding IsReversePowerBtnOpen}"
+                                      IsEnabled="{Binding IsAutoStrategyBtnEnabled}">
+                        </ToggleButton>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            
+        </Grid>
+        <!--2、手动运行-->
+        <Grid Grid.Row="1">
+            <Border Background="White"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <localControl:TitleBorder Text="手动运行"
+                                              Grid.ColumnSpan="4" />
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="1"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="模式："
+                                   VerticalAlignment="Center" />
+                        <ComboBox    Width="100"
+                                     Background="White"
+                                     Foreground="Black"
+                                     FontSize="10"
+                                     Margin="5,0"
+                                     ItemsSource="{Binding StrategyModeSet}"
+                                     SelectedItem="{Binding SelectedManualStrategyMode}"
+                                     RenderTransformOrigin="0.5,0.5">
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="2"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="设置值："
+                                   VerticalAlignment="Center" />
+                        <TextBox Text="{Binding StrategyManualValueSet}"
+                                 VerticalAlignment="Center"
+                                 HorizontalAlignment="Right"
+                                 Width="90"
+                                 Height="25"
+                                 Background="White"
+                                 Foreground="Black" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="3"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center">
+                        <Button Content="重    置"
+                                Width="80"
+                                Height="30"
+                                FontSize="12"
+                                Foreground="white"
+                                FontWeight="Bold"
+                                Background="#1890FF"
+                                BorderThickness="0,0,0,0"
+                                IsEnabled="{Binding IsEnabled_ManualReset}"
+                                Command="{Binding CommandManualReset}" />
+                        <Button Content="应    用"
+                                Width="80"
+                                Height="30"
+                                FontSize="12"
+                                Foreground="white"
+                                FontWeight="Bold"
+                                Background="#1890FF"
+                                BorderThickness="0,0,0,0"
+                                Margin="20,0,0,0"
+                                IsEnabled="{Binding IsEnabled_ManualApply}"
+                                Command="{Binding CommandManualApply}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+        </Grid>
+        <!--3、自行运行-->
+        <Grid Grid.Row="2">
+            <Border Background="White"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <localControl:TitleBorder Text="自动运行"
+                                              Grid.ColumnSpan="4" />
+                    <!--储能参数-->
+                    <Grid Grid.Row="1" Margin="0,20,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <localControl:IconBorder Grid.ColumnSpan="5"
+                                                 FIcon_Text="&#xe601;"
+                                                 FIconTextBlock_Text="储能参数"
+                                                 FIconBorder_Background="#FFECCF"
+                                                 FIcon_Foreground="#FF7D00"
+                                                 Loaded="IconBorder_Loaded_1" />
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="最大SOC(%):"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" />
+                            <TextBox Text="{Binding MaxSOC}"
+                                     Style="{StaticResource Input}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="2"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="最小SOC(%):"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" />
+                            <TextBox Text="{Binding MinSOC}"
+                                     Style="{StaticResource Input}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="3"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="当前最大允许充电功率(kW):"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" />
+                            <TextBox Text="{Binding MaxAllowChargingPower}"
+                                     Style="{StaticResource Input}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="4"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="当前最大允许放电功率(kW):"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" />
+                            <TextBox Text="{Binding MaxAllowDishargingPower}"
+                                     Style="{StaticResource Input}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="储能充电效率(%):"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" />
+                            <TextBox Text="{Binding EnergyChargingEfficiency}"
+                                     Style="{StaticResource Input}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="2"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="储能放电效率(%):"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" />
+                            <TextBox Text="{Binding EnergyDishargingEfficiency}"
+                                     Style="{StaticResource Input}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="3"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="储能初始能量(kWh):"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" />
+                            <TextBox Text="{Binding InitialEnergyStorage}"
+                                     Style="{StaticResource Input}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="4"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="储能可用容量(kWh):"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" />
+                            <TextBox Text="{Binding AvailableEnergyStorageCapacity}"
+                                     Style="{StaticResource Input}" />
+                        </StackPanel>
+                    </Grid>
+                    <!--需量控制-->
+                    <Grid Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <localControl:IconBorder Grid.ColumnSpan="5"
+                                                 FIcon_Text="&#xe649;"
+                                                 FIconTextBlock_Text="需量控制"
+                                                 FIconBorder_Background="#E8FFFB"
+                                                 FIcon_Foreground="#1FCAC6" />
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="需量控制容量(kW):"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" />
+                            <TextBox Text="{Binding DemandControlapacity}"
+                                     Style="{StaticResource Input}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="2"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="下设比例(%):"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" />
+                            <TextBox Text="{Binding MaxDemandDescendRate}"
+                                     Style="{StaticResource Input}" />
+                        </StackPanel>
+                    </Grid>
+                    <!--逆功率保护-->
+                    <Grid Grid.Row="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <localControl:IconBorder Grid.ColumnSpan="5"
+                                                 FIcon_Text="&#xe68f;"
+                                                 FIconTextBlock_Text="逆功率保护"
+                                                 FIconBorder_Background="#E8F3FF"
+                                                 FIcon_Foreground="#2A6BFF" />
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="逆功率保护限值(kW):"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" />
+                            <TextBox Text="{Binding ReversePowerThreshold}"
+                                     Style="{StaticResource Input}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="2"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="逆功率保护动作限值(kW):"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" />
+                            <TextBox Text="{Binding ReversePowerLowestThreshold}"
+                                     Style="{StaticResource Input}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="3"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="下设比例(%):"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" />
+                            <TextBox Text="{Binding ReversePowerDescendRate}"
+                                     Style="{StaticResource Input}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="4"
+                                    Style="{StaticResource ContentPanel}"
+                                    HorizontalAlignment="Left">
+                            <Button Content="重    置"
+                                    Width="80"
+                                    Height="30"
+                                    FontSize="12"
+                                    Foreground="white"
+                                    FontWeight="Bold"
+                                    Background="#1890FF"
+                                    BorderThickness="0,0,0,0"
+                                    IsEnabled="{Binding IsEnabled_AutoReset}"
+                                    Command="{Binding CommandAutoReset}" />
+                            <Button Content="应    用"
+                                    Width="80"
+                                    Height="30"
+                                    FontSize="12"
+                                    Foreground="white"
+                                    FontWeight="Bold"
+                                    Background="#1890FF"
+                                    BorderThickness="0,0,0,0"
+                                    Margin="20,0,0,0"
+                                    IsEnabled="{Binding IsAutoStrategyBtnEnabled}"
+                                    Command="{Binding ReversePowerSendCommand}" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+
+        </Grid>
     </Grid>
 </Page>

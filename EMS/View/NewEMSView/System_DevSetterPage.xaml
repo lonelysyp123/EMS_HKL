@@ -1,14 +1,560 @@
 ﻿<Page x:Class="EMS.View.NewEMSView.System_DevSetterPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:EMS.View.NewEMSView"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="System_DevSetterPage">
-
+      xmlns:localControl="clr-namespace:EMS.MyControl"
+      mc:Ignorable="d"
+      d:DesignHeight="900"
+      d:DesignWidth="1600"
+      Title="System_DevSetterPage"
+      Background="#FAFAFA">
+    <Page.Resources>
+        <!--内容StackPanel-->
+        <Style x:Key="ContentPanel"
+               TargetType="StackPanel">
+            <Setter Property="Orientation"
+                    Value="Horizontal" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+        </Style>
+        <!--输入框-->
+        <Style x:Key="Input"
+               TargetType="TextBox">
+            <Setter Property="Width"
+                    Value="100" />
+            <Setter Property="Height"
+                    Value="30" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="Margin"
+                    Value="20,0,0,0" />
+        </Style>
+    </Page.Resources>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1.5*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <!--BMS-->
+        <Grid Grid.Row="0">
+            <Border Background="white"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <localControl:TitleBorder Text="BMS"
+                                              Grid.ColumnSpan="5" />
+                    <!--BCMU1-->
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="BCMU1"
+                                   FontWeight="Bold"
+                                   Margin="0,0,20,0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBlock Text="ip:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding Ip_BCMU1}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="2"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="端口:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding Port_BCMU1}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="3"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="采集周期:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding AcquisitionCycle_BCMU1}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <!--BCMU2-->
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="BCMU2"
+                                   FontWeight="Bold"
+                                   Margin="0,0,20,0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBlock Text="ip:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding Ip_BCMU2}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="2"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="端口:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding Port_BCMU2}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="3"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="采集周期:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding AcquisitionCycle_BCMU2}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <!--BCMU3-->
+                    <StackPanel Grid.Row="3"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="BCMU3"
+                                   FontWeight="Bold"
+                                   Margin="0,0,20,0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBlock Text="ip:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding Ip_BCMU3}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="3"
+                                Grid.Column="2"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="端口:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding Port_BCMU3}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="3"
+                                Grid.Column="3"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="采集周期:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding AcquisitionCycle_BCMU3}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <!--BCMU4-->
+                    <StackPanel Grid.Row="4"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="BCMU4"
+                                   FontWeight="Bold"
+                                   Margin="0,0,20,0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBlock Text="ip:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding Ip_BCMU4}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="4"
+                                Grid.Column="2"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="端口:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding Port_BCMU4}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="4"
+                                Grid.Column="3"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="采集周期:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding AcquisitionCycle_BCMU4}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    
+                    <!--BCMU5-->
+                    <StackPanel Grid.Row="5"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="BCMU5"
+                                   FontWeight="Bold"
+                                   Margin="0,0,20,0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBlock Text="ip:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding Ip_BCMU5}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="5"
+                                Grid.Column="2"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="端口:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding Port_BCMU5}"
+                                 Style="{StaticResource Input}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="5"
+                                Grid.Column="3"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="采集周期:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding AcquisitionCycle_BCMU5}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    
+                    <!--BCMU6-->
+                    <StackPanel Grid.Row="6"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="BCMU6"
+                                   FontWeight="Bold"
+                                   Margin="0,0,20,0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBlock Text="ip:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding Ip_BCMU6}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="6"
+                                Grid.Column="2"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="端口:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding Port_BCMU6}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="6"
+                                Grid.Column="3"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="采集周期:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding AcquisitionCycle_BCMU6}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="6"
+                                Grid.Column="4"
+                                Style="{StaticResource ContentPanel}">
+                        <Button Content="应    用"
+                                Width="80"
+                                Height="30"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Background="#1890FF"
+                                BorderThickness="0,0,0,0"
+                                IsEnabled="{Binding IsEnabled_BMS}"
+                                Command="{Binding Command_BMS}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+        <!--PCS-->
+        <Grid Grid.Row="1">
+            <Border Background="white"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <localControl:TitleBorder Text="PCS"
+                                              Grid.ColumnSpan="5" />
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="ip:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding Ip_PCS}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="2"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="端口:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding Port_PCS}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="3"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="采集周期:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding AcquisitionCycle_PCS}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="4"
+                                Style="{StaticResource ContentPanel}">
+                        <Button Content="应    用"
+                                Width="80"
+                                Height="30"
+                                FontSize="12"
+                                Foreground="White"
+                                FontWeight="Bold"
+                                Background="#1890FF"
+                                BorderThickness="0,0,0,0"
+                                IsEnabled="{Binding IsEnabled_PCS}"
+                                Command="{Binding Command_PCS}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+        <!--电表-->
+        <Grid Grid.Row="2">
+            <Border Background="white"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <localControl:TitleBorder Text="电表"
+                                              Grid.ColumnSpan="5" />
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="端口号:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <ComboBox  Height="30"
+                                   Width="100"
+                                   Margin="10,0,10,0"
+                                   Background="White"
+                                   Foreground="Black"
+                                   ItemsSource="{Binding CommPorts}"
+                                   SelectedItem="{Binding SelectedCommPort}"
+                                   BorderThickness="1,1,1,1">
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="2"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="波特率:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <ComboBox  Height="30"
+                                   Width="100"
+                                   Margin="10,0,10,0"
+                                   Background="White"
+                                   Foreground="Black"
+                                   ItemsSource="{Binding BaudRates}"
+                                   SelectedItem="{Binding SelectedBaudRate}"
+                                   BorderThickness="1,1,1,1">
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="3"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="数据位:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <ComboBox  Height="30"
+                                   Width="100"
+                                   Margin="10,0,10,0"
+                                   Background="White"
+                                   Foreground="Black"
+                                   ItemsSource="{Binding DataBits}"
+                                   SelectedItem="{Binding SelectedDataBits}"
+                                   BorderThickness="1,1,1,1">
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="停止位:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <ComboBox  Height="30"
+                                   Width="100"
+                                   Margin="10,0,10,0"
+                                   Background="White"
+                                   Foreground="Black"
+                                   ItemsSource="{Binding StopBitsList}"
+                                   SelectedItem="{Binding SelectedStopBits}"
+                                   BorderThickness="1,1,1,1">
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="2"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="校验位:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <ComboBox  Height="30"
+                                   Width="100"
+                                   Margin="10,0,10,0"
+                                   Background="White"
+                                   Foreground="Black"
+                                   ItemsSource="{Binding Parities}"
+                                   SelectedItem="{Binding SelectedParity}"
+                                   BorderThickness="1,1,1,1">
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="3"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="采集周期:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding AcquisitionCycle_Ammeter}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="4"
+                                Style="{StaticResource ContentPanel}">
+                        <Button Content="应    用"
+                                Width="80"
+                                Height="30"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Background="#1890FF"
+                                BorderThickness="0,0,0,0"
+                                IsEnabled="{Binding IsEnabled_Ammeter}"
+                                Command="{Binding Command_Ammeter}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+        <!--时间校对-->
+        <Grid Grid.Row="3">
+            <Border Background="white"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <localControl:TitleBorder Text="时间校对"
+                                              Grid.ColumnSpan="5" />
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="当前时间校对:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBlock Text="{Binding CurrentTome}"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   Margin="40,0,40,0" />
+                        <Button Content="校    对"
+                                Width="80"
+                                FontSize="12"
+                                Height="30"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Background="#1890FF"
+                                BorderThickness="0,0,0,0"
+                                IsEnabled="{Binding IsEnabled_Time}"
+                                Command="{Binding Command_Time}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+        <!--设备数据点配置-->
+        <Grid Grid.Row="4">
+            <Border Background="white"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <localControl:TitleBorder Text="设备数据点配置"
+                                              Grid.ColumnSpan="5" />
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="上传配置文件:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <Button Content="上    传"
+                                Width="80"
+                                Height="30"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Background="#1890FF"
+                                Foreground="White"
+                                BorderThickness="0,0,0,0"
+                                Margin="20,0,0,0"
+                                IsEnabled="{Binding IsEnabled_Time}"
+                                Command="{Binding UploadFile}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </Page>

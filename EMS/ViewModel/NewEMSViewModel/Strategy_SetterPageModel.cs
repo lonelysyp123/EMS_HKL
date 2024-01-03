@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
-    class Strategy_SetterPageModel
+    public class Strategy_SetterPageModel : ViewModelBase
     {
+
     }
 }

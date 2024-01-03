@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMS.ViewModel.NewEMSViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,17 @@ namespace EMS.View.NewEMSView
         public Monitor_BMS_BCMUPage()
         {
             InitializeComponent();
+        }
+
+        public Monitor_BMS_BCMUPage(Monitor_BMS_BCMUPageModel viewmodel)
+        {
+            InitializeComponent();
+            DataContext = viewmodel;
+        }
+
+        private void IconBorder_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

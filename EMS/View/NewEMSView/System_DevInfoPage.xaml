@@ -1,14 +1,317 @@
 ﻿<Page x:Class="EMS.View.NewEMSView.System_DevInfoPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:EMS.View.NewEMSView"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="System_DevInfoPage">
+      xmlns:localControl="clr-namespace:EMS.MyControl"
+      mc:Ignorable="d"
+      d:DesignHeight="900"
+      d:DesignWidth="1600"
+      Title="System_DevInfoPage"
+      Background="#FAFAFA">
 
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="1*" />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <!--EMS-->
+        <Grid Grid.Row="0"
+              Grid.Column="0">
+            <Border Background="white"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <localControl:TitleBorder Text="EMS"
+                                              Grid.ColumnSpan="2" />
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="1"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left">
+                        <TextBlock Text="软件版本:" />
+                        <TextBlock Text="{Binding Version_Software}"
+                                   Margin="20,0,0,0" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+        <!--PCS-->
+        <Grid Grid.Row="0"
+              Grid.Column="1">
+            <Border Background="white"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <localControl:TitleBorder Text="PCS"
+                                              Grid.ColumnSpan="2" />
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="1"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left">
+                        <TextBlock Text="机柜序列号:" />
+                        <TextBlock Text="{Binding CabSerialNumber}"
+                                   Margin="20,0,0,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="2"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left">
+                        <TextBlock Text="监控软件代码:" />
+                        <TextBlock Text="{Binding MonitorSoftCode}"
+                                   Margin="20,0,0,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="1"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left">
+                        <TextBlock Text="DC软件代码:" />
+                        <TextBlock Text="{Binding DcSoftCode}"
+                                   Margin="20,0,0,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="2"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left">
+                        <TextBlock Text="U2软件代码:" />
+                        <TextBlock Text="{Binding U2SoftCode}"
+                                   Margin="20,0,0,0" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+        <!--BMS-->
+        <Grid Grid.Row="1"
+              Grid.ColumnSpan="2">
+            <Border Grid.Row="1"
+                    Background="white"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <localControl:TitleBorder Text="BMS" />
+
+                    <!--软件版本号-->
+                    <Grid Grid.Column="0"
+                          Grid.Row="1"
+                          Margin="0,20,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <localControl:IconBorder Grid.ColumnSpan="4"
+                                                 FIcon_Text="&#xe67b;"
+                                                 FIconTextBlock_Text="软件版本号"
+                                                 FIconBorder_Background="#FFECCF"
+                                                 FIcon_Foreground="#FF7D00" />
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="BCMU1:" />
+                            <TextBlock Text="{Binding VersionSWBCMU1}"
+                                       Margin="20,0,0,0" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="2"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="BCMU2:" />
+                            <TextBlock Text="{Binding VersionSWBCMU2}"
+                                       Margin="20,0,0,0" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="3"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="BCMU3:" />
+                            <TextBlock Text="{Binding VersionSWBCMU3}"
+                                       Margin="20,0,0,0" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="BCMU4:" />
+                            <TextBlock Text="{Binding VersionSWBCMU4}"
+                                       Margin="20,0,0,0" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="2"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="BCMU5:" />
+                            <TextBlock Text="{Binding VersionSWBCMU5}"
+                                       Margin="20,0,0,0" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="3"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="BCMU6:" />
+                            <TextBlock Text="{Binding VersionSWBCMU6}"
+                                       Margin="20,0,0,0" />
+                        </StackPanel>
+                    </Grid>
+                    <!--硬件版本号-->
+                    <Grid Grid.Column="1"
+                          Grid.Row="1"
+                          Margin="0,20,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <localControl:IconBorder Grid.ColumnSpan="4"
+                                                 FIcon_Text="&#xe77b;"
+                                                 FIconTextBlock_Text="硬件版本号"
+                                                 FIconBorder_Background="#E8FFFB"
+                                                 FIcon_Foreground="#1FCAC6" />
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="BCMU1:" />
+                            <TextBlock Text="{Binding Version_Hardware_BCUM1}"
+                                       Margin="20,0,0,0" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="2"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="BCMU2:" />
+                            <TextBlock Text="{Binding Version_Hardware_BCUM2}"
+                                       Margin="20,0,0,0" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="3"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="BCMU3:" />
+                            <TextBlock Text="{Binding Version_Hardware_BCUM3}"
+                                       Margin="20,0,0,0" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="BCMU4:" />
+                            <TextBlock Text="{Binding Version_Hardware_BCUM4}"
+                                       Margin="20,0,0,0" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="2"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="BCMU5:" />
+                            <TextBlock Text="{Binding Version_Hardware_BCUM5}"
+                                       Margin="20,0,0,0" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="3"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="BCMU6:" />
+                            <TextBlock Text="{Binding Version_Hardware_BCUM6}"
+                                       Margin="20,0,0,0" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+        <!--电表-->
+        <Grid Grid.Row="2"
+              Grid.Column="0">
+            <Border Background="white"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <localControl:TitleBorder Text="电表"
+                                              Grid.ColumnSpan="2" />
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="1"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left">
+                        <TextBlock Text="电表编号:" />
+                        <TextBlock Text="{Binding MeterNumber}"
+                                   Margin="20,0,0,0" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </Page>

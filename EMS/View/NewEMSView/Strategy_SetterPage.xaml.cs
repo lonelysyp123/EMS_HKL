@@ -24,5 +24,20 @@ namespace EMS.View.NewEMSView
         {
             InitializeComponent();
         }
+
+        private void ToggleButton_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void IconBorder_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void IconBorder_Loaded_1(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

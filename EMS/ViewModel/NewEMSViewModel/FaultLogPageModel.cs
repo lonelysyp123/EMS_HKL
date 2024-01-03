@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
-    class FaultLogPageModel
+    public class FaultLogPageModel
     {
     }
 }

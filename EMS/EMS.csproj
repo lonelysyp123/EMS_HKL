@@ -107,6 +107,15 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="HandyControl, Version=3.4.0.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b, processorArchitecture=MSIL">
+      <HintPath>..\packages\HandyControl.3.4.0\lib\net48\HandyControl.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.15\lib\net45\log4net.dll</HintPath>
     </Reference>
@@ -115,6 +124,9 @@
     </Reference>
     <Reference Include="MaterialDesignColors, Version=2.1.4.0, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.2.1.4\lib\net462\MaterialDesignColors.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignThemes.MahApps, Version=0.3.0.0, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignThemes.MahApps.0.3.0\lib\net462\MaterialDesignThemes.MahApps.dll</HintPath>
     </Reference>
     <Reference Include="MaterialDesignThemes.Wpf, Version=4.9.0.0, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.4.9.0\lib\net462\MaterialDesignThemes.Wpf.dll</HintPath>
@@ -221,6 +233,7 @@
     <Compile Include="Api\MqttClientApi.cs" />
     <Compile Include="Api\PcsApi.cs" />
     <Compile Include="Api\StrategyApi.cs" />
+    <Compile Include="Common\BMUColors.cs" />
     <Compile Include="Common\LogUtils.cs" />
     <Compile Include="Common\Modbus\ModbusRequest.cs" />
     <Compile Include="Common\Mqtt\BatteryCell.cs" />
@@ -229,6 +242,8 @@
     <Compile Include="Common\Mqtt\BMU.cs" />
     <Compile Include="Common\Mqtt\Pcs.cs" />
     <Compile Include="Common\Mqtt\SmartMeter.cs" />
+    <Compile Include="Common\NavigationService.cs" />
+    <Compile Include="Common\StrategyManage\BMSDevManager.cs" />
     <Compile Include="Common\StrategyManage\EmsController.cs" />
     <Compile Include="Common\StrategyManage\IntraDayScheduler.cs" />
     <Compile Include="Common\SingletonBase.cs" />
@@ -242,22 +257,45 @@
     <Compile Include="Model\BatterySeriesModel.cs" />
     <Compile Include="Model\BatteryStrategyModel.cs" />
     <Compile Include="Model\BatteryTotalModel.cs" />
+    <Compile Include="Model\DcStatusModel.cs" />
     <Compile Include="Model\MqttConnectInfoModel.cs" />
     <Compile Include="Model\PCSModel.cs" />
     <Compile Include="Model\PCSMonitorModel.cs" />
     <Compile Include="Model\PCSParSettingModel.cs" />
     <Compile Include="Common\StrategyManage\EnergyManagementSystem.cs" />
     <Compile Include="Model\BMSParameterSettingModel.cs" />
-    <Compile Include="Model\ElectricityMeterModel.cs" />
     <Compile Include="Model\PublishMessageModel.cs" />
     <Compile Include="Model\SerialPortSettingsModel.cs" />
+    <Compile Include="Model\SmartMeterModel.cs" />
     <Compile Include="Model\SubscribeMessageModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
+    <Compile Include="MyControl\BCMUConnectGraph.xaml.cs">
+      <DependentUpon>BCMUConnectGraph.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControl\CheckedButton.xaml.cs">
+      <DependentUpon>CheckedButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControl\IconBorder.xaml.cs">
+      <DependentUpon>IconBorder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControl\TitleBorder.xaml.cs">
+      <DependentUpon>TitleBorder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControl\WarnControl.xaml.cs">
+      <DependentUpon>WarnControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControl\WarnControl2.xaml.cs">
+      <DependentUpon>WarnControl2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControl\WarnControl3.xaml.cs">
+      <DependentUpon>WarnControl3.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Service\BMSDataService.cs" />
     <Compile Include="Service\IDataService.cs" />
     <Compile Include="Service\impl\MqttClientService.cs" />
     <Compile Include="Service\IMqttClientService.cs" />
     <Compile Include="Service\ModbusTCPDataService.cs" />
+    <Compile Include="Service\SmartMeterDataService.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmandFaultInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmParameterSettingInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSControlInfoManage.cs" />
@@ -272,7 +310,6 @@
     <Compile Include="ViewModel\BatteryTotalViewModel.cs" />
     <Compile Include="ViewModel\BatteryViewModel.cs" />
     <Compile Include="ViewModel\AssistanceStrategyViewModel.cs" />
-    <Compile Include="ViewModel\DCStatusViewModel.cs" />
     <Compile Include="ViewModel\DevControlViewModel.cs" />
     <Compile Include="MyControl\Battery.xaml.cs">
       <DependentUpon>Battery.xaml</DependentUpon>
@@ -312,6 +349,7 @@
     <Compile Include="ViewModel\NewEMSViewModel\Analysis_BMSPageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\Analysis_PCSPageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\Analysis_SmartMeterPageModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\EMSMainViewModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\FaultLogPageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\HomePageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\Monitor_BMSPageModel.cs" />
@@ -326,7 +364,6 @@
     <Compile Include="ViewModel\NewEMSViewModel\System_MqttSetterPageModel.cs" />
     <Compile Include="ViewModel\ParameterSettingViewModel.cs" />
     <Compile Include="ViewModel\PCSMainViewModel.cs" />
-    <Compile Include="ViewModel\PCSMonitorViewModel.cs" />
     <Compile Include="ViewModel\PCSSettingViewModel.cs" />
     <Compile Include="Common\StrategyManage\StrategyManager.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
@@ -434,6 +471,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MyControl\BCMUConnectGraph.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControl\CheckedButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MyControl\DataControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -446,11 +491,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MyControl\IconBorder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MyControl\IDInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MyControl\IPInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControl\TitleBorder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControl\WarnControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControl\WarnControl2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControl\WarnControl3.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -615,6 +680,8 @@
     <Content Include="Resource\Image\Battery75.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resource\Iconfont\iconfont.ttf" />
+    <Resource Include="Resource\Image\tn-logo.png" />
     <Resource Include="Resource\Image\topback.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

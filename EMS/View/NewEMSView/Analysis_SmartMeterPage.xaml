@@ -1,14 +1,162 @@
 ﻿<Page x:Class="EMS.View.NewEMSView.Analysis_SmartMeterPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:localControl="clr-namespace:EMS.MyControl"
       xmlns:local="clr-namespace:EMS.View.NewEMSView"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      xmlns:trl="clr-namespace:EMS.MyControl"
+      xmlns:oxy="http://oxyplot.org/wpf"
+      mc:Ignorable="d"
+      d:DesignHeight="900"
+      d:DesignWidth="1600"
+      Background="#FAFAFA"
       Title="Analysis_SmartMeterPage">
 
+    <Page.Resources>
+        <!--内容StackPanel-->
+        <Style x:Key="ContentPanel"
+               TargetType="StackPanel">
+            <Setter Property="Orientation"
+                    Value="Horizontal" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+        </Style>
+    </Page.Resources>
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="8*" />
+        </Grid.ColumnDefinitions>
+        <!--1、选择电压、电流-->
+        <Grid Grid.Row="0"
+              Grid.Column="0">
+            <Border Background="white"
+                    Margin="10,30"
+                    Padding="20,10"
+                    CornerRadius="15">
+                <Grid>
+                    <ListBox HorizontalAlignment="Center"
+                             BorderThickness="0,0,0,0"
+                             SelectionChanged="DataTypeList_SelectionChanged"
+                             SelectedItem="{Binding SelectedType}"
+                             SelectedIndex="{Binding SelectedTypeIndex}"
+                             Foreground="Black">
+                        <ListBoxItem Content="Voltage"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="SOC"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="Resistance"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="Temperature1"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="Temperature2"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="Capacity"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                    </ListBox>
+                </Grid>
+            </Border>
+        </Grid>
+        <!--2、图表-->
+        <Grid Grid.Row="0"
+              Grid.Column="1">
+            <Border Background="white"
+                    Margin="10,30"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="8*" />
+                    </Grid.RowDefinitions>
+
+                    <localControl:TitleBorder Text="电表曲线" />
+                    <Grid Grid.Row="1">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="开始时间:"
+                                   BorderThickness="0,0,0,0"
+                                   VerticalAlignment="Center"
+                                   Margin="20,0,0,0"
+                                   Foreground="#1E1E1E"></Label>
+                            <DatePicker x:Name="Test1"
+                                        Width="100"
+                                        Height="30"
+                                        Background="White"
+                                        VerticalContentAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        Text="{Binding StartTime1, Mode=TwoWay}"
+                                        BorderThickness="1,1,1,1"></DatePicker>
+                            <trl:DateInput Width="90"
+                                           Height="30"
+                                           Margin="5"
+                                           DateText="{Binding StartTime2, Mode=TwoWay}"
+                                           x:Name="Input1"></trl:DateInput>
+                            <Label Content="终止时间:"
+                                   Margin="20,0,0,0"
+                                   BorderThickness="0,0,0,0"
+                                   VerticalAlignment="Center"
+                                   Foreground="#1E1E1E"></Label>
+                            <DatePicker Name="Test3"
+                                        Height="30"
+                                        VerticalContentAlignment="Center"
+                                        Text="{Binding EndTime1, Mode=TwoWay}"
+                                        Foreground="Black"
+                                        Width="100"
+                                        Background="White"></DatePicker>
+                            <trl:DateInput Width="90"
+                                           Height="30"
+                                           Margin="5"
+                                           DateText="{Binding EndTime2, Mode=TwoWay}" />
+                            <Button Content="查    询"
+                                    Command="{Binding QueryCommand}"
+                                    Width="80"
+                                    Height="30"
+                                    FontSize="12"
+                                    Margin="20,0,10,0"
+                                    Foreground="White"
+                                    Background="#1890FF"
+                                    x:Name="QueryButton"></Button>
+                            <Button Content="导    出"
+                                    Command="{Binding ExportCommand}"
+                                    Width="80"
+                                    Height="30"
+                                    FontSize="12"
+                                    Margin="3"
+                                    Foreground="White"
+                                    Background="#1890FF"
+                                    x:Name="ExportButton"></Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Row="2">
+                        <oxy:PlotView Model="{Binding DisplayDataModel}"
+                                      Background="AliceBlue">
+
+                        </oxy:PlotView>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </Page>
