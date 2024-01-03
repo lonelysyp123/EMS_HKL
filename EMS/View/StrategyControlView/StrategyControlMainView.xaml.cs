@@ -1,5 +1,6 @@
 ﻿using EMS.Properties;
 using EMS.ViewModel;
+using EMS.ViewModel.NewEMSViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,19 +23,14 @@ namespace EMS.View
     public partial class StrategyControl : Page
     {
 
-        public PCSSettingViewModel pCSSettingViewModel;
+        public Strategy_AnalysisPageModel strategy_AnalysisPageModel;
         public StrategyControl()
         {
             InitializeComponent();
-            pCSSettingViewModel = new PCSSettingViewModel();
-            this.DataContext = pCSSettingViewModel;
+            strategy_AnalysisPageModel = new Strategy_AnalysisPageModel();
+            this.DataContext = strategy_AnalysisPageModel;
 
         }          
-
-       
-
-        
-
-        
     }
+
 }

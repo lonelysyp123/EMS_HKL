@@ -10,6 +10,8 @@
       xmlns:localControl="clr-namespace:EMS.MyControl"
       xmlns:core="clr-namespace:System;assembly=mscorlib"
       xmlns:trl="clr-namespace:EMS.MyControl"
+      xmlns:c1="http://schemas.componentone.com/winfx/2006/xaml" 
+      
       mc:Ignorable="d"
       d:DesignHeight="900"
       d:DesignWidth="1600"
@@ -139,7 +141,7 @@
                                       Foreground="Black"
                                       Background="White"
                                       Margin="20,10"
-                                      BorderThickness="1,1,1,1" TextChanged="TextBox_TextChanged" />
+                                      BorderThickness="1,1,1,1"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Left"
@@ -279,13 +281,33 @@
                                    Margin="0,0,110,0"/>
                         <hc:DatePicker Height="30"
                                        Width="100"
+                                       SelectedDate="{Binding SelectedDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                        HorizontalAlignment="Right" />
                     </Grid>
-                    <oxy:PlotView Grid.Row="2"
-                                  Model="{Binding DisplayDataModel}"
+                    <!--<oxy:PlotView Grid.Row="2"
+                                  Model="{Binding DisplayDataModel}"                                  
                                   Background="AliceBlue">
 
-                    </oxy:PlotView>
+                    </oxy:PlotView>-->
+                    <Grid x:Name="LayoutRoot" Grid.Row="2">
+                        <c1:C1Chart HorizontalAlignment="Stretch" Margin="10,10,10,10" Name="c1chart1" VerticalAlignment="Stretch" Theme="Office2007Blue">
+                            <c1:C1Chart.Data >
+                                <c1:ChartData SeriesItemsSource="{Binding MyReports}" >
+                                    <c1:ChartData.SeriesItemTemplate>
+                                        <DataTemplate>
+                                            <c1:XYDataSeries ItemsSource="{Binding Data}"
+                                 ValueBinding="{Binding Y}"
+                                 XValueBinding="{Binding X}" />
+                                        </DataTemplate>
+                                    </c1:ChartData.SeriesItemTemplate>
+                                </c1:ChartData>
+                            </c1:C1Chart.Data>
+
+                            <TextBlock DockPanel.Dock="Left" HorizontalAlignment="Left" VerticalAlignment="Center" Text="单位：kwh" Margin="0,10,-40,0">
+                            </TextBlock>
+                        </c1:C1Chart>
+
+                    </Grid>
                     <!--<UniformGrid Grid.Row="2">
                         <lvc:CartesianChart Series="{Binding ColunmSeriesCollection}"
                                             LegendLocation="Right">

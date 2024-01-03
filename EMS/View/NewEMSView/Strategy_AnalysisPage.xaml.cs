@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using EMS.ViewModel;
 
 namespace EMS.View.NewEMSView
 {
@@ -22,9 +23,12 @@ namespace EMS.View.NewEMSView
     /// 
     public partial class Strategy_AnalysisPage : Page
     {
+        private DataAnalysisViewModel viewmodel;
         public Strategy_AnalysisPage()
         {
             InitializeComponent();
+            viewmodel = new DataAnalysisViewModel();
+            this.DataContext = viewmodel;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

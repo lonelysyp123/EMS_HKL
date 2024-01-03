@@ -56,6 +56,7 @@ namespace EMS.Storage.DB
         public DbSet<PCSControlSettingModel> PCSControlSettingInfos { get; set; }
         public DbSet<PCSInfoModel> PCSInfos { get; set; }
         public DbSet<PCSStrategyDailyPatternInfoModel> pCSStrategyDailyPatternInfos { get; set; }
-       
+
+
     }
 }
