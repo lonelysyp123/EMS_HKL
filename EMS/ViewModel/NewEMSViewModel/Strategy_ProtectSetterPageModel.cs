@@ -10,6 +10,17 @@ namespace EMS.ViewModel.NewEMSViewModel
 {
     public class Strategy_ProtectSetterPageModel:ViewModelBase
     {
+        //BCMU簇选择
+        private List<string> _bcmuId;
+        public List<string> BcmuId
+        {
+            get => _bcmuId;
+            set 
+            {
+                SetProperty(ref _bcmuId, value);
+            }
+        }
+
         #region ProtectPara
         /// <summary>
         ///组端电压上限

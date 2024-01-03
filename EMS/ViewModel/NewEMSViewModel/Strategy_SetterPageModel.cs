@@ -21,8 +21,14 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         #region Command
-        public RelayCommand Strategy_SetterPageCommand { get; set; }
-
+        public RelayCommand SwitchAutoManualCommand { get; set; }
+        public RelayCommand StrategyControlStartStopCommand { get; set; }
+        public RelayCommand DemandControlStartStopCommand { get; set; }
+        public RelayCommand InversePowerProtectionStartStopCommand { get; set; }
+        public RelayCommand CommandManualReset { get; set; }
+        public RelayCommand CommandManualApply { get; set; }
+        public RelayCommand CommandAutoReset { get; set; }
+        public RelayCommand ReversePowerSendCommand { get; set; }
 
         #endregion
 
@@ -116,24 +122,24 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /*需量控制容量*/
-        private double demandControlapacity;
-        public double DemandControlapacity
+        private double demandControlCapacity;
+        public double DemandControlCapacity
         {
-            get { return demandControlapacity; }
+            get { return demandControlCapacity; }
             set
             {
-                SetProperty(ref demandControlapacity, value);
+                SetProperty(ref demandControlCapacity, value);
             }
         }
 
         /*下设比例*/
-        private double lowerProportionDemand;
-        public double LowerProportionDemand
+        private double maxDemandDescendRate;
+        public double MaxDemandDescendRate
         {
-            get { return lowerProportionDemand; }
+            get { return maxDemandDescendRate; }
             set
             {
-                SetProperty(ref lowerProportionDemand, value);
+                SetProperty(ref maxDemandDescendRate, value);
             }
         }
 
@@ -148,34 +154,73 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        /*逆功率保护动作限制*/
-        private double protectionActionLimit;
-        public double ProtectionActionLimit
+        /*逆功率保护动作限值*/
+        private double reversePowerLowestThreshold;
+        public double ReversePowerLowestThreshold
         {
-            get { return protectionActionLimit; }
+            get { return reversePowerLowestThreshold; }
             set
             {
-                SetProperty(ref protectionActionLimit, value);
+                SetProperty(ref reversePowerLowestThreshold, value);
             }
         }
 
         /*下设比例*/
-        private double lowerProportion_InversePower;
-        public double LowerProportion_InversePower
+        private double reversePowerDescendRate;
+        public double ReversePowerDescendRate
         {
-            get { return lowerProportion_InversePower; }
+            get { return reversePowerDescendRate; }
             set
             {
-                SetProperty(ref lowerProportion_InversePower, value);
+                SetProperty(ref reversePowerDescendRate, value);
             }
         }
         #endregion
 
         public Strategy_SetterPageModel()
         {
+            SwitchAutoManualCommand = new RelayCommand(SwitchAutoManual);
+            StrategyControlStartStopCommand = new RelayCommand(StrategyControlStartStop);
+            DemandControlStartStopCommand = new RelayCommand(DemandControlStartStop);
+            InversePowerProtectionStartStopCommand = new RelayCommand(InversePowerProtectionStartStop);
+            CommandManualReset = new RelayCommand(ManualReset);
+            CommandManualApply = new RelayCommand(ManualApply);
+            CommandAutoReset = new RelayCommand(AutoReset);
+            ReversePowerSendCommand = new RelayCommand(ReversePowerSend);
 
         }
+        private void SwitchAutoManual()
+        {
+            //
+        }
 
-        
+        private void StrategyControlStartStop()
+        {
+
+        }
+        private void DemandControlStartStop()
+        {
+
+        }
+        private void InversePowerProtectionStartStop()
+        {
+
+        }
+        private void ManualReset()
+        {
+            //
+        }
+        private void ManualApply()
+        {
+            //
+        }
+        private void AutoReset()
+        {
+
+        }
+        private void ReversePowerSend()
+        {
+
+        }
     }
 }
