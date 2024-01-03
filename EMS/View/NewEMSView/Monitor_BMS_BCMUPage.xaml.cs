@@ -36,5 +36,10 @@ namespace EMS.View.NewEMSView
         {
 
         }
+
+        private void CheckedButton_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
