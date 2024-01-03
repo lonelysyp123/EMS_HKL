@@ -394,7 +394,7 @@ namespace EMS.Service
             total.AlarmStateBCMUFlag1 = BitConverter.ToUInt16(obj, 64);
             total.AlarmStateBCMUFlag2 = BitConverter.ToUInt16(obj, 66);
             total.AlarmStateBCMUFlag3 = BitConverter.ToUInt16(obj, 68);
-            total.FaultyStateBCMUFlag = BitConverter.ToUInt16(obj, 70);
+            total.FaultStateBCMUFlag1 = BitConverter.ToUInt16(obj, 70);
             total.BatMaxChgPower = BitConverter.ToUInt16(obj, 72) * 0.01;
             total.BatMaxDischgPower = BitConverter.ToUInt16(obj, 74) * 0.01;
             total.OneChgCoulomb = BitConverter.ToUInt16(obj, 76) * 0.01;
