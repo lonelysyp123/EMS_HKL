@@ -21,13 +21,15 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         #region Command
-        public RelayCommand Strategy_SetterPageCommand { get; private set; }
+        public RelayCommand Strategy_SetterPageCommand { get; set; }
+
+
         #endregion
 
         #region AutoRunMode
         /*最大SOC*/
-        private string maxSOC;
-        public string MaxSOC
+        private double maxSOC;
+        public double MaxSOC
         {
             get { return maxSOC; }
             set
@@ -37,8 +39,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /*最小SOC*/
-        private string minSOC;
-        public string MinSOC
+        private double minSOC;
+        public double MinSOC
         {
             get { return minSOC; }
             set
@@ -48,8 +50,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /*最大允许充电功率*/
-        private string maxAllowChargingPower;
-        public string MaxAllowChargingPower
+        private double maxAllowChargingPower;
+        public double MaxAllowChargingPower
         {
             get { return maxAllowChargingPower; }
             set
@@ -59,8 +61,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /*最大允许放电功率*/
-        private string maxAllowDishargingPower;
-        public string MaxAllowDishargingPower
+        private double maxAllowDishargingPower;
+        public double MaxAllowDishargingPower
         {
             get { return maxAllowDishargingPower; }
             set
@@ -70,8 +72,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /*储能充电效率*/
-        private string energyChargingEfficiency;
-        public string EnergyChargingEfficiency
+        private double energyChargingEfficiency;
+        public double EnergyChargingEfficiency
         {
             get { return energyChargingEfficiency; }
             set
@@ -81,8 +83,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /*储能放电效率*/
-        private string energyDishargingEfficiency;
-        public string EnergyDishargingEfficiency
+        private double energyDishargingEfficiency;
+        public double EnergyDishargingEfficiency
         {
             get { return energyDishargingEfficiency; }
             set
@@ -92,8 +94,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /*储能初始能量*/
-        private string initialEnergyStorage;
-        public string InitialEnergyStorage
+        private double initialEnergyStorage;
+        public double InitialEnergyStorage
         {
             get { return initialEnergyStorage; }
             set
@@ -103,8 +105,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /*储能可用容量*/
-        private string availableEnergyStorageCapacity;
-        public string AvailableEnergyStorageCapacity
+        private double availableEnergyStorageCapacity;
+        public double AvailableEnergyStorageCapacity
         {
             get { return availableEnergyStorageCapacity; }
             set
@@ -114,8 +116,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /*需量控制容量*/
-        private string demandControlCapacity;
-        public string DemandControlCapacity
+        private double demandControlCapacity;
+        public double DemandControlCapacity
         {
             get { return demandControlCapacity; }
             set
@@ -125,8 +127,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /*下设比例*/
-        private string lowerProportionDemand;
-        public string LowerProportionDemand
+        private double lowerProportionDemand;
+        public double LowerProportionDemand
         {
             get { return lowerProportionDemand; }
             set
@@ -136,8 +138,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /*逆功率保护限制*/
-        private string protectionLimit;
-        public string ProtectionLimit
+        private double protectionLimit;
+        public double ProtectionLimit
         {
             get { return protectionLimit; }
             set
@@ -147,8 +149,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /*逆功率保护动作限制*/
-        private string protectionActionLimit;
-        public string ProtectionActionLimit
+        private double protectionActionLimit;
+        public double ProtectionActionLimit
         {
             get { return protectionActionLimit; }
             set
@@ -158,8 +160,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /*下设比例*/
-        private string lowerProportion_InversePower;
-        public string LowerProportion_InversePower
+        private double lowerProportion_InversePower;
+        public double LowerProportion_InversePower
         {
             get { return lowerProportion_InversePower; }
             set
@@ -174,9 +176,6 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         }
 
-        public void DataDistribution()
-        {
-
-        }
+        
     }
 }
