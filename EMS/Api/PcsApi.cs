@@ -67,18 +67,18 @@ namespace EMS.Api
         //}
 
         public static bool SetPCSStart()
+        {
+            try
             {
-                try
-                {
-                    EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.PCSOpen();
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    return false;
-                    throw (ex);
-                }
+                EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.PCSOpen();
+                return true;
             }
+            catch (Exception ex)
+            {
+                return false;
+                throw (ex);
+            }
+        }
         /// <summary>
         /// 获取参数设置界面所有展现在界面上的数据
         /// </summary>
