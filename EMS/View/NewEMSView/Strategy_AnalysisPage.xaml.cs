@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMS.ViewModel.NewEMSViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,93 +30,12 @@ namespace EMS.View.NewEMSView
         public Strategy_AnalysisPage()
         {
             InitializeComponent();
+        }
 
-            List<PersonItem> list = new List<PersonItem>();
-
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "1",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "2",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "3",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "4",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "5",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "6",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "7",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "8",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "9",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "10",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "11",
-
-                }
-            );
-            list.Add(
-                new PersonItem
-                {
-                    StrategyNumber = "12",
-                }
-            );
-            DataGrid.ItemsSource = list;
+        public Strategy_AnalysisPage(Strategy_AnalysisPageModel viewmodel)
+        {
+            InitializeComponent();
+            this.DataContext = viewmodel;
         }
     }
 }

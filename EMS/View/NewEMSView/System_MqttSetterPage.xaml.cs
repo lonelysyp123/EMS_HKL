@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMS.ViewModel.NewEMSViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,12 @@ namespace EMS.View.NewEMSView
         public System_MqttSetterPage()
         {
             InitializeComponent();
+        }
+
+        public System_MqttSetterPage(System_MqttSetterPageModel viewmodel)
+        {
+            InitializeComponent();
+            this.DataContext = viewmodel;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

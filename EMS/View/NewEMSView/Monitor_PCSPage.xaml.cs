@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMS.ViewModel.NewEMSViewModel;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -45,6 +46,12 @@ namespace EMS.View.NewEMSView
             };
 
             DCDataGrid.ItemsSource = Items;
+        }
+
+        public Monitor_PCSPage(Monitor_PCSPageModel viewmodel)
+        {
+            InitializeComponent();
+            this.DataContext = viewmodel;
         }
     }
 

@@ -608,8 +608,8 @@ namespace EMS.ViewModel
             RecordDataImage = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OffRecord.png"));
 
             service = new BMSDataService();
-            service.RegisterState(ServiceStateCallBack);
-            service.SetCommunicationConfig(IP, Port, TotalList);
+            //service.RegisterState(ServiceStateCallBack);
+            service.SetCommunicationConfig(IP, Port, TotalID);
         }
 
         private void ServiceStateCallBack(bool isConnected, bool isDaqData)

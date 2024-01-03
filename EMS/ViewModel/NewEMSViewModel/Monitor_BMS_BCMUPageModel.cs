@@ -408,7 +408,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             ToMonitor_BMS_BCMUPageCommand = new RelayCommand(ToMonitor_BMS_BCMUPage);
         }
 
-        public void DataDistribution(BatteryTotalModel model, bool isconnected)
+        public void DataDistribution(BatteryTotalModel model)
         {
             RemainingSOC = model.TotalSOC.ToString();
             ClusterVoltage = model.TotalVoltage.ToString();
@@ -424,15 +424,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             //else
             //{
             //    Alarmcolor = new SolidColorBrush(BMUColors.Alarmcolor_F);
-            //}
-
-            //if (isconnected)
-            //{
-            //    IsConnect = new SolidColorBrush(BMUColors.IsConnect_T);
-            //}
-            //else
-            //{
-            //    IsConnect = new SolidColorBrush(BMUColors.IsConnect_F);
             //}
 
             // 断路器？
@@ -470,6 +461,18 @@ namespace EMS.ViewModel.NewEMSViewModel
 
             TemperatureBCMU(model);
             BMUInfo(model);
+        }
+
+        public void StateRefresh(bool isConnected, bool isStartDaqData)
+        {
+            if (isConnected)
+            {
+                IsConnect = new SolidColorBrush(BCMUColors.IsConnect_T);
+            }
+            else
+            {
+                IsConnect = new SolidColorBrush(BCMUColors.IsConnect_F);
+            }
         }
 
         private void ToMonitor_BMS_BCMUPage()
