@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMS.ViewModel.NewEMSViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,5 +26,10 @@ namespace EMS.View.NewEMSView
             InitializeComponent();
         }
 
+        public System_DevInfoPage(System_DevInfoPageModel viewmodel)
+        {
+            InitializeComponent();
+            this.DataContext = viewmodel;
+        }
     }
 }

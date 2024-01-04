@@ -29,7 +29,7 @@ namespace EMS.Service
                 if(_isConnected != value)
                 {
                     _isConnected = value;
-                    OnChangeState(_isConnected, _isDaqData);
+                    OnChangeState(this, _isConnected, _isDaqData);
                 }
             }
         }
@@ -43,18 +43,18 @@ namespace EMS.Service
                 if (_isDaqData != value)
                 {
                     _isDaqData = value;
-                    OnChangeState(_isConnected, _isDaqData);
+                    OnChangeState(this, _isConnected, _isDaqData);
                 }
             }
         }
 
-        private string ID;
+        public string ID { get; private set; }
         private string IP;
         private int Port;
         private TcpClient _client;
         private ModbusMaster _master;
-        private Action<bool, bool> OnChangeState;
-        private Action<BatteryTotalModel, bool> OnChangeData;
+        private Action<object, bool, bool> OnChangeState;
+        private Action<object, BatteryTotalModel> OnChangeData;
 
         public BMSDataService()
         {
@@ -62,21 +62,21 @@ namespace EMS.Service
             CommunicationProtectTr.IsBackground = true;
         }
 
-        public void RegisterState(Action<bool, bool> action)
+        public void RegisterState(Action<object, bool, bool> action)
         {
             OnChangeState = action;
         }
 
-        public void RegisterState(Action<BatteryTotalModel, bool> action)
+        public void RegisterState(Action<object, BatteryTotalModel> action)
         {
             OnChangeData = action;
         }
 
-        public void SetCommunicationConfig(string ip, string port, BlockingCollection<BatteryTotalModel> obj)
+        public void SetCommunicationConfig(string ip, string port, string id)
         {
             IP = ip;
             int.TryParse(port, out Port);
-            batteryTotalModels = obj;
+            ID = id;
         }
 
         public bool Connect()

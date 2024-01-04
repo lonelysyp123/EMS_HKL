@@ -233,7 +233,7 @@
     <Compile Include="Api\MqttClientApi.cs" />
     <Compile Include="Api\PcsApi.cs" />
     <Compile Include="Api\StrategyApi.cs" />
-    <Compile Include="Common\BMUColors.cs" />
+    <Compile Include="Common\EMSColors.cs" />
     <Compile Include="Common\LogUtils.cs" />
     <Compile Include="Common\Modbus\ModbusRequest.cs" />
     <Compile Include="Common\Mqtt\BatteryCell.cs" />

@@ -1157,7 +1157,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             ToMonitor_BMS_BCMUPageCommand = new RelayCommand(ToMonitor_BMS_BCMUPage);
         }
 
-        public void DataDistribution(BatteryTotalModel model, bool isconnected)
+        public void DataDistribution(BatteryTotalModel model)
         {
             RemainingSOC = model.TotalSOC.ToString();
             ClusterVoltage = model.TotalVoltage.ToString();
