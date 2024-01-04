@@ -40,7 +40,7 @@
                 <Grid>
                     <ListBox HorizontalAlignment="Center"
                              BorderThickness="0,0,0,0"
-                             SelectionChanged="DataTypeList_SelectionChanged"
+                            
                              SelectedItem="{Binding SelectedType}"
                              SelectedIndex="{Binding SelectedTypeIndex}"
                              Foreground="Black">

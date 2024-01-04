@@ -12,11 +12,11 @@ namespace EMS.Model
 {
     public class PCSParSettingModel : ViewModelBase
     {
+        
+        private ushort _bMSCMInterruptionTimeOut;
         /// <summary>
         /// BMS通讯中断超时
         /// </summary>
-        private ushort _bMSCMInterruptionTimeOut;
-
         public ushort BMSCMInterruptionTimeOut
         {
             get => _bMSCMInterruptionTimeOut;
@@ -26,11 +26,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private ushort _remote485CMInterruptionTimeOut;
         /// <summary>
         /// 远程485通信中断超时
         /// </summary>
-        private ushort _remote485CMInterruptionTimeOut;
-
         public ushort Remote485CMInterruptonTimeOut
         {
             get => _remote485CMInterruptionTimeOut;
@@ -40,11 +40,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private ushort _remoteTCPCMInterruptionTimeOut;
         /// <summary>
         /// 远程TCP通信中断超时
         /// </summary>
-        private ushort _remoteTCPCMInterruptionTimeOut;
-
         public ushort RemoteTCPCMInterruptionTimeOut
         {
             get => _remoteTCPCMInterruptionTimeOut;
@@ -56,11 +56,11 @@ namespace EMS.Model
 
 
 
+        
+        private double _bUSHigherVolThresh;
         /// <summary>
         /// BUS侧上限电压
         /// </summary>
-        private double _bUSHigherVolThresh;
-
         public double BUSUpperLimitVolThresh
         {
             get => _bUSHigherVolThresh;
@@ -70,11 +70,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private double _bUSLowerLimitVolThresh;
         /// <summary>
         /// BUS侧下限电压
         /// </summary>
-        private double _bUSLowerLimitVolThresh;
-
         public double BUSLowerLimitVolThresh
         {
             get => _bUSLowerLimitVolThresh;
@@ -84,11 +84,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private double _bUSHVolSetting;
         /// <summary>
         /// BUS侧高压设置
         /// </summary>
-        private double _bUSHVolSetting;
-
         public double BUSHVolSetting
         {
             get => _bUSHVolSetting;
@@ -98,11 +98,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private double _bUSLVolSetiing;
         /// <summary>
         /// BUS侧低压设置
         /// </summary>
-        private double _bUSLVolSetiing;
-
         public double BUSLVolSetting
         {
             get => _bUSLVolSetiing;
@@ -117,11 +117,11 @@ namespace EMS.Model
         /// </summary>
         public string ModeSet1 { get; set; }
 
+        
+        private double _bTLLimitVol;
         /// <summary>
         /// 电池下限电压
         /// </summary>
-        private double _bTLLimitVol;
-
         public double BTLLimitVol
         {
             get => _bTLLimitVol;
@@ -131,11 +131,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private double _dischargeSTVol;
         /// <summary>
         /// 放电终止电压
         /// </summary>
-        private double _dischargeSTVol;
-
         public double DischargeSTVol
         {
             get => _dischargeSTVol;
@@ -145,11 +145,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private int _multiBranchCurRegPar;
         /// <summary>
         /// 多支路电流调节参数
         /// </summary>
-        private int _multiBranchCurRegPar;
-
         public int MultiBranchCurRegPar
         {
             get => _multiBranchCurRegPar;
@@ -159,11 +159,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private double _batAveChVol;
         /// <summary>
         /// 电池均充电压
         /// </summary>
-        private double _batAveChVol;
-
         public double BatAveChVol
         {
             get => _batAveChVol;
@@ -173,11 +173,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private double _chCutCurrent;
         /// <summary>
         /// 充电截止电流
         /// </summary>
-        private double _chCutCurrent;
-
         public double ChCutCurrent
         {
             get => _chCutCurrent;
@@ -187,11 +187,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private double _maxChCurrent;
         /// <summary>
         /// 最大充电电流
         /// </summary>
-        private double _maxChCurrent;
-
         public double MaxChCurrent
         {
             get => _maxChCurrent;
@@ -201,11 +201,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private double _maxDisChCurrent;
         /// <summary>
         /// 最大放电电流
         /// </summary>
-        private double _maxDisChCurrent;
-
         public double MaxDisChCurrent
         {
             get => _maxDisChCurrent;
@@ -215,11 +215,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private double _dCCurrentSet;
         /// <summary>
         /// 直流电流设置
         /// </summary>
-        private double _dCCurrentSet;
-
         public double DCCurrentSet
         {
             get => _dCCurrentSet;
@@ -229,11 +229,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private double _dCPowerSet;
         /// <summary>
         /// 直流功率设置
         /// </summary>
-        private double _dCPowerSet;
-
         public double DCPowerSet
         {
             get => _dCPowerSet;
@@ -243,11 +243,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private Visibility _visDCPower;
         /// <summary>
         /// 功率调节可见度
         /// </summary>
-        private Visibility _visDCPower;
-
         public Visibility VisDCPower
         {
             get => _visDCPower;
@@ -257,11 +257,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private Visibility _visDCCur;
         /// <summary>
         /// 电流调节可见度
         /// </summary>
-        private Visibility _visDCCur;
-
         public Visibility VisDCCur
         {
             get => _visDCCur;
@@ -271,11 +271,11 @@ namespace EMS.Model
             }
         }
 
+        
+        private Visibility _visDCChar;
         /// <summary>
         /// 充放电按钮可见度
         /// </summary>
-        private Visibility _visDCChar;
-
         public Visibility VisDCChar
         {
             get => _visDCChar;

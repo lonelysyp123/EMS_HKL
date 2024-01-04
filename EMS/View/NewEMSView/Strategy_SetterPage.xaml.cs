@@ -46,5 +46,10 @@ namespace EMS.View.NewEMSView
         {
 
         }
+
+        private void TextBox_TextChanged()
+        {
+
+        }
     }
 }

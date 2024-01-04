@@ -249,6 +249,7 @@
     <Compile Include="Common\SingletonBase.cs" />
     <Compile Include="Common\StrategyManage\MqttClientManager.cs" />
     <Compile Include="Common\Util\ConcurrentQueueLength.cs" />
+    <Compile Include="Common\Util\DateTimeUtil.cs" />
     <Compile Include="Common\Util\IniFileHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -257,7 +258,6 @@
     <Compile Include="Model\BatterySeriesModel.cs" />
     <Compile Include="Model\BatteryStrategyModel.cs" />
     <Compile Include="Model\BatteryTotalModel.cs" />
-    <Compile Include="Model\DcStatusModel.cs" />
     <Compile Include="Model\MqttConnectInfoModel.cs" />
     <Compile Include="Model\PCSModel.cs" />
     <Compile Include="Model\PCSMonitorModel.cs" />
@@ -296,6 +296,7 @@
     <Compile Include="Service\IMqttClientService.cs" />
     <Compile Include="Service\ModbusTCPDataService.cs" />
     <Compile Include="Service\SmartMeterDataService.cs" />
+    <Compile Include="Service\PCSDataService.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmandFaultInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmParameterSettingInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSControlInfoManage.cs" />

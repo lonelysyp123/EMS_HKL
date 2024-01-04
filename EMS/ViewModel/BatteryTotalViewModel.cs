@@ -721,7 +721,7 @@ namespace EMS.ViewModel
             this.MaxVolDiff = model.MaxVolDiff;
             this.AvgVol = model.AvgVol;
             StateBCMUChange(model.StateBCMU);
-            GetActiveFaultyBCMU(model.FaultyStateBCMUFlag);
+            GetActiveFaultyBCMU(model.FaultStateBCMUFlag1);
             GetBCMUAlarm(model.AlarmStateBCMUFlag1, model.AlarmStateBCMUFlag2, model.AlarmStateBCMUFlag3);
 
             for (int i = 0; i < batterySeriesViewModelList.Count; i++)

@@ -21,22 +21,22 @@ namespace EMS.Service
     public class BMSDataService
     {
         private bool _isConnected;
-        public bool IsConnected 
+        public bool IsConnected
         { 
             get=>_isConnected; 
-            private set 
+            private set
             {
                 if(_isConnected != value)
                 {
                     _isConnected = value;
                     OnChangeState(this, _isConnected, _isDaqData);
                 }
-            } 
+            }
         }
 
         private bool _isDaqData;
         public bool IsDaqData
-        {
+        { 
             get => _isDaqData;
             private set
             {
@@ -56,7 +56,7 @@ namespace EMS.Service
         private Action<object, bool, bool> OnChangeState;
         private Action<object, BatteryTotalModel> OnChangeData;
 
-        public BMSDataService() 
+        public BMSDataService()
         {
             CommunicationProtectTr = new Thread(CommunicationProtect);
             CommunicationProtectTr.IsBackground = true;
@@ -394,7 +394,7 @@ namespace EMS.Service
             total.AlarmStateBCMUFlag1 = BitConverter.ToUInt16(obj, 64);
             total.AlarmStateBCMUFlag2 = BitConverter.ToUInt16(obj, 66);
             total.AlarmStateBCMUFlag3 = BitConverter.ToUInt16(obj, 68);
-            total.FaultyStateBCMUFlag = BitConverter.ToUInt16(obj, 70);
+            total.FaultStateBCMUFlag1 = BitConverter.ToUInt16(obj, 70);
             total.BatMaxChgPower = BitConverter.ToUInt16(obj, 72) * 0.01;
             total.BatMaxDischgPower = BitConverter.ToUInt16(obj, 74) * 0.01;
             total.OneChgCoulomb = BitConverter.ToUInt16(obj, 76) * 0.01;

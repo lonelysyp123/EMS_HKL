@@ -315,6 +315,7 @@ namespace PCSTester.Model
                 try
                 {
                     byte[] dcState = ModbusClient.ReadFunc(53026, 7);
+
                     _dcStatusModel.ModuleOnLineFlag = BitConverter.ToUInt16(dcState, 0);
                     _dcStatusModel.ModuleRunFlag = BitConverter.ToUInt16(dcState, 4);
                     _dcStatusModel.ModuleAlarmFlag = BitConverter.ToUInt16(dcState, 8);
@@ -413,7 +414,6 @@ namespace PCSTester.Model
                         GetActivePCSState();
                         DataAcquisitionDcModuleStatus();
                     });
-
                     Thread.Sleep(DataAcquireTimeSpan * 1000);
                 }
                 catch (Exception ex)
