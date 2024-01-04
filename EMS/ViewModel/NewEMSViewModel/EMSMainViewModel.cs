@@ -60,7 +60,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             Analysis_SmartMeterPageModel = new Analysis_SmartMeterPageModel();
             FaultLogPageModel = new FaultLogPageModel();
             Strategy_AnalysisPageModel = new Strategy_AnalysisPageModel();
-            Strategy_ProtectSetterPageModel = new Strategy_ProtectSetterPageModel();
+            //Strategy_ProtectSetterPageModel = new Strategy_ProtectSetterPageModel();
             Strategy_SetterPageModel = new Strategy_SetterPageModel();
             System_DevInfoPageModel = new System_DevInfoPageModel();
             System_DevSetterPageModel = new System_DevSetterPageModel();
@@ -92,7 +92,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             else if (service.ID == "BCMU5") index = 5;
             else if (service.ID == "BCMU6") index = 6;
 
-            Monitor_BMSPageModel.bmuViewModels[index - 1].StateRefresh(isConnected, isDaqData);
+            //Monitor_BMSPageModel.bmuViewModels[index - 1].DataDistribution();
         }
     }
 }

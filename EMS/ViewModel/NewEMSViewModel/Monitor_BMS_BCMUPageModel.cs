@@ -1149,12 +1149,19 @@ namespace EMS.ViewModel.NewEMSViewModel
         #region Command
 
         public RelayCommand ToMonitor_BMS_BCMUPageCommand { get;private set;}
+        public RelayCommand Command_OffGrid { get; private set; }
 
         #endregion
 
         public Monitor_BMS_BCMUPageModel()
         {
             ToMonitor_BMS_BCMUPageCommand = new RelayCommand(ToMonitor_BMS_BCMUPage);
+            Command_OffGrid = new RelayCommand(OffGridCommand);
+        }
+
+        private void OffGridCommand()
+        {
+
         }
 
         public void DataDistribution(BatteryTotalModel model)

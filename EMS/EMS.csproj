@@ -258,6 +258,7 @@
     <Compile Include="Model\BatterySeriesModel.cs" />
     <Compile Include="Model\BatteryStrategyModel.cs" />
     <Compile Include="Model\BatteryTotalModel.cs" />
+    <Compile Include="Model\FaultLogModel.cs" />
     <Compile Include="Model\MqttConnectInfoModel.cs" />
     <Compile Include="Model\PCSModel.cs" />
     <Compile Include="Model\PCSMonitorModel.cs" />

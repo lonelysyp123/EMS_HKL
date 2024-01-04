@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:EMS.View.NewEMSView"
       xmlns:hc="https://handyorg.github.io/handycontrol"
+      xmlns:bh="http://schemas.microsoft.com/xaml/behaviors"
       mc:Ignorable="d"
       d:DesignHeight="900"
       d:DesignWidth="1600"
@@ -66,10 +67,15 @@
                     Value="White" />
             <Setter Property="Margin"
                     Value="0,10,0,10" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Foreground" Value="Black"></Setter>
+                </Trigger>
+            </Style.Triggers>
         </Style>
         
         <!--DataGrid表体样式-->
-        <Style TargetType="DataGridCell">
+        <!--<Style TargetType="DataGridCell">
             <Setter Property="Background"
                     Value="Transparent" />
             <Setter Property="VerticalContentAlignment"
@@ -87,12 +93,16 @@
                             <Trigger Property="IsSelected"
                                      Value="true">
                                 <Setter Property="Foreground"
-                                        Value="Black" />
+                                        Value="{StaticResource IsSelected}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>-->
+
+        <Style x:Key="dgCell" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Center"/>
         </Style>
     </Page.Resources>
 
@@ -120,25 +130,25 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="*"
                                         Header="序号"
-                                        Binding="{Binding FaultNumber}" />
+                                        Binding="{Binding FaultNumber}" ElementStyle="{StaticResource dgCell}"/>
                     <DataGridTextColumn Width="*"
                                         Header="设备"
-                                        Binding="{Binding FaultDevice}" />
+                                        Binding="{Binding FaultDevice}" ElementStyle="{StaticResource dgCell}"/>
                     <DataGridTextColumn Width="*"
                                         Header="ID"
-                                        Binding="{Binding FaultId}" />
+                                        Binding="{Binding FaultId}" ElementStyle="{StaticResource dgCell}"/>
                     <DataGridTextColumn Width="*"
                                         Header="模块"
-                                        Binding="{Binding FaultModule}" />
+                                        Binding="{Binding FaultModule}" ElementStyle="{StaticResource dgCell}"/>
                     <DataGridTextColumn Width="*"
                                         Header="故障名称"
-                                        Binding="{Binding FaultName}" />
+                                        Binding="{Binding FaultName}" ElementStyle="{StaticResource dgCell}"/>
                     <DataGridTextColumn Width="*"
                                         Header="等级"
-                                        Binding="{Binding FaultGrade}" />
+                                        Binding="{Binding FaultGrade}" ElementStyle="{StaticResource dgCell}"/>
                     <DataGridTextColumn Width="*"
                                         Header="时间"
-                                        Binding="{Binding FaultTime}" />
+                                        Binding="{Binding FaultTime}" ElementStyle="{StaticResource dgCell}"/>
 
                 </DataGrid.Columns>
             </DataGrid>
@@ -147,9 +157,15 @@
                Grid.Column="0"
                HorizontalAlignment="Right">
             <hc:Pagination MaxPageCount="{Binding MaxPageCount}"
-                           PageIndex="{Binding PageIndex}"
-                           DataCountPerPage="10"
-                           IsJumpEnabled="True" />
+                           DataCountPerPage="{Binding DataCountPerPage}"
+                           IsJumpEnabled="True"
+                           PageIndex="{Binding PageIndex, Mode=TwoWay}">
+                <bh:Interaction.Triggers>
+                    <bh:EventTrigger EventName="PageUpdated">
+                        <bh:InvokeCommandAction Command="{Binding PageUpdatedCommand}"></bh:InvokeCommandAction>
+                    </bh:EventTrigger>
+                </bh:Interaction.Triggers>
+            </hc:Pagination>
             <!--<hc:Pagination MaxPageCount="10" PageIndex="1" DataCountPerPage="10" IsJumpEnabled="True"/>-->
 
         </Grid>
