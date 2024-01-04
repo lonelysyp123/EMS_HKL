@@ -18,6 +18,18 @@ namespace EMS.Api
             return item.GetNextBMSDataForMqtt();
         }
 
+        /// <summary>
+        /// 返回当前BMS系统的额定功率(最大充放电功率)，需要根据当前连接的电池簇动态调整
+        /// </summary>
+        /// <returns></returns>
+        public static double GetNormalPowerCapacity() { return 0; }
+
+        /// <summary>
+        /// 将bcmuid对应的那簇电池簇并网到DC侧母线，需要做一定的安全性检查，比如电压差符合并网要求，电池状态不能是异常
+        /// </summary>
+        /// <returns></returns>
+        public static void Connect2DcBus(string bcmuid) { }
+
         public static BatteryTotalModel[] GetNextBMSData()
         {
             DateTime dateTime = DateTime.Now;
