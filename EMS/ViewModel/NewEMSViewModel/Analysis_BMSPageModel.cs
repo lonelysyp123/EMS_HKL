@@ -156,7 +156,13 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// ListBox选择改变
         /// </summary>
-        public RelayCommand DataTypeList_SelectionChanged { get; private set; }
+        public RelayCommand DataTypeList_SelectionChanged { set; get; }
+
+        /// <summary>
+        /// 14个电池列表按钮选择
+        /// </summary>
+        public RelayCommand<SelectionChangedEventArgs> BatteryList_SelectionChanged { get; set; }
+
         #endregion
 
         #region List
@@ -179,18 +185,18 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public Analysis_BMSPageModel()
         {
-
-            QueryCommand = new RelayCommand(Query);
-            ExportCommand = new RelayCommand(Export);
-            DisplayDataModel = new PlotModel();
-            DisplayDataList = new List<List<double[]>>();
-            TimeList = new List<DateTime[]>();
             StartTime1 = DateTime.Today.ToString();
             EndTime1 = DateTime.Today.ToString();
             StartTime2 = "00:00:00";
             EndTime2 = "00:00:00";
             SelectedBatteryList = new List<string>();
+            QueryCommand = new RelayCommand(Query);
+            ExportCommand = new RelayCommand(Export);
+            DisplayDataModel = new PlotModel();
+            DisplayDataList = new List<List<double[]>>();
+            TimeList = new List<DateTime[]>();
             DataTypeList_SelectionChanged = new RelayCommand(SwitchBatteryData);
+            BatteryList_SelectionChanged = new RelayCommand<SelectionChangedEventArgs>(OnBatteryListSelectionChanged);
 
         }
 
@@ -226,7 +232,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 导出
         /// </summary>
-        private void Export() { }
+        private void Export() {
+        }
 
         /// <summary>
         /// 查询单体电池数据
@@ -300,6 +307,31 @@ namespace EMS.ViewModel.NewEMSViewModel
                 TimeList.Add(times.ToArray());
             }
             return obj;
+        }
+
+        /// <summary>
+        /// 电池列表按钮选择
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnBatteryListSelectionChanged(SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0)
+            {
+                foreach (var item in e.AddedItems)
+                {
+                    SelectedBatteryList.Add((item as ListBoxItem).Content.ToString());
+                }
+            }
+            if (e.RemovedItems.Count > 0)
+            {
+                foreach (var item in e.RemovedItems)
+                {
+                    SelectedBatteryList.Remove((item as ListBoxItem).Content.ToString());
+
+                }
+            }
+            SwitchBatteryData();
         }
 
         /// <summary>
@@ -422,8 +454,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
             return true;
         }
-
-
 
 
         /// <summary>

@@ -29,7 +29,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="8*" />
+            <ColumnDefinition Width="5*" />
         </Grid.ColumnDefinitions>
         <!--1、选择电压、电流-->
         <Grid Grid.Row="0"
@@ -39,7 +39,91 @@
                     Padding="20,10"
                     CornerRadius="15">
                 <Grid>
-                    <ListBox HorizontalAlignment="Center"
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListBox Grid.Column="0"
+                             SelectionMode="Extended"
+                             Foreground="White"
+                             BorderThickness="0,0,0,0">
+                        <bh:Interaction.Triggers>
+                            <bh:EventTrigger EventName="SelectionChanged">
+                                <bh:InvokeCommandAction Command="{Binding BatteryList_SelectionChanged}" />
+                            </bh:EventTrigger>
+                        </bh:Interaction.Triggers>
+                        <ListBoxItem Content="1"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="2"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="3"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="4"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="5"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="6"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="7"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="8"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="9"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="10"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="11"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="12"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="13"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="14"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                    </ListBox>
+                    <ListBox Grid.Column="1"  HorizontalAlignment="Center"
                              BorderThickness="0,0,0,0"
                              SelectedItem="{Binding SelectedType}"
                              SelectedIndex="{Binding SelectedTypeIndex}"
@@ -104,14 +188,6 @@
                                    Foreground="#1E1E1E"
                                    Margin="20,0,0,0"
                                    BorderThickness="0,0,0,0" />
-                            <!--<ComboBox  Height="30"
-                                       Width="80"
-                                       Background="White"
-                                       Foreground="Black"
-                                       ItemsSource="{Binding SourceTotal}"
-                                       SelectedItem="{Binding SelectedTotal}"
-                                       BorderThickness="1,1,1,1">
-                            </ComboBox>-->
                             <TextBox Width="80"
                                      Height="30"
                                      Background="White"
@@ -123,20 +199,12 @@
                                    Foreground="#1E1E1E"
                                    Margin="20,0,0,0"
                                    BorderThickness="0,0,0,0"></Label>
-                            <!--<ComboBox  Height="30"
-                                       Width="80"
-                                       Background="White"
-                                       Foreground="Black"
-                                       ItemsSource="{Binding SourceSeries}"
-                                       SelectedItem="{Binding SelectedSeries}"
-                                       BorderThickness="1,1,1,1">
-                            </ComboBox>-->
                             <TextBox Width="80"
                                      Height="30"
                                      Background="White"
                                      Foreground="Black"
                                      BorderThickness="1,1,1,1"
-                                     Text="{Binding SourceSeries}"></TextBox>
+                                     Text="{Binding SelectedSeries}"></TextBox>
                             <Label Content="开始时间:"
                                    BorderThickness="0,0,0,0"
                                    VerticalAlignment="Center"

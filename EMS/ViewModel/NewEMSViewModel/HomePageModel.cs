@@ -339,11 +339,6 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         #endregion
 
-        #region Command
-
-
-
-        #endregion
 
         public HomePageModel()
         {
@@ -351,38 +346,19 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /// <summary>
-        /// BMS数据展示
+        /// 首页数据展示
         /// </summary>
         /// <param name="model"></param>
-        public void DataDisPlayBMS(BatteryTotalModel model,bool isconnected)
+        public void DataDisPlay(BatteryTotalModel bmsmodel,PCSMonitorModel pcsmodel, SmartMeterModel smartmetermodel)
         {
-            if (isconnected)
-            {
+            DcBranch1DCVol = pcsmodel.DcBranch1DCVol.ToString();
+            DcBranch1DCCur = pcsmodel.DcBranch1DCCur.ToString();
+            DcBranch1DCPower = pcsmodel.DcBranch1DCPower.ToString();
+            DcBranch1Char = pcsmodel.DcBranch1Char.ToString();
+            DcBranch1DisChar = pcsmodel.DcBranch1DisChar.ToString();
 
-            }
         }
 
-        /// <summary>
-        /// PCS数据展示
-        /// </summary>
-        /// <param name="model"></param>
-        public void DataDisPlayPCS(PCSMonitorModel model, bool isconnected)
-        {
-            DcBranch1DCVol = model.DcBranch1DCVol.ToString();
-            DcBranch1DCCur = model.DcBranch1DCCur.ToString();
-            DcBranch1DCPower = model.DcBranch1DCPower.ToString();
-            DcBranch1Char = model.DcBranch1Char.ToString();
-            DcBranch1DisChar = model.DcBranch1DisChar.ToString();
-        }
-
-        /// <summary>
-        /// 电表数据展示
-        /// </summary>
-        /// <param name="model"></param>
-        public void DataDisPlaySM(SmartMeterModel model, bool isconnected)
-        {
-
-        }
 
         //运行状态
         //StateFill_Normal
