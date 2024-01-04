@@ -9,6 +9,7 @@ namespace EMS.ViewModel.NewEMSViewModel
 {
     public class Monitor_SmartMeterPageModel:ViewModelBase
     {
+        #region SmartMeterParameters
         /*ABC三相电压*/
         private string voltage_A;
         public string Voltage_A
@@ -152,6 +153,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                 SetProperty(ref wattlessPower_Total, value);
             }
         }
+        #endregion
 
         public Monitor_SmartMeterPageModel()
         {

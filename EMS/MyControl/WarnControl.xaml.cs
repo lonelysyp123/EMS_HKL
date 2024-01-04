@@ -84,6 +84,11 @@ namespace EMS.MyControl
         {
             switch (alertLevel)
             {
+                case AlarmtLevels.NoAlarm:
+                    BorderColor = Brushes.Transparent;
+                    BorderBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F4F4F4"));
+                    TextColor = Brushes.Black;
+                    break;
                 case AlarmtLevels.Info:
                     BorderBackground = Brushes.Transparent;
                     TextColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EEE94F"));
@@ -111,6 +116,7 @@ namespace EMS.MyControl
     //public enum AlertLevels
     public enum AlarmtLevels
     {
+        NoAlarm,
         Info,
         Warning,
         Error

@@ -23,7 +23,7 @@ namespace EMS.Model
         public int ReactivePower_B { get; set; }
         public int ReactivePower_C { get; set; }
         public int ReactivePower_Total { get; set; }
-
+        public string SmartMeterNumber {  get; set; }
         public object Clone()
         {
             return this.MemberwiseClone();

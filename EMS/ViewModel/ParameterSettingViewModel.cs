@@ -448,7 +448,6 @@ namespace EMS.ViewModel
             SOCLowLimitLv2 = BitConverter.ToUInt16(data, 62) * 0.1;
             SOCLowLimitLv3 = BitConverter.ToUInt16(data, 64) * 0.1;
             IsoRLowLimitLv1 = BitConverter.ToUInt16(data, 66);
-
         }
 
         private void SyncInfo()

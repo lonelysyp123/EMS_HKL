@@ -81,7 +81,7 @@
                                    Margin="10,0,10,0"
                                    Background="White"
                                    Foreground="Black"
-                                   ItemsSource="{Binding BCMUInfo2}"
+                                   ItemsSource="{Binding BCMUIDInfo}"
                                    SelectedItem="{Binding SelectedItemBCMU}"
                                    BorderThickness="1,1,1,1">
                         </ComboBox>
