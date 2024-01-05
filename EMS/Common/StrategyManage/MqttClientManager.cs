@@ -30,8 +30,7 @@ namespace TNCN.EMS.Common.StrategyManage
         };
         public MqttClientManager() {
             //TODO （MQTT brocker配置从配置文件获取）
-            //MqttConnectInfoModel mqttConnectInfo = new MqttConnectInfoModel("116.62.159.155", 1883, null, null, null, 55);
-            MqttConnectInfoModel mqttConnectInfo = new MqttConnectInfoModel("127.0.0.1", 1883, null, null, null, 55);
+            MqttConnectInfoModel mqttConnectInfo = new MqttConnectInfoModel("116.62.159.155", 1883, null, null, null, 55);
             mqttConnectInfo.Topics = subscribeTopics.ToList();
             mqttClientService = new MqttClientService();
             mqttClientService.StartMqttClient(mqttConnectInfo);
@@ -43,19 +42,17 @@ namespace TNCN.EMS.Common.StrategyManage
         private void PublishBmsData() {
             BatteryTotalModel[] batteryTotalModels = BmsApi.GetNextBMSData();
             string batteryPostTopic = "hkl2/ems/bms/bcmu/post";
-            //if (batteryTotalModels != null && batteryTotalModels.Length > 0)
-            if (true)
+            if (batteryTotalModels != null && batteryTotalModels.Length > 0)
             {
-                //foreach (BatteryTotalModel batteryTotalModel in batteryTotalModels)
-                //{
-                //    if (batteryTotalModel != null)
-                //    {
-                        //BCMU bcmu = new BCMU(batteryTotalModel);
-                        BCMU bcmu = new BCMU();
+                foreach (BatteryTotalModel batteryTotalModel in batteryTotalModels)
+                {
+                    if (batteryTotalModel != null)
+                    {
+                        BCMU bcmu = new BCMU(batteryTotalModel);
                         byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(bcmu));
                         mqttClientService.PublishAsync(batteryPostTopic, data);
-                //    }
-                //}
+                    }
+                }
                 Thread.Sleep(30000);
             }
             else
