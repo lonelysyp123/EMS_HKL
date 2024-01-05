@@ -40,8 +40,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             for (int i = 0; i < 1; i++)
             {
                 bmsServices[i] = new BMSDataService();
-                bmsServices[i].RegisterState(ServiceDataCallBack);
-                bmsServices[i].RegisterState(OnChangeState);
+                bmsServices[i].RegisterState(DataCallBack);
+                bmsServices[i].RegisterState(StateCallBack);
             }
 
             pcsServices = new PCSDataService[PCSCount];
@@ -76,7 +76,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             System_MqttSetterPageModel = new System_MqttSetterPageModel();
         }
 
-        private void ServiceDataCallBack(object sender, object model)
+        private void DataCallBack(object sender, object model)
         {
             var service = sender as BMSDataService;
             int index = -1;
@@ -90,7 +90,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             Monitor_BMSPageModel.bmuViewModels[index - 1].DataDistribution(model as BatteryTotalModel);
         }
 
-        private void OnChangeState(object sender, bool isConnected, bool isDaqData)
+        private void StateCallBack(object sender, bool isConnected, bool isDaqData)
         {
             var service = sender as BMSDataService;
             int index = -1;
@@ -101,7 +101,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             else if (service.ID == "BCMU5") index = 5;
             else if (service.ID == "BCMU6") index = 6;
 
-            //Monitor_BMSPageModel.bmuViewModels[index - 1].DataDistribution();
+            Monitor_BMSPageModel.bmuViewModels[index - 1].StateDistribution(isConnected, isDaqData);
         }
     }
 }
