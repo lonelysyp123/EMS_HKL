@@ -50,12 +50,12 @@ namespace EMS.ViewModel
             ObservableCollection<string> INFOAS = new ObservableCollection<string>();
 
             //使用API调用电池簇数据
-            BatteryTotalViewModel batteryTotalBases1 = BmsApi.GetBMSTotalInfo(bcmuid1);
-            BatteryTotalViewModel batteryTotalBases2 = BmsApi.GetBMSTotalInfo(bcmuid2);
-            BatteryTotalViewModel batteryTotalBases3 = BmsApi.GetBMSTotalInfo(bcmuid3);
-            BatteryTotalViewModel batteryTotalBases4 = BmsApi.GetBMSTotalInfo(bcmuid4);
-            BatteryTotalViewModel batteryTotalBases5 = BmsApi.GetBMSTotalInfo(bcmuid5);
-            BatteryTotalViewModel batteryTotalBases6 = BmsApi.GetBMSTotalInfo(bcmuid6);
+            BatteryTotalModel batteryTotalBases1 = BmsApi.GetBMSTotalInfo(bcmuid1);
+            BatteryTotalModel batteryTotalBases2 = BmsApi.GetBMSTotalInfo(bcmuid2);
+            BatteryTotalModel batteryTotalBases3 = BmsApi.GetBMSTotalInfo(bcmuid3);
+            BatteryTotalModel batteryTotalBases4 = BmsApi.GetBMSTotalInfo(bcmuid4);
+            BatteryTotalModel batteryTotalBases5 = BmsApi.GetBMSTotalInfo(bcmuid5);
+            BatteryTotalModel batteryTotalBases6 = BmsApi.GetBMSTotalInfo(bcmuid6);
 
             //共6簇告警逻辑方法调用
             AnalyzeBatteryCluster(batteryTotalBases1, INFOAS);
@@ -71,18 +71,18 @@ namespace EMS.ViewModel
 
 
         //每簇组端电压保护，单体电压保护，单体压差保护告警逻辑
-        private void AnalyzeBatteryCluster(BatteryTotalViewModel batteryTotalBases, ObservableCollection<string> INFO)
+        private void AnalyzeBatteryCluster(BatteryTotalModel batteryTotalBases, ObservableCollection<string> INFO)
         {
             if (batteryTotalBases != null)
             {
                 ObservableCollection<double> singleVoltages = new ObservableCollection<double>();
                 ClusterVolLevel(batteryTotalBases.TotalVoltage, INFO);//组端电压保护
-                for (int i = 0; i < batteryTotalBases.CurrentBatteryTotalModel.SeriesCount; i++)
+                for (int i = 0; i < batteryTotalBases.SeriesCount; i++)
                 {
-                    for (int j = 0; j < batteryTotalBases.CurrentBatteryTotalModel.BatteriesCountInSeries; j++)
+                    for (int j = 0; j < batteryTotalBases.BatteriesCountInSeries; j++)
                     {
-                        SingleVolLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[i].Batteries[j].Voltage, INFO);//单体电压保护
-                        double singlevolvalue = batteryTotalBases.CurrentBatteryTotalModel.Series[i].Batteries[j].Voltage;
+                        SingleVolLevel(batteryTotalBases.Series[i].Batteries[j].Voltage, INFO);//单体电压保护
+                        double singlevolvalue = batteryTotalBases.Series[i].Batteries[j].Voltage;
                         singleVoltages.Add(singlevolvalue);
                         ProcessTemperature(batteryTotalBases, i, j, INFO);
                     }
@@ -100,25 +100,25 @@ namespace EMS.ViewModel
         }
 
         //充放电温度告警逻辑
-        private void ProcessTemperature(BatteryTotalViewModel batteryTotalBases, int seriesIndex, int batteryIndex, ObservableCollection<string> INFO)
+        private void ProcessTemperature(BatteryTotalModel batteryTotalBases, int seriesIndex, int batteryIndex, ObservableCollection<string> INFO)
         {
-            switch (batteryTotalBases.CurrentBatteryTotalModel.StateBCMU)
+            switch (batteryTotalBases.StateBCMU)
             {
                 case 1:
-                    TempCharProtectLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[seriesIndex].Batteries[batteryIndex].Temperature1, INFO);
-                    TempCharProtectLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[seriesIndex].Batteries[batteryIndex].Temperature2, INFO);
+                    TempCharProtectLevel(batteryTotalBases.Series[seriesIndex].Batteries[batteryIndex].Temperature1, INFO);
+                    TempCharProtectLevel(batteryTotalBases.Series[seriesIndex].Batteries[batteryIndex].Temperature2, INFO);
                     break;
                 case 2:
-                    TempDischarProtectLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[seriesIndex].Batteries[batteryIndex].Temperature1, INFO);
-                    TempDischarProtectLevel(batteryTotalBases.CurrentBatteryTotalModel.Series[seriesIndex].Batteries[batteryIndex].Temperature2, INFO);
+                    TempDischarProtectLevel(batteryTotalBases.Series[seriesIndex].Batteries[batteryIndex].Temperature1, INFO);
+                    TempDischarProtectLevel(batteryTotalBases.Series[seriesIndex].Batteries[batteryIndex].Temperature2, INFO);
                     break;
             }
         }
 
         //充放电电流告警逻辑和SOC告警逻辑
-        private void ProcessCurrentAndSOC(BatteryTotalViewModel batteryTotalBases, ObservableCollection<string> INFO)
+        private void ProcessCurrentAndSOC(BatteryTotalModel batteryTotalBases, ObservableCollection<string> INFO)
         {
-            switch (batteryTotalBases.CurrentBatteryTotalModel.StateBCMU)
+            switch (batteryTotalBases.StateBCMU)
             {
                 case 1:
                     CurrentProtectLevel("电池组充电", batteryTotalBases.TotalCurrent, INFO);

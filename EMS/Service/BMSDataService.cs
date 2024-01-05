@@ -1,6 +1,8 @@
 ﻿using EMS.Common;
 using EMS.Common.Modbus.ModbusTCP;
 using EMS.Model;
+using EMS.Storage.DB.DBManage;
+using EMS.Storage.DB.Models;
 using Modbus.Device;
 using OxyPlot.Series;
 using System;
@@ -15,6 +17,7 @@ using System.Threading.Tasks;
 using System.Web.UI.WebControls.WebParts;
 using System.Windows;
 using System.Windows.Markup;
+using System.Windows.Media.Animation;
 
 namespace EMS.Service
 {
@@ -49,17 +52,71 @@ namespace EMS.Service
         }
 
         public string ID { get; private set; }
-        private string IP;
+        private string IP = "127.0.0.1";
         private int Port;
         private TcpClient _client;
         private ModbusMaster _master;
         private Action<object, bool, bool> OnChangeState;
-        private Action<object, BatteryTotalModel> OnChangeData;
+        private Action<object, object> OnChangeData;
 
         public BMSDataService()
         {
-            CommunicationProtectTr = new Thread(CommunicationProtect);
-            CommunicationProtectTr.IsBackground = true;
+            Locker = new object();
+            StartDataService();
+        }
+
+        public BMSDataService(string id)
+        {
+            ID = id;
+            Locker = new object();
+            StartDataService();
+        }
+
+        private void StartDataService()
+        {
+            Thread thread = new Thread(TryConnect);
+            thread.IsBackground = true;
+            thread.Start();
+        }
+
+        private void TryConnect()
+        {
+            while (!IsConnected)
+            {
+                try
+                {
+                    // 从数据库中获取链接信息
+                    BcmuManage bmsConfigInfo = new BcmuManage();
+                    var items = bmsConfigInfo.Get();
+                    if (items != null && items.Count > 0)
+                    {
+                        var item = items.Find(x => x.Id.ToString() == ID);
+                        if (item != null)
+                        {
+                            IP = item.Ip == null ? "" : item.Ip;
+                            Port = item.Port;
+                            DaqTimeSpan = item.AcquisitionCycle;
+                        }
+                    }
+
+                    // 创建一个线程去链接设备，直到设备链接成功，退出线程，并开始采集
+                    _client = new TcpClient();
+                    _client.Connect(IPAddress.Parse(IP), Port);
+                    _master = ModbusIpMaster.CreateIp(_client);
+                    IsConnected = true;
+                }
+                catch(Exception ex)
+                {
+                    LogUtils.Warn("BMS id:" + ID + " 连接失败", ex);
+                }
+                finally
+                {
+                    Thread.Sleep(1000);
+                }
+            }
+
+            // 连接成功后开始采集数据
+            StartDaqData();
         }
 
         public void RegisterState(Action<object, bool, bool> action)
@@ -67,100 +124,12 @@ namespace EMS.Service
             OnChangeState = action;
         }
 
-        public void RegisterState(Action<object, BatteryTotalModel> action)
+        public void RegisterState(Action<object, object> action)
         {
             OnChangeData = action;
         }
 
-        public void SetCommunicationConfig(string ip, string port, string id)
-        {
-            IP = ip;
-            int.TryParse(port, out Port);
-            ID = id;
-        }
-
-        public bool Connect()
-        {
-            try
-            {
-                if (!IsConnected)
-                {
-                    _client = new TcpClient();
-                    _client.Connect(IPAddress.Parse(IP), Port);
-                    _master = ModbusIpMaster.CreateIp(_client);
-                    IsConnected = true;
-
-                    // 采集状态
-                    if (IsDaqData)
-                    {
-                        StartDaqData();
-                    }
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogUtils.Error(ex.ToString());
-            }
-            return false;
-        }
-
-        public async Task<bool> ConnectAsync()
-        {
-            try
-            {
-                if (!IsConnected)
-                {
-                    _client = new TcpClient();
-                    await _client.ConnectAsync(IPAddress.Parse(IP), Port);
-                    _master = ModbusIpMaster.CreateIp(_client);
-                    IsConnected = true;
-
-                    // 采集状态
-                    if (IsDaqData)
-                    {
-                        StartDaqData();
-                    }
-
-                    return true;
-                }
-            }
-            catch (SocketException)
-            {
-                LogUtils.Error("未应答");
-            }
-            catch(TimeoutException)
-            {
-                LogUtils.Error("TCP链接超时");
-            }
-            return false;
-        }
-
-        public bool Disconnect()
-        {
-            try
-            {
-                if (IsConnected)
-                {
-                    if(IsDaqData)
-                    {
-                        StopDaqData();
-                    }
-                    _master.Transport.Dispose();
-                    _client.Close();
-                    _client.Dispose();
-                    IsConnected = false;
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                LogUtils.Error(ex.ToString());
-            }
-            return false;
-        }
-
-        public void StartDaqData()
+        private void StartDaqData()
         {
             if (IsConnected)
             {
@@ -174,20 +143,17 @@ namespace EMS.Service
             }
         }
 
-        private int DaqTimeSpan = 1;
-        public void SetDaqTimeSpan(int value)
-        {
-            DaqTimeSpan = value;
-        }
-
-        public BlockingCollection<BatteryTotalModel> batteryTotalModels;
+        private int DaqTimeSpan = 0;
+        //public BlockingCollection<BatteryTotalModel> BatteryTotalModels;
+        private static object Locker;
+        public BatteryTotalModel CurrentBatteryTotalModel;
         private void DaqDataTh()
         {
             while (IsConnected && IsDaqData)
             {
                 try
                 {
-                    Thread.Sleep(DaqTimeSpan * 1000);
+                    Thread.Sleep(DaqTimeSpan * 1000 + 100);
 
                     byte[] BCMUData = new byte[90];
                     Array.Copy(ReadFunc(11000, 45), 0, BCMUData, 0, 90);
@@ -198,13 +164,31 @@ namespace EMS.Service
                     Array.Copy(ReadFunc(10120, 120), 0, BMUData, 240, 240);
                     Array.Copy(ReadFunc(10240, 120), 0, BMUData, 480, 240);
                     Array.Copy(ReadFunc(10360, 12), 0, BMUData, 720, 24);
-                    batteryTotalModels.TryAdd(DataDecode(BCMUData, BMUIDData, BMUData));
+                    lock (Locker)
+                    {
+                        CurrentBatteryTotalModel = DataDecode(BCMUData, BMUIDData, BMUData);
+                        OnChangeData(this, CurrentBatteryTotalModel.Clone());
+                    }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    LogUtils.Error("BMS相关报错", ex);
                     break;
                 }
             }
+        }
+
+        public BatteryTotalModel GetCurrentData()
+        {
+            BatteryTotalModel item = new BatteryTotalModel();
+            if (CurrentBatteryTotalModel != null)
+            {
+                lock (Locker)
+                {
+                    item = CurrentBatteryTotalModel.Clone() as BatteryTotalModel;
+                }
+            }
+            return item;
         }
 
         /// <summary>
@@ -246,7 +230,6 @@ namespace EMS.Service
         private static int maxReconnectTimes = 3;
         private int reconnectCount = 0;
         private bool IsCommunicationProtectState = false;
-        private Thread CommunicationProtectTr;
         private bool CommunicationCheck()
         {
             while (true)
@@ -264,6 +247,8 @@ namespace EMS.Service
                     {
                         IsCommunicationProtectState = true;
                         IsConnected = false;
+                        Thread CommunicationProtectTr = new Thread(CommunicationProtect);
+                        CommunicationProtectTr.IsBackground = true;
                         CommunicationProtectTr.Start();
                         return false;
                     }

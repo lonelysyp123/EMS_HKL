@@ -1145,7 +1145,7 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         }
 
-        public void PCSDataDistribution(PCSModel model,bool isconnected) 
+        public void PCSDataDistribution(PCSModel model) 
         {
             ModuleTemp = model.ModuleTemperature;
             EnvironmentTemp = model.AmbientTemperature;
@@ -1164,6 +1164,11 @@ namespace EMS.ViewModel.NewEMSViewModel
             GetPDSFault(model);
             GetDCAlarm(model);
             GetPDSAlarm(model);
+        }
+
+        public void PCSStateDistribution(bool isconnected, bool isdaqdata)
+        {
+
         }
 
         private void GetDCBranchINFO(PCSModel model)

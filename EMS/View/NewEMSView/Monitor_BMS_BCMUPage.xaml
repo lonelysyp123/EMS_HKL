@@ -435,7 +435,7 @@
                                         Style="{StaticResource ContentPanel}"
                                         HorizontalAlignment="Left">
                                 <TextBlock Text="T1:" />
-                                <TextBlock Text="{Binding Temperature1}"
+                                <TextBlock Text="{Binding HighCotainerTemperature1}"
                                            Margin="10,0,10,0" />
                                 <TextBlock Text="℃" />
                             </StackPanel>
@@ -443,7 +443,7 @@
                                         Grid.Column="2"
                                         Style="{StaticResource ContentPanel}">
                                 <TextBlock Text="T2:" />
-                                <TextBlock Text="{Binding Temperature2}"
+                                <TextBlock Text="{Binding HighCotainerTemperature2}"
                                            Margin="10,0,10,0" />
                                 <TextBlock Text="℃" />
                             </StackPanel>
@@ -451,7 +451,7 @@
                                         Grid.Column="3"
                                         Style="{StaticResource ContentPanel}">
                                 <TextBlock Text="T3：" />
-                                <TextBlock Text="{Binding Temperature3}"
+                                <TextBlock Text="{Binding HighCotainerTemperature3}"
                                            Margin="10,0,10,0" />
                                 <TextBlock Text="℃" />
                             </StackPanel>
@@ -459,7 +459,7 @@
                                         Grid.Column="4"
                                         Style="{StaticResource ContentPanel}">
                                 <TextBlock Text="T4：" />
-                                <TextBlock Text="{Binding Temperature4}"
+                                <TextBlock Text="{Binding HighCotainerTemperature4}"
                                            Margin="10,0,10,0" />
                                 <TextBlock Text="℃" />
                             </StackPanel>

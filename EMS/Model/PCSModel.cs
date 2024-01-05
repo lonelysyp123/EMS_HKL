@@ -127,6 +127,11 @@ namespace EMS.Model
         /// U2软件代码
         /// </summary>
         public ushort U2SoftCode {  get; set; }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 
 }

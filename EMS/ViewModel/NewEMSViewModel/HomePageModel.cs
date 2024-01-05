@@ -354,12 +354,17 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// BMS数据展示
         /// </summary>
         /// <param name="model"></param>
-        public void DataDisPlayBMS(BatteryTotalModel model,bool isconnected)
+        public void DataDisPlayBMS(BatteryTotalModel model)
         {
-            if (isconnected)
-            {
+            InstalledPower = 0.ToString();
+            EnergyStorageCapacity = 0.ToString();
+            TotalSOC = 0.ToString();
+            TotalSOH = 0.ToString();
+        }
 
-            }
+        public void StateDisPlayBMS(bool isconnected)
+        {
+            
         }
 
         /// <summary>

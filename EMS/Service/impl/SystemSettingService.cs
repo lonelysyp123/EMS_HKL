@@ -89,5 +89,11 @@ namespace EMS.Service.impl
 
             return true;
         }
+
+        public List<BcmuModel> GetBcmu()
+        {
+            BcmuManage bmsConfigInfo = new BcmuManage();
+            return bmsConfigInfo.Get();
+        }
     }
 }
