@@ -37,7 +37,12 @@ namespace EMS.Storage.DB
         }
 
         /// <summary>
-        /// BMS配置信息
+        /// PCS
+        /// </summary>
+        public DbSet<PcsModel> PcsModels { get; set; }
+
+        /// <summary>
+        /// BMS
         /// </summary>
         public DbSet<BcmuModel> BcmuModels { get; set; }
 
