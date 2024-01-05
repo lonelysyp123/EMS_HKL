@@ -305,12 +305,14 @@
     <Compile Include="Storage\DB\DBManage\BcmuManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSControlInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSInfoManage.cs" />
+    <Compile Include="Storage\DB\DBManage\PcsManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSStrategyDailyPatternInfoManage.cs" />
     <Compile Include="Storage\DB\Models\AlarmandFaultInfoModel.cs" />
     <Compile Include="Storage\DB\Models\AlarmParameterSettingModel.cs" />
     <Compile Include="Storage\DB\Models\BcmuModel.cs" />
     <Compile Include="Storage\DB\Models\PCSControlSettingModel.cs" />
     <Compile Include="Storage\DB\Models\PCSInfoModel.cs" />
+    <Compile Include="Storage\DB\Models\PcsModel.cs" />
     <Compile Include="Storage\DB\Models\PCSStrategyDailyPatternInfoModel.cs" />
     <Compile Include="ViewModel\BatterySeriesViewModel.cs" />
     <Compile Include="ViewModel\BatteryTotalViewModel.cs" />

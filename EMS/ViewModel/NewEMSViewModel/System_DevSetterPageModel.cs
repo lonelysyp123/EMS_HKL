@@ -304,7 +304,6 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public System_DevSetterPageModel()
         {
-
             BMSConfigCommand = new RelayCommand(BMSConfig);
             PCSConfigCommand = new RelayCommand(PCSConfig);
             SmartMeterConfigCommand = new RelayCommand(SmartMeterConfig);
@@ -315,17 +314,17 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         private void BMSConfig()
         {
-            SystemSettingService.AddBcmu("1", _ip_BCMU1, _port_BCMU1, _acquisitionCycle_BCMU1);
-            SystemSettingService.AddBcmu("2", _ip_BCMU2, _port_BCMU2, _acquisitionCycle_BCMU2);
-            SystemSettingService.AddBcmu("3", _ip_BCMU3, _port_BCMU3, _acquisitionCycle_BCMU3);
-            SystemSettingService.AddBcmu("4", _ip_BCMU4, _port_BCMU4, _acquisitionCycle_BCMU4);
-            SystemSettingService.AddBcmu("5", _ip_BCMU5, _port_BCMU5, _acquisitionCycle_BCMU5);
-            SystemSettingService.AddBcmu("6", _ip_BCMU6, _port_BCMU6, _acquisitionCycle_BCMU6);
+            SystemSettingService.AddBcmu(1, _ip_BCMU1, _port_BCMU1, _acquisitionCycle_BCMU1);
+            SystemSettingService.AddBcmu(2, _ip_BCMU2, _port_BCMU2, _acquisitionCycle_BCMU2);
+            SystemSettingService.AddBcmu(3, _ip_BCMU3, _port_BCMU3, _acquisitionCycle_BCMU3);
+            SystemSettingService.AddBcmu(4, _ip_BCMU4, _port_BCMU4, _acquisitionCycle_BCMU4);
+            SystemSettingService.AddBcmu(5, _ip_BCMU5, _port_BCMU5, _acquisitionCycle_BCMU5);
+            SystemSettingService.AddBcmu(6, _ip_BCMU6, _port_BCMU6, _acquisitionCycle_BCMU6);
         }
 
         private void PCSConfig()
         {
-
+            SystemSettingService.AddPcs(1, _ip_PCS, _port_PCS, _acquisitionCycle_PCS);
         }
 
         private void SmartMeterConfig()

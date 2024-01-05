@@ -7,27 +7,29 @@ using System.Threading.Tasks;
 
 namespace EMS.Storage.DB.Models
 {
-    public class BcmuModel
+    public class PcsModel
     {
         /// <summary>
         /// 簇id
         /// </summary>
         [Key]
-        public int Id { set; get; }
+        public int Id { get; set; }
         /// <summary>
         /// ip地址
         /// </summary>
-        public string Ip { set; get; }
+        public string Ip { get; set; }
         /// <summary>
         /// 端口号
         /// </summary>
-        public int Port { set; get; }
+        public int Port { get; set; }
 
         /// <summary>
         /// 采集周期
         /// </summary>
-        public int AcquisitionCycle { set; get; }
+        public int AcquisitionCycle { get; set; }
 
-        public BcmuModel() { }
+        public PcsModel()
+        {
+        }
     }
 }
