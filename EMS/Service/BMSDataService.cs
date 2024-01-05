@@ -172,6 +172,7 @@ namespace EMS.Service
                 }
                 catch (Exception ex)
                 {
+                    LogUtils.Error("BMS相关报错", ex);
                     break;
                 }
             }
