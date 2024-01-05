@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using EMS.Model;
+using EMS.Service;
+using EMS.Service.impl;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
@@ -296,6 +298,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         public RelayCommand TimeCollatingCommand { get; private set; }
         public RelayCommand DevDataPointConfigCommand { get; private set; }
 
+        public SystemSettingService SystemSettingService { get; set; }
+
         #endregion
 
         public System_DevSetterPageModel()
@@ -306,11 +310,17 @@ namespace EMS.ViewModel.NewEMSViewModel
             SmartMeterConfigCommand = new RelayCommand(SmartMeterConfig);
             TimeCollatingCommand = new RelayCommand(TimeCollating);
             DevDataPointConfigCommand = new RelayCommand(DevDataPointConfig);
+            SystemSettingService = new SystemSettingService();
         }
 
         private void BMSConfig()
         {
-
+            SystemSettingService.AddBcmu("1", _ip_BCMU1, _port_BCMU1, _acquisitionCycle_BCMU1);
+            SystemSettingService.AddBcmu("2", _ip_BCMU2, _port_BCMU2, _acquisitionCycle_BCMU2);
+            SystemSettingService.AddBcmu("3", _ip_BCMU3, _port_BCMU3, _acquisitionCycle_BCMU3);
+            SystemSettingService.AddBcmu("4", _ip_BCMU4, _port_BCMU4, _acquisitionCycle_BCMU4);
+            SystemSettingService.AddBcmu("5", _ip_BCMU5, _port_BCMU5, _acquisitionCycle_BCMU5);
+            SystemSettingService.AddBcmu("6", _ip_BCMU6, _port_BCMU6, _acquisitionCycle_BCMU6);
         }
 
         private void PCSConfig()
