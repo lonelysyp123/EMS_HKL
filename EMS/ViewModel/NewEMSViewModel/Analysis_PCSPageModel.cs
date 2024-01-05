@@ -147,16 +147,15 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public Analysis_PCSPageModel()
         {
-
-            QueryCommand = new RelayCommand(Query);
-            ExportCommand = new RelayCommand(Export);
-            DisplayDataModel = new PlotModel();
-            DisplayDataList = new List<List<double[]>>();
-            TimeList = new List<DateTime[]>();
             StartTime1 = DateTime.Today.ToString();
             EndTime1 = DateTime.Today.ToString();
             StartTime2 = "00:00:00";
             EndTime2 = "00:00:00";
+            TimeList = new List<DateTime[]>();
+            ExportCommand = new RelayCommand(Export);
+            QueryCommand = new RelayCommand(Query);
+            DisplayDataModel = new PlotModel();
+            DisplayDataList = new List<List<double[]>>();
             SelectedBatteryList = new List<string>();
             DataTypeList_SelectionChanged = new RelayCommand(SwitchBatteryData);
 

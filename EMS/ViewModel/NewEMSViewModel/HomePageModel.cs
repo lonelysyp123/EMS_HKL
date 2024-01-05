@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using TNCN.EMS.Api;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
@@ -171,8 +172,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 储存装机功率
         /// </summary>
-        private string installedPower;
-        public string InstalledPower
+        private double installedPower;
+        public double InstalledPower
         {
             get { return installedPower; }
             set
@@ -184,8 +185,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 储能容量
         /// </summary>
-        private string energyStorageCapacity;
-        public string EnergyStorageCapacity
+        private double energyStorageCapacity;
+        public double EnergyStorageCapacity
         {
             get { return energyStorageCapacity; }
             set
@@ -197,8 +198,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 总SOC
         /// </summary>
-        private string totalSOC;
-        public string TotalSOC
+        private double totalSOC;
+        public double TotalSOC
         {
             get { return totalSOC; }
             set
@@ -210,8 +211,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 总SOH
         /// </summary>
-        private string totalSOH;
-        public string TotalSOH
+        private double totalSOH;
+        public double TotalSOH
         {
             get { return totalSOH; }
             set
@@ -223,8 +224,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 今日充电量
         /// </summary>
-        private string chargingCapacity;
-        public string ChargingCapacity
+        private double chargingCapacity;
+        public double ChargingCapacity
         {
             get { return chargingCapacity; }
             set
@@ -236,8 +237,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 今日放电量
         /// </summary>
-        private string dischargeCapacity;
-        public string DischargeCapacity
+        private double dischargeCapacity;
+        public double DischargeCapacity
         {
             get { return dischargeCapacity; }
             set
@@ -249,8 +250,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 累计充电量
         /// </summary>
-        private string dcBranch1Char;
-        public string DcBranch1Char
+        private double dcBranch1Char;
+        public double DcBranch1Char
         {
             get { return dcBranch1Char; }
             set
@@ -262,8 +263,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 累计放电量
         /// </summary>
-        private string dcBranch1DisChar;
-        public string DcBranch1DisChar
+        private double dcBranch1DisChar;
+        public double DcBranch1DisChar
         {
             get { return dcBranch1DisChar; }
             set
@@ -275,8 +276,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 当前功率
         /// </summary>
-        private string currentPower;
-        public string CurrentPower
+        private double currentPower;
+        public double CurrentPower
         {
             get { return currentPower; }
             set
@@ -288,8 +289,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 电站功率
         /// </summary>
-        private string stationPower;
-        public string StationPower
+        private double stationPower;
+        public double StationPower
         {
             get { return stationPower; }
             set
@@ -301,8 +302,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 直流电压
         /// </summary>
-        private string dcBranch1DCVol;
-        public string DcBranch1DCVol
+        private double dcBranch1DCVol;
+        public double DcBranch1DCVol
         {
             get { return dcBranch1DCVol; }
             set
@@ -314,8 +315,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 直流电流
         /// </summary>
-        private string dcBranch1DCCur;
-        public string DcBranch1DCCur
+        private double dcBranch1DCCur;
+        public double DcBranch1DCCur
         {
             get { return dcBranch1DCCur; }
             set
@@ -327,8 +328,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 直流功率
         /// </summary>
-        private string dcBranch1DCPower;
-        public string DcBranch1DCPower
+        private double dcBranch1DCPower;
+        public double DcBranch1DCPower
         {
             get { return dcBranch1DCPower; }
             set
@@ -346,48 +347,67 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /// <summary>
-        /// 首页数据展示
+        /// BMS数据展示
         /// </summary>
         /// <param name="model"></param>
-        public void DataDisPlay(BatteryTotalModel bmsmodel,PCSMonitorModel pcsmodel, SmartMeterModel smartmetermodel)
+        public void DataDisPlayBMS(BatteryTotalModel bmsmodel)
         {
-            DcBranch1DCVol = pcsmodel.DcBranch1DCVol.ToString();
-            DcBranch1DCCur = pcsmodel.DcBranch1DCCur.ToString();
-            DcBranch1DCPower = pcsmodel.DcBranch1DCPower.ToString();
-            DcBranch1Char = pcsmodel.DcBranch1Char.ToString();
-            DcBranch1DisChar = pcsmodel.DcBranch1DisChar.ToString();
-
+            //StateFill_Normal：正常
+            //StateFill_Offline：离线
+            //StateFill_Warn：预警
+            //StateFill_MinorFaults：轻故障
+            //StateFill_HeavyFaults：重故障
+            //StateFill_CrisisFaults：危机故障
+            //StateFill_BMSRun：BMS运行
+            //EnergyStorageCapacity：储能容量
+            //TotalSOC：总SOC
+            //TotalSOH：总SOH
+            //StartStopState：启停状态
+            //FaultState：故障状态
         }
 
+        /// <summary>
+        /// PCS数据展示
+        /// </summary>
+        /// <param name="bmsmodel"></param>
+        /// <param name="pcsmodel"></param>
+        /// <param name="smartmetermodel"></param>
+        public void DataDisPlayPCS(PCSMonitorModel pcsmodel)
+        {
+            DcBranch1DCVol = pcsmodel.DcBranch1DCVol;
+            DcBranch1DCCur = pcsmodel.DcBranch1DCCur;
+            DcBranch1DCPower = pcsmodel.DcBranch1DCPower;
+            DcBranch1Char = pcsmodel.DcBranch1Char;
+            DcBranch1DisChar = pcsmodel.DcBranch1DisChar;
+            //StateFill_PCSRun：PCS运行
+            //InstalledPower：储存装机功率
+            //ChargingCapacity：今日充电量
+            //DischargeCapacity：今日放电量
+            //CurrentPower：当前功率
+            //StationPower：电站功率
+        }
 
-        //运行状态
-        //StateFill_Normal
-        //StateFill_Offline
-        //StateFill_Warn
-        //StateFill_MinorFaults
-        //StateFill_HeavyFaults
-        //StateFill_CrisisFaults
-        //StateFill_CloudTelecom
-        //StateFill_BMSRun
-        //StateFill_PCSRun
-        //StateFill_AmmeterRun
+        /// <summary>
+        /// 电表数据展示
+        /// </summary>
+        /// <param name="smartmetermodel"></param>
+        public void DataDisPlaySmartMeter(SmartMeterModel smartmetermodel)
+        {
+            //StateFill_AmmeterRun：电表运行
+        }
 
-        //台账信息
-        //InstalledPower
-        //EnergyStorageCapacity
-        //TotalSOC
-        //TotalSOH
-
-        //系统概况
-        //ChargingCapacity
-        //DischargeCapacity
-        //CurrentPower
-        //StationPower
-
-        //状态
-        //StartStopState
-        //FaultState
-
-
+        /// <summary>
+        /// 云端数据展示
+        /// </summary>
+        public void DataDisPlayCloud()
+        {
+            MqttClientApi MqttClient = new MqttClientApi();
+            //StateFill_CloudTelecom = MqttClientApi.IsConnected;
+            if (MqttClientApi.IsConnected)
+            {
+                StateFill_CloudTelecom= Open_Green
+                StateFill_CloudTelecom = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
+            }
+        }
     }
 }

@@ -62,7 +62,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             Strategy_AnalysisPageModel = new Strategy_AnalysisPageModel();
             //Strategy_ProtectSetterPageModel = new Strategy_ProtectSetterPageModel();
             Strategy_SetterPageModel = new Strategy_SetterPageModel();
-            //System_DevInfoPageModel = new System_DevInfoPageModel();
+            System_DevInfoPageModel = new System_DevInfoPageModel();
             System_DevSetterPageModel = new System_DevSetterPageModel();
             System_MqttSetterPageModel = new System_MqttSetterPageModel();
         }
@@ -92,7 +92,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             else if (service.ID == "BCMU5") index = 5;
             else if (service.ID == "BCMU6") index = 6;
 
-            //Monitor_BMSPageModel.bmuViewModels[index - 1].StateRefresh(isConnected, isDaqData);
+            //Monitor_BMSPageModel.bmuViewModels[index - 1].DataDistribution();
         }
     }
 }
