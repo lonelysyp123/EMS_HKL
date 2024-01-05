@@ -351,7 +351,7 @@
             </Border>
         </Grid>
         <!--电表-->
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="2" x:Name="SmartMeterGrid">
             <Border Background="white"
                     Margin="20,15,0,0"
                     Padding="20,15"
@@ -384,6 +384,7 @@
                                    Foreground="Black"
                                    ItemsSource="{Binding CommPorts}"
                                    SelectedItem="{Binding SelectedCommPort}"
+                                   DisplayMemberPath="DeviceID"
                                    BorderThickness="1,1,1,1">
                         </ComboBox>
                     </StackPanel>
@@ -400,6 +401,7 @@
                                    Foreground="Black"
                                    ItemsSource="{Binding BaudRates}"
                                    SelectedItem="{Binding SelectedBaudRate}"
+                                   DisplayMemberPath="BaudRateName"
                                    BorderThickness="1,1,1,1">
                         </ComboBox>
                     </StackPanel>
@@ -432,6 +434,7 @@
                                    Foreground="Black"
                                    ItemsSource="{Binding StopBitsList}"
                                    SelectedItem="{Binding SelectedStopBits}"
+                                   DisplayMemberPath="StopBitsName"
                                    BorderThickness="1,1,1,1">
                         </ComboBox>
                     </StackPanel>
@@ -448,6 +451,7 @@
                                    Foreground="Black"
                                    ItemsSource="{Binding Parities}"
                                    SelectedItem="{Binding SelectedParity}"
+                                   DisplayMemberPath="ParityName"
                                    BorderThickness="1,1,1,1">
                         </ComboBox>
                     </StackPanel>
