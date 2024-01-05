@@ -1003,6 +1003,7 @@
                             </StackPanel>
                             <StackPanel x:Name="BMU_Battery"
                                         Grid.Row="1"
+                                        Grid.Column="0"
                                         Style="{StaticResource ContentPanel}">
                             </StackPanel>
                         </Grid>
