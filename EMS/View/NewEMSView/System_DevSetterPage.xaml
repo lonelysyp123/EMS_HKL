@@ -472,7 +472,7 @@
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
                                 IsEnabled="{Binding IsEnabled_Ammeter}"
-                                Command="{Binding Command_Ammeter}" />
+                                Command="{Binding SmartMeterConfigCommand}" />
                     </StackPanel>
                 </Grid>
             </Border>
