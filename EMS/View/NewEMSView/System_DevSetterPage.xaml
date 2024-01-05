@@ -345,7 +345,7 @@
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
                                 IsEnabled="{Binding IsEnabled_PCS}"
-                                Command="{Binding Command_PCS}" />
+                                Command="{Binding PCSConfigCommand}" />
                     </StackPanel>
                 </Grid>
             </Border>
