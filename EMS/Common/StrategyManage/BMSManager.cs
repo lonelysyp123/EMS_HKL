@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace EMS.Common.StrategyManage
 {
-    public class BMSDevManager
+    public class BMSManager
     {
         private List<BMSDataService> bmsDataServices;
         public List<BMSDataService> BMSDataServices { get; private set; } //封装，不能set
 
-        public BMSDevManager()
+        public BMSManager()
         {
             BMSDataServices = new List<BMSDataService>();
         }
