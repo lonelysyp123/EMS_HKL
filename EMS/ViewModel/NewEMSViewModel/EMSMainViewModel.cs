@@ -29,7 +29,7 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public BMSDataService[] bmsServices { get; private set; }
         public SmartMeterDataService[] smServices { get; private set; }
-        //public PCSDataService[] pcsServices { get; private set; }
+        public PCSDataService[] pcsServices { get; private set; }
 
         private static int BCMUCount = 6;
         private static int PCSCount = 1;
@@ -37,12 +37,21 @@ namespace EMS.ViewModel.NewEMSViewModel
         public EMSMainViewModel()
         {
             bmsServices = new BMSDataService[BCMUCount];
-            for (int i = 0; i < bmsServices.Length; i++)
+            for (int i = 0; i < 1; i++)
             {
                 bmsServices[i] = new BMSDataService();
-                bmsServices[i].RegisterState(ServiceDataCallBack);
-                bmsServices[i].RegisterState(OnChangeState);
+                bmsServices[i].RegisterState(DataCallBack);
+                bmsServices[i].RegisterState(StateCallBack);
             }
+
+            pcsServices = new PCSDataService[PCSCount];
+            for (int i = 0; i < pcsServices.Length; i++)
+            {
+                pcsServices[i] = new PCSDataService();
+                //pcsServices[i].RegisterState();
+                //pcsServices[i].RegisterState();
+            }
+
             smServices = new SmartMeterDataService[SmartMeterCount];
             for(int i = 0;i < SmartMeterCount;i++)
             {
@@ -60,14 +69,14 @@ namespace EMS.ViewModel.NewEMSViewModel
             Analysis_SmartMeterPageModel = new Analysis_SmartMeterPageModel();
             FaultLogPageModel = new FaultLogPageModel();
             Strategy_AnalysisPageModel = new Strategy_AnalysisPageModel();
-            //Strategy_ProtectSetterPageModel = new Strategy_ProtectSetterPageModel();
+            Strategy_ProtectSetterPageModel = new Strategy_ProtectSetterPageModel();
             Strategy_SetterPageModel = new Strategy_SetterPageModel();
             System_DevInfoPageModel = new System_DevInfoPageModel();
             System_DevSetterPageModel = new System_DevSetterPageModel();
             System_MqttSetterPageModel = new System_MqttSetterPageModel();
         }
 
-        private void ServiceDataCallBack(object sender, BatteryTotalModel model)
+        private void DataCallBack(object sender, object model)
         {
             var service = sender as BMSDataService;
             int index = -1;
@@ -78,10 +87,10 @@ namespace EMS.ViewModel.NewEMSViewModel
             else if (service.ID == "BCMU5") index = 5;
             else if (service.ID == "BCMU6") index = 6;
 
-            Monitor_BMSPageModel.bmuViewModels[index - 1].DataDistribution(model);
+            Monitor_BMSPageModel.bmuViewModels[index - 1].DataDistribution(model as BatteryTotalModel);
         }
 
-        private void OnChangeState(object sender, bool isConnected, bool isDaqData)
+        private void StateCallBack(object sender, bool isConnected, bool isDaqData)
         {
             var service = sender as BMSDataService;
             int index = -1;
@@ -92,7 +101,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             else if (service.ID == "BCMU5") index = 5;
             else if (service.ID == "BCMU6") index = 6;
 
-            //Monitor_BMSPageModel.bmuViewModels[index - 1].DataDistribution();
+            Monitor_BMSPageModel.bmuViewModels[index - 1].StateDistribution(isConnected, isDaqData);
         }
     }
 }
