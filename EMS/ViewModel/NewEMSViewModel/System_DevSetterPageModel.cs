@@ -2,6 +2,7 @@
 using EMS.Model;
 using EMS.Service;
 using EMS.Service.impl;
+using EMS.Storage.DB.Models;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
@@ -310,44 +311,76 @@ namespace EMS.ViewModel.NewEMSViewModel
             TimeCollatingCommand = new RelayCommand(TimeCollating);
             DevDataPointConfigCommand = new RelayCommand(DevDataPointConfig);
             SystemSettingService = new SystemSettingService();
-            var items = SystemSettingService.GetBcmu();
-            for (int i = 0; i < items.Count; i++)
+            InitBMS();
+            InitPcs();
+        }
+
+        private void InitPcs() 
+        {
+            List<PcsModel> pcsModels = SystemSettingService.GetPcsList();
+            if (pcsModels != null && pcsModels.Count > 0) 
             {
-                if (items[i].Id.ToString() == "1")
-                {
-                    _ip_BCMU1 = items[i].Ip;
-                    _port_BCMU1 = items[i].Port;
-                    _acquisitionCycle_BCMU1 = items[i].AcquisitionCycle;
+                PcsModel pcsModel = pcsModels.Find(item => item.Id == 1);
+                if (pcsModel != null) 
+                { 
+                    Ip_PCS = pcsModel.Ip;
+                    Port_PCS = pcsModel.Port;
+                    AcquisitionCycle_PCS = pcsModel.AcquisitionCycle;
                 }
-                else if (items[i].Id.ToString() == "2")
+            }
+        }
+
+        private void InitBMS() 
+        {
+            List<BcmuModel> bcmuModels = SystemSettingService.GetBcmuList();
+            if (bcmuModels != null && bcmuModels.Count > 0)
+            {
+                BcmuModel bcmuModel1 = bcmuModels.Find(item => item.Id == 1);
+                if (bcmuModel1 != null)
                 {
-                    _ip_BCMU2 = items[i].Ip;
-                    _port_BCMU2 = items[i].Port;
-                    _acquisitionCycle_BCMU2 = items[i].AcquisitionCycle;
+                    Ip_BCMU1 = bcmuModel1.Ip;
+                    Port_BCMU1 = bcmuModel1.Port;
+                    AcquisitionCycle_BCMU1 = bcmuModel1.AcquisitionCycle;
                 }
-                else if (items[i].Id.ToString() == "3")
+
+                BcmuModel bcmuModel2 = bcmuModels.Find(item => item.Id == 2);
+                if (bcmuModel2 != null)
                 {
-                    _ip_BCMU3 = items[i].Ip;
-                    _port_BCMU3 = items[i].Port;
-                    _acquisitionCycle_BCMU3 = items[i].AcquisitionCycle;
+                    Ip_BCMU2 = bcmuModel2.Ip;
+                    Port_BCMU2 = bcmuModel2.Port;
+                    AcquisitionCycle_BCMU2 = bcmuModel2.AcquisitionCycle;
                 }
-                else if (items[i].Id.ToString() == "4")
+
+                BcmuModel bcmuModel3 = bcmuModels.Find(item => item.Id == 3);
+                if (bcmuModel3 != null)
                 {
-                    _ip_BCMU4 = items[i].Ip;
-                    _port_BCMU4 = items[i].Port;
-                    _acquisitionCycle_BCMU4 = items[i].AcquisitionCycle;
+                    Ip_BCMU3 = bcmuModel3.Ip;
+                    Port_BCMU3 = bcmuModel3.Port;
+                    AcquisitionCycle_BCMU3 = bcmuModel3.AcquisitionCycle;
                 }
-                else if (items[i].Id.ToString() == "5")
+
+                BcmuModel bcmuModel4 = bcmuModels.Find(item => item.Id == 4);
+                if (bcmuModel4 != null)
                 {
-                    _ip_BCMU5 = items[i].Ip;
-                    _port_BCMU5 = items[i].Port;
-                    _acquisitionCycle_BCMU5 = items[i].AcquisitionCycle;
+                    Ip_BCMU4 = bcmuModel4.Ip;
+                    Port_BCMU4 = bcmuModel4.Port;
+                    AcquisitionCycle_BCMU4 = bcmuModel4.AcquisitionCycle;
                 }
-                else if (items[i].Id.ToString() == "6")
+
+                BcmuModel bcmuModel5 = bcmuModels.Find(item => item.Id == 5);
+                if (bcmuModel5 != null)
                 {
-                    _ip_BCMU6 = items[i].Ip;
-                    _port_BCMU6 = items[i].Port;
-                    _acquisitionCycle_BCMU6 = items[i].AcquisitionCycle;
+                    Ip_BCMU5 = bcmuModel5.Ip;
+                    Port_BCMU5 = bcmuModel5.Port;
+                    AcquisitionCycle_BCMU5 = bcmuModel5.AcquisitionCycle;
+                }
+
+                BcmuModel bcmuModel6 = bcmuModels.Find(item => item.Id == 6);
+                if (bcmuModel6 != null)
+                {
+                    Ip_BCMU6 = bcmuModel6.Ip;
+                    Port_BCMU6 = bcmuModel6.Port;
+                    AcquisitionCycle_BCMU6 = bcmuModel6.AcquisitionCycle;
                 }
             }
         }

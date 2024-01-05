@@ -11,6 +11,11 @@ namespace EMS.Service.impl
     public class SystemSettingService
     {
         public SystemSettingService() { }
+
+        public List<BcmuModel> GetBcmuList() {
+            BcmuManage bcmuManage = new BcmuManage();
+            return bcmuManage.Get();
+        }
         public bool AddBcmu(int id, string ip, int port, int acquisitionCycle) {
             try
             {
@@ -43,6 +48,12 @@ namespace EMS.Service.impl
             }
 
             return true;
+        }
+
+        public List<PcsModel> GetPcsList()
+        {
+            PcsManage pcsManage = new PcsManage();
+            return pcsManage.Get();
         }
 
         public bool AddPcs(int id, string ip, int port, int acquisitionCycle) {
