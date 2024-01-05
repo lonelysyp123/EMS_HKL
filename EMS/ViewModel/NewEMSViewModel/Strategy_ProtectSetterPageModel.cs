@@ -560,7 +560,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         private BMSDataService bmsDataService;
         //private PCSDataService pcsDataService;
 
-        public Strategy_ProtectSetterPageModel(BMSDataService bmsDataService/*, PCSDataService pcsDataService*/)
+        public Strategy_ProtectSetterPageModel()
         {
             ReadDBInfoCommand = new RelayCommand(ReadDBInfo);
             ReadBCMUInfoCommand = new RelayCommand(ReadBCMUInfo);
@@ -569,9 +569,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             SyncBUSVolInfoCommand = new RelayCommand(SyncBUSVolInfo);
             ReadDCBranchInfoCommand = new RelayCommand(ReadDCBranchInfo);
             SyncDCBranchInfoCommand = new RelayCommand(SyncDCBranchInfo);
-
-            this.bmsDataService = bmsDataService;
-            //this.pcsDataService = pcsDataService;
         }
 
         private void ReadDBInfo()

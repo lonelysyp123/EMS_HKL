@@ -299,9 +299,9 @@ namespace EMS.ViewModel.NewEMSViewModel
         public RelayCommand TimeCollatingCommand { get; private set; }
         public RelayCommand DevDataPointConfigCommand { get; private set; }
 
-        public SystemSettingService SystemSettingService { get; set; }
-
         #endregion
+
+        public SystemSettingService SystemSettingService { get; set; }
 
         public System_DevSetterPageModel()
         {
@@ -311,16 +311,18 @@ namespace EMS.ViewModel.NewEMSViewModel
             TimeCollatingCommand = new RelayCommand(TimeCollating);
             DevDataPointConfigCommand = new RelayCommand(DevDataPointConfig);
             SystemSettingService = new SystemSettingService();
-
             InitBMS();
             InitPcs();
         }
 
-        private void InitPcs() {
+        private void InitPcs() 
+        {
             List<PcsModel> pcsModels = SystemSettingService.GetPcsList();
-            if (pcsModels != null && pcsModels.Count > 0) {
+            if (pcsModels != null && pcsModels.Count > 0) 
+            {
                 PcsModel pcsModel = pcsModels.Find(item => item.Id == 1);
-                if (pcsModel != null) { 
+                if (pcsModel != null) 
+                { 
                     Ip_PCS = pcsModel.Ip;
                     Port_PCS = pcsModel.Port;
                     AcquisitionCycle_PCS = pcsModel.AcquisitionCycle;
@@ -328,7 +330,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private void InitBMS() {
+        private void InitBMS() 
+        {
             List<BcmuModel> bcmuModels = SystemSettingService.GetBcmuList();
             if (bcmuModels != null && bcmuModels.Count > 0)
             {
@@ -379,7 +382,6 @@ namespace EMS.ViewModel.NewEMSViewModel
                     Port_BCMU6 = bcmuModel6.Port;
                     AcquisitionCycle_BCMU6 = bcmuModel6.AcquisitionCycle;
                 }
-
             }
         }
 

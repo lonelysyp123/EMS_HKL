@@ -1095,7 +1095,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string selectedCluster;
+        private string selectedCluster = "A";
         public string SelectedCluster
         {
             get { return selectedCluster; }
@@ -1173,7 +1173,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             MinCellVoltage = model.MinVoltage.ToString();
             MaxTemperature = model.MaxTemperature.ToString();
             MaxCellVoltageIndex = model.MaxTemperatureIndex.ToString();
-           MinCellVoltageIndex = model.MinTemperatureIndex.ToString();
+            MinCellVoltageIndex = model.MinTemperatureIndex.ToString();
             MaxTemperatureIndex = model.MaxTemperatureIndex.ToString();
             MinTemperatureIndex = model.MinTemperatureIndex.ToString();
             RatedBatteryNumber = model.BatteryCount.ToString();
@@ -1190,7 +1190,18 @@ namespace EMS.ViewModel.NewEMSViewModel
             BMUInfo(model);
         }
 
-       
+        public void StateDistribution(bool isconnected, bool isdaqdata)
+        {
+            if (isconnected) 
+            { 
+
+            }
+
+            if (isdaqdata)
+            {
+
+            }
+        }
 
 
         private void ToMonitor_BMS_BCMUPage()
