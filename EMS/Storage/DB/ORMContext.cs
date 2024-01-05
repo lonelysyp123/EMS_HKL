@@ -37,6 +37,11 @@ namespace EMS.Storage.DB
         }
 
         /// <summary>
+        /// MQTT
+        /// </summary>
+        public DbSet<MqttModel> MqttModels { get; set; }
+
+        /// <summary>
         /// PCS
         /// </summary>
         public DbSet<PcsModel> PcsModels { get; set; }
