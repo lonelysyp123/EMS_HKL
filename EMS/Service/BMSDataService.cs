@@ -90,9 +90,13 @@ namespace EMS.Service
                     var items = bmsConfigInfo.Get();
                     if (items != null && items.Count > 0)
                     {
-                        var item = items.Find(x => x.BcmuId == ID);
-                        IP = item.Ip == null ? "" : item.Ip;
-                        Port = item.Port;
+                        var item = items.Find(x => x.Id.ToString() == ID);
+                        if (item != null)
+                        {
+                            IP = item.Ip == null ? "" : item.Ip;
+                            Port = item.Port;
+                            DaqTimeSpan = item.AcquisitionCycle;
+                        }
                     }
 
                     // 创建一个线程去链接设备，直到设备链接成功，退出线程，并开始采集
@@ -139,12 +143,7 @@ namespace EMS.Service
             }
         }
 
-        private int DaqTimeSpan = 1;
-        public void SetDaqTimeSpan(int value)
-        {
-            DaqTimeSpan = value;
-        }
-
+        private int DaqTimeSpan = 0;
         //public BlockingCollection<BatteryTotalModel> BatteryTotalModels;
         private static object Locker;
         public BatteryTotalModel CurrentBatteryTotalModel;
@@ -154,7 +153,7 @@ namespace EMS.Service
             {
                 try
                 {
-                    Thread.Sleep(DaqTimeSpan * 1000);
+                    Thread.Sleep(DaqTimeSpan * 1000 + 100);
 
                     byte[] BCMUData = new byte[90];
                     Array.Copy(ReadFunc(11000, 45), 0, BCMUData, 0, 90);

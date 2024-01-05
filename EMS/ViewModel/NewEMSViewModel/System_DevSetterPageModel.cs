@@ -313,37 +313,37 @@ namespace EMS.ViewModel.NewEMSViewModel
             var items = SystemSettingService.GetBcmu();
             for (int i = 0; i < items.Count; i++)
             {
-                if (items[i].BcmuId == "1")
+                if (items[i].Id.ToString() == "1")
                 {
                     _ip_BCMU1 = items[i].Ip;
                     _port_BCMU1 = items[i].Port;
                     _acquisitionCycle_BCMU1 = items[i].AcquisitionCycle;
                 }
-                else if (items[i].BcmuId == "2")
+                else if (items[i].Id.ToString() == "2")
                 {
                     _ip_BCMU2 = items[i].Ip;
                     _port_BCMU2 = items[i].Port;
                     _acquisitionCycle_BCMU2 = items[i].AcquisitionCycle;
                 }
-                else if (items[i].BcmuId == "3")
+                else if (items[i].Id.ToString() == "3")
                 {
                     _ip_BCMU3 = items[i].Ip;
                     _port_BCMU3 = items[i].Port;
                     _acquisitionCycle_BCMU3 = items[i].AcquisitionCycle;
                 }
-                else if (items[i].BcmuId == "4")
+                else if (items[i].Id.ToString() == "4")
                 {
                     _ip_BCMU4 = items[i].Ip;
                     _port_BCMU4 = items[i].Port;
                     _acquisitionCycle_BCMU4 = items[i].AcquisitionCycle;
                 }
-                else if (items[i].BcmuId == "5")
+                else if (items[i].Id.ToString() == "5")
                 {
                     _ip_BCMU5 = items[i].Ip;
                     _port_BCMU5 = items[i].Port;
                     _acquisitionCycle_BCMU5 = items[i].AcquisitionCycle;
                 }
-                else if (items[i].BcmuId == "6")
+                else if (items[i].Id.ToString() == "6")
                 {
                     _ip_BCMU6 = items[i].Ip;
                     _port_BCMU6 = items[i].Port;
