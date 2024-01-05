@@ -418,17 +418,17 @@ namespace EMS.ViewModel.NewEMSViewModel
 
     public class Configuaration
     {
-        public List<SerialPortSettingsModel> CommPorts { get; private set; }
+        public List<SerialPortSettingsModel> CommPorts { get; set; }
         public string SelectedCommPort { get; set; }
-        public List<SerialPortSettingsModel> BaudRates { get; private set; }
+        public List<SerialPortSettingsModel> BaudRates { get; set; }
         public int SelectedBaudRate { get; set; }
-        public List<SerialPortSettingsModel> Parities { get; private set; }
+        public List<SerialPortSettingsModel> Parities { get; set; }
         public Parity SelectedParity { get; set; }
-        public List<SerialPortSettingsModel> StopBitsList { get; private set; }
+        public List<SerialPortSettingsModel> StopBitsList { get; set; }
         public StopBits SelectedStopBits { get; set; }
-        public int[] DataBits { get; private set; }
+        public int[] DataBits { get; set; }
         public int SelectedDataBits { get; set; }
-        public int AcquisitionCycle_Ammeter {  get; private set; }
+        public int AcquisitionCycle_Ammeter {  get; set; }
 
         public Configuaration()
         {
