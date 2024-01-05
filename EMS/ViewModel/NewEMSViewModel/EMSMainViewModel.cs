@@ -37,9 +37,9 @@ namespace EMS.ViewModel.NewEMSViewModel
         public EMSMainViewModel()
         {
             bmsServices = new BMSDataService[BCMUCount];
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < BCMUCount; i++)
             {
-                bmsServices[i] = new BMSDataService();
+                bmsServices[i] = new BMSDataService((i+1).ToString());
                 bmsServices[i].RegisterState(DataCallBack);
                 bmsServices[i].RegisterState(StateCallBack);
             }
@@ -80,12 +80,12 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             var service = sender as BMSDataService;
             int index = -1;
-            if (service.ID == "BCMU1") index = 1;
-            else if (service.ID == "BCMU2") index = 2;
-            else if (service.ID == "BCMU3") index = 3;
-            else if (service.ID == "BCMU4") index = 4;
-            else if (service.ID == "BCMU5") index = 5;
-            else if (service.ID == "BCMU6") index = 6;
+            if (service.ID == "1") index = 1;
+            else if (service.ID == "2") index = 2;
+            else if (service.ID == "3") index = 3;
+            else if (service.ID == "4") index = 4;
+            else if (service.ID == "5") index = 5;
+            else if (service.ID == "6") index = 6;
 
             Monitor_BMSPageModel.bmuViewModels[index - 1].DataDistribution(model as BatteryTotalModel);
         }
@@ -94,12 +94,12 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             var service = sender as BMSDataService;
             int index = -1;
-            if (service.ID == "BCMU1") index = 1;
-            else if (service.ID == "BCMU2") index = 2;
-            else if (service.ID == "BCMU3") index = 3;
-            else if (service.ID == "BCMU4") index = 4;
-            else if (service.ID == "BCMU5") index = 5;
-            else if (service.ID == "BCMU6") index = 6;
+            if (service.ID == "1") index = 1;
+            else if (service.ID == "2") index = 2;
+            else if (service.ID == "3") index = 3;
+            else if (service.ID == "4") index = 4;
+            else if (service.ID == "5") index = 5;
+            else if (service.ID == "6") index = 6;
 
             Monitor_BMSPageModel.bmuViewModels[index - 1].StateDistribution(isConnected, isDaqData);
         }

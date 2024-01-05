@@ -32,30 +32,10 @@ namespace EMS.View.NewEMSView
 
         }
 
-
-        private Page CurrentPage
-        {
-            get => PageContent.Content as Page;
-            set
-            {
-                if(PageContent.Content != null)
-                {
-                    if ((PageContent.Content as Page).GetType() != value.GetType())
-                    {
-                        PageContent.Content = value;
-                    }
-                }
-                else
-                {
-                    PageContent.Content = value;
-                }
-            }
-        }
-
         private void Navigation(Page page, ToggleButton button, ToggleButton parent = null, ToggleButton grandpa = null)
         {
             UnCheckedOperation(button, parent, grandpa);
-            CurrentPage = page;
+            PageContent.Content = page;
         }
 
         private void UnCheckedOperation(ToggleButton button, ToggleButton parent = null, ToggleButton grandpa = null)

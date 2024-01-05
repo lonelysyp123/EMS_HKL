@@ -457,8 +457,7 @@
         <!--4、页面部分-->
         <Grid Grid.Row="1"
               Grid.Column="1">
-            <Frame x:Name="PageContent"
-                   NavigationUIVisibility="Hidden" Content="{Binding CurrentPage}"></Frame>
+            <Frame x:Name="PageContent" NavigationUIVisibility="Hidden"></Frame>
         </Grid>
     </Grid>
 </Window>

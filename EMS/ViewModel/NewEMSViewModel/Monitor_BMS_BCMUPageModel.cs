@@ -1095,7 +1095,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string selectedCluster;
+        private string selectedCluster = "A";
         public string SelectedCluster
         {
             get { return selectedCluster; }

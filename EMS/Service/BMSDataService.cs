@@ -1,6 +1,8 @@
 ﻿using EMS.Common;
 using EMS.Common.Modbus.ModbusTCP;
 using EMS.Model;
+using EMS.Storage.DB.DBManage;
+using EMS.Storage.DB.Models;
 using Modbus.Device;
 using OxyPlot.Series;
 using System;
@@ -63,6 +65,13 @@ namespace EMS.Service
             StartDataService();
         }
 
+        public BMSDataService(string id)
+        {
+            ID = id;
+            Locker = new object();
+            StartDataService();
+        }
+
         private void StartDataService()
         {
             Thread thread = new Thread(TryConnect);
@@ -77,7 +86,14 @@ namespace EMS.Service
                 try
                 {
                     // 从数据库中获取链接信息
-                    // TODO
+                    BcmuManage bmsConfigInfo = new BcmuManage();
+                    var items = bmsConfigInfo.Get();
+                    if (items != null && items.Count > 0)
+                    {
+                        var item = items.Find(x => x.BcmuId == ID);
+                        IP = item.Ip == null ? "" : item.Ip;
+                        Port = item.Port;
+                    }
 
                     // 创建一个线程去链接设备，直到设备链接成功，退出线程，并开始采集
                     _client = new TcpClient();
@@ -85,11 +101,7 @@ namespace EMS.Service
                     _master = ModbusIpMaster.CreateIp(_client);
                     IsConnected = true;
                 }
-                catch (SocketException ex)
-                {
-                    LogUtils.Warn("BMS id:" + ID + " 连接失败", ex);
-                }
-                catch (ObjectDisposedException ex)
+                catch(Exception ex)
                 {
                     LogUtils.Warn("BMS id:" + ID + " 连接失败", ex);
                 }
@@ -159,7 +171,7 @@ namespace EMS.Service
                         OnChangeData(this, CurrentBatteryTotalModel.Clone());
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     break;
                 }
