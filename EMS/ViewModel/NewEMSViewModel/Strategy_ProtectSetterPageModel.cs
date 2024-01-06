@@ -1,10 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using EMS.Model;
 using EMS.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TNCN.EMS.Common.Mqtt;
+using Xceed.Wpf.Toolkit.Core.Converters;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
@@ -562,9 +565,14 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public Strategy_ProtectSetterPageModel(BMSDataService bmsDataService, PCSDataService pcsDataService)
         {
+            BcmuId = new List<string> { "BCMUID(1)", "BCMUID(2)", "BCMUID(3)", "BCMUID(4)", "BCMUID(5)", "BCMUID(6)" };
+
+
             ReadDBInfoCommand = new RelayCommand(ReadDBInfo);
             ReadBCMUInfoCommand = new RelayCommand(ReadBCMUInfo);
             SyncInfoCommand = new RelayCommand(SyncInfo);
+
+
             ReadBUSVolInfoCommand = new RelayCommand(ReadBUSVolInfo);
             SyncBUSVolInfoCommand = new RelayCommand(SyncBUSVolInfo);
             ReadDCBranchInfoCommand = new RelayCommand(ReadDCBranchInfo);
@@ -581,27 +589,103 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         private void ReadBCMUInfo()
         {
-            //BCMUInfoModel model = bmsService.ReadBCMUInfo();
+            BMSParameterSettingModel model = new BMSParameterSettingModel();
+            this.ClusterVolUpLimitLv1 = model.ClusterVolUpLimitLv1;
+            this.ClusterVolUpLimitLv2 = model.ClusterVolUpLimitLv2;
+            this.ClusterVolUpLimitLv3 = model.ClusterVolUpLimitLv3;
+            this.ClusterVolLowLimitLv1 = model.ClusterVolLowLimitLv1;
+            this.ClusterVolLowLimitLv2 = model.ClusterVolLowLimitLv2;
+            this.ClusterVolLowLimitLv3 = model.ClusterVolLowLimitLv3;
+            this.SingleVolUpLimitLv1 = model.SingleVolUpLimitLv1;
+            this.SingleVolUpLimitLv2 = model.SingleVolUpLimitLv2;
+            this.SingleVolUpLimitLv3 = model.SingleVolUpLimitLv3;
+            this.SingleVolLowLimitLv1 = model.SingleVolLowLimitLv1;
+            this.SingleVolLowLimitLv2 = model.SingleVolLowLimitLv2;
+            this.SingleVolLowLimitLv3 = model.SingleVolLowLimitLv3;
+            this.TempCharUpLimitLv1 = model.TempCharUpLimitLv1;
+            this.TempCharUpLimitLv2 = model.TempCharUpLimitLv2;
+            this.TempCharUpLimitLv3 = model.TempCharUpLimitLv3;
+            this.TempCharLowLimitLv1 = model.TempCharLowLimitLv1;
+            this.TempCharLowLimitLv2 = model.TempCharLowLimitLv2;
+            this.TempCharLowLimitLv3 = model.TempCharLowLimitLv3;
+            this.TempDischarUpLimitLv1 = model.TempDischarUpLimitLv1;
+            this.TempDischarUpLimitLv2 = model.TempDischarUpLimitLv2;
+            this.TempDischarUpLimitLv3 = model.TempDischarUpLimitLv3;
+            this.CurCharLv1 = model.CurCharLv1;
+            this.CurCharLv2 = model.CurCharLv2;
+            this.CurCharLv3 = model.CurCharLv3;
+            this.CurDischarLv1 = model.CurDischarLv1;
+            this.CurDischarLv2 = model.CurDischarLv2;
+            this.CurDischarLv3 = model.CurDischarLv3;
+            this.SingleVolDiffLv1 = model.SingleVolDiffLv1;
+            this.SingleVolDiffLv2 = model.SingleVolDiffLv2;
+            this.SingleVolDiffLv3 = model.SingleVolDiffLv3;
+            this.SOCLowLimitLv1 = model.SOCLowLimitLv1;
+            this.SOCLowLimitLv2 = model.SOCLowLimitLv2;
+            this.SOCLowLimitLv3 = model.SOCLowLimitLv3;
+            this.IsoRLowLimitLv1 = model.IsoRLowLimitLv1;
             //解析model
         }
 
         private void SyncInfo()
         {
-            //BCMUInfoModel model = new BCMUInfoModel();
-            //model.xxxx = this.xxxx
-            //bmsService.SyncInfo(model);
+            BMSParameterSettingModel model = new BMSParameterSettingModel();
+            model.ClusterVolUpLimitLv1 = this.ClusterVolUpLimitLv1;
+            model.ClusterVolUpLimitLv2 = this.ClusterVolUpLimitLv2;
+            model.ClusterVolUpLimitLv3 = this.ClusterVolUpLimitLv3;
+            model.ClusterVolLowLimitLv1 = this.ClusterVolLowLimitLv1;
+            model.ClusterVolLowLimitLv2 = this.ClusterVolLowLimitLv2;
+            model.ClusterVolLowLimitLv3 = this.ClusterVolLowLimitLv3;
+            model.SingleVolUpLimitLv1 = this.SingleVolUpLimitLv1;
+            model.SingleVolUpLimitLv2 = this.SingleVolUpLimitLv2;
+            model.SingleVolUpLimitLv3 = this.SingleVolUpLimitLv3;
+            model.SingleVolLowLimitLv1 = this.SingleVolLowLimitLv1;
+            model.SingleVolLowLimitLv2 = this.SingleVolLowLimitLv2;
+            model.SingleVolLowLimitLv3 = this.SingleVolLowLimitLv3;
+            model.TempCharUpLimitLv1 = this.TempCharUpLimitLv1;
+            model.TempCharUpLimitLv2 = this.TempCharUpLimitLv2;
+            model.TempCharUpLimitLv3 = this.TempCharUpLimitLv3;
+            model.TempCharLowLimitLv1 = this.TempCharLowLimitLv1;
+            model.TempCharLowLimitLv2 = this.TempCharLowLimitLv2;
+            model.TempCharLowLimitLv3 = this.TempCharLowLimitLv3;
+            model.TempDischarUpLimitLv1 = this.TempDischarUpLimitLv1;
+            model.TempDischarUpLimitLv2 = this.TempDischarUpLimitLv2;
+            model.TempDischarUpLimitLv3 = this.TempDischarUpLimitLv3;
+            model.CurCharLv1 = this.CurCharLv1;
+            model.CurCharLv2 = this.CurCharLv2;
+            model.CurCharLv3 = this.CurCharLv3;
+            model.CurDischarLv1 = this.CurDischarLv1;
+            model.CurDischarLv2 = this.CurDischarLv2;
+            model.CurDischarLv3 = this.CurDischarLv3;
+            model.SingleVolDiffLv1 = this.SingleVolDiffLv1;
+            model.SingleVolDiffLv2 = this.SingleVolDiffLv2;
+            model.SingleVolDiffLv3 = this.SingleVolDiffLv3;
+            model.SOCLowLimitLv1 = this.SOCLowLimitLv1;
+            model.SOCLowLimitLv2 = this.SOCLowLimitLv2;
+            model.SOCLowLimitLv3 = this.SOCLowLimitLv3;
+            model.IsoRLowLimitLv1 = this.IsoRLowLimitLv1;
+
+            //bmsDataService.SyncInfo(model);
         }
 
         private void ReadBUSVolInfo()
         {
-            //PCSInfoModel model = pcsService.BUSVolInfo();
+            PCSParSettingModel model = new PCSParSettingModel();
             //解析model
+            this.BUSUpperLimitVolThresh = model.BUSUpperLimitVolThresh;
+            this.BUSLowerLimitVolThresh = model.BUSLowerLimitVolThresh;
+            this.BUSHVolSetting = model.BUSHVolSetting;
+            this.BUSLVolSetting = model.BUSLVolSetting;
+
         }
 
         private void SyncBUSVolInfo()
         {
-            //PCSInfoModel model = new BUSVolInfo();
-            //model.xxxx = this.xxxx
+            PCSParSettingModel model = new PCSParSettingModel();
+            model.BUSUpperLimitVolThresh = this.BUSUpperLimitVolThresh;
+            model.BUSLowerLimitVolThresh = this.BUSLowerLimitVolThresh;
+            model.BUSHVolSetting = this.BUSHVolSetting;
+            model.BUSLVolSetting = this.BUSLVolSetting;
             //pcsService.SyncBUSVolInfo(model);
         }
 
@@ -609,6 +693,14 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             //PCSInfoModel model = pcsService.DCBranchInfo();
             //解析model
+            PCSParSettingModel model = new PCSParSettingModel();
+            this.BTLLimitVol = model.BTLLimitVol;
+            this.DischargeSTVol = model.DischargeSTVol;
+            this.MultiBranchCurRegPar = model.MultiBranchCurRegPar;
+            this.BatAveChVol = model.BatAveChVol;
+            this.ChCutCurrent = model.ChCutCurrent;
+            this.MaxChCurrent = model.MaxChCurrent;
+            this.MaxDisChCurrent = model.MaxDisChCurrent;
         }
 
         private void SyncDCBranchInfo()
@@ -616,6 +708,15 @@ namespace EMS.ViewModel.NewEMSViewModel
             //PCSInfoModel model = new DCBranchInfo();
             //model.xxxx = this.xxxx
             //pcsService.SyncDCBranchInfo(model);
+            PCSParSettingModel model = new PCSParSettingModel();
+            model.BTLLimitVol = this.BTLLimitVol;
+            model.DischargeSTVol = this.DischargeSTVol;
+            model.MultiBranchCurRegPar = this.MultiBranchCurRegPar;
+            model.BatAveChVol = this.BatAveChVol;
+            model.ChCutCurrent = this.ChCutCurrent;
+            model.MaxChCurrent = this.MaxChCurrent;
+            model.MaxDisChCurrent = this.MaxDisChCurrent;
+
         }
 
     }
