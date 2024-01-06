@@ -351,12 +351,12 @@
             </Border>
         </Grid>
         <!--电表-->
-        <Grid Grid.Row="2" x:Name="SmartMeterGrid">
+        <Grid Grid.Row="2">
             <Border Background="white"
                     Margin="20,15,0,0"
                     Padding="20,15"
                     CornerRadius="15">
-                <Grid>
+                <Grid x:Name="SmartMeterGrid">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition />
@@ -383,8 +383,9 @@
                                    Background="White"
                                    Foreground="Black"
                                    ItemsSource="{Binding CommPorts}"
-                                   SelectedItem="{Binding SelectedCommPort}"
+                                   SelectedValue="{Binding SelectedCommPort}"
                                    DisplayMemberPath="DeviceID"
+                                   SelectedValuePath="Description"
                                    BorderThickness="1,1,1,1">
                         </ComboBox>
                     </StackPanel>
@@ -400,8 +401,9 @@
                                    Background="White"
                                    Foreground="Black"
                                    ItemsSource="{Binding BaudRates}"
-                                   SelectedItem="{Binding SelectedBaudRate}"
+                                   SelectedValue="{Binding SelectedBaudRate}"
                                    DisplayMemberPath="BaudRateName"
+                                   SelectedValuePath="BaudRateValue"
                                    BorderThickness="1,1,1,1">
                         </ComboBox>
                     </StackPanel>
@@ -433,8 +435,9 @@
                                    Background="White"
                                    Foreground="Black"
                                    ItemsSource="{Binding StopBitsList}"
-                                   SelectedItem="{Binding SelectedStopBits}"
+                                   SelectedValue="{Binding SelectedStopBits}"
                                    DisplayMemberPath="StopBitsName"
+                                   SelectedValuePath="StopBitsValue"
                                    BorderThickness="1,1,1,1">
                         </ComboBox>
                     </StackPanel>
@@ -450,8 +453,9 @@
                                    Background="White"
                                    Foreground="Black"
                                    ItemsSource="{Binding Parities}"
-                                   SelectedItem="{Binding SelectedParity}"
+                                   SelectedValue="{Binding SelectedParity}"
                                    DisplayMemberPath="ParityName"
+                                   SelectedValuePath="ParityValue"
                                    BorderThickness="1,1,1,1">
                         </ComboBox>
                     </StackPanel>

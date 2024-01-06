@@ -2,6 +2,7 @@
 using EMS.Model;
 using EMS.Storage.DB.DBManage;
 using EMS.ViewModel;
+using EMS.ViewModel.NewEMSViewModel;
 using log4net.Repository.Hierarchy;
 using Modbus.Device;
 using System;
@@ -64,6 +65,7 @@ namespace EMS.Service
         {
             ID = id;
             Locker = new object();
+            Configuaration = new Configuaration();
             StartDataService();
         }
 
@@ -79,6 +81,22 @@ namespace EMS.Service
             while (!IsConnected)
             {
                 // 从数据库中获取链接信息
+                SmartMeterManage smConfigInfo = new SmartMeterManage();
+                var items = smConfigInfo.Get();
+                if (items != null && items.Count > 0)
+                {
+                    var item = items.Find(x => x.Id.ToString() == ID);
+                    if (item != null)
+                    {
+                        Configuaration.SelectedCommPort = item.SelectedCommPort;
+                        Configuaration.SelectedBaudRate = item.SelectedBaudRate;
+                        Configuaration.SelectedParity = (Parity)item.SelectedParity;
+                        Configuaration.SelectedStopBits = (StopBits)item.SelectedStopBits;
+                        Configuaration.SelectedDataBits = item.SelectedDataBits;
+                        Configuaration.AcquisitionCycle_Ammeter = item.AcquisitionCycle;
+                    }
+                }
+                
                 if (Open())
                 {
                     IsConnected = true;
