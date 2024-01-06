@@ -36,12 +36,14 @@ namespace EMS.ViewModel.NewEMSViewModel
         private static int SmartMeterCount = 1;
         public EMSMainViewModel()
         {
+            EnergyManagementSystem.Initialization(new EnergyManagementSystem());
             bmsServices = new BMSDataService[BCMUCount];
             for (int i = 0; i < BCMUCount; i++)
             {
                 bmsServices[i] = new BMSDataService((i+1).ToString());
                 bmsServices[i].RegisterState(DataCallBack_BMS);
                 bmsServices[i].RegisterState(StateCallBack_BMS);
+                EnergyManagementSystem.GlobalInstance.BMSManager.AddBMSDev(bmsServices[i]);
             }
 
             pcsService = new PCSDataService("1");
@@ -85,7 +87,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             Monitor_BMSPageModel.bmuViewModels[index - 1].DataDistribution(model as BatteryTotalModel);
         }
 
-        private void StateCallBack_BMS(object sender, bool isConnected, bool isDaqData)
+        private void StateCallBack_BMS(object sender, bool isConnected, bool isDaqData, bool isSaveData)
         {
             var service = sender as BMSDataService;
             int index = -1;
@@ -96,7 +98,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             else if (service.ID == "5") index = 5;
             else if (service.ID == "6") index = 6;
 
-            Monitor_BMSPageModel.bmuViewModels[index - 1].StateDistribution(isConnected, isDaqData);
+            Monitor_BMSPageModel.bmuViewModels[index - 1].StateDistribution(isConnected, isDaqData, isSaveData);
         }
 
         private void DataCallBack_PCS(object sender, object model)
@@ -104,9 +106,9 @@ namespace EMS.ViewModel.NewEMSViewModel
             Monitor_PCSPageModel.PCSDataDistribution(model as PCSModel);
         }
 
-        private void StateCallBack_PCS(object sender, bool isConnected, bool isDaqData)
+        private void StateCallBack_PCS(object sender, bool isConnected, bool isDaqData, bool isSaveData)
         {
-            Monitor_PCSPageModel.PCSStateDistribution(isConnected, isDaqData);
+            Monitor_PCSPageModel.PCSStateDistribution(isConnected, isDaqData, isSaveData);
         }
     }
 }

@@ -3,6 +3,7 @@ using EMS.Model;
 using EMS.Service;
 using EMS.Service.impl;
 using EMS.Storage.DB.Models;
+using OxyPlot;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
@@ -289,7 +290,75 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        public Configuaration Configuaration { get; set; }
+        public List<SerialPortSettingsModel> CommPorts { get; set; }
+
+        private string selectedCommPort;
+        public string SelectedCommPort
+        {
+            get { return selectedCommPort; }
+            set
+            {
+                SetProperty(ref selectedCommPort, value);
+            }
+        }
+
+        public List<SerialPortSettingsModel> BaudRates { get; set; }
+
+        private int selectedBaudRate;
+        public int SelectedBaudRate
+        {
+            get { return selectedBaudRate; }
+            set
+            {
+                SetProperty(ref selectedBaudRate, value);
+            }
+        }
+
+        public List<SerialPortSettingsModel> Parities { get; set; }
+
+        private Parity selectedParity;
+        public Parity SelectedParity
+        {
+            get { return selectedParity; }
+            set
+            {
+                SetProperty(ref selectedParity, value);
+            }
+        }
+
+        public List<SerialPortSettingsModel> StopBitsList { get; set; }
+
+        private StopBits selectedStopBits;
+        public StopBits SelectedStopBits
+        {
+            get { return selectedStopBits; }
+            set
+            {
+                SetProperty(ref selectedStopBits, value);
+            }
+        }
+
+        public int[] DataBits { get; set; }
+
+        private int selectedDataBits;
+        public int SelectedDataBits
+        {
+            get { return selectedDataBits; }
+            set
+            {
+                SetProperty(ref selectedDataBits, value);
+            }
+        }
+
+        private int acquisitionCycle_Ammeter;
+        public int AcquisitionCycle_Ammeter 
+        {
+            get { return acquisitionCycle_Ammeter; }
+            set
+            {
+                SetProperty(ref acquisitionCycle_Ammeter, value);
+            }
+        }
         #endregion
 
         #region Command
@@ -311,8 +380,14 @@ namespace EMS.ViewModel.NewEMSViewModel
             TimeCollatingCommand = new RelayCommand(TimeCollating);
             DevDataPointConfigCommand = new RelayCommand(DevDataPointConfig);
             SystemSettingService = new SystemSettingService();
+            CommPorts = SerialPortSettingsModel.Instance.getCommPorts();
+            BaudRates = SerialPortSettingsModel.Instance.getBaudRates();
+            Parities = SerialPortSettingsModel.Instance.getParities();
+            StopBitsList = SerialPortSettingsModel.Instance.getStopBits();
+            DataBits = new int[] { 4, 5, 6, 7, 8 };
             InitBMS();
             InitPcs();
+            InitSmartMeter();
         }
 
         private void InitPcs() 
@@ -385,6 +460,21 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
+        private void InitSmartMeter()
+        {
+            List<SmartMeterDBModel> smartMeterDBModels = SystemSettingService.GetSmartMeterList();
+            if (smartMeterDBModels != null && smartMeterDBModels.Count > 0)
+            {
+                SmartMeterDBModel smartMeterDBModel = smartMeterDBModels.Find(item => item.Id == 1);
+                SelectedCommPort = smartMeterDBModel.SelectedCommPort;
+                SelectedBaudRate = smartMeterDBModel.SelectedBaudRate;
+                SelectedStopBits = (StopBits)smartMeterDBModel.SelectedStopBits;
+                SelectedDataBits = smartMeterDBModel.SelectedDataBits;
+                selectedParity = (Parity)smartMeterDBModel.SelectedParity;
+                AcquisitionCycle_Ammeter = smartMeterDBModel.AcquisitionCycle;
+            }
+        }
+
         private void BMSConfig()
         {
             SystemSettingService.AddBcmu(1, _ip_BCMU1, _port_BCMU1, _acquisitionCycle_BCMU1);
@@ -402,12 +492,12 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         private void SmartMeterConfig()
         {
-
+            SystemSettingService.AddSmartMeter(1, SelectedCommPort, SelectedBaudRate, System.Convert.ToInt32(SelectedStopBits), SelectedDataBits, System.Convert.ToInt32(SelectedParity), AcquisitionCycle_Ammeter);
         }
 
         private void TimeCollating()
         {
-             
+            
         }
 
         private void DevDataPointConfig()
@@ -416,27 +506,18 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
     }
 
-    public class Configuaration
+    public class Configuaration 
     {
-        public List<SerialPortSettingsModel> CommPorts { get; set; }
         public string SelectedCommPort { get; set; }
-        public List<SerialPortSettingsModel> BaudRates { get; set; }
         public int SelectedBaudRate { get; set; }
-        public List<SerialPortSettingsModel> Parities { get; set; }
         public Parity SelectedParity { get; set; }
-        public List<SerialPortSettingsModel> StopBitsList { get; set; }
         public StopBits SelectedStopBits { get; set; }
-        public int[] DataBits { get; set; }
         public int SelectedDataBits { get; set; }
         public int AcquisitionCycle_Ammeter {  get; set; }
 
         public Configuaration()
         {
-            CommPorts = SerialPortSettingsModel.Instance.getCommPorts();
-            BaudRates = SerialPortSettingsModel.Instance.getBaudRates();
-            Parities = SerialPortSettingsModel.Instance.getParities();
-            StopBitsList = SerialPortSettingsModel.Instance.getStopBits();
-            DataBits = new int[] { 4, 5, 6, 7, 8 };
+
         }
     }
 }

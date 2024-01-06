@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using EMS.Common;
 using EMS.Model;
 using EMS.Service;
+using EMS.ViewModel.NewEMSViewModel;
 using log4net;
 using System;
 using System.Collections.Concurrent;
@@ -212,8 +213,8 @@ namespace EMS.ViewModel
 
         public ElectricMeterViewModel()
         {
-            service = new SmartMeterDataService();
-            service.RegisterState(ServiceStateCallBack);
+            //service = new SmartMeterDataService();
+            //service.RegisterState(ServiceStateCallBack);
         }
 
         private void ServiceStateCallBack(bool isConnected, bool isDaqData)
@@ -243,25 +244,25 @@ namespace EMS.ViewModel
         {
             while (IsDaqData)
             {
-                if (service.smartMeterModels.TryTake(out SmartMeterModel CurrentSmartMeterModel))
-                {
-                    var model = (SmartMeterModel)CurrentSmartMeterModel.Clone();
-                    SmartMeterModelList.Add(model);
-                    // 把数据分发给需要显示的内容
-                    App.Current.Dispatcher.Invoke(() =>
-                    {
-                        RefreshData(CurrentSmartMeterModel);
-                    });
+                //if (service.smartMeterModels.TryTake(out SmartMeterModel CurrentSmartMeterModel))
+                //{
+                //    var model = (SmartMeterModel)CurrentSmartMeterModel.Clone();
+                //    SmartMeterModelList.Add(model);
+                //    // 把数据分发给需要显示的内容
+                //    App.Current.Dispatcher.Invoke(() =>
+                //    {
+                //        RefreshData(CurrentSmartMeterModel);
+                //    });
 
-                    if (IsRecordData)
-                    {
-                        SaveData(CurrentSmartMeterModel);
-                    }
-                }
-                else
-                {
-                    Thread.Sleep(500);
-                }
+                //    if (IsRecordData)
+                //    {
+                //        SaveData(CurrentSmartMeterModel);
+                //    }
+                //}
+                //else
+                //{
+                //    Thread.Sleep(500);
+                //}
             }
         }
 
@@ -291,14 +292,14 @@ namespace EMS.ViewModel
         [RelayCommand]
         public void CloseSerialPort()
         {
-            service.Disconnect();
+            //service.Disconnect();
         }
 
         [RelayCommand]
         private void OpenSerialPort()
         {
-            service.SetCommunicationConfig(Configuaration);
-            service.Connect();
+            //service.SetCommunicationConfig(Configuaration);
+            //service.Connect();
         }
 
         public ThreePhaseValue GetThreePhaseVoltage()
@@ -353,28 +354,5 @@ namespace EMS.ViewModel
         public double PhaseA;
         public double PhaseB;
         public double PhaseC;
-    }
-
-    public class Configuaration
-    {
-        public List<SerialPortSettingsModel> CommPorts { get; private set; }
-        public string SelectedCommPort { get; set; }
-        public List<SerialPortSettingsModel> BaudRates { get; private set; }
-        public int SelectedBaudRate { get; set; }
-        public List<SerialPortSettingsModel> Parities { get; private set; }
-        public Parity SelectedParity { get; set; }
-        public List<SerialPortSettingsModel> StopBitsList { get; private set; }
-        public StopBits SelectedStopBits { get; set; }
-        public int[] DataBits { get; private set; }
-        public int SelectedDataBits { get; set; }
-
-        public Configuaration()
-        {
-            CommPorts = SerialPortSettingsModel.Instance.getCommPorts();
-            BaudRates = SerialPortSettingsModel.Instance.getBaudRates();
-            Parities = SerialPortSettingsModel.Instance.getParities();
-            StopBitsList = SerialPortSettingsModel.Instance.getStopBits();
-            DataBits = new int[] { 4, 5, 6, 7, 8 };
-        }
     }
 }
