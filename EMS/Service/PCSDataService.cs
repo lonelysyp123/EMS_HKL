@@ -15,6 +15,7 @@ using System.Net.NetworkInformation;
 using System.Xml.Linq;
 using log4net.Repository.Hierarchy;
 using EMS.Storage.DB.DBManage;
+using EMS.Storage.DB.Models;
 
 namespace EMS.Service
 {
@@ -29,7 +30,7 @@ namespace EMS.Service
                 if (_isConnected != value)
                 {
                     _isConnected = value;
-                    OnChangeState(this, _isConnected, _isDaqData);
+                    OnChangeState(this, _isConnected, _isDaqData, _isSaveDaq);
                 }
             }
         }
@@ -43,7 +44,22 @@ namespace EMS.Service
                 if (_isDaqData != value)
                 {
                     _isDaqData = value;
-                    OnChangeState(this, _isConnected, _isDaqData);
+                    OnChangeState(this, _isConnected, _isDaqData, _isSaveDaq);
+                }
+            }
+        }
+
+
+        private bool _isSaveDaq;
+        public bool IsSaveDaq
+        {
+            get => _isSaveDaq;
+            private set
+            {
+                if (_isSaveDaq != value)
+                {
+                    _isSaveDaq = value;
+                    OnChangeState(this, _isConnected, _isDaqData, _isSaveDaq);
                 }
             }
         }
@@ -53,7 +69,7 @@ namespace EMS.Service
         private int Port;
         private TcpClient _client;
         private ModbusMaster _master;
-        private Action<object, bool, bool> OnChangeState;
+        private Action<object, bool, bool, bool> OnChangeState;
         private Action<object, object> OnChangeData;
         public static byte PcsId = 1;
         public PCSModel pcsModel;
@@ -113,7 +129,7 @@ namespace EMS.Service
             StartDaqData();
         }
 
-        public void RegisterState(Action<object, bool, bool> action)
+        public void RegisterState(Action<object, bool, bool, bool> action)
         {
             OnChangeState = action;
         }
@@ -134,8 +150,17 @@ namespace EMS.Service
             }
         }
 
-        private int DaqTimeSpan = 0;
+        public void StartSaveData()
+        {
+            IsSaveDaq = true;
+        }
 
+        public void StopSaveData()
+        {
+            IsSaveDaq = false;
+        }
+
+        private int DaqTimeSpan = 0;
         private void DaqDataTh()
         {
             while (IsConnected && IsDaqData)
@@ -152,7 +177,11 @@ namespace EMS.Service
                     lock (Locker)
                     {
                         pcsModel = DataDecode(dcState, pcsData, Temp, DCBranch1INFO, SerialNumber);
-                        OnChangeData(this, pcsModel);
+                        OnChangeData(this, pcsModel.Clone());
+                        if (IsSaveDaq)
+                        {
+                            SaveData(pcsModel);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -161,6 +190,24 @@ namespace EMS.Service
                     break;
                 }
             }
+        }
+
+        private void SaveData(PCSModel model)
+        {
+            PCSInfoModel pcsInfoModel = new PCSInfoModel();
+            pcsInfoModel.ID = int.Parse(ID);
+            pcsInfoModel.DCPower = model.DcBranch1DCPower;
+            pcsInfoModel.DCVol = model.DcBranch1DCVol;
+            pcsInfoModel.DCCurrent = model.DcBranch1DCCur;
+            //pcsInfoModel.TotalCharCap = model.;
+            pcsInfoModel.BusVol = model.DcBranch1BUSVol;
+            pcsInfoModel.ModuleTemp = model.ModuleTemperature;
+            pcsInfoModel.EnvTemp = model.AmbientTemperature;
+            //pcsInfoModel.PCSState = ;
+            //pcsInfoModel.SideState = ;
+            pcsInfoModel.HappenTime = DateTime.Now;
+            PCSInfoManage pcsInfoManage = new PCSInfoManage();
+            pcsInfoManage.Insert(pcsInfoModel);
         }
 
         public PCSModel GetCurrentData()

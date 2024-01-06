@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using EMS.Service.impl;
+using EMS.Storage.DB.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,16 +39,16 @@ namespace EMS.ViewModel.NewEMSViewModel
 			}
 		}
 
-		private int _userID;
+		private string _clientId;
 		/// <summary>
-		/// 用户ID
+		/// 客户端ID
 		/// </summary>
-		public int UserID
+		public string ClientId
 		{
-			get => _userID;
+			get => _clientId;
 			set
 			{
-				SetProperty(ref _userID, value);
+				SetProperty(ref _clientId, value);
 			}
 		}
 
@@ -79,23 +81,37 @@ namespace EMS.ViewModel.NewEMSViewModel
 
 		#region Command
 		public RelayCommand MQTTConfigSaveCommand { get; private set; }
-		public RelayCommand MQTTConnectCommand { get; private set; }
-		#endregion
+        public SystemSettingService SystemSettingService { get; set; }
+        #endregion
 
-		public System_MqttSetterPageModel()
+        public System_MqttSetterPageModel()
 		{
-            MQTTConnectCommand=new RelayCommand(MQTTConnect);
-			MQTTConfigSaveCommand=new RelayCommand(MQTTConfigSave);
+			MQTTConfigSaveCommand = new RelayCommand(MQTTConfigSave);
+            SystemSettingService = new SystemSettingService();
+			InitMqtt();
+
         }
 
-        private void MQTTConnect()
+        private void InitMqtt()
+        {
+            List<MqttModel> mqttModels = SystemSettingService.GetMqttInfo();
+            if (mqttModels != null && mqttModels.Count > 0)
+            {
+                MqttModel mqttModel = mqttModels.Find(item => item.Id == 1);
+                if (mqttModel != null)
+                {
+					IP = mqttModel.Ip;
+					Port = mqttModel.Port;
+                    ClientId = mqttModel.ClientId;
+					Username = mqttModel.UserName; 
+					Password = mqttModel.Password;
+                }
+            }
+        }
+
+        private void MQTTConfigSave()
 		{
-
-		}
-
-		private void MQTTConfigSave()
-		{
-
-		}
+			SystemSettingService.AddMqtt(1, _ip, _port, _clientId, _username, _password);
+        }
     }
 }

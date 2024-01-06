@@ -85,7 +85,7 @@
                     <TextBlock Text="用户ID:"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center" />
-                    <TextBox Text="{Binding UserID}"
+                    <TextBox Text="{Binding ClientId}"
                              Style="{StaticResource Input}" />
                 </StackPanel>
                 <StackPanel Grid.Row="2"
@@ -117,17 +117,7 @@
                             Background="#1890FF"
                             BorderThickness="0,0,0,0"
                             IsEnabled="{Binding IsEnabled_Save}"
-                            Command="{Binding Save}"/>
-                    <Button Content="连    接"
-                            Width="100"
-                            Height="35"
-                            Foreground="white"
-                            FontWeight="Bold"
-                            Background="#1890FF"
-                            BorderThickness="0,0,0,0"
-                            Margin="20,0,0,0"
-                            IsEnabled="{Binding IsEnabled_Connect}"
-                            Command="{Binding Connect}" />
+                            Command="{Binding MQTTConfigSaveCommand}"/>
                 </StackPanel>
             </Grid>
         </Border>

@@ -45,6 +45,7 @@ namespace BMS.Common.Modbus.ModbusTCP
         {
             while(_isConnected)
             {
+                Thread.Sleep(100);
                 if(RequestQueue.TryDequeue(out ModbusRequest _request))
                 {
                     if (_request.RequestType == RequestTypes.Read)

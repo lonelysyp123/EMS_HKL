@@ -2,9 +2,12 @@
 using EMS.Storage.DB.Models;
 using System;
 using System.Collections.Generic;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls.WebParts;
+using System.Windows.Controls;
 
 namespace EMS.Service.impl
 {
@@ -90,10 +93,92 @@ namespace EMS.Service.impl
             return true;
         }
 
-        public List<BcmuModel> GetBcmu()
+        public List<MqttModel> GetMqttInfo() {
+            MqttManage mqttManage = new MqttManage();
+            return mqttManage.Get();
+        }
+
+        public bool AddMqtt(int id, string ip, int port, string clientId, string userName, string password) {
+            try
+            {
+                MqttModel mqttModel = new MqttModel();
+                mqttModel.Id = id;
+                mqttModel.Ip = ip; 
+                mqttModel.Port = port; 
+                mqttModel.ClientId = clientId; 
+                mqttModel.UserName = userName; 
+                mqttModel.Password = password;
+                MqttManage mqttManage = new MqttManage();
+                List<MqttModel> mqttModels = mqttManage.Get();
+                if (mqttModels != null && mqttModels.Count > 0)
+                {
+                    MqttModel mqttModel1 = mqttModels.Find(item => item.Id == id);
+                    if (mqttModel1 == null)
+                    {
+                        mqttManage.Insert(mqttModel);
+                    }
+                    else
+                    {
+                        mqttManage.Update(mqttModel);
+                    }
+                }
+                else
+                {
+                    mqttManage.Insert(mqttModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public List<SmartMeterDBModel> GetSmartMeterList()
         {
-            BcmuManage bmsConfigInfo = new BcmuManage();
-            return bmsConfigInfo.Get();
+            SmartMeterManage smartMeterManage = new SmartMeterManage();
+            return smartMeterManage.Get();
+        }
+
+        public bool AddSmartMeter(int id, string selectedCommPort, int selectedBaudRate, int selectedStopBits, int SelectedDataBits, int SelectedParity, int acquisitionCycle)
+        {
+            try
+            {
+                SmartMeterDBModel smartMeterDBModel = new SmartMeterDBModel();
+                smartMeterDBModel.Id = id;
+                smartMeterDBModel.SelectedCommPort = selectedCommPort;
+                smartMeterDBModel.SelectedBaudRate = selectedBaudRate;
+                smartMeterDBModel.SelectedStopBits = selectedStopBits;
+                smartMeterDBModel.SelectedDataBits = SelectedDataBits;
+                smartMeterDBModel.SelectedParity = SelectedParity;
+                smartMeterDBModel.AcquisitionCycle = acquisitionCycle;
+
+                SmartMeterManage smartMeterManage = new SmartMeterManage();
+                List<SmartMeterDBModel> smartMeterDBModels = smartMeterManage.Get();
+                if (smartMeterDBModels != null && smartMeterDBModels.Count > 0)
+                {
+                    SmartMeterDBModel smartMeterDBModel1 = smartMeterDBModels.Find(item => item.Id == id);
+                    if (smartMeterDBModel1 == null)
+                    {
+                        smartMeterManage.Insert(smartMeterDBModel);
+                    }
+                    else
+                    {
+                        smartMeterManage.Update(smartMeterDBModel);
+                    }
+                }
+                else
+                {
+                    smartMeterManage.Insert(smartMeterDBModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
