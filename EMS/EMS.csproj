@@ -308,6 +308,7 @@
     <Compile Include="Storage\DB\DBManage\PCSInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\PcsManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSStrategyDailyPatternInfoManage.cs" />
+    <Compile Include="Storage\DB\DBManage\SmartMeterManage.cs" />
     <Compile Include="Storage\DB\Models\AlarmandFaultInfoModel.cs" />
     <Compile Include="Storage\DB\Models\AlarmParameterSettingModel.cs" />
     <Compile Include="Storage\DB\Models\BcmuModel.cs" />
@@ -316,6 +317,7 @@
     <Compile Include="Storage\DB\Models\PCSInfoModel.cs" />
     <Compile Include="Storage\DB\Models\PcsModel.cs" />
     <Compile Include="Storage\DB\Models\PCSStrategyDailyPatternInfoModel.cs" />
+    <Compile Include="Storage\DB\Models\SmartMeterDBModel.cs" />
     <Compile Include="ViewModel\BatterySeriesViewModel.cs" />
     <Compile Include="ViewModel\BatteryTotalViewModel.cs" />
     <Compile Include="ViewModel\BatteryViewModel.cs" />

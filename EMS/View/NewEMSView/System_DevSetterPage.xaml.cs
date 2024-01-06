@@ -47,5 +47,10 @@ namespace EMS.View.NewEMSView
                 //this.FilePathTextBox.Text = filePath;
             }
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
