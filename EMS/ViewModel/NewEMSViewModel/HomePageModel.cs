@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using EMS.Model;
+using EMS.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using TNCN.EMS.Api;
+using System.Diagnostics;
+using EMS.Service;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
@@ -144,19 +147,6 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /// <summary>
-        /// 启停状态
-        /// </summary>
-        private SolidColorBrush startStopState;
-        public SolidColorBrush StartStopState
-        {
-            get { return startStopState; }
-            set
-            {
-                SetProperty(ref startStopState, value);
-            }
-        }
-
-        /// <summary>
         /// 故障状态
         /// </summary>
         private SolidColorBrush faultState;
@@ -166,6 +156,19 @@ namespace EMS.ViewModel.NewEMSViewModel
             set
             {
                 SetProperty(ref faultState, value);
+            }
+        }
+
+        /// <summary>
+        /// 启停状态
+        /// </summary>
+        private string startStopState;
+        public string StartStopState
+        {
+            get { return startStopState; }
+            set
+            {
+                SetProperty(ref startStopState, value);
             }
         }
 
@@ -341,6 +344,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         #endregion
 
 
+        private SmartMeterDataService smartMeterDataService;
         public HomePageModel()
         {
 
@@ -375,6 +379,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         public void DataDisPlayPCS(PCSMonitorModel pcsmodel)
         {
             DcBranch1DCVol = pcsmodel.DcBranch1DCVol;
+            DcBranch1DCVol = pcsmodel.DcBranch1DCVol;
             DcBranch1DCCur = pcsmodel.DcBranch1DCCur;
             DcBranch1DCPower = pcsmodel.DcBranch1DCPower;
             DcBranch1Char = pcsmodel.DcBranch1Char;
@@ -391,9 +396,16 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// 电表数据展示
         /// </summary>
         /// <param name="smartmetermodel"></param>
-        public void DataDisPlaySmartMeter(SmartMeterModel smartmetermodel)
+        public void DataDisPlaySmartMeter(SmartMeterDataService smartMeterDataService)
         {
-            //StateFill_AmmeterRun：电表运行
+            if (smartMeterDataService.IsConnected)
+            {
+                StateFill_AmmeterRun = new SolidColorBrush(LightColors.Open_Green);
+            }
+            else
+            {
+                StateFill_AmmeterRun = new SolidColorBrush(LightColors.Close);
+            }
         }
 
         /// <summary>
@@ -401,13 +413,18 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// </summary>
         public void DataDisPlayCloud()
         {
-            MqttClientApi MqttClient = new MqttClientApi();
-            //StateFill_CloudTelecom = MqttClientApi.IsConnected;
-            if (MqttClientApi.IsConnected)
+
+            if (MqttClientApi.IsConnected())
+               
             {
-                StateFill_CloudTelecom= Open_Green
-                StateFill_CloudTelecom = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF00"));
+                StateFill_CloudTelecom = new SolidColorBrush(LightColors.Open_Green);
+            } 
+            else
+            {
+                StateFill_CloudTelecom = new SolidColorBrush(LightColors.Close);
+
             }
         }
     }
 }
+

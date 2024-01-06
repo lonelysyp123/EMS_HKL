@@ -134,7 +134,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         #endregion
 
         #region List
-        public List<string> SelectedBatteryList;
+        public List<string> SelectedPCSList;
         /// <summary>
         /// 查询数据集合
         /// </summary>
@@ -156,8 +156,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             QueryCommand = new RelayCommand(Query);
             DisplayDataModel = new PlotModel();
             DisplayDataList = new List<List<double[]>>();
-            SelectedBatteryList = new List<string>();
-            DataTypeList_SelectionChanged = new RelayCommand(SwitchBatteryData);
+            SelectedPCSList = new List<string>();
+            DataTypeList_SelectionChanged = new RelayCommand(SwitchPCSData);
 
         }
 
@@ -168,22 +168,15 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             DisplayDataList.Clear();
             TimeList.Clear();
-
-
-                if (TryCombinTime(StartTime1, StartTime2, out DateTime StartTime) && TryCombinTime(EndTime1, EndTime2, out DateTime EndTime))
-                {
-                //for (int i = 0; i < 14; i++)
-                //{
-                //    DisplayDataList.Add(QueryBatteryInfo(SelectedTotal, SelectedSeries, (i + 1).ToString(), StartTime, EndTime));
-                //}
-
-                DisplayDataList.Add(QueryBatteryInfo( StartTime, EndTime));
-
+            
+            if (TryCombinTime(StartTime1, StartTime2, out DateTime StartTime) && TryCombinTime(EndTime1, EndTime2, out DateTime EndTime))
+            {
+                DisplayDataList.Add(PCSInfo( StartTime, EndTime));
             }
             else
-                {
-                    MessageBox.Show("请选择正确时间");
-                }
+            {
+                MessageBox.Show("请选择正确时间");
+            }
         }
 
 
@@ -196,73 +189,78 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /// <summary>
-        /// 查询单体电池数据
+        /// 查询PCS数据
         /// </summary>
         /// <param name="startTime">开始时间</param>
         /// <param name="endTime">停止时间</param>
-        private List<double[]> QueryBatteryInfo( DateTime startTime, DateTime endTime)
+        private List<double[]> PCSInfo( DateTime startTime, DateTime endTime)
         {
             SeriesBatteryInfoManage SeriesManage = new SeriesBatteryInfoManage();
             var SeriesList = SeriesManage.Find( startTime, endTime);
             List<double[]> obj = new List<double[]>();
-            //if (int.TryParse(sort, out int Sort))
-            {
-                // 查询Battery数据
-                List<double> vols = new List<double>();
-                List<double> caps = new List<double>();
-                List<double> socList = new List<double>();
-                List<double> resistances = new List<double>();
-                List<double> temperature1List = new List<double>();
-                List<double> temperature2List = new List<double>();
+
+                // 查询PCS数据
+                List<double> dcPowerList = new List<double>();
+                List<double> dcVolList = new List<double>();
+                List<double> dcCurrentList = new List<double>();
+                List<double> totalCharCapList = new List<double>();
+                List<double> busVolList = new List<double>();
+                List<double> moduleTemp1List = new List<double>();
+                List<double> envTempList = new List<double>();
                 List<DateTime> times = new List<DateTime>();
-                //for (int i = 1; i < SeriesList.Count; i++)
-                //{
-                //    var item0 = typeof(SeriesBatteryInfoModel).GetProperty("Voltage" + (Sort - 1)).GetValue(SeriesList[i]);
-                //    if (double.TryParse(item0.ToString(), out double vol))
-                //    {
-                //        vols.Add(vol);
-                //    }
+                for (int i = 1; i < SeriesList.Count; i++)
+                {
+                    var item0 = typeof(PCSInfoModel).GetProperty("DCPower").GetValue(SeriesList[i]);
+                    if (double.TryParse(item0.ToString(), out double dcPower))
+                    {
+                        dcPowerList.Add(dcPower);
+                    }
 
-                //    var item1 = typeof(SeriesBatteryInfoModel).GetProperty("Capacity" + (Sort - 1)).GetValue(SeriesList[i]);
-                //    if (double.TryParse(item1.ToString(), out double cap))
-                //    {
-                //        caps.Add(cap);
-                //    }
+                    var item1 = typeof(PCSInfoModel).GetProperty("DCVol").GetValue(SeriesList[i]);
+                    if (double.TryParse(item1.ToString(), out double dcVol))
+                    {
+                        dcVolList.Add(dcVol);
+                    }
 
-                //    var item2 = typeof(SeriesBatteryInfoModel).GetProperty("SOC" + (Sort - 1)).GetValue(SeriesList[i]);
-                //    if (double.TryParse(item2.ToString(), out double soc))
-                //    {
-                //        socList.Add(soc);
-                //    }
+                    var item2 = typeof(PCSInfoModel).GetProperty("DCCurrent").GetValue(SeriesList[i]);
+                    if (double.TryParse(item2.ToString(), out double dcCurrent))
+                    {
+                        dcCurrentList.Add(dcCurrent);
+                    }
 
-                //    var item3 = typeof(SeriesBatteryInfoModel).GetProperty("Resistance" + (Sort - 1)).GetValue(SeriesList[i]);
-                //    if (double.TryParse(item3.ToString(), out double resistance))
-                //    {
-                //        resistances.Add(resistance);
-                //    }
+                    var item3 = typeof(PCSInfoModel).GetProperty("TotalCharCap").GetValue(SeriesList[i]);
+                    if (double.TryParse(item3.ToString(), out double totalCharCap))
+                    {
+                        totalCharCapList.Add(totalCharCap);
+                    }
 
-                //    var item4 = typeof(SeriesBatteryInfoModel).GetProperty("Temperature" + (Sort - 1) * 2).GetValue(SeriesList[i]);
-                //    if (double.TryParse(item4.ToString(), out double temperature1))
-                //    {
-                //        temperature1List.Add(temperature1);
-                //    }
+                    var item4 = typeof(PCSInfoModel).GetProperty("BusVol").GetValue(SeriesList[i]);
+                    if (double.TryParse(item4.ToString(), out double busVol))
+                    {
+                        busVolList.Add(busVol);
+                    }
 
-                //    var item5 = typeof(SeriesBatteryInfoModel).GetProperty("Temperature" + ((Sort - 1) * 2 + 1)).GetValue(SeriesList[i]);
-                //    if (double.TryParse(item5.ToString(), out double temperature2))
-                //    {
-                //        temperature2List.Add(temperature2);
-                //    }
+                    var item5 = typeof(PCSInfoModel).GetProperty("ModuleTemp").GetValue(SeriesList[i]);
+                    if (double.TryParse(item5.ToString(), out double moduleTemp))
+                    {
+                        moduleTemp1List.Add(moduleTemp);
+                    }
 
-                //    times.Add(SeriesList[i].HappenTime);
-                //}
-                obj.Add(vols.ToArray());
-                obj.Add(socList.ToArray());
-                obj.Add(resistances.ToArray());
-                obj.Add(temperature1List.ToArray());
-                obj.Add(temperature2List.ToArray());
-                obj.Add(caps.ToArray());
+                    var item6 = typeof(PCSInfoModel).GetProperty("EnvTemp").GetValue(SeriesList[i]);
+                    if (double.TryParse(item6.ToString(), out double envTemp))
+                    {
+                        envTempList.Add(envTemp);
+                    }
+                    times.Add(SeriesList[i].HappenTime);
+                }
+                obj.Add(dcPowerList.ToArray());
+                obj.Add(dcVolList.ToArray());
+                obj.Add(dcCurrentList.ToArray());
+                obj.Add(totalCharCapList.ToArray());
+                obj.Add(busVolList.ToArray());
+                obj.Add(moduleTemp1List.ToArray());
+                obj.Add(envTempList.ToArray());
                 TimeList.Add(times.ToArray());
-            }
             return obj;
         }
 
@@ -270,17 +268,17 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// 选择数据类型
         /// </summary>
         /// <param name="type">数据类型</param>
-        public void SwitchBatteryData()
+        public void SwitchPCSData()
         {
             InitChart();
             DisplayDataModel.Series.Clear();
-            for (int i = 0; i < SelectedBatteryList.Count; i++)
+            for (int i = 0; i < SelectedPCSList.Count; i++)
             {
                 LineSeries lineSeries = new LineSeries();
-                lineSeries.Title = SelectedBatteryList[i];
+                lineSeries.Title = SelectedPCSList[i];
                 lineSeries.MarkerSize = 3;
                 lineSeries.MarkerType = MarkerType.Circle;
-                if (int.TryParse(SelectedBatteryList[i], out int index))
+                if (int.TryParse(SelectedPCSList[i], out int index))
                 {
                     if (DisplayDataList.Count > 0 && DisplayDataList.Count > index - 1)
                     {

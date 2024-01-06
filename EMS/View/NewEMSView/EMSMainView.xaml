@@ -11,8 +11,7 @@
         xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
         mc:Ignorable="d"
         Title="EMSMainView"
-        Height="1080"
-        Width="1920"
+        SizeChanged="Window_SizeChanged"
         Background="#FAFAFA">
     <Window.Resources>
         <!--1、侧边菜单栏-->
@@ -207,258 +206,256 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="1600"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <!--1、logo-->
-        <Grid Grid.Row="0"
-              Grid.Column="0"
-              Background="#405673">
-            <StackPanel Orientation="Horizontal"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Center"
-                        Margin="10,0,0,0">
-                <Image Source="pack://application:,,,/EMS;component/Resource/Image/tn-logo.png"
-                       Width="40"
-                       Stretch="Fill"
-                       Cursor=""
-                       Height="40" />
-                <TextBlock Text="TN-EMS"
-                           Foreground="White"
-                           FontSize="24"
-                           Margin="20,0,0,0"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center">
-                </TextBlock>
-            </StackPanel>
-        </Grid>
-        <!--2、导航栏-->
-        <Grid Grid.Row="0"
-              Grid.Column="1">
+        <Grid x:Name="contentGrid">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="5*" />
             </Grid.ColumnDefinitions>
-            <hc:DateTimePicker IsEnabled="False" HorizontalAlignment="Right" Margin="0,0,20,0"/>
-            <Menu Grid.Column="1"
-                  VerticalAlignment="Center"
-                  Background="Transparent">
-                <MenuItem>
-                    <MenuItem.Icon>
-                        <TextBlock Text="&#xe607;"
-                                   Style="{StaticResource TextBlockFabricIcons}"/>
-                    </MenuItem.Icon>
-                    <MenuItem Header="用户手册"
-                              Click="OperationManual_Click">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="14*" />
+            </Grid.RowDefinitions>
+            <!--1、logo-->
+            <Grid Grid.Row="0"
+                  Grid.Column="0"
+                  Background="#405673">
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Margin="10,0,0,0">
+                    <Image Source="pack://application:,,,/EMS;component/Resource/Image/tn-logo.png"
+                           Width="40"
+                           Stretch="Fill"
+                           Cursor=""
+                           Height="40" />
+                    <TextBlock Text="TN-EMS"
+                               Foreground="White"
+                               FontSize="24"
+                               Margin="20,0,0,0"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center">
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+            <!--2、导航栏-->
+            <Grid Grid.Row="0"
+                  Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <hc:DateTimePicker IsEnabled="False"
+                                   HorizontalAlignment="Right"
+                                   Margin="0,0,20,0" />
+                <Menu Grid.Column="1"
+                      VerticalAlignment="Center"
+                      Background="Transparent">
+                    <MenuItem>
                         <MenuItem.Icon>
-                            <TextBlock Text="&#xe60b;"
+                            <TextBlock Text="&#xe607;"
                                        Style="{StaticResource TextBlockFabricIcons}" />
                         </MenuItem.Icon>
+                        <MenuItem Header="用户手册"
+                                  Click="OperationManual_Click">
+                            <MenuItem.Icon>
+                                <TextBlock Text="&#xe60b;"
+                                           Style="{StaticResource TextBlockFabricIcons}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
-                </MenuItem>
-                <MenuItem>
-                    <MenuItem.Icon>
-                        <TextBlock Text="&#xe6f0;"
-                                   Style="{StaticResource TextBlockFabricIcons}" />
-                    </MenuItem.Icon>
-                    <MenuItem Header="开发人员"
-                              Click="AboutMenuItem_Click">
+                    <MenuItem>
                         <MenuItem.Icon>
-                            <TextBlock Text="&#xe89a;"
+                            <TextBlock Text="&#xe6f0;"
                                        Style="{StaticResource TextBlockFabricIcons}" />
                         </MenuItem.Icon>
+                        <MenuItem Header="开发人员"
+                                  Click="AboutMenuItem_Click">
+                            <MenuItem.Icon>
+                                <TextBlock Text="&#xe89a;"
+                                           Style="{StaticResource TextBlockFabricIcons}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
-                </MenuItem>
-                <MenuItem>
-                    <MenuItem.Icon>
-                        <TextBlock Text="&#xe60a;"
-                                   Style="{StaticResource TextBlockFabricIcons}" />
-                    </MenuItem.Icon>
-                    <MenuItem Header="退出"
-                              Click="Exit_Click">
+                    <MenuItem>
                         <MenuItem.Icon>
-                            <TextBlock Text="&#xe647;"
+                            <TextBlock Text="&#xe60a;"
                                        Style="{StaticResource TextBlockFabricIcons}" />
                         </MenuItem.Icon>
+                        <MenuItem Header="退出"
+                                  Click="Exit_Click">
+                            <MenuItem.Icon>
+                                <TextBlock Text="&#xe647;"
+                                           Style="{StaticResource TextBlockFabricIcons}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
-                </MenuItem>
-            </Menu>
-        </Grid>
-        <!--3、侧边菜单栏-->
-        <Grid Grid.Row="1"
-              Grid.Column="0"
-              Background="#405673">
-            <StackPanel Margin="0,50,0,0" x:Name="NavigationTool">
-                <!--首页-->
-                <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Click="HomeViewMenu_Checked"
-                              Content="首页"
-                              Uid="&#xe7c8;"
-                              Loaded="ToggleButton_Loaded" ></ToggleButton>
-                <!--监控界面-->
-                <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
-                              Content="监控界面"
-                              Uid="&#xea8b;"
-                              x:Name="MonitorViewMenu"
-                              Click="MonitorViewMenu_Checked"
-                              Loaded="ToggleButton_Loaded" />
-                <ToggleButton x:Name="MonitorViewMenu_BMS"
-                              Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
-                              Content="BMS"
-                              Uid="&#xe677;"
-                              Click="MonitorViewMenu_BMS_Checked"
-                              Visibility="Collapsed"
-                              Loaded="ToggleButton_LoadedForLevel2" />
-                <ToggleButton x:Name="BMS_SubBMU1"
-                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="BMU1"
-                              Click="BMS_SubBMU1_Checked"
-                              Visibility="Collapsed"
-                              />
-                <ToggleButton x:Name="BMS_SubBMU2"
-                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="BMU2"
-                              Visibility="Collapsed"
-                              Click="BMS_SubBMU1_Checked"/>
-                <ToggleButton x:Name="BMS_SubBMU3"
-                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="BMU3"
-                              Visibility="Collapsed"
-                              Click="BMS_SubBMU1_Checked"/>
-                <ToggleButton x:Name="BMS_SubBMU4"
-                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="BMU4"
-                              Visibility="Collapsed"
-                              Click="BMS_SubBMU1_Checked"/>
-                <ToggleButton x:Name="BMS_SubBMU5"
-                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="BMU5"
-                              Visibility="Collapsed"
-                              Click="BMS_SubBMU1_Checked"/>
-                <ToggleButton x:Name="BMS_SubBMU6"
-                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="BMU6"
-                              Visibility="Collapsed"
-                              Click="BMS_SubBMU1_Checked"/>
-                <ToggleButton x:Name="MonitorViewMenu_PCS"
-                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="PCS"
-                              Uid="&#xe610;"
-                              Click="MonitorViewMenu_PCS_Checked"
-                              Visibility="Collapsed"
-                                />
-                <ToggleButton x:Name="MonitorViewMenu_SM"
-                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="电表"
-                              Uid="&#xe6a7;"
-                              Click="MonitorViewMenu_SM_Checked"
-                              Visibility="Collapsed"
-                               />
-                <!--数据分析-->
-                <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
-                              Content="数据分析"
-                              Uid="&#xe608;"
-                              x:Name="AnalysisViewMenu"
-                              Click="AnalysisViewMenu_Checked"
-                              Loaded="ToggleButton_Loaded" />
-                <ToggleButton x:Name="AnalysisViewMenu_BMS"
-                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="BMS"
-                              Uid="&#xe603;"
-                              Click="AnalysisViewMenu_BMS_Checked"
-                               
-                              Visibility="Collapsed" />
-                <ToggleButton x:Name="AnalysisViewMenu_PCS"
-                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="PCS"
-                              Uid="&#xe851;"
-                              Click="AnalysisViewMenu_PCS_Checked"
-                               
-                              Visibility="Collapsed" />
-                <ToggleButton x:Name="AnalysisViewMenu_SmartMeter"
-                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="电表"
-                              Uid="&#xe694;"
-                              Click="AnalysisViewMenu_SmartMeter_Checked"
-                               
-                              Visibility="Collapsed" />
-                <!--故障日志-->
-                <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="故障日志"
-                              Uid="&#xe78e;"
-                              Click="FaultViewMenu_Checked" 
-                              Loaded="ToggleButton_Loaded" />
-                <!--策略管理-->
-                <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
-                              Content="策略管理"
-                              Uid="&#xe64b;"
-                              x:Name="StrategyViewMenu"
-                              Click="StrategyViewMenu_Checked"
-                              Loaded="ToggleButton_Loaded" />
-                <ToggleButton x:Name="StrategyViewMenu_Setter"
-                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="策略配置"
-                              Uid="&#xe61a;"
-                              Click="StrategyViewMenu_Setter_Checked"
-                               
-                              Visibility="Collapsed" />
-                <ToggleButton x:Name="StrategyViewMenu_Analysis"
-                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="策略曲线"
-                              Uid="&#xe64a;"
-                              Click="StrategyViewMenu_Analysis_Checked"
-                               
-                              Visibility="Collapsed" />
-                <ToggleButton x:Name="StrategyViewMenu_ProtectSetter"
-                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="保护参数"
-                              Uid="&#xe6db;"
-                              Click="StrategyViewMenu_ProtectSetter_Checked"
-                               
-                              Visibility="Collapsed" />
-                <!--系统管理-->
-                <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
-                              Content="系统管理"
-                              Uid="&#xea41;"
-                              x:Name="SystemViewMenu"
-                              Click="SystemViewMenu_Checked"
-                              Loaded="ToggleButton_Loaded" />
-                <ToggleButton x:Name="SystemViewMenu_DevInfo"
-                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="设备详情"
-                              Uid="&#xe7d6;"
-                              Click="SystemViewMenu_DevInfo_Checked"
-                               
-                              Visibility="Collapsed" />
-                <ToggleButton x:Name="SystemViewMenu_DevSetter"
-                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="设备配置"
-                              Uid="&#xe726;"
-                              Click="SystemViewMenu_DevSetter_Checked"
-                               
-                              Visibility="Collapsed" />
-                <ToggleButton x:Name="SystemViewMenu_MqttSetter"
-                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="云端设置"
-                              Uid="&#xea53;"
-                              Click="SystemViewMenu_MqttSetter_Checked"
-                               
-                              Visibility="Collapsed" />
+                </Menu>
+            </Grid>
+            <!--3、侧边菜单栏-->
+            <Grid Grid.Row="1"
+                  Grid.Column="0"
+                  Background="#405673">
+                <StackPanel Margin="0,50,0,0"
+                            x:Name="NavigationTool">
+                    <!--首页-->
+                    <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Click="HomeViewMenu_Checked"
+                                  Content="首页"
+                                  Uid="&#xe7c8;"
+                                  Loaded="ToggleButton_Loaded"></ToggleButton>
+                    <!--监控界面-->
+                    <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
+                                  Content="监控界面"
+                                  Uid="&#xea8b;"
+                                  x:Name="MonitorViewMenu"
+                                  Click="MonitorViewMenu_Checked"
+                                  Loaded="ToggleButton_Loaded" />
+                    <ToggleButton x:Name="MonitorViewMenu_BMS"
+                                  Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
+                                  Content="BMS"
+                                  Uid="&#xe677;"
+                                  Click="MonitorViewMenu_BMS_Checked"
+                                  Visibility="Collapsed"
+                                  Loaded="ToggleButton_LoadedForLevel2" />
+                    <ToggleButton x:Name="BMS_SubBMU1"
+                                  Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Content="BMU1"
+                                  Click="BMS_SubBMU1_Checked"
+                                  Visibility="Collapsed" />
+                    <ToggleButton x:Name="BMS_SubBMU2"
+                                  Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Content="BMU2"
+                                  Visibility="Collapsed"
+                                  Click="BMS_SubBMU1_Checked" />
+                    <ToggleButton x:Name="BMS_SubBMU3"
+                                  Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Content="BMU3"
+                                  Visibility="Collapsed"
+                                  Click="BMS_SubBMU1_Checked" />
+                    <ToggleButton x:Name="BMS_SubBMU4"
+                                  Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Content="BMU4"
+                                  Visibility="Collapsed"
+                                  Click="BMS_SubBMU1_Checked" />
+                    <ToggleButton x:Name="BMS_SubBMU5"
+                                  Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Content="BMU5"
+                                  Visibility="Collapsed"
+                                  Click="BMS_SubBMU1_Checked" />
+                    <ToggleButton x:Name="BMS_SubBMU6"
+                                  Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Content="BMU6"
+                                  Visibility="Collapsed"
+                                  Click="BMS_SubBMU1_Checked" />
+                    <ToggleButton x:Name="MonitorViewMenu_PCS"
+                                  Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Content="PCS"
+                                  Uid="&#xe610;"
+                                  Click="MonitorViewMenu_PCS_Checked"
+                                  Visibility="Collapsed" />
+                    <ToggleButton x:Name="MonitorViewMenu_SM"
+                                  Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Content="电表"
+                                  Uid="&#xe6a7;"
+                                  Click="MonitorViewMenu_SM_Checked"
+                                  Visibility="Collapsed" />
+                    <!--数据分析-->
+                    <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
+                                  Content="数据分析"
+                                  Uid="&#xe608;"
+                                  x:Name="AnalysisViewMenu"
+                                  Click="AnalysisViewMenu_Checked"
+                                  Loaded="ToggleButton_Loaded" />
+                    <ToggleButton x:Name="AnalysisViewMenu_BMS"
+                                  Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Content="BMS"
+                                  Uid="&#xe603;"
+                                  Click="AnalysisViewMenu_BMS_Checked"
+                                  Visibility="Collapsed" />
+                    <ToggleButton x:Name="AnalysisViewMenu_PCS"
+                                  Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Content="PCS"
+                                  Uid="&#xe851;"
+                                  Click="AnalysisViewMenu_PCS_Checked"
+                                  Visibility="Collapsed" />
+                    <ToggleButton x:Name="AnalysisViewMenu_SmartMeter"
+                                  Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Content="电表"
+                                  Uid="&#xe694;"
+                                  Click="AnalysisViewMenu_SmartMeter_Checked"
+                                  Visibility="Collapsed" />
+                    <!--故障日志-->
+                    <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Content="故障日志"
+                                  Uid="&#xe78e;"
+                                  Click="FaultViewMenu_Checked"
+                                  Loaded="ToggleButton_Loaded" />
+                    <!--策略管理-->
+                    <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
+                                  Content="策略管理"
+                                  Uid="&#xe64b;"
+                                  x:Name="StrategyViewMenu"
+                                  Click="StrategyViewMenu_Checked"
+                                  Loaded="ToggleButton_Loaded" />
+                    <ToggleButton x:Name="StrategyViewMenu_Setter"
+                                  Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Content="策略配置"
+                                  Uid="&#xe61a;"
+                                  Click="StrategyViewMenu_Setter_Checked"
+                                  Visibility="Collapsed" />
+                    <ToggleButton x:Name="StrategyViewMenu_Analysis"
+                                  Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Content="策略曲线"
+                                  Uid="&#xe64a;"
+                                  Click="StrategyViewMenu_Analysis_Checked"
+                                  Visibility="Collapsed" />
+                    <ToggleButton x:Name="StrategyViewMenu_ProtectSetter"
+                                  Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Content="保护参数"
+                                  Uid="&#xe6db;"
+                                  Click="StrategyViewMenu_ProtectSetter_Checked"
+                                  Visibility="Collapsed" />
+                    <!--系统管理-->
+                    <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
+                                  Content="系统管理"
+                                  Uid="&#xea41;"
+                                  x:Name="SystemViewMenu"
+                                  Click="SystemViewMenu_Checked"
+                                  Loaded="ToggleButton_Loaded" />
+                    <ToggleButton x:Name="SystemViewMenu_DevInfo"
+                                  Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Content="设备详情"
+                                  Uid="&#xe7d6;"
+                                  Click="SystemViewMenu_DevInfo_Checked"
+                                  Visibility="Collapsed" />
+                    <ToggleButton x:Name="SystemViewMenu_DevSetter"
+                                  Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Content="设备配置"
+                                  Uid="&#xe726;"
+                                  Click="SystemViewMenu_DevSetter_Checked"
+                                  Visibility="Collapsed" />
+                    <ToggleButton x:Name="SystemViewMenu_MqttSetter"
+                                  Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                                  Content="云端设置"
+                                  Uid="&#xea53;"
+                                  Click="SystemViewMenu_MqttSetter_Checked"
+                                  Visibility="Collapsed" />
 
-            </StackPanel>
+                </StackPanel>
 
-            <!--END-->
+                <!--END-->
+            </Grid>
+            <!--4、页面部分-->
+            <Grid Grid.Row="1"
+                  Grid.Column="1">
+                <Frame x:Name="PageContent"
+                       NavigationUIVisibility="Hidden"
+                       Content="{Binding CurrentPage}"></Frame>
+            </Grid>
         </Grid>
-        <!--4、页面部分-->
-        <Grid Grid.Row="1"
-              Grid.Column="1">
-            <Frame x:Name="PageContent"
-                   NavigationUIVisibility="Hidden" Content="{Binding CurrentPage}"></Frame>
-        </Grid>
+        <Grid.RenderTransform>
+            <ScaleTransform x:Name="contentScaleTransform"
+                           />
+        </Grid.RenderTransform>
     </Grid>
 </Window>

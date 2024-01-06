@@ -24,12 +24,19 @@ namespace EMS.View.NewEMSView
     /// </summary>
     public partial class EMSMainView : System.Windows.Window
     {
+        private double _originalWidth; // 假设原始设计宽度
+        private double _originalHeight; // 假设原始设计高度
+
+
         private EMSMainViewModel viewmodel;
         public EMSMainView()
         {
             InitializeComponent();
             viewmodel = new EMSMainViewModel();
 
+            // 初始化原始设计尺寸
+            _originalWidth = 1920;
+            _originalHeight = 1080;
         }
 
 
@@ -50,6 +57,28 @@ namespace EMS.View.NewEMSView
                     PageContent.Content = value;
                 }
             }
+        }
+
+
+        // 监听窗口大小更改事件
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // 如果有特别针对不同分辨率做特殊处理的需求，可以在此处检查窗口尺寸并作出相应调整
+            double windowWidth = this.ActualWidth;
+            double windowHeight = this.ActualHeight;
+
+            // 计算新的缩放比例以保持宽高比不变
+            double scale = windowWidth / _originalWidth;
+
+            // 应用到内容区域的RenderTransform
+            //contentScaleTransform.ScaleX = scale;
+            //contentScaleTransform.ScaleY = scale;
+
+
+            Debug.WriteLine(scale, "1111111111111111");
+            Debug.WriteLine(this.ActualWidth, "222222222222");
+            Debug.WriteLine(this.ActualHeight, "333333333333");
+
         }
 
         private void Navigation(Page page, ToggleButton button, ToggleButton parent = null, ToggleButton grandpa = null)

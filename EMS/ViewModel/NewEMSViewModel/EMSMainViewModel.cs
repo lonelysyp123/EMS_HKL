@@ -62,7 +62,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             Strategy_AnalysisPageModel = new Strategy_AnalysisPageModel();
             //Strategy_ProtectSetterPageModel = new Strategy_ProtectSetterPageModel();
             Strategy_SetterPageModel = new Strategy_SetterPageModel();
-            System_DevInfoPageModel = new System_DevInfoPageModel();
+            //System_DevInfoPageModel = new System_DevInfoPageModel();
             System_DevSetterPageModel = new System_DevSetterPageModel();
             System_MqttSetterPageModel = new System_MqttSetterPageModel();
         }
