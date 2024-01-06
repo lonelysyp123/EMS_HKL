@@ -9,7 +9,9 @@ namespace EMS.ViewModel.NewEMSViewModel
 {
     public class Strategy_SetterPageModel : ViewModelBase
     {
-        /*当前执行模式*/
+        /// <summary>
+        /// 当前执行模式
+        /// </summary>
         private string totalStrategyState;
         public string TotalStrategyState
         {
@@ -19,6 +21,34 @@ namespace EMS.ViewModel.NewEMSViewModel
                 SetProperty(ref totalStrategyState, value);
             }
         }
+
+        /// <summary>
+        /// 模式
+        /// </summary>
+        private List<string> strategyModeSet;
+        public List<string> StrategyModeSet
+        {
+            get { return strategyModeSet; }
+            set
+            {
+                SetProperty(ref strategyModeSet, value);
+            }
+        }
+
+        private string selectedManualStrategyMode;
+        public string SelectedManualStrategyMode
+        {
+            get { return selectedManualStrategyMode; }
+            set
+            {
+                SetProperty(ref selectedManualStrategyMode, value);
+            }
+        }
+
+        /// <summary>
+        /// 设置值
+        /// </summary>
+        
 
         #region Command
         public RelayCommand SwitchAutoManualCommand { get; set; }
@@ -179,19 +209,29 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public Strategy_SetterPageModel()
         {
-            SwitchAutoManualCommand = new RelayCommand(SwitchAutoManual);
-            StrategyControlStartStopCommand = new RelayCommand(StrategyControlStartStop);
-            DemandControlStartStopCommand = new RelayCommand(DemandControlStartStop);
-            InversePowerProtectionStartStopCommand = new RelayCommand(InversePowerProtectionStartStop);
-            CommandManualReset = new RelayCommand(ManualReset);
-            CommandManualApply = new RelayCommand(ManualApply);
-            CommandAutoReset = new RelayCommand(AutoReset);
-            ReversePowerSendCommand = new RelayCommand(ReversePowerSend);
-
+            SwitchAutoManualCommand = new RelayCommand(SwitchAutoManual,() => true);
+            if(TotalStrategyState == "手动运行")
+            {
+                StrategyControlStartStopCommand = new RelayCommand(StrategyControlStartStop);
+                DemandControlStartStopCommand = new RelayCommand(DemandControlStartStop);
+                InversePowerProtectionStartStopCommand = new RelayCommand(InversePowerProtectionStartStop);
+                CommandManualReset = new RelayCommand(ManualReset);
+                CommandManualApply = new RelayCommand(ManualApply);
+            }
+            else if(TotalStrategyState == "自动运行")
+            {
+                CommandAutoReset = new RelayCommand(AutoReset);
+                ReversePowerSendCommand = new RelayCommand(ReversePowerSend);
+            }
+            //else
+            //{
+            //    throw new NotImplementedException();
+            //}
         }
         private void SwitchAutoManual()
         {
-            //
+            //模式切换
+            TotalStrategyState = TotalStrategyState == "手动运行" ? "自动运行" : "手动运行";
         }
 
         private void StrategyControlStartStop()
@@ -208,7 +248,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
         private void ManualReset()
         {
-            //
+            this.//
         }
         private void ManualApply()
         {
