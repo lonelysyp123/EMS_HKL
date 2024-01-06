@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using EMS.Api;
 using EMS.Model;
 using EMS.Service;
 using System;
@@ -14,13 +15,23 @@ namespace EMS.ViewModel.NewEMSViewModel
     public class Strategy_ProtectSetterPageModel:ViewModelBase
     {
         //BCMU簇选择
-        private List<string> _bcmuId;
-        public List<string> BcmuId
+        private List<string> bcmuIdInfo;
+        public List<string> BCMUIDInfo
         {
-            get => _bcmuId;
+            get => bcmuIdInfo;
             set 
             {
-                SetProperty(ref _bcmuId, value);
+                SetProperty(ref bcmuIdInfo, value);
+            }
+        }
+
+        private string selectedItemBCMU;
+        public string SelectedItemBCMU
+        {
+            get => selectedItemBCMU;
+            set
+            {
+                SetProperty(ref selectedItemBCMU, value);
             }
         }
 
@@ -565,14 +576,11 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public Strategy_ProtectSetterPageModel(BMSDataService bmsDataService, PCSDataService pcsDataService)
         {
-            BcmuId = new List<string> { "BCMUID(1)", "BCMUID(2)", "BCMUID(3)", "BCMUID(4)", "BCMUID(5)", "BCMUID(6)" };
-
+            bcmuIdInfo = new List<string> { "BCMUID(1)", "BCMUID(2)", "BCMUID(3)", "BCMUID(4)", "BCMUID(5)", "BCMUID(6)" };
 
             ReadDBInfoCommand = new RelayCommand(ReadDBInfo);
             ReadBCMUInfoCommand = new RelayCommand(ReadBCMUInfo);
             SyncInfoCommand = new RelayCommand(SyncInfo);
-
-
             ReadBUSVolInfoCommand = new RelayCommand(ReadBUSVolInfo);
             SyncBUSVolInfoCommand = new RelayCommand(SyncBUSVolInfo);
             ReadDCBranchInfoCommand = new RelayCommand(ReadDCBranchInfo);
@@ -589,7 +597,7 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         private void ReadBCMUInfo()
         {
-            BMSParameterSettingModel model = new BMSParameterSettingModel();
+            BMSParameterSettingModel model = BmsApi.GetBMSParam(SelectedItemBCMU);
             this.ClusterVolUpLimitLv1 = model.ClusterVolUpLimitLv1;
             this.ClusterVolUpLimitLv2 = model.ClusterVolUpLimitLv2;
             this.ClusterVolUpLimitLv3 = model.ClusterVolUpLimitLv3;
@@ -629,7 +637,7 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         private void SyncInfo()
         {
-            BMSParameterSettingModel model = new BMSParameterSettingModel();
+            BMSParameterSettingModel model = BmsApi.SetBMSParam(SelectedItemBCMU);
             model.ClusterVolUpLimitLv1 = this.ClusterVolUpLimitLv1;
             model.ClusterVolUpLimitLv2 = this.ClusterVolUpLimitLv2;
             model.ClusterVolUpLimitLv3 = this.ClusterVolUpLimitLv3;

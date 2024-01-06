@@ -33,9 +33,9 @@ namespace EMS.Api
         /// 设置BMS保护参数接口
         /// </summary>
         /// <returns></returns>
-        public static void SetBMSParam(string bcmuid)
+        public static BMSParameterSettingModel SetBMSParam(string bcmuid)
         {
-
+            return null;
         }
 
         /// <summary>
