@@ -100,8 +100,8 @@
                                 Foreground="White"
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
-                                IsEnabled="{Binding IsFailureRecovery}"
-                                Command="{Binding Command_FailureRecovery}" />
+                                
+                                Command="{Binding Command_ResetFault}" />
                     </StackPanel>
                 </Grid>
             </Border>
