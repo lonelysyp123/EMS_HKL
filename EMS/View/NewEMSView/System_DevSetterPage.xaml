@@ -466,7 +466,8 @@
                     </StackPanel>
                     <StackPanel Grid.Row="2"
                                 Grid.Column="4"
-                                Style="{StaticResource ContentPanel}">
+                                Style="{StaticResource ContentPanel}"
+                                x:Name="SmartMeterBtn">
                         <Button Content="应    用"
                                 Width="80"
                                 Height="30"

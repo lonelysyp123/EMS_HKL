@@ -213,7 +213,7 @@ namespace EMS.ViewModel
         public ElectricMeterViewModel()
         {
             service = new SmartMeterDataService();
-            service.RegisterState(ServiceStateCallBack);
+            //service.RegisterState(ServiceStateCallBack);
         }
 
         private void ServiceStateCallBack(bool isConnected, bool isDaqData)
@@ -243,25 +243,25 @@ namespace EMS.ViewModel
         {
             while (IsDaqData)
             {
-                if (service.smartMeterModels.TryTake(out SmartMeterModel CurrentSmartMeterModel))
-                {
-                    var model = (SmartMeterModel)CurrentSmartMeterModel.Clone();
-                    SmartMeterModelList.Add(model);
-                    // 把数据分发给需要显示的内容
-                    App.Current.Dispatcher.Invoke(() =>
-                    {
-                        RefreshData(CurrentSmartMeterModel);
-                    });
+                //if (service.smartMeterModels.TryTake(out SmartMeterModel CurrentSmartMeterModel))
+                //{
+                //    var model = (SmartMeterModel)CurrentSmartMeterModel.Clone();
+                //    SmartMeterModelList.Add(model);
+                //    // 把数据分发给需要显示的内容
+                //    App.Current.Dispatcher.Invoke(() =>
+                //    {
+                //        RefreshData(CurrentSmartMeterModel);
+                //    });
 
-                    if (IsRecordData)
-                    {
-                        SaveData(CurrentSmartMeterModel);
-                    }
-                }
-                else
-                {
-                    Thread.Sleep(500);
-                }
+                //    if (IsRecordData)
+                //    {
+                //        SaveData(CurrentSmartMeterModel);
+                //    }
+                //}
+                //else
+                //{
+                //    Thread.Sleep(500);
+                //}
             }
         }
 
@@ -291,14 +291,14 @@ namespace EMS.ViewModel
         [RelayCommand]
         public void CloseSerialPort()
         {
-            service.Disconnect();
+            //service.Disconnect();
         }
 
         [RelayCommand]
         private void OpenSerialPort()
         {
-            service.SetCommunicationConfig(Configuaration);
-            service.Connect();
+            //service.SetCommunicationConfig(Configuaration);
+            //service.Connect();
         }
 
         public ThreePhaseValue GetThreePhaseVoltage()

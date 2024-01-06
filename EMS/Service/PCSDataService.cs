@@ -58,11 +58,6 @@ namespace EMS.Service
         public static byte PcsId = 0;
         public PCSModel pcsModel;
         private static object Locker;
-        
-        public PCSDataService()
-        {
-            Locker = new object();
-        }
 
         public PCSDataService(string id)
         {

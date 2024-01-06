@@ -115,7 +115,7 @@ namespace EMS.ViewModel
 
         public BatteryViewModel()
         {
-
+            Voltage = 100;
         }
 
         public void MarkMinVoltage()

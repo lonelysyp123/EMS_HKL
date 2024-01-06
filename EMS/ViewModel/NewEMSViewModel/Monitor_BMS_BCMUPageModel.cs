@@ -1144,6 +1144,9 @@ namespace EMS.ViewModel.NewEMSViewModel
                 SetProperty(ref fault_BMU_1, value);
             }
         }
+
+        public BatteryViewModel[] BatteryViewModelList;
+
         #endregion
 
         #region Command
@@ -1157,6 +1160,12 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             ToMonitor_BMS_BCMUPageCommand = new RelayCommand(ToMonitor_BMS_BCMUPage);
             Command_OffGrid = new RelayCommand(OffGridCommand);
+
+            BatteryViewModelList = new BatteryViewModel[14];
+            for (int i = 0; i < BatteryViewModelList.Length; i++)
+            {
+                BatteryViewModelList[i] = new BatteryViewModel();
+            }
         }
 
         private void OffGridCommand()
@@ -1220,8 +1229,24 @@ namespace EMS.ViewModel.NewEMSViewModel
         {  
             int i = Array.IndexOf(Cluster, SelectedCluster);
             AnlyseBMUFault(model.Series[i].VolFaultInfo, model.Series[i].TempFaultInfo1, model.Series[i].TempFaultInfo2, model.Series[i].BalanceFaultFaultInfo);
-
+            BatteryInfo(model.Series[i]);
         }
+
+        private void BatteryInfo(BatterySeriesModel model)
+        {
+            for (int j = 0; j < BatteryViewModelList.Length; j++)
+            {
+                BatteryViewModelList[j].Voltage = model.Batteries[j].Voltage;
+                BatteryViewModelList[j].Temperature1 = model.Batteries[j].Temperature1;
+                BatteryViewModelList[j].Temperature2 = model.Batteries[j].Temperature2;
+                BatteryViewModelList[j].SOC = model.Batteries[j].SOC;
+                BatteryViewModelList[j].SOH = model.Batteries[j].SOH;
+                BatteryViewModelList[j].Resistance = model.Batteries[j].Resistance;
+                BatteryViewModelList[j].Capacity = model.Batteries[j].Capacity;
+                BatteryViewModelList[j].BatteryNumber = j + 1;
+            }
+        }
+
         /// <summary>
         /// 分析BCMU故障
         /// </summary>
