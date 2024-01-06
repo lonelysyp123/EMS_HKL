@@ -1319,7 +1319,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                         {
                             case 0:
                                 {
-                                    BCMUTotalFault = FaultLevels.NoFault;
+                                    BCMUTotalFault = FaultLevels.NoAlarm;
                                 }break;
                                 case 1:
                                 {

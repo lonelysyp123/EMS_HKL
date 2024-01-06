@@ -132,7 +132,7 @@
             <!--告警故障绑定Foreground颜色：默认无告警：#FAFAFA，告警：#FFA500，故障：#D81E06-->
             <TextBlock Text="&#xec35;"
                        Style="{StaticResource FIconAlarm}"
-                       Foreground="{Binding FaultColor, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                       Foreground="{Binding Alarmcolor, RelativeSource={RelativeSource AncestorType=UserControl}}"
                        Canvas.Left="80"
                        Canvas.Top="390" />
         </Canvas>
