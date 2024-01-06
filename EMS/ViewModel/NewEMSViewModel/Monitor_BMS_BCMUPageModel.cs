@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using ControlzEx.Standard;
+using EMS.Api;
 using EMS.Common;
 using EMS.Model;
 using EMS.MyControl;
@@ -1194,6 +1195,16 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
+        private string bcmuStateText;
+        public string BCMUStateText
+        {
+            get { return bcmuStateText; }
+            set
+            {
+                SetProperty(ref bcmuStateText, value);
+            }
+        }
+
 
         public BatteryViewModel[] BatteryViewModelList;
 
@@ -1203,13 +1214,17 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public RelayCommand ToMonitor_BMS_BCMUPageCommand { get;private set;}
         public RelayCommand Command_OffGrid { get; private set; }
-
+        public RelayCommand Command_OnGrid { get; private set; }
+        public RelayCommand Command_ResetFault { get; private set; }
         #endregion
-
-        public Monitor_BMS_BCMUPageModel()
+        private string id { get; set; }
+        public Monitor_BMS_BCMUPageModel(string id)
         {
+            this.id =id;
             ToMonitor_BMS_BCMUPageCommand = new RelayCommand(ToMonitor_BMS_BCMUPage);
             Command_OffGrid = new RelayCommand(OffGridCommand);
+            Command_OnGrid = new RelayCommand(OnGridCommand);
+            Command_ResetFault = new RelayCommand(ResetFault);
 
             BatteryViewModelList = new BatteryViewModel[14];
             for (int i = 0; i < BatteryViewModelList.Length; i++)
@@ -1218,45 +1233,66 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
+       
+        private void ResetFault()
+        {
+            BmsApi.ResetBMSFault(id);
+        }
+
+        private void OnGridCommand()
+        {
+            BmsApi.Connect2DcBus(id);
+        }
+
         private void OffGridCommand()
         {
-           
+            BmsApi.Disconnect2DcBus(id);
         }
 
         public void DataDistribution(BatteryTotalModel model)
         {
-            RemainingSOC = model.TotalSOC.ToString();
-            ClusterVoltage = model.TotalVoltage.ToString();
-            PresentCurrent = model.TotalCurrent.ToString();
-            MaxCellVoltage = model.MaxVoltage.ToString();
-            MinCellVoltage = model.MinVoltage.ToString();
-            MaxTemperature = model.MaxTemperature.ToString();
-            MaxCellVoltageIndex = model.MaxTemperatureIndex.ToString();
-            MinCellVoltageIndex = model.MinTemperatureIndex.ToString();
-            MaxTemperatureIndex = model.MaxTemperatureIndex.ToString();
-            MinTemperatureIndex = model.MinTemperatureIndex.ToString();
-            RatedBatteryNumber = model.BatteryCount.ToString();
-            RatedCapacity = model.NomCapacity.ToString();
-            RatedVoltage = model.NomVoltage.ToString();
-            BCMUFaultStateFlag1 = model.FaultStateBCMUTotalFlag;
-            BCMUFaultStateFlag2 = model.FaultStateBCMUFlag1;
-            BCMUFaultStateFlag3 = model.FaultStateBCMUFlag2;
-            BCMUAlarmStateFlag1 = model.AlarmStateBCMUFlag1;
-            BCMUAlarmStateFlag2 = model.AlarmStateBCMUFlag2;
-            BCMUAlarmStateFlag3 = model.AlarmStateBCMUFlag3;
-            StateBCMUFlag = model.StateBCMU;
-            HighCotainerTemperature1 = model.VolContainerTemperature1.ToString();
-            HighCotainerTemperature2 = model.VolContainerTemperature2.ToString();
-            HighCotainerTemperature3 = model.VolContainerTemperature3.ToString();
-            HighCotainerTemperature4 = model.VolContainerTemperature4.ToString();
-            App.Current.Dispatcher.Invoke(()=>
+            try
             {
-                StateBCMUChange(StateBCMUFlag);
-                AnalyseBCMUFault(BCMUFaultStateFlag1,BCMUFaultStateFlag2,BCMUFaultStateFlag3);
-                AnalyseBCMUAlarm(BCMUAlarmStateFlag1,BCMUAlarmStateFlag2,BCMUAlarmStateFlag3);
-            });
-           
-            BMUInfo(model);
+                RemainingSOC = model.TotalSOC.ToString();
+                ClusterVoltage = model.TotalVoltage.ToString();
+                PresentCurrent = model.TotalCurrent.ToString();
+                MaxCellVoltage = model.MaxVoltage.ToString();
+                MinCellVoltage = model.MinVoltage.ToString();
+                MaxTemperature = model.MaxTemperature.ToString();
+                MaxCellVoltageIndex = model.MaxTemperatureIndex.ToString();
+                MinCellVoltageIndex = model.MinTemperatureIndex.ToString();
+                MaxTemperatureIndex = model.MaxTemperatureIndex.ToString();
+                MinTemperatureIndex = model.MinTemperatureIndex.ToString();
+                RatedBatteryNumber = model.BatteryCount.ToString();
+                RatedCapacity = model.NomCapacity.ToString();
+                RatedVoltage = model.NomVoltage.ToString();
+                BCMUFaultStateFlag1 = model.FaultStateBCMUTotalFlag;
+                BCMUFaultStateFlag2 = model.FaultStateBCMUFlag1;
+                BCMUFaultStateFlag3 = model.FaultStateBCMUFlag2;
+                BCMUAlarmStateFlag1 = model.AlarmStateBCMUFlag1;
+                BCMUAlarmStateFlag2 = model.AlarmStateBCMUFlag2;
+                BCMUAlarmStateFlag3 = model.AlarmStateBCMUFlag3;
+                StateBCMUFlag = model.StateBCMU;
+                HighCotainerTemperature1 = model.VolContainerTemperature1.ToString();
+                HighCotainerTemperature2 = model.VolContainerTemperature2.ToString();
+                HighCotainerTemperature3 = model.VolContainerTemperature3.ToString();
+                HighCotainerTemperature4 = model.VolContainerTemperature4.ToString();
+
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    StateBCMUChange(StateBCMUFlag);
+                    AnalyseBCMUFault(BCMUFaultStateFlag1, BCMUFaultStateFlag2, BCMUFaultStateFlag3);
+                    AnalyseBCMUAlarm(BCMUAlarmStateFlag1, BCMUAlarmStateFlag2, BCMUAlarmStateFlag3);
+                });
+
+                BMUInfo(model);
+            }
+            catch (Exception ex)
+            {
+                LogUtils.Error($"BCMU{id}",ex);
+                throw ex;
+            }
+          
         }
 
 
@@ -1268,6 +1304,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                 DisChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                 StandStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                 OffNetStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                BCMUStateText = "充电";
             }
             else if (state == 2)
             {
@@ -1275,6 +1312,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                 DisChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
                 StandStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                 OffNetStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                BCMUStateText = "放电";
             }
             else if (state == 3)
             {
@@ -1282,6 +1320,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                 DisChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                 StandStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
                 OffNetStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                BCMUStateText = "静置";
             }
             else if (state == 4)
             {
@@ -1289,6 +1328,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                 DisChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                 StandStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
                 OffNetStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
+                BCMUStateText = "离网";
             }
         }
         public void StateDistribution(bool isconnected, bool isdaqdata)

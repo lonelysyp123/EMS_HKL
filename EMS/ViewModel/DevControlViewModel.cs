@@ -360,7 +360,7 @@ namespace EMS.Model
             CloseChargeChannelCommand = new RelayCommand(CloseChargeChannel);
             SelectBalancedModeCommand = new RelayCommand(SelectBalancedMode);
             FwUpdateCommand = new RelayCommand(FwUpdate);
-            InNetCommand = new RelayCommand(InNet);
+            
            
             SelectDataCollectionModeCommand = new RelayCommand(SelectDataCollectionMode);   
             DevService = service;
@@ -393,10 +393,7 @@ namespace EMS.Model
             };
         }
 
-        private void InNet()
-        {
-            DevService.InNet();
-        }
+       
 
         private void SelectBalancedMode()
         {

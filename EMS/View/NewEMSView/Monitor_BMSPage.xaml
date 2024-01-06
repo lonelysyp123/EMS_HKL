@@ -37,6 +37,7 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
                            Text="剩余SOC(%):"
@@ -74,6 +75,13 @@
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
+                <TextBlock Grid.Row="6"
+           Text="电池簇状态:"
+           HorizontalAlignment="Right"
+           VerticalAlignment="Center"
+           FontSize="18"
+           FontWeight="Bold" />
+                
             </Grid>
         </Grid>
         <!--BCMU1-->
@@ -106,6 +114,7 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
                            Text="{Binding RemainingSOC}"
@@ -143,6 +152,14 @@
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
+                <TextBlock Grid.Row="6"
+            Text="{Binding BCMUStateText}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="18"
+            FontWeight="Bold" />
+
+                
             </Grid>
         </Grid>
         <!--BCMU2-->
@@ -175,6 +192,7 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
                            Text="{Binding RemainingSOC}"
@@ -212,6 +230,12 @@
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
+                <TextBlock Grid.Row="6"
+            Text="{Binding BCMUStateText}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="18"
+            FontWeight="Bold" />
             </Grid>
         </Grid>
         <!--BCMU3-->
@@ -251,6 +275,7 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
                            Text="{Binding RemainingSOC}"
@@ -288,6 +313,12 @@
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
+                <TextBlock Grid.Row="6"
+            Text="{Binding BCMUStateText}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="18"
+            FontWeight="Bold" />
             </Grid>
         </Grid>
         <!--BCMU4-->
@@ -320,6 +351,7 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
                            Text="{Binding RemainingSOC}"
@@ -357,6 +389,12 @@
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
+                <TextBlock Grid.Row="6"
+Text="{Binding BCMUStateText}"
+HorizontalAlignment="Center"
+VerticalAlignment="Center"
+FontSize="18"
+FontWeight="Bold" />
             </Grid>
         </Grid>
         <!--BCMU5-->
@@ -389,6 +427,7 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
                            Text="{Binding RemainingSOC}"
@@ -426,6 +465,12 @@
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
+                <TextBlock Grid.Row="6"
+Text="{Binding BCMUStateText}"
+HorizontalAlignment="Center"
+VerticalAlignment="Center"
+FontSize="18"
+FontWeight="Bold" />
             </Grid>
         </Grid>
         <!--BCMU6-->
@@ -458,6 +503,7 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
                            Text="{Binding RemainingSOC}"
@@ -495,6 +541,12 @@
                            VerticalAlignment="Center"
                            FontSize="18"
                            FontWeight="Bold" />
+                <TextBlock Grid.Row="6"
+Text="{Binding BCMUStateText}"
+HorizontalAlignment="Center"
+VerticalAlignment="Center"
+FontSize="18"
+FontWeight="Bold" />
             </Grid>
         </Grid>
     </Grid>

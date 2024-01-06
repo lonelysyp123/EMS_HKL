@@ -33,8 +33,33 @@ namespace EMS.Api
         public static void Connect2DcBus(string bcmuid) 
         {
             var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == bcmuid);
-            item.InNet();
+            item.OnGrid();
         }
+
+        public static void Disconnect2DcBus(string bcmuid)
+        {
+            var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == bcmuid);
+            item.OffGrid();
+        }
+
+        public static void ResetBMSFault(string bcmuid)
+        {
+            var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == bcmuid);
+            item.ResetFault();
+        }
+
+        public static byte[] GetBMSProtectSet(string bcmuid)
+        {
+            var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == bcmuid);
+            byte[] data = item.GetProetctSet();
+            return data;
+        }
+
+
+
+
+
+
 
         public static BatteryTotalModel[] GetNextBMSData()
         {

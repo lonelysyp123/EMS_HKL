@@ -55,6 +55,8 @@ namespace EMS.Model
         
     }
 
+
+  
     public class EnergyManagementSystem
     {
         private Thread _operationThread;

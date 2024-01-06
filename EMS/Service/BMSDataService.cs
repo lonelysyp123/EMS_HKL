@@ -538,10 +538,7 @@ namespace EMS.Service
             WriteFunc(40104, 0xBBAA);
         }
 
-        public void InNet()
-        {
-            WriteFunc(40103, 0xBB11);
-        }
+     
 
         public void OnGrid()
         {
@@ -555,6 +552,10 @@ namespace EMS.Service
             WriteFunc(546, 0);
         }
 
+        public byte[] GetProetctSet()
+        {
+            return ReadFunc(560, 37);
+        }
         public void SetClusterState(ushort value)
         {
             WriteFunc(547, value);

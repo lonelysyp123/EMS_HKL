@@ -60,7 +60,7 @@
                                 Foreground="White"
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
-                                IsEnabled="{Binding IsOffGrid}"
+                              
                                 Command="{Binding Command_OffGrid}" />
                         <!--<TextBlock Text="故障恢复："
            Margin="90,0,20,0"
@@ -92,8 +92,8 @@
                                 Foreground="White"
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
-                                IsEnabled="{Binding IsConnectedGrid}"
-                                Command="{Binding Command_ConnectedGrid}" />
+                                
+                                Command="{Binding Command_OnGrid}" />
                     </StackPanel>
                 </Grid>
             </Border>

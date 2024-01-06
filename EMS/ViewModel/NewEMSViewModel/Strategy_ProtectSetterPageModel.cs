@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using EMS.Api;
 using EMS.Service;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,16 @@ namespace EMS.ViewModel.NewEMSViewModel
             set 
             {
                 SetProperty(ref _bcmuId, value);
+            }
+        }
+
+        private string selectedBCMUID;
+        public string SelectedBCMUID
+        {
+            get => selectedBCMUID;
+            set
+            {
+                SetProperty(ref  selectedBCMUID, value);
             }
         }
 
@@ -580,13 +591,13 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             //BCMUInfoModel model = bmsService.ReadBCMUInfo();
             //解析model
+            byte[] data =BmsApi.GetBMSProtectSet(selectedBCMUID);
+
         }
 
         private void SyncInfo()
         {
-            //BCMUInfoModel model = new BCMUInfoModel();
-            //model.xxxx = this.xxxx
-            //bmsService.SyncInfo(model);
+           
         }
 
         private void ReadBUSVolInfo()

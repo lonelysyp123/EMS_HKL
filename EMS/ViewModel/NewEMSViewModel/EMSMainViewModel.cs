@@ -12,6 +12,8 @@ namespace EMS.ViewModel.NewEMSViewModel
 {
     public class EMSMainViewModel : ViewModelBase
     {
+               
+
         public HomePageModel HomePageModel { get; private set; }
         public Monitor_BMSPageModel Monitor_BMSPageModel { get; private set;}
         public Monitor_PCSPageModel Monitor_PCSPageModel { get; private set; }
@@ -36,12 +38,15 @@ namespace EMS.ViewModel.NewEMSViewModel
         private static int SmartMeterCount = 1;
         public EMSMainViewModel()
         {
+
+            EnergyManagementSystem.Initialization(new EnergyManagementSystem());
             bmsServices = new BMSDataService[BCMUCount];
             for (int i = 0; i < BCMUCount; i++)
             {
                 bmsServices[i] = new BMSDataService((i+1).ToString());
                 bmsServices[i].RegisterState(DataCallBack_BMS);
                 bmsServices[i].RegisterState(StateCallBack_BMS);
+                EnergyManagementSystem.GlobalInstance.BMSManager.AddBMSDev(bmsServices[i]);
             }
 
             pcsService = new PCSDataService("1");
@@ -66,6 +71,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             System_DevInfoPageModel = new System_DevInfoPageModel();
             System_DevSetterPageModel = new System_DevSetterPageModel();
             System_MqttSetterPageModel = new System_MqttSetterPageModel();
+
+
         }
 
         private void DataCallBack_BMS(object sender, object model)
