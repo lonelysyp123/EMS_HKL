@@ -1,4 +1,5 @@
-﻿using EMS.ViewModel.NewEMSViewModel;
+﻿using EMS.MyControl;
+using EMS.ViewModel.NewEMSViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,16 +31,22 @@ namespace EMS.View.NewEMSView
         {
             InitializeComponent();
             DataContext = viewmodel;
+            InitView(viewmodel);
         }
 
-        private void IconBorder_Loaded(object sender, RoutedEventArgs e)
+        private void InitView(Monitor_BMS_BCMUPageModel viewmodel)
         {
-
-        }
-
-        private void CheckedButton_Loaded(object sender, RoutedEventArgs e)
-        {
-
+            for (int l = 0; l < 14; l++)
+            {
+                Battery battery = new Battery();
+                Grid.SetRow(battery, l / 7 + 1);
+                Grid.SetColumn(battery, l % 7 + 1);
+                battery.Margin = new Thickness(5);
+                Binding binding = new Binding() { Path = new PropertyPath("SOC") };
+                battery.SetBinding(Battery.SOCProperty, binding);
+                battery.DataContext = viewmodel.BatteryViewModelList[l];
+                BMU_Battery.Children.Add(battery);
+            }
         }
     }
 }

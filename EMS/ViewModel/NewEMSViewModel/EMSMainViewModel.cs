@@ -44,7 +44,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                 bmsServices[i].RegisterState(StateCallBack_BMS);
             }
 
-            pcsService = new PCSDataService();
+            pcsService = new PCSDataService("1");
             pcsService.RegisterState(DataCallBack_PCS);
             pcsService.RegisterState(StateCallBack_PCS);
 
