@@ -1,4 +1,5 @@
-﻿using EMS.ViewModel.NewEMSViewModel;
+﻿using EMS.Model;
+using EMS.ViewModel.NewEMSViewModel;
 using HandyControl.Controls;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,8 @@ namespace EMS.View.NewEMSView
         {
             InitializeComponent();
             viewmodel = new EMSMainViewModel();
-
+            //EnergyManagementSystem.Initialization(new EnergyManagementSystem());
+            
         }
 
         private void Navigation(Page page, ToggleButton button, ToggleButton parent = null, ToggleButton grandpa = null)

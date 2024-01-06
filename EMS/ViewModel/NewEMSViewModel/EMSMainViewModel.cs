@@ -66,6 +66,9 @@ namespace EMS.ViewModel.NewEMSViewModel
             System_DevInfoPageModel = new System_DevInfoPageModel();
             System_DevSetterPageModel = new System_DevSetterPageModel();
             System_MqttSetterPageModel = new System_MqttSetterPageModel();
+
+            EnergyManagementSystem.Initialization(new EnergyManagementSystem());
+            EnergyManagementSystem.GlobalInstance.PcsManager.SetPCS(pcsService);
         }
 
         private void DataCallBack_BMS(object sender, object model)

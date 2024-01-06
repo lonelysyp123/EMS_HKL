@@ -55,7 +55,7 @@ namespace EMS.Service
         private ModbusMaster _master;
         private Action<object, bool, bool> OnChangeState;
         private Action<object, object> OnChangeData;
-        public static byte PcsId = 0;
+        public static byte PcsId = 1;
         public PCSModel pcsModel;
         private static object Locker;
 
@@ -231,7 +231,7 @@ namespace EMS.Service
         {
             try
             {
-                ushort[] holding_register = _master.ReadHoldingRegisters(0, address, num);
+                ushort[] holding_register = _master.ReadHoldingRegisters(1, address, num);
                 byte[] ret = new byte[holding_register.Length * 2];
                 for (int i = 0; i < holding_register.Length; i++)
                 {
@@ -324,9 +324,9 @@ namespace EMS.Service
             }
         }
 
-        public bool WriteFunc(byte slave, PcsCommandAdressEnum address, int value)
+        public bool WriteFunc(byte slave, PcsCommandAdressEnum address, ushort value)
         {
-            return WriteFunc(slave, (ushort)address, (ushort)value);
+            return WriteFunc(slave, (ushort)address, value);
         }
 
 
@@ -337,10 +337,10 @@ namespace EMS.Service
         /// <param name="busvolvalues">BUS侧电压阈值数组</param>
         public void SyncBUSVolInfo(double[] busvolvalues)
         {
-            WriteFunc(PcsId, PcsCommandAdressEnum.HigherVolThreshold, (ushort)(busvolvalues[1] * 10));
-            WriteFunc(PcsId, PcsCommandAdressEnum.LowerVolThreshold, (ushort)(busvolvalues[2] * 10));
-            WriteFunc(PcsId, PcsCommandAdressEnum.HigherVolSetting, (ushort)(busvolvalues[3] * 10));
-            WriteFunc(PcsId, PcsCommandAdressEnum.LowerVolSetting, (ushort)(busvolvalues[4] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.HigherVolThreshold, (ushort)(busvolvalues[0] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.LowerVolThreshold, (ushort)(busvolvalues[1] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.HigherVolSetting, (ushort)(busvolvalues[2] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.LowerVolSetting, (ushort)(busvolvalues[3] * 10));
         }
 
         public byte[] ReadBUSVolInfo()
@@ -366,13 +366,13 @@ namespace EMS.Service
         /// <param name="dcbranch1values">DC侧支路分支值数组</param>
         public void SyncDCBranchInfo(double[] dcbranch1values)
         {
-            WriteFunc(PcsId, PcsCommandAdressEnum.BatteryLowerVolThreshold, (ushort)(dcbranch1values[1] * 10));
-            WriteFunc(PcsId, PcsCommandAdressEnum.EndOfDischargeVol, (ushort)(dcbranch1values[2] * 10));
-            WriteFunc(PcsId, PcsCommandAdressEnum.MutiStrCurRegulationPar, (ushort)(dcbranch1values[3]));
-            WriteFunc(PcsId, PcsCommandAdressEnum.BatteryToppingCharVol, (ushort)(dcbranch1values[4] * 10));
-            WriteFunc(PcsId, PcsCommandAdressEnum.EndOfCharCur, (ushort)(dcbranch1values[5] * 10));
-            WriteFunc(PcsId, PcsCommandAdressEnum.MaxCharCur, (ushort)(dcbranch1values[6] * 10));
-            WriteFunc(PcsId, PcsCommandAdressEnum.MaxDischarCur, (ushort)(dcbranch1values[7] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.BatteryLowerVolThreshold, (ushort)(dcbranch1values[0] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.EndOfDischargeVol, (ushort)(dcbranch1values[1] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.MutiStrCurRegulationPar, (ushort)(dcbranch1values[2]));
+            WriteFunc(PcsId, PcsCommandAdressEnum.BatteryToppingCharVol, (ushort)(dcbranch1values[3] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.EndOfCharCur, (ushort)(dcbranch1values[4] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.MaxCharCur, (ushort)(dcbranch1values[5] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.MaxDischarCur, (ushort)(dcbranch1values[6] * 10));
         }
 
         public byte[] ReadDCBranchInfo()
@@ -494,8 +494,8 @@ namespace EMS.Service
                     valueAddress = PcsCommandAdressEnum.PowerValueSet;
                     break;
             }
-            WriteFunc(PcsId, modeAddress, modeValue);
-            WriteFunc(PcsId, valueAddress, controlValue);
+            //WriteFunc(PcsId, modeAddress, modeValue);
+            //WriteFunc(PcsId, valueAddress, controlValue);
         }
     }
     public enum PcsCommandAdressEnum

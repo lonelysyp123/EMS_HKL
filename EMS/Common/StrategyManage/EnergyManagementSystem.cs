@@ -51,8 +51,6 @@ namespace EMS.Model
         {
             _pcsDataService = pcsdataservice;
         }
-
-        
     }
 
     public class EnergyManagementSystem
