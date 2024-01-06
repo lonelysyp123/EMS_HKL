@@ -978,7 +978,7 @@
 
                         </Grid>
                         <!--BMU电池信息-->
-                        <Grid Grid.Row="4">
+                        <Grid Grid.Row="4" x:Name="BMU_Battery">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition />
@@ -1001,11 +1001,11 @@
                                                          FIconBorder_Background="#E8F3FF"
                                                          FIcon_Foreground="#2A6BFF" />
                             </StackPanel>
-                            <StackPanel x:Name="BMU_Battery"
+                            <!--<StackPanel x:Name="BMU_Battery"
                                         Grid.Row="1"
                                         Grid.Column="0"
                                         Style="{StaticResource ContentPanel}">
-                            </StackPanel>
+                            </StackPanel>-->
                         </Grid>
                     </Grid>
                 </Border>

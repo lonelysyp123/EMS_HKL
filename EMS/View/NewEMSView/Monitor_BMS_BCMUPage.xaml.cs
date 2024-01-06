@@ -31,32 +31,22 @@ namespace EMS.View.NewEMSView
         {
             InitializeComponent();
             DataContext = viewmodel;
-            InitView();
+            InitView(viewmodel);
         }
 
-        private void InitView()
+        private void InitView(Monitor_BMS_BCMUPageModel viewmodel)
         {
             for (int l = 0; l < 14; l++)
             {
                 Battery battery = new Battery();
-                Grid.SetRow(battery, l / 7);
-                Grid.SetColumn(battery, l % 7);
+                Grid.SetRow(battery, l / 7 + 1);
+                Grid.SetColumn(battery, l % 7 + 1);
                 battery.Margin = new Thickness(5);
                 Binding binding = new Binding() { Path = new PropertyPath("SOC") };
                 battery.SetBinding(Battery.SOCProperty, binding);
-                battery.DataContext = (this.DataContext as Monitor_BMS_BCMUPageModel).BatteryViewModelList[l];
+                battery.DataContext = viewmodel.BatteryViewModelList[l];
                 BMU_Battery.Children.Add(battery);
             }
-        }
-
-        private void IconBorder_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void CheckedButton_Loaded(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
