@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls.WebParts;
+using System.Windows.Controls;
 
 namespace EMS.Service.impl
 {
@@ -90,10 +92,46 @@ namespace EMS.Service.impl
             return true;
         }
 
-        public List<BcmuModel> GetBcmu()
-        {
-            BcmuManage bmsConfigInfo = new BcmuManage();
-            return bmsConfigInfo.Get();
+        public List<MqttModel> GetMqttInfo() {
+            MqttManage mqttManage = new MqttManage();
+            return mqttManage.Get();
+        }
+
+        public bool AddMqtt(int id, string ip, int port, string clientId, string userName, string password) {
+            try
+            {
+                MqttModel mqttModel = new MqttModel();
+                mqttModel.Id = id;
+                mqttModel.Ip = ip; 
+                mqttModel.Port = port; 
+                mqttModel.ClientId = clientId; 
+                mqttModel.UserName = userName; 
+                mqttModel.Password = password;
+                MqttManage mqttManage = new MqttManage();
+                List<MqttModel> mqttModels = mqttManage.Get();
+                if (mqttModels != null && mqttModels.Count > 0)
+                {
+                    MqttModel mqttModel1 = mqttModels.Find(item => item.Id == id);
+                    if (mqttModel1 == null)
+                    {
+                        mqttManage.Insert(mqttModel);
+                    }
+                    else
+                    {
+                        mqttManage.Update(mqttModel);
+                    }
+                }
+                else
+                {
+                    mqttManage.Insert(mqttModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
