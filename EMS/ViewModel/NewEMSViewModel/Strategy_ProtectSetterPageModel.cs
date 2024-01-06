@@ -11,6 +11,7 @@ namespace EMS.ViewModel.NewEMSViewModel
 {
     public class Strategy_ProtectSetterPageModel:ViewModelBase
     {
+        
         //BCMU簇选择
         private List<string> _bcmuId;
         public List<string> BcmuId
@@ -265,6 +266,39 @@ namespace EMS.ViewModel.NewEMSViewModel
             set
             {
                 SetProperty(ref _tempDischarUpLimitLv3, value);
+            }
+        }
+
+        /// <summary>
+        /// 放电温度下限
+        /// </summary>
+        private double _tempDischarLowLimitLv2;
+        public double TempDischarLowLimitLv2
+        {
+            get => _tempDischarLowLimitLv2;
+            set
+            {
+                SetProperty(ref _tempDischarLowLimitLv2, value);
+            }
+        }
+
+        private double _tempDischarLowLimitLv1;
+        public double TempDischarLowLimitLv1
+        {
+            get => _tempDischarLowLimitLv1;
+            set
+            {
+                SetProperty(ref _tempDischarLowLimitLv1, value);
+            }
+        }
+
+        private double _tempDischarLowLimitLv3;
+        public double TempDischarLowLimitLv3
+        {
+            get => _tempDischarLowLimitLv3;
+            set
+            {
+                SetProperty(ref _tempDischarLowLimitLv3, value);
             }
         }
 
@@ -591,7 +625,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             //BCMUInfoModel model = bmsService.ReadBCMUInfo();
             //解析model
-            byte[] data =BmsApi.GetBMSProtectSet(selectedBCMUID);
+            byte[] data;
+            data=BmsApi.GetBMSProtectSet(selectedBCMUID);
 
         }
 
