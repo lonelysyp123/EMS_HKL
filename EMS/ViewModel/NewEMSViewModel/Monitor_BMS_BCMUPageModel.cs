@@ -1199,7 +1199,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             BMUInfo(model);
         }
 
-        public void StateDistribution(bool isconnected, bool isdaqdata)
+        public void StateDistribution(bool isconnected, bool isdaqdata, bool isSaveData)
         {
             if (isconnected) 
             { 
