@@ -141,16 +141,7 @@
                                        HorizontalAlignment="Center" />
                             <TextBox Text="{Binding ClusterVolUpLimitLv3}"
                                      Style="{StaticResource Input}" />
-                            <Button Content="读取信息"
-                                    FontSize="11"
-                                    Width="80"
-                                    Height="25"
-                                    Foreground="white"
-                                    FontWeight="Bold"
-                                    Background="#1890FF"
-                                    BorderThickness="0,0,0,0"
-                                    Margin="10 0 0 0"
-                                    Command="{Binding ReadDBInfoCommand}" />
+                            
                             <Button Content="同步信息"
                                     FontSize="11"
                                     Width="80"
@@ -160,7 +151,7 @@
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
                                     Margin="10 0 0 0"
-                                    Command="{Binding SyncInfoCommand}" />
+                                    Command="{Binding SyncInfo1Command}" />
                         </StackPanel>
                         <StackPanel Grid.Row="2"
                                     Grid.Column="1"
@@ -199,16 +190,7 @@
                                        HorizontalAlignment="Center" />
                             <TextBox Text="{Binding ClusterVolLowLimitLv3}"
                                      Style="{StaticResource Input}" />
-                            <Button Content="读取信息"
-                                    FontSize="11"
-                                    Width="80"
-                                    Height="25"
-                                    Foreground="white"
-                                    FontWeight="Bold"
-                                    Background="#1890FF"
-                                    BorderThickness="0,0,0,0"
-                                    Margin="10 0 0 0"
-                                    Command="{Binding ReadDBInfoCommand}" />
+                            
                             <Button Content="同步信息"
                                     FontSize="11"
                                     Width="80"
@@ -218,7 +200,7 @@
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
                                     Margin="10 0 0 0"
-                                    Command="{Binding SyncInfoCommand}" />
+                                    Command="{Binding SyncInfo2Command}" />
                         </StackPanel>
                     </Grid>
                     <!--单体设置-->
@@ -288,16 +270,7 @@
                                        HorizontalAlignment="Center" />
                             <TextBox Text="{Binding SingleVolUpLimitLv3}"
                                      Style="{StaticResource Input}" />
-                            <Button Content="读取信息"
-                                    FontSize="11"
-                                    Width="80"
-                                    Height="25"
-                                    Foreground="white"
-                                    FontWeight="Bold"
-                                    Background="#1890FF"
-                                    BorderThickness="0,0,0,0"
-                                    Margin="10 0 0 0"
-                                    Command="{Binding ReadDBInfoCommand}" />
+                            
                             <Button Content="同步信息"
                                     FontSize="11"
                                     Width="80"
@@ -307,7 +280,7 @@
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
                                     Margin="10 0 0 0"
-                                    Command="{Binding SyncInfoCommand}" />
+                                    Command="{Binding SyncInfo3Command}" />
                         </StackPanel>
                         <!--第2行-->
                         <StackPanel Grid.Row="2"
@@ -347,16 +320,7 @@
                                        HorizontalAlignment="Center" />
                             <TextBox Text="{Binding SingleVolLowLimitLv3}"
                                      Style="{StaticResource Input}" />
-                            <Button Content="读取信息"
-                                    FontSize="11"
-                                    Width="80"
-                                    Height="25"
-                                    Foreground="white"
-                                    FontWeight="Bold"
-                                    Background="#1890FF"
-                                    BorderThickness="0,0,0,0"
-                                    Margin="10 0 0 0"
-                                    Command="{Binding ReadDBInfoCommand}" />
+                            
                             <Button Content="同步信息"
                                     FontSize="11"
                                     Width="80"
@@ -366,7 +330,7 @@
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
                                     Margin="10 0 0 0"
-                                    Command="{Binding SyncInfoCommand}" />
+                                    Command="{Binding SyncInfo4Command}" />
                         </StackPanel>
                         <!--第3行-->
                         <StackPanel Grid.Row="3"
@@ -406,16 +370,7 @@
                                        HorizontalAlignment="Center" />
                             <TextBox Text="{Binding TempCharUpLimitLv3}"
                                      Style="{StaticResource Input}" />
-                            <Button Content="读取信息"
-                                    FontSize="11"
-                                    Width="80"
-                                    Height="25"
-                                    Foreground="white"
-                                    FontWeight="Bold"
-                                    Background="#1890FF"
-                                    BorderThickness="0,0,0,0"
-                                    Margin="10 0 0 0"
-                                    Command="{Binding ReadDBInfoCommand}" />
+                            
                             <Button Content="同步信息"
                                     FontSize="11"
                                     Width="80"
@@ -425,7 +380,7 @@
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
                                     Margin="10 0 0 0"
-                                    Command="{Binding SyncInfoCommand}" />
+                                    Command="{Binding SyncInfo5Command}" />
                         </StackPanel>
                         <!--第4行-->
                         <StackPanel Grid.Row="4"
@@ -465,16 +420,7 @@
                                        HorizontalAlignment="Center" />
                             <TextBox Text="{Binding TempCharLowLimitLv3}"
                                      Style="{StaticResource Input}" />
-                            <Button Content="读取信息"
-                                    FontSize="11"
-                                    Width="80"
-                                    Height="25"
-                                    Foreground="white"
-                                    FontWeight="Bold"
-                                    Background="#1890FF"
-                                    BorderThickness="0,0,0,0"
-                                    Margin="10 0 0 0"
-                                    Command="{Binding ReadDBInfoCommand}" />
+                            
                             <Button Content="同步信息"
                                     FontSize="11"
                                     Width="80"
@@ -484,7 +430,7 @@
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
                                     Margin="10 0 0 0"
-                                    Command="{Binding SyncInfoCommand}" />
+                                    Command="{Binding SyncInfo6Command}" />
                         </StackPanel>
                         <!--第5行-->
                         <StackPanel Grid.Row="5"
@@ -525,16 +471,7 @@
                                        HorizontalAlignment="Center" />
                             <TextBox Text="{Binding TempDischarUpLimitLv3}"
                                      Style="{StaticResource Input}" />
-                            <Button Content="读取信息"
-                                    FontSize="11"
-                                    Width="80"
-                                    Height="25"
-                                    Foreground="white"
-                                    FontWeight="Bold"
-                                    Background="#1890FF"
-                                    BorderThickness="0,0,0,0"
-                                    Margin="10 0 0 0"
-                                    Command="{Binding ReadDBInfoCommand}" />
+                            
                             <Button Content="同步信息"
                                     FontSize="11"
                                     Width="80"
@@ -544,7 +481,7 @@
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
                                     Margin="10 0 0 0"
-                                    Command="{Binding SyncInfoCommand}" />
+                                    Command="{Binding SyncInfo7Command}" />
                         </StackPanel>
                         <!--第6行-->
                         <StackPanel Grid.Row="6"
@@ -584,16 +521,7 @@
                                HorizontalAlignment="Center" />
                                             <TextBox Text="{Binding TempDischarLowLimitLv3}"
                              Style="{StaticResource Input}" />
-                            <Button Content="读取信息"
-                                    FontSize="11"
-                                    Width="80"
-                                    Height="25"
-                                    Foreground="white"
-                                    FontWeight="Bold"
-                                    Background="#1890FF"
-                                    BorderThickness="0,0,0,0"
-                                    Margin="10 0 0 0"
-                                    Command="{Binding ReadDBInfoCommand}" />
+                            
                             <Button Content="同步信息"
                                     FontSize="11"
                                     Width="80"
@@ -603,7 +531,7 @@
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
                                     Margin="10 0 0 0"
-                                    Command="{Binding SyncInfoCommand}" />
+                                    Command="{Binding SyncInfo8Command}" />
                         </StackPanel>
                         
                         <!--第7行-->
@@ -644,16 +572,7 @@
                                        HorizontalAlignment="Center" />
                             <TextBox Text="{Binding CurCharLv3}"
                                      Style="{StaticResource Input}" />
-                            <Button Content="读取信息"
-                                    FontSize="11"
-                                    Width="80"
-                                    Height="25"
-                                    Foreground="white"
-                                    FontWeight="Bold"
-                                    Background="#1890FF"
-                                    BorderThickness="0,0,0,0"
-                                    Margin="10 0 0 0"
-                                    Command="{Binding ReadDBInfoCommand}" />
+                            
                             <Button Content="同步信息"
                                     FontSize="11"
                                     Width="80"
@@ -663,7 +582,7 @@
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
                                     Margin="10 0 0 0"
-                                    Command="{Binding SyncInfoCommand}" />
+                                    Command="{Binding SyncInfo9Command}" />
                         </StackPanel>
                         <!--第8行-->
                         <StackPanel Grid.Row="8"
@@ -703,16 +622,7 @@
                                        HorizontalAlignment="Center" />
                             <TextBox Text="{Binding CurDischarLv3}"
                                      Style="{StaticResource Input}" />
-                            <Button Content="读取信息"
-                                    FontSize="11"
-                                    Width="80"
-                                    Height="25"
-                                    Foreground="white"
-                                    FontWeight="Bold"
-                                    Background="#1890FF"
-                                    BorderThickness="0,0,0,0"
-                                    Margin="10 0 0 0"
-                                    Command="{Binding ReadDBInfoCommand}" />
+                            
                             <Button Content="同步信息"
                                     FontSize="11"
                                     Width="80"
@@ -722,7 +632,7 @@
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
                                     Margin="10 0 0 0"
-                                    Command="{Binding SyncInfoCommand}" />
+                                    Command="{Binding SyncInfo10Command}" />
                         </StackPanel>
                         <!--第9行-->
                         <StackPanel Grid.Row="9"
@@ -762,16 +672,7 @@
                                        HorizontalAlignment="Center" />
                             <TextBox Text="{Binding SingleVolDiffLv3}"
                                      Style="{StaticResource Input}" />
-                            <Button Content="读取信息"
-                                    FontSize="11"
-                                    Width="80"
-                                    Height="25"
-                                    Foreground="white"
-                                    FontWeight="Bold"
-                                    Background="#1890FF"
-                                    BorderThickness="0,0,0,0"
-                                    Margin="10 0 0 0"
-                                    Command="{Binding ReadDBInfoCommand}" />
+                            
                             <Button Content="同步信息"
                                     FontSize="11"
                                     Width="80"
@@ -781,7 +682,7 @@
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
                                     Margin="10 0 0 0"
-                                    Command="{Binding SyncInfoCommand}" />
+                                    Command="{Binding SyncInfo11Command}" />
                         </StackPanel>
                         <!--第10行-->
                         <StackPanel Grid.Row="10"
@@ -821,16 +722,7 @@
                                        HorizontalAlignment="Center" />
                             <TextBox Text="{Binding SOCLowLimitLv3}"
                                      Style="{StaticResource Input}" />
-                            <Button Content="读取信息"
-                                    FontSize="11"
-                                    Width="80"
-                                    Height="25"
-                                    Foreground="white"
-                                    FontWeight="Bold"
-                                    Background="#1890FF"
-                                    BorderThickness="0,0,0,0"
-                                    Margin="10 0 0 0"
-                                    Command="{Binding ReadDBInfoCommand}" />
+                           
                             <Button Content="同步信息"
                                     FontSize="11"
                                     Width="80"
@@ -840,7 +732,7 @@
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
                                     Margin="10 0 0 0"
-                                    Command="{Binding SyncInfoCommand}" />
+                                    Command="{Binding SyncInfo12Command}" />
                         </StackPanel>
                         <!--第11行-->
                         <StackPanel Grid.Row="11"
@@ -868,16 +760,7 @@
                                        HorizontalAlignment="Center" Visibility="Hidden"/>
                             <TextBox Text="{Binding IsoRLowLimitLv1}"
                                      Style="{StaticResource Input}" Visibility="Hidden"/>
-                            <Button Content="读取信息"
-                                    FontSize="11"
-                                    Width="80"
-                                    Height="25"
-                                    Foreground="white"
-                                    FontWeight="Bold"
-                                    Background="#1890FF"
-                                    BorderThickness="0,0,0,0"
-                                    Margin="10 0 0 0"
-                                    Command="{Binding ReadDBInfoCommand}" />
+                            
                             <Button Content="同步信息"
                                     FontSize="11"
                                     Width="80"
@@ -887,7 +770,7 @@
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
                                     Margin="10 0 0 0"
-                                    Command="{Binding SyncInfoCommand}" />
+                                    Command="{Binding SyncInfo13Command}" />
                         </StackPanel>
                         <!--第12行-->
                         <StackPanel Grid.Row="12"
@@ -911,14 +794,7 @@
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
                                     Command="{Binding ReadBCMUInfoCommand}" />
-                            <Button Content="同步信息"
-                                    Width="120"
-                                    Height="35"
-                                    Foreground="white"
-                                    FontWeight="Bold"
-                                    Background="#1890FF"
-                                    BorderThickness="0,0,0,0"
-                                    Command="{Binding SyncInfoCommand}" />
+                            
                         </StackPanel>
                     </Grid>
                     <!--end-->

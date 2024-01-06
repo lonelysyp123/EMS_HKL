@@ -627,7 +627,45 @@ namespace EMS.ViewModel.NewEMSViewModel
             //解析model
             byte[] data;
             data=BmsApi.GetBMSProtectSet(selectedBCMUID);
+            ClusterVolUpLimitLv1 = BitConverter.ToUInt16(data, 0) * 0.1;
+            ClusterVolUpLimitLv2 = BitConverter.ToUInt16(data, 2) * 0.1;
+            ClusterVolUpLimitLv3 = BitConverter.ToUInt16(data, 4) * 0.1;
+            ClusterVolLowLimitLv1 = BitConverter.ToUInt16(data, 6) * 0.1;
+            ClusterVolLowLimitLv2 = BitConverter.ToUInt16(data, 8) * 0.1;
+            ClusterVolLowLimitLv3 = BitConverter.ToUInt16(data, 10) * 0.1;
+            SingleVolUpLimitLv1 = BitConverter.ToUInt16(data, 12) * 0.001;
+            SingleVolUpLimitLv2 = BitConverter.ToUInt16(data, 14) * 0.001;
+            SingleVolUpLimitLv3 = BitConverter.ToUInt16(data, 16) * 0.001;
+            SingleVolLowLimitLv1 = BitConverter.ToUInt16(data, 18) * 0.001;
+            SingleVolLowLimitLv2 = BitConverter.ToUInt16(data, 20) * 0.001;
+            SingleVolLowLimitLv3 = BitConverter.ToUInt16(data, 22) * 0.001;
+            TempCharUpLimitLv1 = (BitConverter.ToUInt16(data, 24) - 2731) * 0.1;
+            TempCharUpLimitLv2 = (BitConverter.ToUInt16(data, 26) - 2731) * 0.1;
+            TempCharUpLimitLv3 = (BitConverter.ToUInt16(data, 28) - 2731) * 0.1;
+            TempCharLowLimitLv1 = (BitConverter.ToUInt16(data, 30) - 2731) * 0.1;
+            TempCharLowLimitLv2 = (BitConverter.ToUInt16(data, 32) - 2731) * 0.1;
+            TempCharLowLimitLv3 = (BitConverter.ToUInt16(data, 34) - 2731) * 0.1;
+            TempDischarUpLimitLv1 = (BitConverter.ToUInt16(data, 36) - 2731) * 0.1;
+            TempDischarUpLimitLv2 = (BitConverter.ToUInt16(data, 38) - 2731) * 0.1;
+            TempDischarUpLimitLv3 = (BitConverter.ToUInt16(data, 40) - 2731) * 0.1;
 
+
+            TempDischarLowLimitLv1 = (BitConverter.ToUInt16(data, 42) - 2731) * 0.1;
+            TempDischarLowLimitLv2 = (BitConverter.ToUInt16(data, 44) - 2731) * 0.1;
+            TempDischarLowLimitLv3 = (BitConverter.ToUInt16(data, 46) - 2731) * 0.1;
+            CurCharLv1 = BitConverter.ToInt16(data, 48) * 0.1;
+            CurCharLv2 = BitConverter.ToInt16(data, 50) * 0.1;
+            CurCharLv3 = BitConverter.ToInt16(data, 52) * 0.1;
+            CurDischarLv1 = BitConverter.ToInt16(data, 54) * 0.1;
+            CurDischarLv2 = BitConverter.ToInt16(data, 56) * 0.1;
+            CurDischarLv3 = BitConverter.ToInt16(data, 58) * 0.1;
+            SingleVolDiffLv1 = BitConverter.ToUInt16(data, 60) * 0.001;
+            SingleVolDiffLv2 = BitConverter.ToUInt16(data, 62) * 0.001;
+            SingleVolDiffLv3 = BitConverter.ToUInt16(data, 64) * 0.001;
+            SOCLowLimitLv1 = BitConverter.ToUInt16(data, 66) * 0.1;
+            SOCLowLimitLv2 = BitConverter.ToUInt16(data, 68) * 0.1;
+            SOCLowLimitLv3 = BitConverter.ToUInt16(data, 70) * 0.1;
+            IsoRLowLimitLv1 = BitConverter.ToUInt16(data, 72);
         }
 
         private void SyncInfo()
