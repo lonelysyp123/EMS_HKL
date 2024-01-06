@@ -32,18 +32,25 @@ namespace EMS.Api
         /// 获取PCS保护参数接口
         /// </summary>
         /// <returns></returns>
-        public static PCSParSettingModel GetBMSParam()
+        public static PCSParSettingModel GetBUSParam()
         {
+            //需实现获取BUS相关逻辑
             return null;
         }
-
-        /// <summary>
-        /// 设置PCS保护参数接口
-        /// </summary>
-        /// <returns></returns>
-        public static void SetBMSParam()
+        public static PCSParSettingModel SetBUSParam()
         {
-
+            //需实现设置BUS相关逻辑
+            return null;
+        }
+        public static PCSParSettingModel GetDCBranchParam()
+        {
+            //需实现获取DCBranch相关逻辑
+            return null;
+        }
+        public static PCSParSettingModel SetDCBranchParam()
+        {
+            //需实现设置DCBranch相关逻辑
+            return null;
         }
 
         /// <summary>

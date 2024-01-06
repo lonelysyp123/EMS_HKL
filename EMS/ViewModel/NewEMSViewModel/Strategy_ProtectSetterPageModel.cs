@@ -678,7 +678,7 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         private void ReadBUSVolInfo()
         {
-            PCSParSettingModel model = new PCSParSettingModel();
+            PCSParSettingModel model = PcsApi.GetBUSParam();
             //解析model
             this.BUSUpperLimitVolThresh = model.BUSUpperLimitVolThresh;
             this.BUSLowerLimitVolThresh = model.BUSLowerLimitVolThresh;
@@ -689,7 +689,7 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         private void SyncBUSVolInfo()
         {
-            PCSParSettingModel model = new PCSParSettingModel();
+            PCSParSettingModel model = PcsApi.SetBUSParam();
             model.BUSUpperLimitVolThresh = this.BUSUpperLimitVolThresh;
             model.BUSLowerLimitVolThresh = this.BUSLowerLimitVolThresh;
             model.BUSHVolSetting = this.BUSHVolSetting;
@@ -701,7 +701,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             //PCSInfoModel model = pcsService.DCBranchInfo();
             //解析model
-            PCSParSettingModel model = new PCSParSettingModel();
+            PCSParSettingModel model = PcsApi.GetDCBranchParam();
             this.BTLLimitVol = model.BTLLimitVol;
             this.DischargeSTVol = model.DischargeSTVol;
             this.MultiBranchCurRegPar = model.MultiBranchCurRegPar;
@@ -716,7 +716,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             //PCSInfoModel model = new DCBranchInfo();
             //model.xxxx = this.xxxx
             //pcsService.SyncDCBranchInfo(model);
-            PCSParSettingModel model = new PCSParSettingModel();
+            PCSParSettingModel model = PcsApi.SetDCBranchParam();
             model.BTLLimitVol = this.BTLLimitVol;
             model.DischargeSTVol = this.DischargeSTVol;
             model.MultiBranchCurRegPar = this.MultiBranchCurRegPar;
