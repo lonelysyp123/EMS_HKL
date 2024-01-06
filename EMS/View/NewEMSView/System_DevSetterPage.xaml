@@ -351,12 +351,12 @@
             </Border>
         </Grid>
         <!--电表-->
-        <Grid Grid.Row="2" x:Name="SmartMeterGrid">
+        <Grid Grid.Row="2">
             <Border Background="white"
                     Margin="20,15,0,0"
                     Padding="20,15"
                     CornerRadius="15">
-                <Grid>
+                <Grid x:Name="SmartMeterGrid">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition />

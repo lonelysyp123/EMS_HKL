@@ -312,7 +312,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             TimeCollatingCommand = new RelayCommand(TimeCollating);
             DevDataPointConfigCommand = new RelayCommand(DevDataPointConfig);
             SystemSettingService = new SystemSettingService();
-
+            Configuaration = new Configuaration();
             InitBMS();
             InitPcs();
             InitSmartMeter();
@@ -435,18 +435,67 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
     }
 
-    public class Configuaration
+    public class Configuaration : ViewModelBase
     {
         public List<SerialPortSettingsModel> CommPorts { get; set; }
-        public string SelectedCommPort { get; set; }
+
+        private string selectedCommPort;
+        public string SelectedCommPort 
+        {
+            get {  return selectedCommPort; }
+            set
+            {
+                SetProperty(ref selectedCommPort, value);
+            }
+        }
+
         public List<SerialPortSettingsModel> BaudRates { get; set; }
-        public int SelectedBaudRate { get; set; }
+
+        private int selectedBaudRate;
+        public int SelectedBaudRate 
+        {
+            get { return  selectedBaudRate; }
+            set
+            {
+                SetProperty(ref selectedBaudRate, value);
+            }
+        }
+
         public List<SerialPortSettingsModel> Parities { get; set; }
-        public Parity SelectedParity { get; set; }
+
+        private Parity selectedParity;
+        public Parity SelectedParity 
+        {
+            get { return selectedParity; }
+            set
+            {
+                SetProperty(ref selectedParity, value);
+            }
+        }
+
         public List<SerialPortSettingsModel> StopBitsList { get; set; }
-        public StopBits SelectedStopBits { get; set; }
+
+        private StopBits selectedStopBits;
+        public StopBits SelectedStopBits 
+        {
+            get { return selectedStopBits; }
+            set
+            {
+                SetProperty(ref selectedStopBits, value);
+            }
+        }
+
         public int[] DataBits { get; set; }
-        public int SelectedDataBits { get; set; }
+
+        private int selectedDataBits;
+        public int SelectedDataBits 
+        {
+            get { return selectedDataBits; }
+            set
+            {
+                SetProperty(ref selectedDataBits, value);
+            }
+        }
         public int AcquisitionCycle_Ammeter {  get; set; }
 
         public Configuaration()

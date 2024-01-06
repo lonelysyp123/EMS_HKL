@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using EMS.Common;
 using EMS.Model;
 using EMS.Service;
+using EMS.ViewModel.NewEMSViewModel;
 using log4net;
 using System;
 using System.Collections.Concurrent;
@@ -212,7 +213,7 @@ namespace EMS.ViewModel
 
         public ElectricMeterViewModel()
         {
-            service = new SmartMeterDataService();
+            //service = new SmartMeterDataService();
             //service.RegisterState(ServiceStateCallBack);
         }
 
@@ -353,28 +354,5 @@ namespace EMS.ViewModel
         public double PhaseA;
         public double PhaseB;
         public double PhaseC;
-    }
-
-    public class Configuaration
-    {
-        public List<SerialPortSettingsModel> CommPorts { get; private set; }
-        public string SelectedCommPort { get; set; }
-        public List<SerialPortSettingsModel> BaudRates { get; private set; }
-        public int SelectedBaudRate { get; set; }
-        public List<SerialPortSettingsModel> Parities { get; private set; }
-        public Parity SelectedParity { get; set; }
-        public List<SerialPortSettingsModel> StopBitsList { get; private set; }
-        public StopBits SelectedStopBits { get; set; }
-        public int[] DataBits { get; private set; }
-        public int SelectedDataBits { get; set; }
-
-        public Configuaration()
-        {
-            CommPorts = SerialPortSettingsModel.Instance.getCommPorts();
-            BaudRates = SerialPortSettingsModel.Instance.getBaudRates();
-            Parities = SerialPortSettingsModel.Instance.getParities();
-            StopBitsList = SerialPortSettingsModel.Instance.getStopBits();
-            DataBits = new int[] { 4, 5, 6, 7, 8 };
-        }
     }
 }

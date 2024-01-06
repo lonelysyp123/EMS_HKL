@@ -2,6 +2,7 @@
 using EMS.Model;
 using EMS.Storage.DB.DBManage;
 using EMS.ViewModel;
+using EMS.ViewModel.NewEMSViewModel;
 using log4net.Repository.Hierarchy;
 using Modbus.Device;
 using System;
