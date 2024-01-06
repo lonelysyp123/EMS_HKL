@@ -595,7 +595,20 @@ namespace EMS.ViewModel.NewEMSViewModel
         #region Command
         public RelayCommand ReadDBInfoCommand { get; set; }
         public RelayCommand ReadBCMUInfoCommand { get; set; }
-        public RelayCommand SyncInfoCommand { get; set; }
+        public RelayCommand SyncInfo1Command { get; set; }
+        public RelayCommand SyncInfo13Command { get; set; }
+        public RelayCommand SyncInfo2Command { get; set; }
+        public RelayCommand SyncInfo3Command { get; set; }
+        public RelayCommand SyncInfo4Command { get; set; }
+        public RelayCommand SyncInfo5Command { get; set; }
+        public RelayCommand SyncInfo6Command { get; set; }
+        public RelayCommand SyncInfo7Command { get; set; }
+        public RelayCommand SyncInfo8Command { get; set; }
+        public RelayCommand SyncInfo9Command { get; set; }
+        public RelayCommand SyncInfo10Command { get; set; }
+        public RelayCommand SyncInfo11Command { get; set; }
+        public RelayCommand SyncInfo12Command { get; set; }
+        
         public RelayCommand ReadBUSVolInfoCommand { get; set; }
         public RelayCommand SyncBUSVolInfoCommand { get; set; }
         public RelayCommand ReadDCBranchInfoCommand { get; set; }
@@ -609,7 +622,19 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             ReadDBInfoCommand = new RelayCommand(ReadDBInfo);
             ReadBCMUInfoCommand = new RelayCommand(ReadBCMUInfo);
-            SyncInfoCommand = new RelayCommand(SyncInfo);
+            SyncInfo1Command = new RelayCommand(SyncInfo1);
+            SyncInfo2Command = new RelayCommand(SyncInfo2);
+            SyncInfo3Command = new RelayCommand(SyncInfo3);
+            SyncInfo4Command = new RelayCommand(SyncInfo4);
+            SyncInfo5Command = new RelayCommand(SyncInfo5);
+            SyncInfo6Command = new RelayCommand(SyncInfo6);
+            SyncInfo7Command = new RelayCommand(SyncInfo7);
+            SyncInfo8Command = new RelayCommand(SyncInfo8);
+            SyncInfo9Command = new RelayCommand(SyncInfo9);
+            SyncInfo10Command = new RelayCommand(SyncInfo10);
+            SyncInfo11Command = new RelayCommand(SyncInfo11);
+            SyncInfo12Command = new RelayCommand(SyncInfo12);
+            SyncInfo13Command = new RelayCommand(SyncInfo13);
             ReadBUSVolInfoCommand = new RelayCommand(ReadBUSVolInfo);
             SyncBUSVolInfoCommand = new RelayCommand(SyncBUSVolInfo);
             ReadDCBranchInfoCommand = new RelayCommand(ReadDCBranchInfo);
@@ -668,11 +693,72 @@ namespace EMS.ViewModel.NewEMSViewModel
             IsoRLowLimitLv1 = BitConverter.ToUInt16(data, 72);
         }
 
-        private void SyncInfo()
+        private void SyncInfo1()
         {
            
         }
 
+        private void SyncInfo2()
+        {
+
+        }
+
+        private void SyncInfo3()
+        {
+
+        }
+
+        private void SyncInfo4()
+        {
+
+        }
+
+        private void SyncInfo5()
+        {
+
+        }
+
+        private void SyncInfo6()
+        {
+
+        }
+
+        private void SyncInfo7()
+        {
+
+        }
+
+        private void SyncInfo8()
+        {
+
+        }
+
+        private void SyncInfo9()
+        {
+
+        }
+
+        private void SyncInfo10()
+        {
+
+        }
+
+        private void SyncInfo11()
+        {
+
+        }
+
+        private void SyncInfo12()
+        {
+
+        }
+
+        private void SyncInfo13()
+        {
+
+        }
+
+        
         private void ReadBUSVolInfo()
         {
             //PCSInfoModel model = pcsService.BUSVolInfo();

@@ -611,5 +611,60 @@ namespace EMS.Service
                 throw ex;
             }
         }
+
+        public void SyncBCMUInfo1(ushort[] values)
+        {
+
+            WriteFunc(500, values);
+        }
+        public void SyncBCMUInfo2(ushort[] values)
+        {
+            WriteFunc(503, values);
+        }
+        public void SyncBCMUInfo3(ushort[] values)
+        {
+            WriteFunc(506, values);
+        }
+        public void SyncBCMUInfo4(ushort[] values)
+        {
+            WriteFunc(509, values);
+        }
+        public void SyncBCMUInfo5(ushort[] values)
+        {
+            WriteFunc(512, values);
+        }
+        public void SyncBCMUInfo6(ushort[] values)
+        {
+            WriteFunc(515, values);
+        }
+        public void SyncBCMUInfo7(ushort[] values)
+        {
+            WriteFunc(518, values);
+        }
+        public void SyncBCMUInfo8(ushort[] values)
+        {
+            WriteFunc(521, values);
+
+        }
+        public void SyncBCMUInfo9(ushort[] values)
+        {
+            WriteFunc(524, values);
+        }
+        public void SyncBCMUInfo10(ushort[] values)
+        {
+            WriteFunc(527, values);
+        }
+        public void SyncBCMUInfo11(ushort[] values)
+        {
+            WriteFunc(530, values);
+        }
+        public void SyncBCMUInfo12(ushort[] values)
+        {
+            WriteFunc(533, values);
+        }
+        public void SyncBCMUInfo13(ushort[] values)
+        {
+            WriteFunc(536, values);
+        }
     }
 }
