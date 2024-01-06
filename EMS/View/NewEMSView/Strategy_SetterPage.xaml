@@ -148,7 +148,7 @@
                                       Cursor="Hand"
                                       IsChecked="{Binding IsDailyPatternBtnOpen}"
                                       IsEnabled="{Binding IsAutoStrategyBtnEnabled}"
-                                      Checked="ToggleButton_Checked">
+                                      Command="{Binding StrategyControlStartStopCommand}">
                         </ToggleButton>
                     </StackPanel>
                     <StackPanel Grid.Row="2"
@@ -164,7 +164,8 @@
                                       Style="{DynamicResource ToggleButtonStyle}"
                                       Cursor="Hand"
                                       IsChecked="{Binding IsMaxDemandControlBtnOpen}"
-                                      IsEnabled="{Binding IsAutoStrategyBtnEnabled}">
+                                      IsEnabled="{Binding IsAutoStrategyBtnEnabled}"
+                                      Command="{Binding DemandControlStartStopCommand}">
                         </ToggleButton>
                     </StackPanel>
                     <StackPanel Grid.Row="2"
@@ -180,7 +181,8 @@
                                       Style="{DynamicResource ToggleButtonStyle}"
                                       Cursor="Hand"
                                       IsChecked="{Binding IsReversePowerBtnOpen}"
-                                      IsEnabled="{Binding IsAutoStrategyBtnEnabled}">
+                                      IsEnabled="{Binding IsAutoStrategyBtnEnabled}"
+                                      Command="{Binding InversePowerProtectionStartStopCommand}">
                         </ToggleButton>
                     </StackPanel>
                 </Grid>
@@ -411,7 +413,7 @@
                             <TextBlock Text="需量控制容量(kW):"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
-                            <TextBox Text="{Binding DemandControlapacity}"
+                            <TextBox Text="{Binding DemandControlCapacity}"
                                      Style="{StaticResource Input}" />
                         </StackPanel>
                         <StackPanel Grid.Row="1"

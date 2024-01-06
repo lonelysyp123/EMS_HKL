@@ -608,8 +608,7 @@ namespace EMS.ViewModel
             RecordDataImage = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OffRecord.png"));
 
             service = new BMSDataService();
-            service.RegisterState(ServiceStateCallBack);
-            service.SetCommunicationConfig(IP, Port, TotalList);
+            //service.RegisterState(ServiceStateCallBack);
         }
 
         private void ServiceStateCallBack(bool isConnected, bool isDaqData)
@@ -623,29 +622,29 @@ namespace EMS.ViewModel
         [RelayCommand]
         public void DisconnectDev()
         {
-            if(!service.Disconnect())
-            {
-                MessageBox.Show("断开连接失败");
-            }
+            //if(!service.Disconnect())
+            //{
+            //    MessageBox.Show("断开连接失败");
+            //}
         }
 
         [RelayCommand]
         public async void ConnectDev()
         {
-            if(await service.ConnectAsync())
-            {
-                devControlViewModel = new DevControlViewModel(service);
-                devControlViewModel.InitBCMUInfo(3, 14);
-                parameterSettingViewModel = new ParameterSettingViewModel(service, TotalID);
-            }
+            //if(await service.ConnectAsync())
+            //{
+            //    devControlViewModel = new DevControlViewModel(service);
+            //    devControlViewModel.InitBCMUInfo(3, 14);
+            //    parameterSettingViewModel = new ParameterSettingViewModel(service, TotalID);
+            //}
         }
 
         public void StartDaqData()
         {
-            service.StartDaqData();
-            Thread thread = new Thread(RefreshDataTh);
-            thread.IsBackground = true;
-            thread.Start();
+            //service.StartDaqData();
+            //Thread thread = new Thread(RefreshDataTh);
+            //thread.IsBackground = true;
+            //thread.Start();
         }
 
         private void RefreshDataTh()

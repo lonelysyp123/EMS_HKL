@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMS.ViewModel.NewEMSViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,12 @@ namespace EMS.View.NewEMSView
             InitializeComponent();
         }
 
+        public Strategy_SetterPage(Strategy_SetterPageModel viewmodel)
+        {
+            InitializeComponent();
+            this.DataContext = viewmodel;
+        }
+
         private void ToggleButton_Checked(object sender, RoutedEventArgs e)
         {
 
@@ -36,6 +43,11 @@ namespace EMS.View.NewEMSView
         }
 
         private void IconBorder_Loaded_1(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TextBox_TextChanged()
         {
 
         }

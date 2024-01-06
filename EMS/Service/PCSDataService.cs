@@ -13,6 +13,8 @@ using System.Collections.Concurrent;
 using EMS.Model;
 using System.Net.NetworkInformation;
 using System.Xml.Linq;
+using log4net.Repository.Hierarchy;
+using EMS.Storage.DB.DBManage;
 
 namespace EMS.Service
 {
@@ -27,7 +29,7 @@ namespace EMS.Service
                 if (_isConnected != value)
                 {
                     _isConnected = value;
-                    OnChangeState(_isConnected, _isDaqData);
+                    OnChangeState(this, _isConnected, _isDaqData);
                 }
             }
         }
@@ -41,90 +43,84 @@ namespace EMS.Service
                 if (_isDaqData != value)
                 {
                     _isDaqData = value;
-                    OnChangeState(_isConnected, _isDaqData);
+                    OnChangeState(this, _isConnected, _isDaqData);
                 }
             }
         }
 
+        public string ID;
         private string IP;
         private int Port;
         private TcpClient _client;
         private ModbusMaster _master;
-        private Action<bool, bool> OnChangeState;
-        private Action<PCSModel, bool> OnChangeDataState;
-
+        private Action<object, bool, bool> OnChangeState;
+        private Action<object, object> OnChangeData;
         public static byte PcsId = 0;
-
         public PCSModel pcsModel;
-        
+        private static object Locker;
 
-        public PCSDataService()
+        public PCSDataService(string id)
         {
-            CommunicationProtectTr = new Thread(CommunicationProtect);
-            CommunicationProtectTr.IsBackground = true;
-            
+            ID = id;
+            Locker = new object();
+            StartDataService();
         }
 
-        public void RegisterState(Action<bool, bool> action)
+        private void StartDataService()
+        {
+            Thread thread = new Thread(TryConnect);
+            thread.IsBackground = true;
+            thread.Start();
+        }
+
+        private void TryConnect()
+        {
+            while (!IsConnected)
+            {
+                try
+                {
+                    // 从数据库中获取链接信息
+                    PcsManage pcsConfigInfo = new PcsManage();
+                    var items = pcsConfigInfo.Get();
+                    if (items != null && items.Count > 0)
+                    {
+                        var item = items.Find(x => x.Id.ToString() == ID);
+                        if (item != null)
+                        {
+                            IP = item.Ip == null ? "" : item.Ip;
+                            Port = item.Port;
+                            DaqTimeSpan = item.AcquisitionCycle;
+                        }
+                    }
+
+                    // 创建一个线程去链接设备，直到设备链接成功，退出线程，并开始采集
+                    _client = new TcpClient();
+                    _client.Connect(IPAddress.Parse(IP), Port);
+                    _master = ModbusIpMaster.CreateIp(_client);
+                    IsConnected = true;
+                }
+                catch (Exception ex)
+                {
+                    LogUtils.Warn("PCS id:" + ID + " 连接失败", ex);
+                }
+                finally
+                {
+                    Thread.Sleep(1000);
+                }
+            }
+
+            // 连接成功后开始采集数据
+            StartDaqData();
+        }
+
+        public void RegisterState(Action<object, bool, bool> action)
         {
             OnChangeState = action;
         }
 
-        public void RegisterDataState(Action<PCSModel, bool> action)
+        public void RegisterState(Action<object, object> action)
         {
-            OnChangeDataState = action; 
-        }
-
-        public void SetCommunicationConfig(string ip, string port)
-        {
-            IP = ip;
-            int.TryParse(port, out Port);
-        }
-
-        public async Task<bool> ConnectAsync()
-        {
-            try
-            {
-                if (!IsConnected)
-                {
-                    _client = new TcpClient();
-                    await _client.ConnectAsync(IPAddress.Parse(IP), Port);
-                    _master = ModbusIpMaster.CreateIp(_client);
-                    IsConnected = true;
-                    StartDaqData();
-                    return true;
-                }
-            }
-            catch (SocketException)
-            {
-                LogUtils.Error("未应答");
-            }
-            catch (TimeoutException)
-            {
-                LogUtils.Error("TCP链接超时");
-            }
-            return false;
-        }
-
-        public bool Disconnect()
-        {
-            try
-            {
-                if (IsConnected)
-                {
-                    IsDaqData = false;
-                    _master.Transport.Dispose();
-                    _client.Close();
-                    _client.Dispose();
-                    IsConnected = false;
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                LogUtils.Error(ex.ToString());
-            }
-            return false;
+            OnChangeData = action;
         }
 
         public void StartDaqData()
@@ -138,35 +134,47 @@ namespace EMS.Service
             }
         }
 
-        private int DaqTimeSpan = 1;
+        private int DaqTimeSpan = 0;
 
         private void DaqDataTh()
         {
-            while (IsConnected)
+            while (IsConnected && IsDaqData)
             {
-                if (!IsDaqData)
-                {
-                    break;
-                }
                 try
                 {
-                    Thread.Sleep(DaqTimeSpan * 1000);
+                    Thread.Sleep(DaqTimeSpan * 1000 + 100);
 
                     byte[] dcState = ReadFunc(53026, 7);
                     byte[] pcsData = ReadFunc(53005, 10);
                     byte[] Temp = ReadFunc(53221, 3);
                     byte[] DCBranch1INFO = ReadFunc(53250, 10);
                     byte[] SerialNumber = ReadFunc(53579, 15);
-                    pcsModel = DataDecode(dcState, pcsData, Temp, DCBranch1INFO, SerialNumber);
-                    OnChangeDataState(pcsModel, IsConnected);
+                    lock (Locker)
+                    {
+                        pcsModel = DataDecode(dcState, pcsData, Temp, DCBranch1INFO, SerialNumber);
+                        OnChangeData(this, pcsModel);
+                    }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    LogUtils.Error("PCS相关报错", ex);
                     break;
                 }
             }
         }
 
+        public PCSModel GetCurrentData()
+        {
+            PCSModel item = new PCSModel();
+            if (pcsModel != null)
+            {
+                lock (Locker)
+                {
+                    item = pcsModel.Clone() as PCSModel;
+                }
+            }
+            return item;
+        }
 
         private PCSModel DataDecode(byte[] dcstate, byte[] pcsdata, byte[]temp, byte[] dcbranch1info, byte[] serialnumber)
         {
@@ -251,7 +259,6 @@ namespace EMS.Service
         private static int maxReconnectTimes = 3;
         private int reconnectCount = 0;
         private bool IsCommunicationProtectState = false;
-        private Thread CommunicationProtectTr;
 
         private bool CommunicationCheck()
         {
@@ -270,6 +277,8 @@ namespace EMS.Service
                     {
                         IsCommunicationProtectState = true;
                         IsConnected = false;
+                        Thread CommunicationProtectTr = new Thread(CommunicationProtect);
+                        CommunicationProtectTr.IsBackground = true;
                         CommunicationProtectTr.Start();
                         return false;
                     }

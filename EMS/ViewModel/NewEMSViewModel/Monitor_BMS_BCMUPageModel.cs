@@ -1095,7 +1095,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string selectedCluster;
+        private string selectedCluster = "A";
         public string SelectedCluster
         {
             get { return selectedCluster; }
@@ -1149,15 +1149,22 @@ namespace EMS.ViewModel.NewEMSViewModel
         #region Command
 
         public RelayCommand ToMonitor_BMS_BCMUPageCommand { get;private set;}
+        public RelayCommand Command_OffGrid { get; private set; }
 
         #endregion
 
         public Monitor_BMS_BCMUPageModel()
         {
             ToMonitor_BMS_BCMUPageCommand = new RelayCommand(ToMonitor_BMS_BCMUPage);
+            Command_OffGrid = new RelayCommand(OffGridCommand);
         }
 
-        public void DataDistribution(BatteryTotalModel model, bool isconnected)
+        private void OffGridCommand()
+        {
+
+        }
+
+        public void DataDistribution(BatteryTotalModel model)
         {
             RemainingSOC = model.TotalSOC.ToString();
             ClusterVoltage = model.TotalVoltage.ToString();
@@ -1166,7 +1173,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             MinCellVoltage = model.MinVoltage.ToString();
             MaxTemperature = model.MaxTemperature.ToString();
             MaxCellVoltageIndex = model.MaxTemperatureIndex.ToString();
-           MinCellVoltageIndex = model.MinTemperatureIndex.ToString();
+            MinCellVoltageIndex = model.MinTemperatureIndex.ToString();
             MaxTemperatureIndex = model.MaxTemperatureIndex.ToString();
             MinTemperatureIndex = model.MinTemperatureIndex.ToString();
             RatedBatteryNumber = model.BatteryCount.ToString();
@@ -1183,7 +1190,18 @@ namespace EMS.ViewModel.NewEMSViewModel
             BMUInfo(model);
         }
 
-       
+        public void StateDistribution(bool isconnected, bool isdaqdata)
+        {
+            if (isconnected) 
+            { 
+
+            }
+
+            if (isdaqdata)
+            {
+
+            }
+        }
 
 
         private void ToMonitor_BMS_BCMUPage()

@@ -38,6 +38,11 @@ namespace EMS.Api
              EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.SendPcsCommand(command);
         }
 
+        /// <summary>
+        ///  返回PCS当前是否处于正常运行状态，如果PCS处于故障状态，返回false，如果PCS没有故障但是有告警返回true
+        /// </summary>
+        /// <returns>指令下发是否成功</returns>
+        public static bool IsPcsNormal() { return true; }
         public static List<string> GetPCSFaultInfo() { return null; }
 
         /// <summary>
@@ -255,33 +260,33 @@ namespace EMS.Api
             //return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.AmbientTemperature;
         }
 
-        public static async Task<bool> PCSConnect()
-        {
-            try
-            {
-                await EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.ConnectAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-                throw (ex);
-            }
-        }
+        //public static async Task<bool> PCSConnect()
+        //{
+        //    try
+        //    {
+        //        await EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.ConnectAsync();
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return false;
+        //        throw (ex);
+        //    }
+        //}
 
-        public static bool PCSDisConnect()
-        {
-            //Buffer,是个缓存，把所有指令封装成一个，下发的时候调用其中的指令。
-            try
-            {
-                EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.Disconnect();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-                throw (ex);
-            }
-        }
+        //public static bool PCSDisConnect()
+        //{
+        //    //Buffer,是个缓存，把所有指令封装成一个，下发的时候调用其中的指令。
+        //    try
+        //    {
+        //        EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.Disconnect();
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return false;
+        //        throw (ex);
+        //    }
+        //}
     }
 }

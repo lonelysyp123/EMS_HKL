@@ -247,9 +247,9 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         #endregion
 
-        public System_DevInfoPageModel(PCSModel pcsmodel,BatteryTotalModel batterytotalmodel, SmartMeterModel smartmetermodel)
+        public System_DevInfoPageModel()
         {
-            DevInfoDataDistribution(pcsmodel, batterytotalmodel, smartmetermodel);
+
         }
 
         public void DevInfoDataDistribution(PCSModel pcsmodel, BatteryTotalModel batterytotalmodel,SmartMeterModel smartmetermodel)

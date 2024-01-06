@@ -40,26 +40,27 @@
                 <Grid>
                     <ListBox HorizontalAlignment="Center"
                              BorderThickness="0,0,0,0"
-                             SelectionChanged="DataTypeList_SelectionChanged"
+                             
                              SelectedItem="{Binding SelectedType}"
                              SelectedIndex="{Binding SelectedTypeIndex}"
                              Foreground="Black">
                         <ListBoxItem Content="Voltage"
+                                     Width="100"
                                      BorderThickness="1,1,1,1"
                                      Margin="0,10,0,0"
                                      HorizontalContentAlignment="Center"
                                      BorderBrush="#1890FF"></ListBoxItem>
-                        <ListBoxItem Content="SOC"
+                        <ListBoxItem Content="Current"
                                      BorderThickness="1,1,1,1"
                                      Margin="0,10,0,0"
                                      HorizontalContentAlignment="Center"
                                      BorderBrush="#1890FF"></ListBoxItem>
-                        <ListBoxItem Content="Resistance"
+                        <ListBoxItem Content="Power"
                                      BorderThickness="1,1,1,1"
                                      Margin="0,10,0,0"
                                      HorizontalContentAlignment="Center"
                                      BorderBrush="#1890FF"></ListBoxItem>
-                        <ListBoxItem Content="Temperature1"
+                        <!--<ListBoxItem Content="Temperature1"
                                      BorderThickness="1,1,1,1"
                                      Margin="0,10,0,0"
                                      HorizontalContentAlignment="Center"
@@ -72,7 +73,7 @@
                                      BorderThickness="1,1,1,1"
                                      Margin="0,10,0,0"
                                      HorizontalContentAlignment="Center"
-                                     BorderBrush="#1890FF"></ListBoxItem>
+                                     BorderBrush="#1890FF"></ListBoxItem>-->
                     </ListBox>
                 </Grid>
             </Border>

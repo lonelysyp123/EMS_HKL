@@ -1,4 +1,5 @@
 ﻿using EMS.Model;
+using EMS.Service;
 using EMS.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace EMS.Api
 {
@@ -14,48 +16,54 @@ namespace EMS.Api
     {
         public static BatteryTotalModel GetNextBMSData(string bcmuid)
         {
-            var item = EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList.ToList().Find(x => x.TotalID == bcmuid);
-            return item.GetNextBMSDataForMqtt();
+            var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == bcmuid);
+            return item.GetCurrentData();
+        }
+
+        /// <summary>
+        /// 返回当前BMS系统的额定功率(最大充放电功率)，需要根据当前连接的电池簇动态调整
+        /// </summary>
+        /// <returns></returns>
+        public static double GetNormalPowerCapacity() { return 0; }
+
+        /// <summary>
+        /// 将bcmuid对应的那簇电池簇并网到DC侧母线，需要做一定的安全性检查，比如电压差符合并网要求，电池状态不能是异常
+        /// </summary>
+        /// <returns></returns>
+        public static void Connect2DcBus(string bcmuid) 
+        {
+            var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == bcmuid);
+            item.InNet();
         }
 
         public static BatteryTotalModel[] GetNextBMSData()
         {
             DateTime dateTime = DateTime.Now;
-            List<BatteryTotalViewModel> viewmodels = EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList.ToList();
+            List<BMSDataService> services = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices;
             List<BatteryTotalModel> models = new List<BatteryTotalModel>();
-            for (int i = 0; i < viewmodels.Count; i++)
+            for (int i = 0; i < services.Count; i++)
             {
-                var item = viewmodels[i].GetNextBMSDataForMqtt();
+                var item = services[i].GetCurrentData();
                 if (item != null)
                 {
                     item.CurrentTime = dateTime;
                     models.Add(item);
                 }
             }
-
             return models.ToArray();
         }
 
-        /// <summary>
-        /// 得到BMS信息
-        /// </summary>
-        /// <returns></returns>
-        public static List<BatteryTotalViewModel> GetBMSTotalInfo()
-        {
-            return EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList.ToList();
-        }
-
-        public static BatteryTotalViewModel GetBMSTotalInfo(string bcmuid)
+        public static BatteryTotalModel GetBMSTotalInfo(string bcmuid)
         {// 这个函数如果经常被调用，可以考虑重构成Dictionary
-            List<BatteryTotalViewModel> totallist= EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList.ToList();
+            List<BMSDataService> services = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices;
             
-            if(totallist != null)
+            if(services != null && services.Count > 0)
             {
-                foreach (var total in totallist)
+                foreach (var service in services)
                 {
-                    if (total.TotalID == bcmuid)
+                    if (service.ID == bcmuid)
                     {
-                        return total;
+                        return service.GetCurrentData();
 
                     }
 
@@ -63,27 +71,28 @@ namespace EMS.Api
             }
             return null;
         }
+
         /// <summary>
         /// 得到BMS所有告警故障信息
         /// </summary>
         /// <returns></returns>
         public static List<string> GetTotalAlarmInfo()
         {
-            List<BatteryTotalViewModel> totallist = EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList.ToList();//获取所有电池数据
+            List<BMSDataService> services = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices;//获取所有电池数据
             List<string>totalalarminfo = new List<string>();
-            foreach(var total in totallist)
+            foreach(var service in services)
             {
                 List<string>bcmualarm = new List<string>();
                 List<string>bcmufault = new List<string>();
                
-                bcmualarm = total.AlarmStateBCMU.ToList();
-                bcmufault = total.FaultyStateBCMU.ToList();
+                bcmualarm = service.GetCurrentData().AlarmStateBCMU.ToList();
+                bcmufault = service.GetCurrentData().FaultyStateBCMU.ToList();
                 totalalarminfo.AddRange(bcmualarm);
                 totalalarminfo.AddRange((bcmufault));//BCMU数据得到
-                for (int i = 0;i<total.batterySeriesViewModelList.Count;i++)
+                for (int i = 0;i< service.GetCurrentData().Series.Count;i++)
                 {
                     List<string> bmufault = new List<string>();
-                    bmufault = total.batterySeriesViewModelList[i].FaultyStateBMU.ToList();
+                    bmufault = GetActiveFaultyBMU(service.GetCurrentData().Series[i].AlarmStateFlagBMU);
                     totalalarminfo.AddRange(bmufault);//BMU数据得到
                 }
                 
@@ -93,22 +102,39 @@ namespace EMS.Api
             totalalarminfo=totalalarminfo.Distinct().ToList();
             return totalalarminfo;
         }
+
+        private static List<string> GetActiveFaultyBMU(int flag)
+        {
+            int Value = flag;
+            List<string> INFO = new List<string>();
+            if ((Value & 0x0001) != 0) { INFO.Add("电压传感器异常");  } //bit0
+            if ((Value & 0x0002) != 0) { INFO.Add("温度传感器异常");  }  //bit1
+            if ((Value & 0x0004) != 0) { INFO.Add("内部通讯故障");  }  //bit2
+            if ((Value & 0x0008) != 0) { INFO.Add("输入过压故障");  }  //bit3
+            if ((Value & 0x0010) != 0) { INFO.Add("输入反接故障");  }  //bit4
+            if ((Value & 0x0020) != 0) { INFO.Add("继电器故障");  } //bit5
+            if ((Value & 0x0040) != 0) { INFO.Add("电池损坏故障");  } //bit6
+            if ((Value & 0x0080) != 0) { INFO.Add("关机电路异常");  } //bit7
+            if ((Value & 0x0100) != 0) { INFO.Add("BMIC异常");  } //bit8
+            if ((Value & 0x0200) != 0) { INFO.Add("内部总线异常");  } //bit9
+            if ((Value & 0x0400) != 0) { INFO.Add("开机自检异常");  } //bit10
+            return INFO;
+        }
+
         /// <summary>
         /// 所有SOC、最大最小平均SOC
         /// </summary>
         /// <returns></returns>
         public static List<double> GetTotalSOC()
         {
-            List<BatteryTotalViewModel> batteryTotalBases = new List<BatteryTotalViewModel>();
-            batteryTotalBases = EnergyManagementSystem.GlobalInstance.BmsManager.BmsTotalList.ToList();
+            List<BMSDataService> services = new List<BMSDataService>();
+            services = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices;
             List<double> SOCTotalList = new List<double>();
-            foreach (var total in batteryTotalBases)
+            foreach (var total in services)
             {
-                SOCTotalList.Add(total.TotalSOC);
+                SOCTotalList.Add(total.GetCurrentData().TotalSOC);
             }
             return SOCTotalList;
-
-
         }
 
         public static double GetMinSOC()

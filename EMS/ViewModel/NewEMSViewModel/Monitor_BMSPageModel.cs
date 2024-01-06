@@ -27,18 +27,5 @@ namespace EMS.ViewModel.NewEMSViewModel
                 bmuViewModels[i] = new Monitor_BMS_BCMUPageModel();
             }
         }
-
-        public void ServiceDataCallBack(BatteryTotalModel model, bool IsConnected)
-        {
-            int index = -1;
-            if (model.BCMUID == "BCMU1") index = 1;
-            else if (model.BCMUID == "BCMU2") index = 2;
-            else if (model.BCMUID == "BCMU3") index = 3;
-            else if (model.BCMUID == "BCMU4") index = 4;
-            else if (model.BCMUID == "BCMU5") index = 5;
-            else if (model.BCMUID == "BCMU6") index = 6;
-
-            bmuViewModels[index-1].DataDistribution(model, IsConnected);
-        }
     }
 }
