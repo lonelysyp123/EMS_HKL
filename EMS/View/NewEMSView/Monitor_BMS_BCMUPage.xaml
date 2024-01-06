@@ -247,7 +247,7 @@
                                 <TextBlock Text="离网" />
                                 <Border Width="15"
                                         Height="15"
-                                        Background="{Binding OffGrid}"
+                                        Background="Transparent"
                                         CornerRadius="75"
                                         Margin="20,0,0,0" />
                             </StackPanel>
@@ -257,7 +257,7 @@
                                 <TextBlock Text="并网" />
                                 <Border Width="15"
                                         Height="15"
-                                        Background="{Binding ConnectedGrid}"
+                                        Background="Transparent"
                                         CornerRadius="75"
                                         Margin="20,0,0,0" />
                             </StackPanel>

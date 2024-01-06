@@ -63,14 +63,14 @@ namespace EMS.MyControl
         public static readonly DependencyProperty Visible_DownArrowProperty =
             DependencyProperty.Register("Visible_DownArrow", typeof(Visibility), typeof(BCMUConnectGraph), new PropertyMetadata(Visibility.Collapsed));
 
-        //Alarmcolor告警颜色
-        public Brush Alarmcolor
+        //Faultcolor告警颜色
+        public Brush Faultcolor
         {
-            get { return (Brush)GetValue(AlarmcolorProperty); }
-            set { SetValue(AlarmcolorProperty, value); }
+            get { return (Brush)GetValue(FaultcolorProperty); }
+            set { SetValue(FaultcolorProperty, value); }
         }
-        public static readonly DependencyProperty AlarmcolorProperty =
-            DependencyProperty.Register("Alarmcolor", typeof(Brush), typeof(BCMUConnectGraph), new PropertyMetadata(new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A5A5A5"))));
+        public static readonly DependencyProperty FaultcolorProperty =
+            DependencyProperty.Register("Faultcolor", typeof(Brush), typeof(BCMUConnectGraph), new PropertyMetadata(new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A5A5A5"))));
 
         //IsConnectColor离并网连接线颜色
         public Brush IsConnectColor
@@ -82,13 +82,13 @@ namespace EMS.MyControl
             DependencyProperty.Register("IsConnectColor", typeof(Brush), typeof(BCMUConnectGraph), new PropertyMetadata(new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D81E06"))));
 
         // 自定义属性：AlertLevel
-        public AlarmtLevels AlarmtLevel
+        public FaultLevels FaultLevel
         {
-            get { return (AlarmtLevels)GetValue(AlarmtLevelProperty); }
-            set { SetValue(AlarmtLevelProperty, value); }
+            get { return (FaultLevels)GetValue(FaultLevelProperty); }
+            set { SetValue(FaultLevelProperty, value); }
         }
-        public static readonly DependencyProperty AlarmtLevelProperty =
-            DependencyProperty.Register("AlarmtLevel", typeof(AlarmtLevels), typeof(BCMUConnectGraph), new PropertyMetadata(AlarmtLevels.NoAlarm, OnAlarmtLevelChanged));
+        public static readonly DependencyProperty FaultLevelProperty =
+            DependencyProperty.Register("FaultLevel", typeof(FaultLevels), typeof(BCMUConnectGraph), new PropertyMetadata(FaultLevels.NoFault, OnFaultLevelChanged));
 
         // 自定义属性：IsConnect
         public bool IsConnect
@@ -112,14 +112,14 @@ namespace EMS.MyControl
 
 
 
-        private static void OnAlarmtLevelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnFaultLevelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((BCMUConnectGraph)d).OnAlarmtLevelChanged((AlarmtLevels)e.NewValue);
+            ((BCMUConnectGraph)d).OnFaultLevelChanged((FaultLevels)e.NewValue);
         }
 
-        protected virtual void OnAlarmtLevelChanged(AlarmtLevels newValue)
+        protected virtual void OnFaultLevelChanged(FaultLevels newValue)
         {
-            UpdateColors_AlarmtLevels(newValue);
+            UpdateColors_FaultLevels(newValue);
         }
 
 
@@ -150,25 +150,25 @@ namespace EMS.MyControl
         /// <summary>
         /// 告警级别
         /// </summary>
-        /// <param name="alarmtLevel"></param>
-        private void UpdateColors_AlarmtLevels(AlarmtLevels alarmtLevel)
+        /// <param name="faulttLevel"></param>
+        private void UpdateColors_FaultLevels(FaultLevels faulttLevel)
         {
-            switch (alarmtLevel)
+            switch (faulttLevel)
             {
-                case AlarmtLevels.NoAlarm:
-                    Alarmcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A5A5A5"));
+                case FaultLevels.NoFault:
+                    Faultcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A5A5A5"));
                     break;
-                case AlarmtLevels.Info:
-                    Alarmcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EEE94F"));
+                case FaultLevels.Info:
+                    Faultcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EEE94F"));
                     break;
-                case AlarmtLevels.Warning:
-                    Alarmcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFA12F"));
+                case FaultLevels.Warning:
+                    Faultcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFA12F"));
                     break;
-                case AlarmtLevels.Error:
-                    Alarmcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE6666"));
+                case FaultLevels.Error:
+                    Faultcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EE6666"));
                     break;
                 default:
-                    Alarmcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A5A5A5"));
+                    Faultcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A5A5A5"));
                     break;
             }
         }
@@ -176,9 +176,9 @@ namespace EMS.MyControl
         /// <summary>
         /// 告警
         /// </summary>
-        public enum AlarmtLevels
+        public enum FaultLevels
         {
-            NoAlarm,
+            NoFault,
             Info,
             Warning,
             Error
@@ -232,7 +232,7 @@ namespace EMS.MyControl
         }
 
          //控件绑定值
-         //AlarmtLevel:NoAlarm、Info、Warning、Error；
+         //FaultLevel:NoFault、Info、Warning、Error；
          //IsConnect:True、False；
          //BatteryClusterStatus：Charge、Discharge、Stand
     }
