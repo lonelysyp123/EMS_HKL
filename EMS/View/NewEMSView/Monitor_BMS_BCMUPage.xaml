@@ -542,13 +542,13 @@
                                         Grid.Column="1"
                                         Style="{StaticResource ContentPanel}"
                                         HorizontalAlignment="Left">
-                                <localControl:WarnControl AlertLevel="{Binding ClusterVolLowAlarm}"
+                                <localControl:WarnControl AlertLevel="{Binding ClusterVolUpAlarm}"
                                                           AlertText="电池簇高压" />
                             </StackPanel>
                             <StackPanel Grid.Row="2"
                                         Grid.Column="2"
                                         Style="{StaticResource ContentPanel}">
-                                <localControl:WarnControl AlertLevel="{Binding ClusterVolUpAlarm}"
+                                <localControl:WarnControl AlertLevel="{Binding ClusterVolLowAlarm}"
                                                           AlertText="电池簇低压" />
                             </StackPanel>
                             <StackPanel Grid.Row="2"

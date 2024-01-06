@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Markup.Localizer;
 using System.Windows.Media;
+using TNCN.EMS.Common.Mqtt;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
@@ -1184,12 +1185,48 @@ namespace EMS.ViewModel.NewEMSViewModel
             HighCotainerTemperature2 = model.VolContainerTemperature2.ToString();
             HighCotainerTemperature3 = model.VolContainerTemperature3.ToString();
             HighCotainerTemperature4 = model.VolContainerTemperature4.ToString();
-
-            AnalyseBCMUFault(model.FaultStateBCMUTotalFlag, model.FaultStateBCMUFlag1, model.FaultStateBCMUFlag2);
-            AnalyseBCMUAlarm(model.AlarmStateBCMUFlag1,model.AlarmStateBCMUFlag2 , model.AlarmStateBCMUFlag3);
+            App.Current.Dispatcher.Invoke(()=>
+            {
+                StateBCMUChange(model.StateBCMU);
+                AnalyseBCMUFault(model.FaultStateBCMUTotalFlag, model.FaultStateBCMUFlag1, model.FaultStateBCMUFlag2);
+                AnalyseBCMUAlarm(model.AlarmStateBCMUFlag1, model.AlarmStateBCMUFlag2, model.AlarmStateBCMUFlag3);
+            });
+           
             BMUInfo(model);
         }
 
+
+        private void StateBCMUChange(int state)
+        {
+            if (state == 1)
+            {
+                ChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
+                DisChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                StandStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                OffNetStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+            }
+            else if (state == 2)
+            {
+                ChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                DisChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
+                StandStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                OffNetStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+            }
+            else if (state == 3)
+            {
+                ChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                DisChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                StandStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
+                OffNetStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+            }
+            else if (state == 4)
+            {
+                ChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                DisChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                StandStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                OffNetStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
+            }
+        }
         public void StateDistribution(bool isconnected, bool isdaqdata)
         {
             if (isconnected) 
@@ -1410,11 +1447,11 @@ namespace EMS.ViewModel.NewEMSViewModel
             if ((value1 & 0x0800) != 0) { BATPEAlarm = AlarmtLevels.Error; } else { BATPEAlarm = AlarmtLevels.NoAlarm; }  //bit3
             if ((IsoRPLowAlarm == AlarmtLevels.Error) || (IsoRNLowAlarm == AlarmtLevels.Error) || (HVPEShortAlarm == AlarmtLevels.Error) || (BATPEAlarm == AlarmtLevels.Error))
             {
-                IsoRTotalAlarm = AlarmtLevels.NoAlarm;
+                IsoRTotalAlarm = AlarmtLevels.Error;
             }
             else
             {
-                IsoRTotalAlarm = AlarmtLevels.Error;
+                IsoRTotalAlarm = AlarmtLevels.NoAlarm;
             }
 
             List<int> result21 = new List<int>();

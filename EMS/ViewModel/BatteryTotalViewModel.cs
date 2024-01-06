@@ -490,8 +490,8 @@ namespace EMS.ViewModel
             }
         }
 
-        private ushort _batteryCount;
-        public ushort BatteryCount
+        private int _batteryCount;
+        public int BatteryCount
         {
             get => _batteryCount;
             set

@@ -80,8 +80,8 @@ namespace EMS.ViewModel
             }
         }
 
-        private int _soh;
-        public int SOH
+        private double _soh;
+        public double SOH
         {
             get => _soh;
             set

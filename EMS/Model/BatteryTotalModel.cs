@@ -192,7 +192,7 @@ namespace EMS.Model
         /// <summary>
         /// 电池数量
         /// </summary>
-        public ushort BatteryCount { set; get; }
+        public int BatteryCount { set; get; }
         public ushort SeriesCount = 3;
         public ushort BatteriesCountInSeries = 14;
         public DateTime CurrentTime;

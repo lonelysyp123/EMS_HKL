@@ -155,18 +155,32 @@ namespace EMS.Service
                 {
                     Thread.Sleep(DaqTimeSpan * 1000 + 100);
 
-                    byte[] BCMUData = new byte[90];
-                    Array.Copy(ReadFunc(11000, 45), 0, BCMUData, 0, 90);
-                    byte[] BMUIDData = new byte[48];
-                    Array.Copy(ReadFunc(11045, 24), 0, BMUIDData, 0, 48);
-                    byte[] BMUData = new byte[744];
-                    Array.Copy(ReadFunc(10000, 120), 0, BMUData, 0, 240);
-                    Array.Copy(ReadFunc(10120, 120), 0, BMUData, 240, 240);
-                    Array.Copy(ReadFunc(10240, 120), 0, BMUData, 480, 240);
-                    Array.Copy(ReadFunc(10360, 12), 0, BMUData, 720, 24);
+
+                    byte[] BCMUData = new byte[48];
+                    Array.Copy(ReadFunc(361, 24), 0, BCMUData, 0, 48);
+
+                    byte[] BMUIDData = { 0 };
+                    byte[] BMUData = new byte[720];
+                    Array.Copy(ReadFunc(1, 120), 0, BMUData, 0, 240);
+                    Array.Copy(ReadFunc(121, 120), 0, BMUData, 240, 240);
+                    Array.Copy(ReadFunc(241, 120), 0, BMUData, 480, 240);
+
+
+                    ///BMUState, 0:451   2:452, 4:455 6:456 8:457 10:458 12:459 14:460 16:461 18:462 20:463 22:464 24:465 26:466
+                    byte[] BMUStateData = new byte[28];
+                    Array.Copy(ReadFunc(451, 2), 0, BMUStateData, 0, 4);
+                    Array.Copy(ReadFunc(455, 12), 0, BMUStateData, 4, 24);
+
+                    //BCMUState  0:450  2:453 4：454    6：467 8：468 10：469
+                    byte[] BCMUStateData = new byte[12];
+                    Array.Copy(ReadFunc(450, 1), 0, BCMUStateData, 0, 2);
+                    Array.Copy(ReadFunc(453, 2), 0, BCMUStateData, 2, 4);
+                    Array.Copy(ReadFunc(467, 3), 0, BCMUStateData, 6, 6);
+
+                    //batteryTotalModels.Enqueue(DataDecode(BCMUData, BCMUStateData, BMUIDData, BMUData, BMUStateData));
                     lock (Locker)
                     {
-                        CurrentBatteryTotalModel = DataDecode(BCMUData, BMUIDData, BMUData);
+                        CurrentBatteryTotalModel = DataDecode(BCMUData, BCMUStateData, BMUIDData, BMUData, BMUStateData);
                         OnChangeData(this, CurrentBatteryTotalModel.Clone());
                     }
                 }
@@ -275,17 +289,18 @@ namespace EMS.Service
             }
         }
 
-        private BatteryTotalModel DataDecode(byte[] BCMU, byte[] BMUID, byte[] BMU)
+        private BatteryTotalModel DataDecode(byte[] BCMU, byte[] BCMUState, byte[] BMUID, byte[] BMU, byte[] BMUState)
         {
             BatteryTotalModel item = new BatteryTotalModel();
-            if (BCMU != null)
+            if (BCMU != null && BCMUState != null)
             {
-                DataDecode_BCMU(BCMU, ref item);
+                DataDecode_BCMU(BCMU, BCMUState, ref item);
             }
-            if (BMU != null && BMUID != null)
+            if (BMU != null && BMUID != null && BMUState != null)
             {
-                DataDecode_BMU(BMU, BMUID, ref item);
+                DataDecode_BMU(BMU, BMUID, BMUState, ref item);
             }
+
             return item;
         }
 
@@ -305,90 +320,115 @@ namespace EMS.Service
             return bitPosition;
         }
 
-        private void DataDecode_BMU(byte[] obj1, byte[] obj2, ref BatteryTotalModel total)
+        private void DataDecode_BMU(byte[] obj1, byte[] obj2, byte[] obj3, ref BatteryTotalModel total)
         {
             for (int i = 0; i < total.Series.Count; i++)
             {
-                total.Series[i].AlarmStateFlagBMU = BitConverter.ToUInt16(obj1, (336 + i) * 2);
-                total.Series[i].FaultyStateFlagBMU = BitConverter.ToUInt16(obj1, (339 + i) * 2);
-                total.Series[i].ChargeChannelState = BitConverter.ToUInt16(obj1, (342 + i) * 2);
-                total.Series[i].ChargeCapacitySum = BitConverter.ToUInt16(obj1, (345 + i) * 2) * 0.01;
-                total.Series[i].MinVoltage = BitConverter.ToInt16(obj1, (348 + i * 8) * 2) * 0.001;
-                total.Series[i].MaxVoltage = BitConverter.ToInt16(obj1, (349 + i * 8) * 2) * 0.001;
-                total.Series[i].MinVoltageIndex = BitConverter.ToUInt16(obj1, (350 + i * 8) * 2);
-                total.Series[i].MaxVoltageIndex = BitConverter.ToUInt16(obj1, (351 + i * 8) * 2);
-                total.Series[i].MinTemperature = (BitConverter.ToInt16(obj1, (352 + i * 8) * 2) - 2731) * 0.1;
-                total.Series[i].MaxTemperature = (BitConverter.ToInt16(obj1, (353 + i * 8) * 2) - 2731) * 0.1;
-                total.Series[i].MinTemperatureIndex = BitConverter.ToUInt16(obj1, (354 + i * 8) * 2);
-                total.Series[i].MaxTemperatureIndex = BitConverter.ToUInt16(obj1, (355 + i * 8) * 2);
-                total.Series[i].ChargeChannelStateNumber = GetSetBitPositions(total.Series[i].ChargeChannelState).ToString();
+
+
+                total.Series[i].ChargeChannelState = 0;
+                total.Series[i].ChargeCapacitySum = 0;
+                total.Series[i].MinVoltage = BitConverter.ToInt16(obj1, (337 + i * 4) * 2) * 0.001; ;
+                total.Series[i].MaxVoltage = BitConverter.ToInt16(obj1, (338 + i * 4) * 2) * 0.001;
+                var volindex = BitConverter.ToInt16(obj1, ((339 + i * 4)) * 2);
+                total.Series[i].MaxVoltageIndex = (volindex >> 8) & 0xFF;
+                total.Series[i].MinVoltageIndex = volindex & 0xFF;
+                total.Series[i].MinTemperature = (BitConverter.ToInt16(obj1, (349 + i * 4) * 2) - 2731) * 0.1;
+                total.Series[i].MaxTemperature = (BitConverter.ToInt16(obj1, (350 + i * 4) * 2) - 2731) * 0.1;
+                var tempindex = BitConverter.ToInt16(obj1, (351 + i * 4) * 2);
+                total.Series[i].MaxTemperatureIndex = (tempindex >> 8) & 0xFF;
+                total.Series[i].MinTemperatureIndex = (tempindex) & 0xFF;
+                //BMU电梯故障信息
+                total.Series[i].VolFaultInfo = BitConverter.ToUInt16(obj3, (2 + i * 4) * 2);
+                total.Series[i].TempFaultInfo1 = BitConverter.ToUInt16(obj3, (3 + i * 4) * 2);
+                total.Series[i].TempFaultInfo2 = BitConverter.ToUInt16(obj3, (4 + i * 4) * 2);
+                total.Series[i].BalanceFaultFaultInfo = BitConverter.ToUInt16(obj3, (5 + 4 * i) * 2);
+
+                total.Series[i].ChargeChannelStateNumber = "0";
 
                 // BMUID
-                byte[] BMUIDArray = new byte[16];
-                Array.Copy(obj2, 16 * i, BMUIDArray, 0, 16);
-                int ID1 = BitConverter.ToInt16(BMUIDArray, 0);
-                StringBuilder BMUNameBuilder = new StringBuilder();
-                for (int k = 0; k < 16; k++)
-                {
-                    char BMUIDChar = Convert.ToChar(BMUIDArray[k]);
-                    BMUNameBuilder.Append(BMUIDChar);
-                }
-                total.Series[i].BMUID = BMUNameBuilder.ToString();
+                //byte[] BMUIDArray = new byte[16];
+                //Array.Copy(obj2, 16 * i, BMUIDArray, 0, 16);
+                //int ID1 = BitConverter.ToInt16(BMUIDArray, 0);
+                //StringBuilder BMUNameBuilder = new StringBuilder();
+                //for (int k = 0; k < 16; k++)
+                //{
+                //    char BMUIDChar = Convert.ToChar(BMUIDArray[k]);
+                //    BMUNameBuilder.Append(BMUIDChar);
+                //}
+
+                total.Series[i].BMUID = (i + 1).ToString();
 
                 for (int j = 0; j < total.Series[i].Batteries.Count; j++)
                 {
                     total.Series[i].Batteries[j].Voltage = BitConverter.ToInt16(obj1, (j + i * 16) * 2) * 0.001;
-                    total.Series[i].Batteries[j].Temperature1 = (BitConverter.ToInt16(obj1, (48 + j * 2 + i * 32) * 2) - 2731) * 0.1;
-                    total.Series[i].Batteries[j].Temperature2 = (BitConverter.ToInt16(obj1, (48 + j * 2 + 1 + i * 32) * 2) - 2731) * 0.1;
-                    total.Series[i].Batteries[j].SOC = BitConverter.ToUInt16(obj1, (144 + j + i * 16) * 2) * 0.1;
-                    total.Series[i].Batteries[j].SOH = BitConverter.ToUInt16(obj1, (192 + j + i * 16) * 2);
-                    total.Series[i].Batteries[j].Resistance = BitConverter.ToUInt16(obj1, (240 + j + i * 16) * 2);
-                    total.Series[i].Batteries[j].Capacity = BitConverter.ToUInt16(obj1, (288 + j + i * 16) * 2) * 0.1;
+                    total.Series[i].Batteries[j].Temperature1 = (BitConverter.ToInt16(obj1, (48 + j + i * 32) * 2) - 2731) * 0.1;
+                    total.Series[i].Batteries[j].Temperature2 = (BitConverter.ToInt16(obj1, (64 + j + i * 32) * 2) - 2731) * 0.1;
+                    total.Series[i].Batteries[j].SOC = BitConverter.ToInt16(obj1, (144 + i * 16 + j) * 2) * 0.1;
+                    total.Series[i].Batteries[j].SOH = BitConverter.ToInt16(obj1, (192 + i * 16 + j) * 2) * 0.1;
+                    total.Series[i].Batteries[j].Resistance = BitConverter.ToInt16(obj1, (240 + i * 16 + j) * 2);
+                    total.Series[i].Batteries[j].Capacity = BitConverter.ToInt16(obj1, (288 + i * 16 + j) * 2);
                     total.Series[i].Batteries[j].BatteryNumber = j + 1;
                 }
             }
         }
 
-        private void DataDecode_BCMU(byte[] obj, ref BatteryTotalModel total)
+        private void DataDecode_BCMU(byte[] obj, byte[] obj2, ref BatteryTotalModel total)
         {
             total.TotalVoltage = BitConverter.ToInt16(obj, 0) * 0.1;
-            total.TotalCurrent = (BitConverter.ToInt16(obj, 2) * 0.1);
-            total.TotalSOC = BitConverter.ToUInt16(obj, 4) * 0.1;
-            total.TotalSOH = BitConverter.ToUInt16(obj, 6) * 0.1;
-            total.AverageTemperature = (BitConverter.ToInt16(obj, 8) - 2731) * 0.1;
+            total.TotalCurrent = BitConverter.ToInt16(obj, 2) * 0.1;
+            total.TotalSOC = BitConverter.ToInt16(obj, 4) * 0.1;
+            total.TotalSOH = BitConverter.ToInt16(obj, 6) * 0.1;
+            total.AvgVol = BitConverter.ToInt16(obj, 8) * 0.1;
             total.MinVoltage = BitConverter.ToInt16(obj, 10) * 0.001;
             total.MaxVoltage = BitConverter.ToInt16(obj, 12) * 0.001;
-            total.MinVoltageIndex = BitConverter.ToUInt16(obj, 14);
-            total.MaxVoltageIndex = BitConverter.ToUInt16(obj, 16);
+            var volIndex = BitConverter.ToInt16(obj, 14);
+            total.MaxVoltageIndex = (volIndex >> 8) & 0xFF;
+            total.MinVoltageIndex = (volIndex) & 0xFF;
+
+            total.AverageTemperature = (BitConverter.ToInt16(obj, 16) - 2731) * 0.1;
             total.MinTemperature = (BitConverter.ToInt16(obj, 18) - 2731) * 0.1;
             total.MaxTemperature = (BitConverter.ToInt16(obj, 20) - 2731) * 0.1;
-            total.MinTemperatureIndex = BitConverter.ToUInt16(obj, 22);
-            total.MaxTemperatureIndex = BitConverter.ToUInt16(obj, 24);
-            total.BatteryCycles = BitConverter.ToInt16(obj, 26);
-            total.HWVersionBCMU = BitConverter.ToInt16(obj, 28);
-            total.VersionSWBCMU = BitConverter.ToInt16(obj, 34);
-            total.BatteryCount = BitConverter.ToUInt16(obj, 38);
-            total.StateBCMU = BitConverter.ToInt16(obj, 48);
-            total.IResistanceRP = BitConverter.ToInt16(obj, 50);
-            total.IResistanceRN = BitConverter.ToInt16(obj, 52);
-            total.DCVoltage = BitConverter.ToInt16(obj, 54);
-            total.VolContainerTemperature1 = (BitConverter.ToUInt16(obj, 56) - 2731) * 0.1;
-            total.VolContainerTemperature2 = (BitConverter.ToUInt16(obj, 58) - 2731) * 0.1;
-            total.VolContainerTemperature3 = (BitConverter.ToUInt16(obj, 60) - 2731) * 0.1;
-            total.VolContainerTemperature4 = (BitConverter.ToUInt16(obj, 62) - 2731) * 0.1;
-            total.AlarmStateBCMUFlag1 = BitConverter.ToUInt16(obj, 64);
-            total.AlarmStateBCMUFlag2 = BitConverter.ToUInt16(obj, 66);
-            total.AlarmStateBCMUFlag3 = BitConverter.ToUInt16(obj, 68);
-            total.FaultStateBCMUFlag1 = BitConverter.ToUInt16(obj, 70);
-            total.BatMaxChgPower = BitConverter.ToUInt16(obj, 72) * 0.01;
-            total.BatMaxDischgPower = BitConverter.ToUInt16(obj, 74) * 0.01;
-            total.OneChgCoulomb = BitConverter.ToUInt16(obj, 76) * 0.01;
-            total.OneDischgCoulomb = BitConverter.ToUInt16(obj, 78) * 0.01;
-            total.TotalChgCoulomb = BitConverter.ToUInt16(obj, 80) * 0.01;
-            total.TotalDischgCoulomb = BitConverter.ToUInt16(obj, 82) * 0.01;
-            total.RestCoulomb = BitConverter.ToUInt16(obj, 84) * 0.01;
-            total.MaxVolDiff = BitConverter.ToUInt16(obj, 86) * 0.01;
-            total.AvgVol = BitConverter.ToUInt16(obj, 88) * 0.01;
+            var tempIndex = BitConverter.ToInt16(obj, 22);
+            total.MaxTemperatureIndex = (tempIndex >> 8) & 0xFF;
+            total.MinTemperatureIndex = (tempIndex) & 0xFF;
+            //total.MinTemperatureIndex = BitConverter.ToInt16(obj, 22);
+            //total.MaxTemperatureIndex = BitConverter.ToInt16(obj, 23);
+            total.VolContainerTemperature1 = (BitConverter.ToInt16(obj, 24) - 2731) * 0.1;
+            total.VolContainerTemperature2 = (BitConverter.ToInt16(obj, 26) - 2731) * 0.1;
+            total.VolContainerTemperature3 = (BitConverter.ToInt16(obj, 28) - 2731) * 0.1;
+            total.VolContainerTemperature4 = (BitConverter.ToInt16(obj, 30) - 2731) * 0.1;
+            total.StateBCMU = BitConverter.ToInt16(obj, 32);
+            total.DCVoltage = BitConverter.ToInt16(obj, 34);
+            total.IResistanceRP = BitConverter.ToInt16(obj, 36);
+            total.IResistanceRN = BitConverter.ToInt16(obj, 38);
+            total.NomCapacity = BitConverter.ToInt16(obj, 40);
+            total.NomVoltage = BitConverter.ToInt16(obj, 42);
+            total.BatteryCount = BitConverter.ToInt16(obj, 44);
+            total.BatteryCycles = BitConverter.ToInt16(obj, 46);
+            total.FaultStateBCMUTotalFlag = BitConverter.ToInt16(obj2, 0);
+            total.FaultStateBCMUFlag1 = BitConverter.ToInt16(obj2, 2);
+            total.FaultStateBCMUFlag2 = BitConverter.ToInt16(obj2, 4);
+            total.AlarmStateBCMUFlag1 = BitConverter.ToUInt16(obj2, 6);
+            total.AlarmStateBCMUFlag2 = BitConverter.ToUInt16(obj2, 8);
+            total.AlarmStateBCMUFlag3 = BitConverter.ToUInt16(obj2, 10);
+
+
+            total.HWVersionBCMU = 0;
+            total.VersionSWBCMU = 0;
+            //total.AlarmStateBCMUFlag1 =0;
+            //total.AlarmStateBCMUFlag2 = 0;
+            //total.AlarmStateBCMUFlag3 = 0;
+
+            total.BatMaxChgPower = 0;
+            total.BatMaxDischgPower = 0;
+            total.OneChgCoulomb = 0;
+            total.OneDischgCoulomb = 0;
+            total.TotalChgCoulomb = 0;
+            total.TotalDischgCoulomb = 0;
+            total.RestCoulomb = 0;
+            total.MaxVolDiff = 0;
+
         }
 
         public void StopDaqData()
