@@ -99,7 +99,6 @@ namespace EMS.Service
                         }
                     }
 
-                    // 创建一个线程去链接设备，直到设备链接成功，退出线程，并开始采集
                     _client = new TcpClient();
                     _client.Connect(IPAddress.Parse(IP), Port);
                     _master = ModbusIpMaster.CreateIp(_client);
