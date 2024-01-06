@@ -497,7 +497,7 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         private void TimeCollating()
         {
-             
+            
         }
 
         private void DevDataPointConfig()
