@@ -3,6 +3,7 @@ using EMS.Model;
 using EMS.Service;
 using EMS.Service.impl;
 using EMS.Storage.DB.Models;
+using OxyPlot;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
@@ -311,8 +312,10 @@ namespace EMS.ViewModel.NewEMSViewModel
             TimeCollatingCommand = new RelayCommand(TimeCollating);
             DevDataPointConfigCommand = new RelayCommand(DevDataPointConfig);
             SystemSettingService = new SystemSettingService();
+
             InitBMS();
             InitPcs();
+            InitSmartMeter();
         }
 
         private void InitPcs() 
@@ -385,6 +388,22 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
+        private void InitSmartMeter()
+        {
+            List<SmartMeterDBModel> smartMeterDBModels = SystemSettingService.GetSmartMeterList();
+            if (smartMeterDBModels != null && smartMeterDBModels.Count > 0)
+            {
+                SmartMeterDBModel smartMeterDBModel = smartMeterDBModels.Find(item => item.Id == 1);
+                Configuaration configuaration = new Configuaration();
+                configuaration.SelectedCommPort = smartMeterDBModel.SelectedCommPort;
+                configuaration.SelectedBaudRate = smartMeterDBModel.SelectedBaudRate;
+                configuaration.SelectedStopBits = (StopBits)smartMeterDBModel.SelectedStopBits;
+                configuaration.SelectedDataBits = smartMeterDBModel.SelectedDataBits;
+                configuaration.AcquisitionCycle_Ammeter = smartMeterDBModel.AcquisitionCycle;
+                Configuaration = configuaration;
+            }
+        }
+
         private void BMSConfig()
         {
             SystemSettingService.AddBcmu(1, _ip_BCMU1, _port_BCMU1, _acquisitionCycle_BCMU1);
@@ -402,7 +421,7 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         private void SmartMeterConfig()
         {
-
+            SystemSettingService.AddSmartMeter(1, Configuaration.SelectedCommPort, Configuaration.SelectedBaudRate, System.Convert.ToInt32(Configuaration.SelectedStopBits), Configuaration.SelectedDataBits, Configuaration.AcquisitionCycle_Ammeter);
         }
 
         private void TimeCollating()

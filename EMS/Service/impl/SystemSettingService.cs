@@ -2,6 +2,7 @@
 using EMS.Storage.DB.Models;
 using System;
 using System.Collections.Generic;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -124,6 +125,51 @@ namespace EMS.Service.impl
                 else
                 {
                     mqttManage.Insert(mqttModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public List<SmartMeterDBModel> GetSmartMeterList()
+        {
+            SmartMeterManage smartMeterManage = new SmartMeterManage();
+            return smartMeterManage.Get();
+        }
+
+        public bool AddSmartMeter(int id, string selectedCommPort, int selectedBaudRate, int selectedStopBits, int SelectedDataBits, int acquisitionCycle)
+        {
+            try
+            {
+                SmartMeterDBModel smartMeterDBModel = new SmartMeterDBModel();
+                smartMeterDBModel.Id = id;
+                smartMeterDBModel.SelectedCommPort = selectedCommPort;
+                smartMeterDBModel.SelectedBaudRate = selectedBaudRate;
+                smartMeterDBModel.SelectedStopBits = selectedStopBits;
+                smartMeterDBModel.SelectedDataBits = SelectedDataBits;
+                smartMeterDBModel.AcquisitionCycle = acquisitionCycle;
+
+                SmartMeterManage smartMeterManage = new SmartMeterManage();
+                List<SmartMeterDBModel> smartMeterDBModels = smartMeterManage.Get();
+                if (smartMeterDBModels != null && smartMeterDBModels.Count > 0)
+                {
+                    SmartMeterDBModel smartMeterDBModel1 = smartMeterDBModels.Find(item => item.Id == id);
+                    if (smartMeterDBModel1 == null)
+                    {
+                        smartMeterManage.Insert(smartMeterDBModel);
+                    }
+                    else
+                    {
+                        smartMeterManage.Update(smartMeterDBModel);
+                    }
+                }
+                else
+                {
+                    smartMeterManage.Insert(smartMeterDBModel);
                 }
             }
             catch (Exception ex)
