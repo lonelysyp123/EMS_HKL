@@ -3,6 +3,7 @@ using ControlzEx.Standard;
 using EMS.Common;
 using EMS.Model;
 using EMS.MyControl;
+using EMS.Service;
 using EMS.View.NewEMSView;
 using System;
 using System.Collections.Generic;
@@ -1126,25 +1127,73 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private AlarmtLevels wran_BMU_1;
-        public AlarmtLevels Wran_BMU_1
+        private int bcmuFaultStateFlag1;
+        public int BCMUFaultStateFlag1
         {
-            get { return wran_BMU_1; }
+            get { return bcmuFaultStateFlag1; }
             set
             {
-                SetProperty(ref wran_BMU_1, value);
+                SetProperty(ref bcmuFaultStateFlag1, value);
+            }
+        }
+        private int bcmuFaultStateFlag2;
+        public int BCMUFaultStateFlag2
+        {
+            get { return bcmuFaultStateFlag2; }
+            set
+            {
+                SetProperty(ref bcmuFaultStateFlag2, value);
+            }
+        }
+        private int bcmuFaultStateFlag3;
+        public int BCMUFaultStateFlag3
+        {
+            get { return bcmuFaultStateFlag3; }
+            set
+            {
+                SetProperty(ref bcmuFaultStateFlag3, value);
             }
         }
 
-        private AlarmtLevels fault_BMU_1;
-        public AlarmtLevels Fault_BMU_1
+        private int bcmuAlarmStateFlag1;
+        public int BCMUAlarmStateFlag1
         {
-            get { return fault_BMU_1; }
+            get { return bcmuAlarmStateFlag1; }
             set
             {
-                SetProperty(ref fault_BMU_1, value);
+                SetProperty(ref bcmuAlarmStateFlag1, value);
             }
         }
+        private int bcmuAlarmStateFlag2;
+        public int BCMUAlarmStateFlag2
+        {
+            get { return bcmuAlarmStateFlag2; }
+            set
+            {
+                SetProperty(ref bcmuAlarmStateFlag2, value);
+            }
+        }
+        private int bcmuAlarmStateFlag3;
+        public int BCMUAlarmStateFlag3
+        {
+            get { return bcmuAlarmStateFlag3; }
+            set
+            {
+                SetProperty(ref bcmuAlarmStateFlag3, value);
+            }
+        }
+
+        private int stateBCMUFlag;
+        public int StateBCMUFlag
+        {
+            get { return stateBCMUFlag; }
+            set
+            {
+                SetProperty(ref stateBCMUFlag, value);
+
+            }
+        }
+
 
         public BatteryViewModel[] BatteryViewModelList;
 
@@ -1171,7 +1220,7 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         private void OffGridCommand()
         {
-
+           
         }
 
         public void DataDistribution(BatteryTotalModel model)
@@ -1189,16 +1238,22 @@ namespace EMS.ViewModel.NewEMSViewModel
             RatedBatteryNumber = model.BatteryCount.ToString();
             RatedCapacity = model.NomCapacity.ToString();
             RatedVoltage = model.NomVoltage.ToString();
-
+            BCMUFaultStateFlag1 = model.FaultStateBCMUTotalFlag;
+            BCMUFaultStateFlag2 = model.FaultStateBCMUFlag1;
+            BCMUFaultStateFlag3 = model.FaultStateBCMUFlag2;
+            BCMUAlarmStateFlag1 = model.AlarmStateBCMUFlag1;
+            BCMUAlarmStateFlag2 = model.AlarmStateBCMUFlag2;
+            BCMUAlarmStateFlag3 = model.AlarmStateBCMUFlag3;
+            StateBCMUFlag = model.StateBCMU;
             HighCotainerTemperature1 = model.VolContainerTemperature1.ToString();
             HighCotainerTemperature2 = model.VolContainerTemperature2.ToString();
             HighCotainerTemperature3 = model.VolContainerTemperature3.ToString();
             HighCotainerTemperature4 = model.VolContainerTemperature4.ToString();
             App.Current.Dispatcher.Invoke(()=>
             {
-                StateBCMUChange(model.StateBCMU);
-                AnalyseBCMUFault(model.FaultStateBCMUTotalFlag, model.FaultStateBCMUFlag1, model.FaultStateBCMUFlag2);
-                AnalyseBCMUAlarm(model.AlarmStateBCMUFlag1, model.AlarmStateBCMUFlag2, model.AlarmStateBCMUFlag3);
+                StateBCMUChange(StateBCMUFlag);
+                AnalyseBCMUFault(BCMUFaultStateFlag1,BCMUFaultStateFlag2,BCMUFaultStateFlag3);
+                AnalyseBCMUAlarm(BCMUAlarmStateFlag1,BCMUAlarmStateFlag2,BCMUAlarmStateFlag3);
             });
            
             BMUInfo(model);
@@ -1267,6 +1322,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             int i = Array.IndexOf(Cluster, SelectedCluster);
             AnlyseBMUFault(model.Series[i].VolFaultInfo, model.Series[i].TempFaultInfo1, model.Series[i].TempFaultInfo2, model.Series[i].BalanceFaultFaultInfo);
             BatteryInfo(model.Series[i]);
+
         }
 
         private void BatteryInfo(BatterySeriesModel model)
@@ -1281,6 +1337,35 @@ namespace EMS.ViewModel.NewEMSViewModel
                 BatteryViewModelList[j].Resistance = model.Batteries[j].Resistance;
                 BatteryViewModelList[j].Capacity = model.Batteries[j].Capacity;
                 BatteryViewModelList[j].BatteryNumber = j + 1;
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    if (j == (model.MaxVoltageIndex - 1))
+                    {
+                        BatteryViewModelList[j].VoltageColor = new SolidColorBrush(Colors.Red);
+                    }
+                    else if (j == (model.MinVoltageIndex - 1))
+                    {
+                        BatteryViewModelList[j].VoltageColor = new SolidColorBrush(Colors.LightBlue);
+                    }
+                    else
+                    {
+                        BatteryViewModelList[j].VoltageColor = new SolidColorBrush(Colors.Black);
+                    }
+
+                    if (j == (model.MaxTemperatureIndex - 1))
+                    {
+                        BatteryViewModelList[j].TemperatureColor = new SolidColorBrush(Colors.Red);
+                    }
+                    else if (j == (model.MinTemperatureIndex - 1))
+                    {
+                        BatteryViewModelList[j].TemperatureColor = new SolidColorBrush(Colors.LightBlue);
+                    }
+                    else
+                    {
+                        BatteryViewModelList[j].TemperatureColor = new SolidColorBrush(Colors.Black);
+                    }
+                });
+                
             }
         }
 
