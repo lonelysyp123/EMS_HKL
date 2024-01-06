@@ -36,12 +36,14 @@ namespace EMS.ViewModel.NewEMSViewModel
         private static int SmartMeterCount = 1;
         public EMSMainViewModel()
         {
+            EnergyManagementSystem.Initialization(new EnergyManagementSystem());
             bmsServices = new BMSDataService[BCMUCount];
             for (int i = 0; i < BCMUCount; i++)
             {
                 bmsServices[i] = new BMSDataService((i+1).ToString());
                 bmsServices[i].RegisterState(DataCallBack_BMS);
                 bmsServices[i].RegisterState(StateCallBack_BMS);
+                EnergyManagementSystem.GlobalInstance.BMSManager.AddBMSDev(bmsServices[i]);
             }
 
             pcsService = new PCSDataService("1");

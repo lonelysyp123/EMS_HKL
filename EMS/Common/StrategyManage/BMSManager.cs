@@ -11,8 +11,7 @@ namespace EMS.Common.StrategyManage
 {
     public class BMSManager
     {
-        private List<BMSDataService> bmsDataServices;
-        public List<BMSDataService> BMSDataServices { get; private set; } //封装，不能set
+        public List<BMSDataService> BMSDataServices { get; set; } //封装，不能set
 
         public BMSManager()
         {
@@ -21,14 +20,14 @@ namespace EMS.Common.StrategyManage
 
         public void AddBMSDev(BMSDataService service)
         {
-            if(!bmsDataServices.Contains(service))
-                bmsDataServices.Add(service);
+            if(!BMSDataServices.Contains(service))
+                BMSDataServices.Add(service);
         }
 
         public void RemoveBMSDev(BMSDataService service)
         {
-            if (bmsDataServices.Contains(service))
-                bmsDataServices.Remove(service);
+            if (BMSDataServices.Contains(service))
+                BMSDataServices.Remove(service);
         }
     }
 }

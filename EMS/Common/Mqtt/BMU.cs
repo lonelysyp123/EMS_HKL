@@ -27,11 +27,11 @@ namespace TNCN.EMS.Common.Mqtt
         }
 
         public BMU(BatterySeriesModel batterySeriesModel) {
-            //this.battery_cells = new List<BatteryCell>();
-            //this.id = batterySeriesModel.BMUID;
-            //this.alarm_state = batterySeriesModel.AlarmStateFlagBMU;
-            //this.faulty_state = batterySeriesModel.FaultyStateFlagBMU;
-            
+            this.battery_cells = new List<BatteryCell>();
+            this.id = batterySeriesModel.BMUID;
+            this.alarm_state = batterySeriesModel.AlarmStateFlagBMU;
+            this.faulty_state = batterySeriesModel.FaultyStateFlagBMU;
+
             foreach (var battery in batterySeriesModel.Batteries)
             {
                 BatteryCell batteryCell = new BatteryCell(battery);

@@ -12,7 +12,7 @@ namespace EMS.Storage.DB.Models
         public int Id { get; set; }
         public string SelectedCommPort { get; set; }
         public int SelectedBaudRate { get; set; }
-        public Parity SelectedParity { get; set; }
+        public int SelectedParity { get; set; }
         public int SelectedStopBits { get; set; }
         public int SelectedDataBits { get; set; }
         public int AcquisitionCycle { get; set; }

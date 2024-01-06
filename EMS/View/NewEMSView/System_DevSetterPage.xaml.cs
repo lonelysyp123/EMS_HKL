@@ -31,7 +31,6 @@ namespace EMS.View.NewEMSView
         {
             InitializeComponent();
             this.DataContext = viewmodel;
-            SmartMeterGrid.DataContext = viewmodel.Configuaration;
             SmartMeterBtn.DataContext = viewmodel;
         }
 
