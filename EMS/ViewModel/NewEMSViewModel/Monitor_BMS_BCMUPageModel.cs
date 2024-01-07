@@ -210,6 +210,20 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
+
+        private string chargeChannelStateNumber;
+
+        public string ChargeChannelStateNumber
+        {
+            get => chargeChannelStateNumber;
+            set
+            {
+                SetProperty(ref chargeChannelStateNumber, value);
+            }
+        }
+
+
+
         /// <summary>
         /// 额定容量
         /// </summary>
@@ -1111,15 +1125,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string chargeChannelStateNumber;
-        public string ChargeChannelStateNumber
-        {
-            get { return chargeChannelStateNumber; }
-            set
-            {
-                SetProperty(ref chargeChannelStateNumber, value);
-            }
-        }
+     
 
         private int bcmuFaultStateFlag1;
         public int BCMUFaultStateFlag1
@@ -1302,7 +1308,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                 HighCotainerTemperature2 = model.VolContainerTemperature2.ToString();
                 HighCotainerTemperature3 = model.VolContainerTemperature3.ToString();
                 HighCotainerTemperature4 = model.VolContainerTemperature4.ToString();
-
+                ChargeChannelStateNumber = model.BalanceChannel.ToString();
                 App.Current.Dispatcher.Invoke(() =>
                 {
                     StateBCMUChange(StateBCMUFlag);
@@ -1389,7 +1395,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                 IsOnGrid = false;
             }
         }
-        public void StateDistribution(bool isconnected, bool isdaqdata)
+        public void StateDistribution(bool isconnected, bool isdaqdata,bool issavedata)
         {
             if (isconnected) 
             { 

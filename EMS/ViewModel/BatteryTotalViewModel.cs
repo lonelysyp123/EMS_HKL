@@ -736,7 +736,7 @@ namespace EMS.ViewModel
                 series.MaxTemperature = model.Series[i].MaxTemperature;
                 series.MinTemperatureIndex = model.Series[i].MinTemperatureIndex;
                 series.MaxTemperatureIndex = model.Series[i].MaxTemperatureIndex;
-                series.ChargeChannelStateNumber = model.Series[i].ChargeChannelStateNumber;
+            
                 series.GetActiveFaultyBMU(model.Series[i].FaultyStateFlagBMU);
                 series.GetActiveAlarmBMU(model.Series[i].AlarmStateFlagBMU);
                 series.BMUID = model.Series[i].BMUID;
@@ -1036,9 +1036,7 @@ namespace EMS.ViewModel
                 SeriesModel.MinTemperatureIndex = total.Series[i].MinTemperatureIndex;
                 SeriesModel.MaxTemperature = total.Series[i].MaxTemperature;
                 SeriesModel.MaxTemperatureIndex = total.Series[i].MaxTemperatureIndex;
-                SeriesModel.AlarmState = total.Series[i].AlarmStateFlagBMU.ToString();
-                SeriesModel.FaultState = total.Series[i].FaultyStateFlagBMU.ToString();
-                SeriesModel.ChargeChannelState = total.Series[i].ChargeChannelState.ToString();
+               
                 SeriesModel.ChargeCapacitySum = total.Series[i].ChargeCapacitySum;
                 SeriesModel.HappenTime = date;
                 for (int j = 0; j < total.Series[i].Batteries.Count; j++)
