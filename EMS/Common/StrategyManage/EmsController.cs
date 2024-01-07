@@ -30,10 +30,10 @@ namespace EMS.Common.StrategyManage
 
         private double _maxDemandPower; //负载侧最大功率极限：通常为负载侧变压器额定功率
         private double _maxDemandPowerDescendRate;
-        private double _reversePowerThreshold;
-        private double _reversePowerLowestThreshold;
+        private double _reversePowerActionThreshold;
+        private double _reversePowerStopThreshold;
         private double _reversePowerDescendRate;
-        private double _dcBusConnectionChargingPowerFactor = .1;
+        private double _dcBusConnectionChargingPowerFactor;
         private double _maxSoc;
         private double _minSoc;
         private double _maxChargingPower;
@@ -87,14 +87,14 @@ namespace EMS.Common.StrategyManage
 
         public void SetReversePowerThreshold(double threshold, double lowestthreshhold, double descendrate)
         {
-            _reversePowerThreshold = threshold;
-            _reversePowerLowestThreshold = lowestthreshhold;
+            _reversePowerActionThreshold = threshold;
+            _reversePowerStopThreshold = lowestthreshhold;
             _reversePowerDescendRate = descendrate;
         }
         public void GetReversePowerThreshold(out double threshold, out double lowestthreshold, out double descendrate)
         {
-            threshold = _reversePowerThreshold;
-            lowestthreshold = _reversePowerLowestThreshold;
+            threshold = _reversePowerActionThreshold;
+            lowestthreshold = _reversePowerStopThreshold;
             descendrate = _reversePowerDescendRate;
         }
         public Dictionary<int, List<BatteryStrategyModel>> DailyPatterns { get; set; }
