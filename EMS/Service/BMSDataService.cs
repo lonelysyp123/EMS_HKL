@@ -73,16 +73,16 @@ namespace EMS.Service
         private Action<object, bool, bool, bool> OnChangeState;
         private Action<object, object> OnChangeData;
 
-        public BMSDataService()
-        {
-            Locker = new object();
-            StartDataService();
-        }
+        //public BMSDataService()
+        //{
+        //    Locker = new object();
+        //    StartDataService();
+        //}
 
         public BMSDataService(string id)
         {
             ID = id;
-            Locker = new object();
+            //Locker = new object();
             StartDataService();
         }
 
@@ -153,6 +153,7 @@ namespace EMS.Service
                     Thread th = new Thread(DaqDataTh);
                     th.IsBackground = true;
                     th.Start();
+                    LogUtils.Debug("BMS id:" + ID + " 开始采集数据");
                 }
             }
         }
@@ -160,16 +161,18 @@ namespace EMS.Service
         public void StartSaveData()
         {
             IsSaveDaq = true;
+            LogUtils.Debug("BMS id:" + ID + " 开始保存数据");
         }
 
         public void StopSaveData()
         {
             IsSaveDaq = false;
+            LogUtils.Debug("BMS id:" + ID + " 停止保存数据");
         }
 
         private int DaqTimeSpan = 0;
         //public BlockingCollection<BatteryTotalModel> BatteryTotalModels;
-        private static object Locker;
+        //private static object Locker;
         public BatteryTotalModel CurrentBatteryTotalModel;
         private void DaqDataTh()
         {
@@ -202,19 +205,19 @@ namespace EMS.Service
                     Array.Copy(ReadFunc(467, 3), 0, BCMUStateData, 6, 6);
 
                     //batteryTotalModels.Enqueue(DataDecode(BCMUData, BCMUStateData, BMUIDData, BMUData, BMUStateData));
-                    lock (Locker)
-                    {
+                    //lock (Locker)
+                    //{
                         CurrentBatteryTotalModel = DataDecode(BCMUData, BCMUStateData, BMUIDData, BMUData, BMUStateData);
                         OnChangeData(this, CurrentBatteryTotalModel.Clone());
                         if (IsSaveDaq)
                         {
                             SaveData(CurrentBatteryTotalModel);
                         }
-                    }
+                    //}
                 }
                 catch (Exception ex)
                 {
-                    LogUtils.Error("BMS相关报错", ex);
+                    LogUtils.Error("BMS id:" + ID, ex);
                     break;
                 }
             }
@@ -289,10 +292,10 @@ namespace EMS.Service
             BatteryTotalModel item = new BatteryTotalModel();
             if (CurrentBatteryTotalModel != null)
             {
-                lock (Locker)
-                {
+                //lock (Locker)
+                //{
                     item = CurrentBatteryTotalModel.Clone() as BatteryTotalModel;
-                }
+                //}
             }
             return item;
         }
@@ -319,7 +322,7 @@ namespace EMS.Service
             }
             catch (Exception ex)
             {
-                LogUtils.Warn("读取数据失败", ex);
+                LogUtils.Warn("BMS id:"+ID+"读取数据失败", ex);
                 if (!_client.Connected && !IsCommunicationProtectState)
                 {
                     if (CommunicationCheck())
@@ -362,7 +365,7 @@ namespace EMS.Service
             }
         }
 
-        private static int reconnectIntervalLong =60 * 1000 * 5; // ms
+        private static int reconnectIntervalLong =1 * 1000 * 5; // ms
         private void CommunicationProtect()
         {
             while (!IsConnected)
@@ -526,6 +529,7 @@ namespace EMS.Service
         public void StopDaqData()
         {
             IsDaqData = false;
+            LogUtils.Debug("BMS id:" + ID + " 停止采集数据");
         }
 
         public int[] ReadNetInfo()
