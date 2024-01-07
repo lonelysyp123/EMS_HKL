@@ -182,7 +182,7 @@ namespace EMS.Service
 
                     byte[] BCMUData = new byte[48];
                     Array.Copy(ReadFunc(361, 24), 0, BCMUData, 0, 48);
-                    Array.Copy(ReadFunc(405, 1), 0, BCMUData, 48, 2);
+                    //Array.Copy(ReadFunc(405, 1), 0, BCMUData, 48, 2);
                     byte[] BMUIDData = { 0 };
                     byte[] BMUData = new byte[720];
                     Array.Copy(ReadFunc(1, 120), 0, BMUData, 0, 240);
@@ -497,7 +497,7 @@ namespace EMS.Service
             total.NomVoltage = BitConverter.ToInt16(obj, 42);
             total.BatteryCount = BitConverter.ToInt16(obj, 44);
             total.BatteryCycles = BitConverter.ToInt16(obj, 46);
-            total.BalanceChannel = BitConverter.ToInt16(obj, 48);
+            total.BalanceChannel = 0;
             total.FaultStateBCMUTotalFlag = BitConverter.ToInt16(obj2, 0);
             total.FaultStateBCMUFlag1 = BitConverter.ToInt16(obj2, 2);
             total.FaultStateBCMUFlag2 = BitConverter.ToInt16(obj2, 4);

@@ -280,7 +280,7 @@
                                 Foreground="White"
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
-                                IsEnabled="{Binding IsEnabled_BMS}"
+                                
                                 Command="{Binding BMSConfigCommand}" />
                     </StackPanel>
                 </Grid>
