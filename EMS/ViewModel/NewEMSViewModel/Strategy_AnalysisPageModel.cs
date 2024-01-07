@@ -546,15 +546,26 @@ namespace EMS.ViewModel.NewEMSViewModel
             data.Add(new MyData() { X = "4", Y = 3 });
             data.Add(new MyData() { X = "5", Y = 1 });
             report.Data = data;
+            report.label = "电流";
+
+            MyReport report2 = new MyReport();
+            ObservableCollection<MyData> data2 = new ObservableCollection<MyData>();
+            data2.Add(new MyData() { X = "6", Y = 5 });
+            data2.Add(new MyData() { X = "8", Y = 1 });
+            data2.Add(new MyData() { X = "9", Y = 4 });
+            data2.Add(new MyData() { X = "12", Y = 3 });
+            report2.Data = data2;
+            report2.label = "功率";
 
             MyReports = new ObservableCollection<MyReport>();
-            MyReports.Add(report);  
-            
+            MyReports.Add(report);
+            MyReports.Add(report2);
         }
         public ObservableCollection<MyReport> MyReports { get; set; }
     }
     public class MyReport
     {
+        public string label { get; set; }
         public ObservableCollection<MyData> Data { get; set; }
     }
     public class MyData

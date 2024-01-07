@@ -268,44 +268,29 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
                         <RowDefinition Height="5*" />
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
                         <localControl:TitleBorder Text="计划曲线" />
                     </Grid>
-                    <Grid Grid.Row="1">
-                        <TextBlock Text="日期选择："
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Right"
-                                   Margin="0,0,110,0"/>
-                        <hc:DatePicker Height="30"
-                                       Width="100"
-                                       SelectedDate="{Binding SelectedDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                       HorizontalAlignment="Right" />
-                    </Grid>
-                    <!--<oxy:PlotView Grid.Row="2"
-                                  Model="{Binding DisplayDataModel}"                                  
-                                  Background="AliceBlue">
-
-                    </oxy:PlotView>-->
-                    <Grid x:Name="LayoutRoot" Grid.Row="2">
-                        <c1:C1Chart HorizontalAlignment="Stretch" Margin="10,10,10,10" Name="c1chart1" VerticalAlignment="Stretch" Theme="Office2007Blue">
-                            <c1:C1Chart.Data >
+                    
+                    <Grid x:Name="LayoutRoot" Grid.Row="1">
+                        <c1:C1Chart HorizontalAlignment="Left" Margin="335,80,0,0" VerticalAlignment="Top">
+                            <c1:C1Chart.Data>
                                 <c1:ChartData SeriesItemsSource="{Binding MyReports}" >
                                     <c1:ChartData.SeriesItemTemplate>
                                         <DataTemplate>
                                             <c1:XYDataSeries ItemsSource="{Binding Data}"
-                                 ValueBinding="{Binding Y}"
-                                 XValueBinding="{Binding X}" />
+                                                             ValueBinding="{Binding Y}"
+                                                             Label="{Binding label}"
+                                                             XValueBinding="{Binding X}"/>
                                         </DataTemplate>
                                     </c1:ChartData.SeriesItemTemplate>
                                 </c1:ChartData>
                             </c1:C1Chart.Data>
-
-                            <TextBlock DockPanel.Dock="Left" HorizontalAlignment="Left" VerticalAlignment="Center" Text="单位：kwh" Margin="0,10,-40,0">
-                            </TextBlock>
+                            <c1:C1ChartLegend/>
                         </c1:C1Chart>
+
 
                     </Grid>
                     <!--<UniformGrid Grid.Row="2">
