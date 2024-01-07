@@ -331,7 +331,26 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
         private void ManualApply()
         {
-            //
+            if (SelectedManualStrategyMode == "待机")
+            {
+                //= this.StrategyManualValueSet;
+            }
+            if (SelectedManualStrategyMode == "恒电流充电")
+            {
+                //= this.StrategyManualValueSet;
+            }
+            if (SelectedManualStrategyMode == "恒电流放电")
+            {
+                //= this.StrategyManualValueSet;
+            }
+            if (SelectedManualStrategyMode == "恒功率充电")
+            {
+                //= this.StrategyManualValueSet;
+            }
+            if (SelectedManualStrategyMode == "恒功率放电")
+            {
+                //= this.StrategyManualValueSet;
+            }
         }
         /// <summary>
         /// 自动运行的重置应用
