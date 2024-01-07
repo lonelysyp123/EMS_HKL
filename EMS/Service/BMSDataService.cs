@@ -66,8 +66,8 @@ namespace EMS.Service
         }
 
         public string ID { get; private set; }
-        private string IP = "127.0.0.1";
-        private int Port;
+        private string IP = "0.0.0.0";
+        private int Port = 0;
         private TcpClient _client;
         private ModbusMaster _master;
         private Action<object, bool, bool, bool> OnChangeState;
