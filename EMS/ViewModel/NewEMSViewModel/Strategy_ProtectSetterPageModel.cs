@@ -831,8 +831,15 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         private void ReadBUSVolInfo()
         {
-            PCSParSettingModel model = PcsApi.GetBUSParam();
+            //PCSInfoModel model = pcsService.BUSVolInfo();
             //解析model
+            byte[] busvoldata;
+            busvoldata = PcsApi.ReadPCSBUSVolPar();
+
+            BUSUpperLimitVolThresh = Math.Round(BitConverter.ToInt16(busvoldata, 0) * 0.1, 2);
+            BUSLowerLimitVolThresh = Math.Round(BitConverter.ToInt16(busvoldata, 2) * 0.1, 2);
+            BUSHVolSetting = Math.Round(BitConverter.ToInt16(busvoldata, 4) * 0.1, 2);
+            BUSLVolSetting = Math.Round(BitConverter.ToInt16(busvoldata, 6) * 0.1, 2);
         }
 
         private void SyncBUSVolInfo()
