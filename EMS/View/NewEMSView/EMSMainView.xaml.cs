@@ -1,4 +1,5 @@
-﻿using EMS.ViewModel.NewEMSViewModel;
+﻿using EMS.Model;
+using EMS.ViewModel.NewEMSViewModel;
 using HandyControl.Controls;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ namespace EMS.View.NewEMSView
         {
             InitializeComponent();
             viewmodel = new EMSMainViewModel();
+            Navigation(new HomePage(viewmodel.HomePageModel), null);
 
         }
 

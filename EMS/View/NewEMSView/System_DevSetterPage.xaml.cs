@@ -31,6 +31,7 @@ namespace EMS.View.NewEMSView
         {
             InitializeComponent();
             this.DataContext = viewmodel;
+            SmartMeterBtn.DataContext = viewmodel;
         }
 
         private void UploadFile(object sender, RoutedEventArgs e)

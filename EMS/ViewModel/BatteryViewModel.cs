@@ -40,13 +40,13 @@ namespace EMS.ViewModel
             }
         }
 
-        private SolidColorBrush _temperatureColor;
-        public SolidColorBrush TemperatureColor
+        private SolidColorBrush _temperature1Color;
+        public SolidColorBrush Temperature1Color
         {
-            get => _temperatureColor;
+            get => _temperature1Color;
             set
             {
-                SetProperty(ref _temperatureColor, value);
+                SetProperty(ref _temperature1Color, value);
             }
         }
 
@@ -57,6 +57,26 @@ namespace EMS.ViewModel
             set
             {
                 SetProperty(ref _temperature2, value);
+            }
+        }
+
+        private SolidColorBrush _temperature2Color;
+        public SolidColorBrush Temperature2Color
+        {
+            get => _temperature2Color;
+            set
+            {
+                SetProperty(ref _temperature2Color, value);
+            }
+        }
+
+        private SolidColorBrush _temperatureColor;
+        public SolidColorBrush TemperatureColor
+        {
+            get => _temperatureColor;
+            set
+            {
+                SetProperty(ref _temperatureColor, value);
             }
         }
 
@@ -80,8 +100,8 @@ namespace EMS.ViewModel
             }
         }
 
-        private int _soh;
-        public int SOH
+        private double _soh;
+        public double SOH
         {
             get => _soh;
             set
@@ -115,7 +135,9 @@ namespace EMS.ViewModel
 
         public BatteryViewModel()
         {
-
+            VoltageColor = new SolidColorBrush(Colors.White);
+            Temperature1Color = new SolidColorBrush(Colors.White);
+            Temperature2Color = new SolidColorBrush(Colors.White);
         }
 
         public void MarkMinVoltage()
@@ -130,12 +152,12 @@ namespace EMS.ViewModel
 
         public void MarkMinTemperature()
         {
-            TemperatureColor = new SolidColorBrush(Colors.LightBlue);
+            Temperature1Color = new SolidColorBrush(Colors.LightBlue);
         }
 
         public void MarkMaxTemperature()
         {
-            TemperatureColor = new SolidColorBrush(Colors.Red);
+            Temperature1Color = new SolidColorBrush(Colors.Red);
         }
     }
 }

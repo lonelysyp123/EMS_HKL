@@ -120,7 +120,7 @@
                                             Orientation="Horizontal"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Center">
-                                    <TextBlock Text="{Binding DC_power}"
+                                    <TextBlock Text="{Binding DC_Power}"
                                                Style="{StaticResource HighlightText}" />
                                     <TextBlock Text="kW"
                                                Style="{StaticResource NormalText}"/>
@@ -495,16 +495,16 @@
                         <TextBlock Text="DC模块组：模块9"  Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
                         <TextBlock Text="DC模块组：模块10"  Grid.Row="10" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
 
-                        <TextBlock Text="{Binding Module1Status1}"  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor1}" />
-                        <TextBlock Text="{Binding Module1Status2}"  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor2}" />
-                        <TextBlock Text="{Binding Module1Status3}"  Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor3}" />
-                        <TextBlock Text="{Binding Module1Status4}"  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor4}" />
-                        <TextBlock Text="{Binding Module1Status5}"  Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor5}" />
-                        <TextBlock Text="{Binding Module1Status6}"  Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor6}" />
-                        <TextBlock Text="{Binding Module1Status7}"  Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor7}" />
-                        <TextBlock Text="{Binding Module1Status8}"  Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor8}" />
-                        <TextBlock Text="{Binding Module1Status9}"  Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor9}" />
-                        <TextBlock Text="{Binding Module1Status10}"  Grid.Row="10" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor10}" />
+                        <TextBlock Text="{Binding Module1Status1}"  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor1}" FontSize="20"/>
+                        <TextBlock Text="{Binding Module1Status2}"  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor2}" FontSize="20"/>
+                        <TextBlock Text="{Binding Module1Status3}"  Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor3}" FontSize="20"/>
+                        <TextBlock Text="{Binding Module1Status4}"  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor4}" FontSize="20"/>
+                        <TextBlock Text="{Binding Module1Status5}"  Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor5}" FontSize="20"/>
+                        <TextBlock Text="{Binding Module1Status6}"  Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor6}" FontSize="20"/>
+                        <TextBlock Text="{Binding Module1Status7}"  Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor7}" FontSize="20"/>
+                        <TextBlock Text="{Binding Module1Status8}"  Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor8}" FontSize="20"/>
+                        <TextBlock Text="{Binding Module1Status9}"  Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor9}" FontSize="20"/>
+                        <TextBlock Text="{Binding Module1Status10}"  Grid.Row="10" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor10}" FontSize="20"/>
                     </Grid>
                 </Grid>
             </Border>

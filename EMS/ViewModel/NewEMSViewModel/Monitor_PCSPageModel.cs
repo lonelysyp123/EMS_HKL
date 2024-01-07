@@ -1145,25 +1145,33 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         }
 
-        public void PCSDataDistribution(PCSModel model,bool isconnected) 
+        public void PCSDataDistribution(PCSModel model)
         {
-            ModuleTemp = model.ModuleTemperature;
-            EnvironmentTemp = model.AmbientTemperature;
-            DC_Power = model.DcBranch1DCPower;
-            DC_Voltage = model.DcBranch1DCVol;
-            DC_Current = model.DcBranch1DCCur;
-            DC_BUSVoltage = model.DcBranch1BUSVol;
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                ModuleTemp = model.ModuleTemperature;
+                EnvironmentTemp = model.AmbientTemperature;
+                DC_Power = model.DcBranch1DCPower;
+                DC_Voltage = model.DcBranch1DCVol;
+                DC_Current = model.DcBranch1DCCur;
+                DC_BUSVoltage = model.DcBranch1BUSVol;
 
 
-            GetDCBranchINFO(model);
-            EnergyCal(model);
-            DataAcquisitionDcModuleStatus(model);
-            GetActivePCSControlState(model);
-            GetActivePCSState(model);
-            GetDCFault(model);
-            GetPDSFault(model);
-            GetDCAlarm(model);
-            GetPDSAlarm(model);
+                GetDCBranchINFO(model);
+                EnergyCal(model);
+                DataAcquisitionDcModuleStatus(model);
+                GetActivePCSControlState(model);
+                GetActivePCSState(model);
+                GetDCFault(model);
+                GetPDSFault(model);
+                GetDCAlarm(model);
+                GetPDSAlarm(model);
+            });
+        }
+
+        public void PCSStateDistribution(bool isconnected, bool isdaqdata, bool issavedata)
+        {
+
         }
 
         private void GetDCBranchINFO(PCSModel model)
@@ -1197,11 +1205,11 @@ namespace EMS.ViewModel.NewEMSViewModel
 
             if ((value2 & 0x0001) != 0)
             {
-                DC_StartOrStopState = new SolidColorBrush(Colors.Green);
+                DC_StartOrStopState = new SolidColorBrush(Colors.LightGreen);
             }
             else if ((value2 & 0x0001) == 0)
             {
-                DC_StartOrStopState = new SolidColorBrush(Colors.Gray);
+                DC_StartOrStopState = new SolidColorBrush(Colors.LightGray);
             }
         }
 

@@ -1,19 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using EMS.Api;
-using EMS.Model;
 using EMS.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TNCN.EMS.Common.Mqtt;
-using Xceed.Wpf.Toolkit.Core.Converters;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
     public class Strategy_ProtectSetterPageModel:ViewModelBase
     {
+        
         //BCMU簇选择
         private List<string> bcmuIdInfo;
         public List<string> BCMUIDInfo
@@ -32,6 +29,16 @@ namespace EMS.ViewModel.NewEMSViewModel
             set
             {
                 SetProperty(ref selectedItemBCMU, value);
+            }
+        }
+
+        private string selectedBCMUID;
+        public string SelectedBCMUID
+        {
+            get => selectedBCMUID;
+            set
+            {
+                SetProperty(ref  selectedBCMUID, value);
             }
         }
 
@@ -268,6 +275,39 @@ namespace EMS.ViewModel.NewEMSViewModel
             set
             {
                 SetProperty(ref _tempDischarUpLimitLv3, value);
+            }
+        }
+
+        /// <summary>
+        /// 放电温度下限
+        /// </summary>
+        private double _tempDischarLowLimitLv2;
+        public double TempDischarLowLimitLv2
+        {
+            get => _tempDischarLowLimitLv2;
+            set
+            {
+                SetProperty(ref _tempDischarLowLimitLv2, value);
+            }
+        }
+
+        private double _tempDischarLowLimitLv1;
+        public double TempDischarLowLimitLv1
+        {
+            get => _tempDischarLowLimitLv1;
+            set
+            {
+                SetProperty(ref _tempDischarLowLimitLv1, value);
+            }
+        }
+
+        private double _tempDischarLowLimitLv3;
+        public double TempDischarLowLimitLv3
+        {
+            get => _tempDischarLowLimitLv3;
+            set
+            {
+                SetProperty(ref _tempDischarLowLimitLv3, value);
             }
         }
 
@@ -564,7 +604,20 @@ namespace EMS.ViewModel.NewEMSViewModel
         #region Command
         public RelayCommand ReadDBInfoCommand { get; set; }
         public RelayCommand ReadBCMUInfoCommand { get; set; }
-        public RelayCommand SyncInfoCommand { get; set; }
+        public RelayCommand SyncInfo1Command { get; set; }
+        public RelayCommand SyncInfo13Command { get; set; }
+        public RelayCommand SyncInfo2Command { get; set; }
+        public RelayCommand SyncInfo3Command { get; set; }
+        public RelayCommand SyncInfo4Command { get; set; }
+        public RelayCommand SyncInfo5Command { get; set; }
+        public RelayCommand SyncInfo6Command { get; set; }
+        public RelayCommand SyncInfo7Command { get; set; }
+        public RelayCommand SyncInfo8Command { get; set; }
+        public RelayCommand SyncInfo9Command { get; set; }
+        public RelayCommand SyncInfo10Command { get; set; }
+        public RelayCommand SyncInfo11Command { get; set; }
+        public RelayCommand SyncInfo12Command { get; set; }
+        
         public RelayCommand ReadBUSVolInfoCommand { get; set; }
         public RelayCommand SyncBUSVolInfoCommand { get; set; }
         public RelayCommand ReadDCBranchInfoCommand { get; set; }
@@ -580,14 +633,23 @@ namespace EMS.ViewModel.NewEMSViewModel
 
             ReadDBInfoCommand = new RelayCommand(ReadDBInfo);
             ReadBCMUInfoCommand = new RelayCommand(ReadBCMUInfo);
-            SyncInfoCommand = new RelayCommand(SyncInfo);
+            SyncInfo1Command = new RelayCommand(SyncInfo1);
+            SyncInfo2Command = new RelayCommand(SyncInfo2);
+            SyncInfo3Command = new RelayCommand(SyncInfo3);
+            SyncInfo4Command = new RelayCommand(SyncInfo4);
+            SyncInfo5Command = new RelayCommand(SyncInfo5);
+            SyncInfo6Command = new RelayCommand(SyncInfo6);
+            SyncInfo7Command = new RelayCommand(SyncInfo7);
+            SyncInfo8Command = new RelayCommand(SyncInfo8);
+            SyncInfo9Command = new RelayCommand(SyncInfo9);
+            SyncInfo10Command = new RelayCommand(SyncInfo10);
+            SyncInfo11Command = new RelayCommand(SyncInfo11);
+            SyncInfo12Command = new RelayCommand(SyncInfo12);
+            SyncInfo13Command = new RelayCommand(SyncInfo13);
             ReadBUSVolInfoCommand = new RelayCommand(ReadBUSVolInfo);
             SyncBUSVolInfoCommand = new RelayCommand(SyncBUSVolInfo);
             ReadDCBranchInfoCommand = new RelayCommand(ReadDCBranchInfo);
             SyncDCBranchInfoCommand = new RelayCommand(SyncDCBranchInfo);
-
-            this.bmsDataService = bmsDataService;
-            this.pcsDataService = pcsDataService;
         }
 
         private void ReadDBInfo()
@@ -595,120 +657,202 @@ namespace EMS.ViewModel.NewEMSViewModel
             //
         }
 
+
+
         private void ReadBCMUInfo()
         {
-            BMSParameterSettingModel model = BmsApi.GetBMSParam(SelectedItemBCMU);
-            this.ClusterVolUpLimitLv1 = model.ClusterVolUpLimitLv1;
-            this.ClusterVolUpLimitLv2 = model.ClusterVolUpLimitLv2;
-            this.ClusterVolUpLimitLv3 = model.ClusterVolUpLimitLv3;
-            this.ClusterVolLowLimitLv1 = model.ClusterVolLowLimitLv1;
-            this.ClusterVolLowLimitLv2 = model.ClusterVolLowLimitLv2;
-            this.ClusterVolLowLimitLv3 = model.ClusterVolLowLimitLv3;
-            this.SingleVolUpLimitLv1 = model.SingleVolUpLimitLv1;
-            this.SingleVolUpLimitLv2 = model.SingleVolUpLimitLv2;
-            this.SingleVolUpLimitLv3 = model.SingleVolUpLimitLv3;
-            this.SingleVolLowLimitLv1 = model.SingleVolLowLimitLv1;
-            this.SingleVolLowLimitLv2 = model.SingleVolLowLimitLv2;
-            this.SingleVolLowLimitLv3 = model.SingleVolLowLimitLv3;
-            this.TempCharUpLimitLv1 = model.TempCharUpLimitLv1;
-            this.TempCharUpLimitLv2 = model.TempCharUpLimitLv2;
-            this.TempCharUpLimitLv3 = model.TempCharUpLimitLv3;
-            this.TempCharLowLimitLv1 = model.TempCharLowLimitLv1;
-            this.TempCharLowLimitLv2 = model.TempCharLowLimitLv2;
-            this.TempCharLowLimitLv3 = model.TempCharLowLimitLv3;
-            this.TempDischarUpLimitLv1 = model.TempDischarUpLimitLv1;
-            this.TempDischarUpLimitLv2 = model.TempDischarUpLimitLv2;
-            this.TempDischarUpLimitLv3 = model.TempDischarUpLimitLv3;
-            this.CurCharLv1 = model.CurCharLv1;
-            this.CurCharLv2 = model.CurCharLv2;
-            this.CurCharLv3 = model.CurCharLv3;
-            this.CurDischarLv1 = model.CurDischarLv1;
-            this.CurDischarLv2 = model.CurDischarLv2;
-            this.CurDischarLv3 = model.CurDischarLv3;
-            this.SingleVolDiffLv1 = model.SingleVolDiffLv1;
-            this.SingleVolDiffLv2 = model.SingleVolDiffLv2;
-            this.SingleVolDiffLv3 = model.SingleVolDiffLv3;
-            this.SOCLowLimitLv1 = model.SOCLowLimitLv1;
-            this.SOCLowLimitLv2 = model.SOCLowLimitLv2;
-            this.SOCLowLimitLv3 = model.SOCLowLimitLv3;
-            this.IsoRLowLimitLv1 = model.IsoRLowLimitLv1;
+            //BCMUInfoModel model = bmsService.ReadBCMUInfo();
             //解析model
+            byte[] data;
+            data=BmsApi.GetBMSProtectSet(selectedBCMUID);
+            ClusterVolUpLimitLv1 = BitConverter.ToUInt16(data, 0) * 0.1;
+            ClusterVolUpLimitLv2 = BitConverter.ToUInt16(data, 2) * 0.1;
+            ClusterVolUpLimitLv3 = BitConverter.ToUInt16(data, 4) * 0.1;
+            ClusterVolLowLimitLv1 = BitConverter.ToUInt16(data, 6) * 0.1;
+            ClusterVolLowLimitLv2 = BitConverter.ToUInt16(data, 8) * 0.1;
+            ClusterVolLowLimitLv3 = BitConverter.ToUInt16(data, 10) * 0.1;
+            SingleVolUpLimitLv1 = BitConverter.ToUInt16(data, 12) * 0.001;
+            SingleVolUpLimitLv2 = BitConverter.ToUInt16(data, 14) * 0.001;
+            SingleVolUpLimitLv3 = BitConverter.ToUInt16(data, 16) * 0.001;
+            SingleVolLowLimitLv1 = BitConverter.ToUInt16(data, 18) * 0.001;
+            SingleVolLowLimitLv2 = BitConverter.ToUInt16(data, 20) * 0.001;
+            SingleVolLowLimitLv3 = BitConverter.ToUInt16(data, 22) * 0.001;
+            TempCharUpLimitLv1 = (BitConverter.ToUInt16(data, 24) - 2731) * 0.1;
+            TempCharUpLimitLv2 = (BitConverter.ToUInt16(data, 26) - 2731) * 0.1;
+            TempCharUpLimitLv3 = (BitConverter.ToUInt16(data, 28) - 2731) * 0.1;
+            TempCharLowLimitLv1 = (BitConverter.ToUInt16(data, 30) - 2731) * 0.1;
+            TempCharLowLimitLv2 = (BitConverter.ToUInt16(data, 32) - 2731) * 0.1;
+            TempCharLowLimitLv3 = (BitConverter.ToUInt16(data, 34) - 2731) * 0.1;
+            TempDischarUpLimitLv1 = (BitConverter.ToUInt16(data, 36) - 2731) * 0.1;
+            TempDischarUpLimitLv2 = (BitConverter.ToUInt16(data, 38) - 2731) * 0.1;
+            TempDischarUpLimitLv3 = (BitConverter.ToUInt16(data, 40) - 2731) * 0.1;
+
+
+            TempDischarLowLimitLv1 = (BitConverter.ToUInt16(data, 42) - 2731) * 0.1;
+            TempDischarLowLimitLv2 = (BitConverter.ToUInt16(data, 44) - 2731) * 0.1;
+            TempDischarLowLimitLv3 = (BitConverter.ToUInt16(data, 46) - 2731) * 0.1;
+            CurCharLv1 = BitConverter.ToInt16(data, 48) * 0.1;
+            CurCharLv2 = BitConverter.ToInt16(data, 50) * 0.1;
+            CurCharLv3 = BitConverter.ToInt16(data, 52) * 0.1;
+            CurDischarLv1 = BitConverter.ToInt16(data, 54) * 0.1;
+            CurDischarLv2 = BitConverter.ToInt16(data, 56) * 0.1;
+            CurDischarLv3 = BitConverter.ToInt16(data, 58) * 0.1;
+            SingleVolDiffLv1 = BitConverter.ToUInt16(data, 60) * 0.001;
+            SingleVolDiffLv2 = BitConverter.ToUInt16(data, 62) * 0.001;
+            SingleVolDiffLv3 = BitConverter.ToUInt16(data, 64) * 0.001;
+            SOCLowLimitLv1 = BitConverter.ToUInt16(data, 66) * 0.1;
+            SOCLowLimitLv2 = BitConverter.ToUInt16(data, 68) * 0.1;
+            SOCLowLimitLv3 = BitConverter.ToUInt16(data, 70) * 0.1;
+            IsoRLowLimitLv1 = BitConverter.ToUInt16(data, 72);
         }
 
-        private void SyncInfo()
+        private void SyncInfo1()
         {
-            BMSParameterSettingModel model = BmsApi.SetBMSParam(SelectedItemBCMU);
-            model.ClusterVolUpLimitLv1 = this.ClusterVolUpLimitLv1;
-            model.ClusterVolUpLimitLv2 = this.ClusterVolUpLimitLv2;
-            model.ClusterVolUpLimitLv3 = this.ClusterVolUpLimitLv3;
-            model.ClusterVolLowLimitLv1 = this.ClusterVolLowLimitLv1;
-            model.ClusterVolLowLimitLv2 = this.ClusterVolLowLimitLv2;
-            model.ClusterVolLowLimitLv3 = this.ClusterVolLowLimitLv3;
-            model.SingleVolUpLimitLv1 = this.SingleVolUpLimitLv1;
-            model.SingleVolUpLimitLv2 = this.SingleVolUpLimitLv2;
-            model.SingleVolUpLimitLv3 = this.SingleVolUpLimitLv3;
-            model.SingleVolLowLimitLv1 = this.SingleVolLowLimitLv1;
-            model.SingleVolLowLimitLv2 = this.SingleVolLowLimitLv2;
-            model.SingleVolLowLimitLv3 = this.SingleVolLowLimitLv3;
-            model.TempCharUpLimitLv1 = this.TempCharUpLimitLv1;
-            model.TempCharUpLimitLv2 = this.TempCharUpLimitLv2;
-            model.TempCharUpLimitLv3 = this.TempCharUpLimitLv3;
-            model.TempCharLowLimitLv1 = this.TempCharLowLimitLv1;
-            model.TempCharLowLimitLv2 = this.TempCharLowLimitLv2;
-            model.TempCharLowLimitLv3 = this.TempCharLowLimitLv3;
-            model.TempDischarUpLimitLv1 = this.TempDischarUpLimitLv1;
-            model.TempDischarUpLimitLv2 = this.TempDischarUpLimitLv2;
-            model.TempDischarUpLimitLv3 = this.TempDischarUpLimitLv3;
-            model.CurCharLv1 = this.CurCharLv1;
-            model.CurCharLv2 = this.CurCharLv2;
-            model.CurCharLv3 = this.CurCharLv3;
-            model.CurDischarLv1 = this.CurDischarLv1;
-            model.CurDischarLv2 = this.CurDischarLv2;
-            model.CurDischarLv3 = this.CurDischarLv3;
-            model.SingleVolDiffLv1 = this.SingleVolDiffLv1;
-            model.SingleVolDiffLv2 = this.SingleVolDiffLv2;
-            model.SingleVolDiffLv3 = this.SingleVolDiffLv3;
-            model.SOCLowLimitLv1 = this.SOCLowLimitLv1;
-            model.SOCLowLimitLv2 = this.SOCLowLimitLv2;
-            model.SOCLowLimitLv3 = this.SOCLowLimitLv3;
-            model.IsoRLowLimitLv1 = this.IsoRLowLimitLv1;
-
-            //bmsDataService.SyncInfo(model);
+            ushort[] values = new ushort[3];
+            values[0] = (ushort)ClusterVolUpLimitLv1;
+            values[1] = (ushort)ClusterVolUpLimitLv2;
+            values[2] = (ushort)ClusterVolUpLimitLv3;
+            int bcmuid = int.Parse(SelectedBCMUID);
+            BmsApi.SyncBCMUInfo1(bcmuid - 1, values);
         }
+        private void SyncInfo2()
+        {
+            ushort[] values = new ushort[3];
+            values[0] = (ushort)ClusterVolLowLimitLv1;
+            values[1] = (ushort)ClusterVolLowLimitLv2;
+            values[2] = (ushort)ClusterVolLowLimitLv3;
+            int bcmuid = int.Parse(SelectedBCMUID);
+            BmsApi.SyncBCMUInfo2(bcmuid - 1, values);
+        }
+        private void SyncInfo3()
+        {
+            ushort[] values = new ushort[3];
+            values[0] = (ushort)SingleVolUpLimitLv1;
+            values[1] = (ushort)SingleVolUpLimitLv2;
+            values[2] = (ushort)SingleVolUpLimitLv3;
+            int bcmuid = int.Parse(SelectedBCMUID);
+            BmsApi.SyncBCMUInfo3(bcmuid - 1, values);
+        }
+        private void SyncInfo4()
+        {
+            ushort[] values = new ushort[3];
+            values[0] = (ushort)SingleVolLowLimitLv1;
+            values[1] = (ushort)SingleVolLowLimitLv2;
+            values[2] = (ushort)SingleVolLowLimitLv3;
+            int bcmuid = int.Parse(SelectedBCMUID);
+            BmsApi.SyncBCMUInfo4(bcmuid - 1, values);
+        }
+        private void SyncInfo5()
+        {
+            ushort[] values = new ushort[3];
+            values[0] = (ushort)TempCharUpLimitLv1;
+            values[1] = (ushort)TempCharUpLimitLv2;
+            values[2] = (ushort)TempCharUpLimitLv3;
+            int bcmuid = int.Parse(SelectedBCMUID);
+            BmsApi.SyncBCMUInfo5(bcmuid - 1, values);
+        }
+        private void SyncInfo6()
+        {
+            ushort[] values = new ushort[3];
+            values[0] = (ushort)TempCharLowLimitLv1;
+            values[1] = (ushort)TempCharLowLimitLv2;
+            values[2] = (ushort)TempCharLowLimitLv3;
+            int bcmuid = int.Parse(SelectedBCMUID);
+            BmsApi.SyncBCMUInfo6(bcmuid - 1, values);
+        }
+        private void SyncInfo7()
+        {
+            ushort[] values = new ushort[3];
+            values[0] = (ushort)TempDischarUpLimitLv1;
+            values[1] = (ushort)TempDischarUpLimitLv2;
+            values[2] = (ushort)TempDischarUpLimitLv3;
+            int bcmuid = int.Parse(SelectedBCMUID);
+            BmsApi.SyncBCMUInfo7(bcmuid - 1, values);
+        }
+        private void SyncInfo8()
+        {
+            ushort[] values = new ushort[3];
+            values[0] = (ushort)TempDischarLowLimitLv1;
+            values[1] = (ushort)TempDischarLowLimitLv2;
+            values[2] = (ushort)TempDischarLowLimitLv3;
+            int bcmuid = int.Parse(SelectedBCMUID);
+            BmsApi.SyncBCMUInfo8(bcmuid - 1, values);
+        }
+        private void SyncInfo9()
+        {
+            ushort[] values = new ushort[3];
+            values[0] = (ushort)CurCharLv1;
+            values[1] = (ushort)CurCharLv2;
+            values[2] = (ushort)CurCharLv3;
+            int bcmuid = int.Parse(SelectedBCMUID);
+            BmsApi.SyncBCMUInfo9(bcmuid - 1, values);
+        }
+        private void SyncInfo10()
+        {
+            ushort[] values = new ushort[3];
+            values[0] = (ushort)CurDischarLv1;
+            values[1] = (ushort)CurDischarLv2;
+            values[2] = (ushort)CurDischarLv3;
+            int bcmuid = int.Parse(SelectedBCMUID);
+            BmsApi.SyncBCMUInfo10(bcmuid - 1, values);
+        }
+        private void SyncInfo11()
+        {
+            ushort[] values = new ushort[3];
+            values[0] = (ushort)SingleVolDiffLv1;
+            values[1] = (ushort)SingleVolDiffLv2;
+            values[2] = (ushort)SingleVolDiffLv3;
+            int bcmuid = int.Parse(SelectedBCMUID);
+            BmsApi.SyncBCMUInfo11(bcmuid - 1, values);
+        }
+        private void SyncInfo12()
+        {
+            ushort[] values = new ushort[3];
+            values[0] = (ushort)SOCLowLimitLv1;
+            values[1] = (ushort)SOCLowLimitLv2;
+            values[2] = (ushort)SOCLowLimitLv3;
+            int bcmuid = int.Parse(SelectedBCMUID);
+            BmsApi.SyncBCMUInfo12(bcmuid - 1, values);
+        }
+        private void SyncInfo13()
+        {
+            //BCMUInfoModel model = new BCMUInfoModel();
+            //model.xxxx = this.xxxx
+            //bmsService.SyncInfo(model);
+        }
+
 
         private void ReadBUSVolInfo()
         {
             PCSParSettingModel model = PcsApi.GetBUSParam();
             //解析model
-            this.BUSUpperLimitVolThresh = model.BUSUpperLimitVolThresh;
-            this.BUSLowerLimitVolThresh = model.BUSLowerLimitVolThresh;
-            this.BUSHVolSetting = model.BUSHVolSetting;
-            this.BUSLVolSetting = model.BUSLVolSetting;
-
         }
 
         private void SyncBUSVolInfo()
         {
-            PCSParSettingModel model = PcsApi.SetBUSParam();
-            model.BUSUpperLimitVolThresh = this.BUSUpperLimitVolThresh;
-            model.BUSLowerLimitVolThresh = this.BUSLowerLimitVolThresh;
-            model.BUSHVolSetting = this.BUSHVolSetting;
-            model.BUSLVolSetting = this.BUSLVolSetting;
+            //PCSInfoModel model = new BUSVolInfo();
+            //model.xxxx = this.xxxx
             //pcsService.SyncBUSVolInfo(model);
+            try
+            {
+                double[] busdata = new double[4];
+                busdata[0] = BUSUpperLimitVolThresh;
+                busdata[1] = BUSLowerLimitVolThresh;
+                busdata[2] = BUSHVolSetting;
+                busdata[3] = BUSLVolSetting;
+                PcsApi.SyncPCSBUSVolPar(busdata);
+            }
+            catch (Exception ex) 
+            {
+                LogUtils.Error("同步BUS电压错误",ex);
+                throw ex;
+            }
         }
 
         private void ReadDCBranchInfo()
         {
             //PCSInfoModel model = pcsService.DCBranchInfo();
             //解析model
-            PCSParSettingModel model = PcsApi.GetDCBranchParam();
-            this.BTLLimitVol = model.BTLLimitVol;
-            this.DischargeSTVol = model.DischargeSTVol;
-            this.MultiBranchCurRegPar = model.MultiBranchCurRegPar;
-            this.BatAveChVol = model.BatAveChVol;
-            this.ChCutCurrent = model.ChCutCurrent;
-            this.MaxChCurrent = model.MaxChCurrent;
-            this.MaxDisChCurrent = model.MaxDisChCurrent;
         }
 
         private void SyncDCBranchInfo()
@@ -716,15 +860,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             //PCSInfoModel model = new DCBranchInfo();
             //model.xxxx = this.xxxx
             //pcsService.SyncDCBranchInfo(model);
-            PCSParSettingModel model = PcsApi.SetDCBranchParam();
-            model.BTLLimitVol = this.BTLLimitVol;
-            model.DischargeSTVol = this.DischargeSTVol;
-            model.MultiBranchCurRegPar = this.MultiBranchCurRegPar;
-            model.BatAveChVol = this.BatAveChVol;
-            model.ChCutCurrent = this.ChCutCurrent;
-            model.MaxChCurrent = this.MaxChCurrent;
-            model.MaxDisChCurrent = this.MaxDisChCurrent;
-
         }
 
     }

@@ -2,6 +2,8 @@
 using EMS.Model;
 using EMS.Service;
 using EMS.Service.impl;
+using EMS.Storage.DB.Models;
+using OxyPlot;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
@@ -288,7 +290,146 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        public Configuaration Configuaration { get; set; }
+        public List<SerialPortSettingsModel> CommPorts { get; set; }
+
+        private string selectedCommPort;
+        public string SelectedCommPort
+        {
+            get { return selectedCommPort; }
+            set
+            {
+                SetProperty(ref selectedCommPort, value);
+            }
+        }
+
+        public List<SerialPortSettingsModel> BaudRates { get; set; }
+
+        private int selectedBaudRate;
+        public int SelectedBaudRate
+        {
+            get { return selectedBaudRate; }
+            set
+            {
+                SetProperty(ref selectedBaudRate, value);
+            }
+        }
+
+        public List<SerialPortSettingsModel> Parities { get; set; }
+
+        private Parity selectedParity;
+        public Parity SelectedParity
+        {
+            get { return selectedParity; }
+            set
+            {
+                SetProperty(ref selectedParity, value);
+            }
+        }
+
+        public List<SerialPortSettingsModel> StopBitsList { get; set; }
+
+        private StopBits selectedStopBits;
+        public StopBits SelectedStopBits
+        {
+            get { return selectedStopBits; }
+            set
+            {
+                SetProperty(ref selectedStopBits, value);
+            }
+        }
+
+        public int[] DataBits { get; set; }
+
+        private int selectedDataBits;
+        public int SelectedDataBits
+        {
+            get { return selectedDataBits; }
+            set
+            {
+                SetProperty(ref selectedDataBits, value);
+            }
+        }
+
+        private int acquisitionCycle_Ammeter;
+        public int AcquisitionCycle_Ammeter 
+        {
+            get { return acquisitionCycle_Ammeter; }
+            set
+            {
+                SetProperty(ref acquisitionCycle_Ammeter, value);
+            }
+        }
+
+        private bool _isEnabled_BMS;
+
+        public bool IsEnabled_BMS
+        {
+            get => _isEnabled_BMS;
+            set
+            {
+                SetProperty(ref _isEnabled_BMS, value);
+            }
+        }
+
+        private bool _isEnabled_PCS;
+
+        public bool IsEnabled_PCS
+        {
+            get => _isEnabled_PCS;
+            set
+            {
+                SetProperty(ref _isEnabled_PCS, value);
+            }
+        }
+
+        private bool _isEnabled_Ammeter;
+
+        public bool IsEnabled_Ammeter
+        {
+            get => _isEnabled_Ammeter;
+            set
+            {
+                SetProperty(ref _isEnabled_Ammeter, value);
+            }
+        }
+
+        private string _currentTime;
+
+        public string CurrentTime
+        {
+            get => _currentTime;
+            set
+            {
+                SetProperty(ref _currentTime, value);
+            }
+        }
+
+        private bool _isEnabled_Time;
+
+        public bool IsEnabled_Time
+        {
+            get => _isEnabled_Time;
+            set
+            {
+                SetProperty(ref _isEnabled_Time, value);
+            }
+        }
+
+
+        private bool _isEnabled_Save;
+
+        public bool IsEnabled_Save
+        {
+            get => _isEnabled_Save;
+            set
+            {
+                SetProperty(ref _isEnabled_Save, value);
+            }
+        }
+
+
+
+
         #endregion
 
         #region Command
@@ -297,6 +438,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         public RelayCommand SmartMeterConfigCommand { get; private set; }
         public RelayCommand TimeCollatingCommand { get; private set; }
         public RelayCommand DevDataPointConfigCommand { get; private set; }
+        
 
         #endregion
 
@@ -310,45 +452,102 @@ namespace EMS.ViewModel.NewEMSViewModel
             TimeCollatingCommand = new RelayCommand(TimeCollating);
             DevDataPointConfigCommand = new RelayCommand(DevDataPointConfig);
             SystemSettingService = new SystemSettingService();
-            var items = SystemSettingService.GetBcmu();
-            for (int i = 0; i < items.Count; i++)
+            CommPorts = SerialPortSettingsModel.Instance.getCommPorts();
+            BaudRates = SerialPortSettingsModel.Instance.getBaudRates();
+            Parities = SerialPortSettingsModel.Instance.getParities();
+            StopBitsList = SerialPortSettingsModel.Instance.getStopBits();
+            DataBits = new int[] { 4, 5, 6, 7, 8 };
+            InitBMS();
+            InitPcs();
+            InitSmartMeter();
+
+            IsEnabled_BMS = true;
+            IsEnabled_PCS = true;
+            IsEnabled_Ammeter = true;
+        }
+
+        private void InitPcs() 
+        {
+            List<PcsModel> pcsModels = SystemSettingService.GetPcsList();
+            if (pcsModels != null && pcsModels.Count > 0) 
             {
-                if (items[i].Id.ToString() == "1")
-                {
-                    _ip_BCMU1 = items[i].Ip;
-                    _port_BCMU1 = items[i].Port;
-                    _acquisitionCycle_BCMU1 = items[i].AcquisitionCycle;
+                PcsModel pcsModel = pcsModels.Find(item => item.Id == 1);
+                if (pcsModel != null) 
+                { 
+                    Ip_PCS = pcsModel.Ip;
+                    Port_PCS = pcsModel.Port;
+                    AcquisitionCycle_PCS = pcsModel.AcquisitionCycle;
                 }
-                else if (items[i].Id.ToString() == "2")
+            }
+        }
+
+        private void InitBMS() 
+        {
+            List<BcmuModel> bcmuModels = SystemSettingService.GetBcmuList();
+            if (bcmuModels != null && bcmuModels.Count > 0)
+            {
+                BcmuModel bcmuModel1 = bcmuModels.Find(item => item.Id == 1);
+                if (bcmuModel1 != null)
                 {
-                    _ip_BCMU2 = items[i].Ip;
-                    _port_BCMU2 = items[i].Port;
-                    _acquisitionCycle_BCMU2 = items[i].AcquisitionCycle;
+                    Ip_BCMU1 = bcmuModel1.Ip;
+                    Port_BCMU1 = bcmuModel1.Port;
+                    AcquisitionCycle_BCMU1 = bcmuModel1.AcquisitionCycle;
                 }
-                else if (items[i].Id.ToString() == "3")
+
+                BcmuModel bcmuModel2 = bcmuModels.Find(item => item.Id == 2);
+                if (bcmuModel2 != null)
                 {
-                    _ip_BCMU3 = items[i].Ip;
-                    _port_BCMU3 = items[i].Port;
-                    _acquisitionCycle_BCMU3 = items[i].AcquisitionCycle;
+                    Ip_BCMU2 = bcmuModel2.Ip;
+                    Port_BCMU2 = bcmuModel2.Port;
+                    AcquisitionCycle_BCMU2 = bcmuModel2.AcquisitionCycle;
                 }
-                else if (items[i].Id.ToString() == "4")
+
+                BcmuModel bcmuModel3 = bcmuModels.Find(item => item.Id == 3);
+                if (bcmuModel3 != null)
                 {
-                    _ip_BCMU4 = items[i].Ip;
-                    _port_BCMU4 = items[i].Port;
-                    _acquisitionCycle_BCMU4 = items[i].AcquisitionCycle;
+                    Ip_BCMU3 = bcmuModel3.Ip;
+                    Port_BCMU3 = bcmuModel3.Port;
+                    AcquisitionCycle_BCMU3 = bcmuModel3.AcquisitionCycle;
                 }
-                else if (items[i].Id.ToString() == "5")
+
+                BcmuModel bcmuModel4 = bcmuModels.Find(item => item.Id == 4);
+                if (bcmuModel4 != null)
                 {
-                    _ip_BCMU5 = items[i].Ip;
-                    _port_BCMU5 = items[i].Port;
-                    _acquisitionCycle_BCMU5 = items[i].AcquisitionCycle;
+                    Ip_BCMU4 = bcmuModel4.Ip;
+                    Port_BCMU4 = bcmuModel4.Port;
+                    AcquisitionCycle_BCMU4 = bcmuModel4.AcquisitionCycle;
                 }
-                else if (items[i].Id.ToString() == "6")
+
+                BcmuModel bcmuModel5 = bcmuModels.Find(item => item.Id == 5);
+                if (bcmuModel5 != null)
                 {
-                    _ip_BCMU6 = items[i].Ip;
-                    _port_BCMU6 = items[i].Port;
-                    _acquisitionCycle_BCMU6 = items[i].AcquisitionCycle;
+                    Ip_BCMU5 = bcmuModel5.Ip;
+                    Port_BCMU5 = bcmuModel5.Port;
+                    AcquisitionCycle_BCMU5 = bcmuModel5.AcquisitionCycle;
                 }
+
+                BcmuModel bcmuModel6 = bcmuModels.Find(item => item.Id == 6);
+                if (bcmuModel6 != null)
+                {
+                    Ip_BCMU6 = bcmuModel6.Ip;
+                    Port_BCMU6 = bcmuModel6.Port;
+                    AcquisitionCycle_BCMU6 = bcmuModel6.AcquisitionCycle;
+                }
+            }
+        }
+
+        private void InitSmartMeter()
+        {
+            List<SmartMeterDBModel> smartMeterDBModels = SystemSettingService.GetSmartMeterList();
+            if (smartMeterDBModels != null && smartMeterDBModels.Count > 0)
+            {
+                SmartMeterDBModel smartMeterDBModel = smartMeterDBModels.Find(item => item.Id == 1);
+                SelectedCommPort = smartMeterDBModel.SelectedCommPort;
+                SelectedBaudRate = smartMeterDBModel.SelectedBaudRate;
+                SelectedStopBits = (StopBits)smartMeterDBModel.SelectedStopBits;
+                SelectedDataBits = smartMeterDBModel.SelectedDataBits;
+                selectedParity = (Parity)smartMeterDBModel.SelectedParity;
+                AcquisitionCycle_Ammeter = smartMeterDBModel.AcquisitionCycle;
             }
         }
 
@@ -369,12 +568,12 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         private void SmartMeterConfig()
         {
-
+            SystemSettingService.AddSmartMeter(1, SelectedCommPort, SelectedBaudRate, System.Convert.ToInt32(SelectedStopBits), SelectedDataBits, System.Convert.ToInt32(SelectedParity), AcquisitionCycle_Ammeter);
         }
 
         private void TimeCollating()
         {
-             
+            
         }
 
         private void DevDataPointConfig()
@@ -383,27 +582,18 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
     }
 
-    public class Configuaration
+    public class Configuaration 
     {
-        public List<SerialPortSettingsModel> CommPorts { get; private set; }
         public string SelectedCommPort { get; set; }
-        public List<SerialPortSettingsModel> BaudRates { get; private set; }
         public int SelectedBaudRate { get; set; }
-        public List<SerialPortSettingsModel> Parities { get; private set; }
         public Parity SelectedParity { get; set; }
-        public List<SerialPortSettingsModel> StopBitsList { get; private set; }
         public StopBits SelectedStopBits { get; set; }
-        public int[] DataBits { get; private set; }
         public int SelectedDataBits { get; set; }
-        public int AcquisitionCycle_Ammeter {  get; private set; }
+        public int AcquisitionCycle_Ammeter {  get; set; }
 
         public Configuaration()
         {
-            CommPorts = SerialPortSettingsModel.Instance.getCommPorts();
-            BaudRates = SerialPortSettingsModel.Instance.getBaudRates();
-            Parities = SerialPortSettingsModel.Instance.getParities();
-            StopBitsList = SerialPortSettingsModel.Instance.getStopBits();
-            DataBits = new int[] { 4, 5, 6, 7, 8 };
+
         }
     }
 }

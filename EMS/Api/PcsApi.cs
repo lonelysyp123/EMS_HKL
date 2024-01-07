@@ -71,9 +71,53 @@ namespace EMS.Api
         public static List<string> GetPCSFaultInfo() { return null; }
 
         /// <summary>
-        /// 
+        /// 读取保护参数界面BUSVol参数
         /// </summary>
-        /// <returns></returns>
+        /// <returns>返回读取的字节数组</returns>
+        public static byte[] ReadPCSBUSVolPar()
+        {
+            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.ReadBUSVolInfo();
+        }
+
+        /// <summary>
+        /// 读取保护参数界面DCBranch1参数
+        /// </summary>
+        /// <returns>返回读取的字节数组</returns>
+        public static byte[] ReadPCSDCBranch1Par()
+        {
+            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.ReadDCBranchInfo();
+        }
+
+        public static  bool  SyncPCSBUSVolPar(double[] busvolvalues)
+        {
+            try
+            {
+                EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.SyncBUSVolInfo(busvolvalues);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw ex;
+            }
+        }
+
+        public static bool SyncPCSDCBranch1Par(double[] dcbranch1values)
+        {
+            try
+            {
+                EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.SyncDCBranchInfo(dcbranch1values);
+                return true;
+            }
+            catch(Exception ex)
+            {
+                return false; 
+                throw ex;
+            }
+        }
+
+
+
         public static bool SetPCSHalt()
         {
             try
@@ -285,33 +329,33 @@ namespace EMS.Api
             //return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.AmbientTemperature;
         }
 
-        public static async Task<bool> PCSConnect()
-        {
-            try
-            {
-                await EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.ConnectAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-                throw (ex);
-            }
-        }
+        //public static async Task<bool> PCSConnect()
+        //{
+        //    try
+        //    {
+        //        await EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.ConnectAsync();
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return false;
+        //        throw (ex);
+        //    }
+        //}
 
-        public static bool PCSDisConnect()
-        {
-            //Buffer,是个缓存，把所有指令封装成一个，下发的时候调用其中的指令。
-            try
-            {
-                EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.Disconnect();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-                throw (ex);
-            }
-        }
+        //public static bool PCSDisConnect()
+        //{
+        //    //Buffer,是个缓存，把所有指令封装成一个，下发的时候调用其中的指令。
+        //    try
+        //    {
+        //        EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.Disconnect();
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return false;
+        //        throw (ex);
+        //    }
+        //}
     }
 }

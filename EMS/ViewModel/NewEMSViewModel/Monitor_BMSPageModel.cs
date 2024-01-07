@@ -24,7 +24,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             bmuViewModels = new Monitor_BMS_BCMUPageModel[6];
             for (int i = 0; i < bmuViewModels.Length; i++)
             {
-                bmuViewModels[i] = new Monitor_BMS_BCMUPageModel();
+                bmuViewModels[i] = new Monitor_BMS_BCMUPageModel((i+1).ToString());
             }
         }
     }

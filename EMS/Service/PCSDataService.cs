@@ -13,6 +13,9 @@ using System.Collections.Concurrent;
 using EMS.Model;
 using System.Net.NetworkInformation;
 using System.Xml.Linq;
+using log4net.Repository.Hierarchy;
+using EMS.Storage.DB.DBManage;
+using EMS.Storage.DB.Models;
 
 namespace EMS.Service
 {
@@ -27,7 +30,7 @@ namespace EMS.Service
                 if (_isConnected != value)
                 {
                     _isConnected = value;
-                    OnChangeState(_isConnected, _isDaqData);
+                    OnChangeState(this, _isConnected, _isDaqData, _isSaveDaq);
                 }
             }
         }
@@ -41,90 +44,100 @@ namespace EMS.Service
                 if (_isDaqData != value)
                 {
                     _isDaqData = value;
-                    OnChangeState(_isConnected, _isDaqData);
+                    OnChangeState(this, _isConnected, _isDaqData, _isSaveDaq);
                 }
             }
         }
 
+
+        private bool _isSaveDaq;
+        public bool IsSaveDaq
+        {
+            get => _isSaveDaq;
+            private set
+            {
+                if (_isSaveDaq != value)
+                {
+                    _isSaveDaq = value;
+                    OnChangeState(this, _isConnected, _isDaqData, _isSaveDaq);
+                }
+            }
+        }
+
+        public string ID;
         private string IP;
         private int Port;
         private TcpClient _client;
         private ModbusMaster _master;
-        private Action<bool, bool> OnChangeState;
-        private Action<PCSModel, bool> OnChangeDataState;
-
-        public static byte PcsId = 0;
-
+        private Action<object, bool, bool, bool> OnChangeState;
+        private Action<object, object> OnChangeData;
+        public static byte PcsId = 1;
         public PCSModel pcsModel;
-        
+        private static object Locker;
 
-        public PCSDataService()
+        public PCSDataService(string id)
         {
-            CommunicationProtectTr = new Thread(CommunicationProtect);
-            CommunicationProtectTr.IsBackground = true;
-            
+            ID = id;
+            Locker = new object();
+            StartDataService();
         }
 
-        public void RegisterState(Action<bool, bool> action)
+        private void StartDataService()
+        {
+            Thread thread = new Thread(TryConnect);
+            thread.IsBackground = true;
+            thread.Start();
+        }
+
+        private void TryConnect()
+        {
+            while (!IsConnected)
+            {
+                try
+                {
+                    // 从数据库中获取链接信息
+                    PcsManage pcsConfigInfo = new PcsManage();
+                    var items = pcsConfigInfo.Get();
+                    if (items != null && items.Count > 0)
+                    {
+                        var item = items.Find(x => x.Id.ToString() == ID);
+                        if (item != null)
+                        {
+                            IP = item.Ip == null ? "" : item.Ip;
+                            Port = item.Port;
+                            DaqTimeSpan = item.AcquisitionCycle;
+                        }
+                    }
+
+                    // 创建一个线程去链接设备，直到设备链接成功，退出线程，并开始采集
+                    _client = new TcpClient();
+                    _client.Connect(IPAddress.Parse(IP), Port);
+                    _master = ModbusIpMaster.CreateIp(_client);
+                    IsConnected = true;
+                }
+                catch (Exception ex)
+                {
+                    LogUtils.Warn("PCS id:" + ID + " 连接失败", ex);
+                }
+                finally
+                {
+                    Thread.Sleep(1000);
+                }
+            }
+
+            // 连接成功后开始采集数据
+            StartDaqData();
+            StartSaveData();
+        }
+
+        public void RegisterState(Action<object, bool, bool, bool> action)
         {
             OnChangeState = action;
         }
 
-        public void RegisterDataState(Action<PCSModel, bool> action)
+        public void RegisterState(Action<object, object> action)
         {
-            OnChangeDataState = action; 
-        }
-
-        public void SetCommunicationConfig(string ip, string port)
-        {
-            IP = ip;
-            int.TryParse(port, out Port);
-        }
-
-        public async Task<bool> ConnectAsync()
-        {
-            try
-            {
-                if (!IsConnected)
-                {
-                    _client = new TcpClient();
-                    await _client.ConnectAsync(IPAddress.Parse(IP), Port);
-                    _master = ModbusIpMaster.CreateIp(_client);
-                    IsConnected = true;
-                    StartDaqData();
-                    return true;
-                }
-            }
-            catch (SocketException)
-            {
-                LogUtils.Error("未应答");
-            }
-            catch (TimeoutException)
-            {
-                LogUtils.Error("TCP链接超时");
-            }
-            return false;
-        }
-
-        public bool Disconnect()
-        {
-            try
-            {
-                if (IsConnected)
-                {
-                    IsDaqData = false;
-                    _master.Transport.Dispose();
-                    _client.Close();
-                    _client.Dispose();
-                    IsConnected = false;
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                LogUtils.Error(ex.ToString());
-            }
-            return false;
+            OnChangeData = action;
         }
 
         public void StartDaqData()
@@ -138,35 +151,78 @@ namespace EMS.Service
             }
         }
 
-        private int DaqTimeSpan = 1;
+        public void StartSaveData()
+        {
+            IsSaveDaq = true;
+        }
 
+        public void StopSaveData()
+        {
+            IsSaveDaq = false;
+        }
+
+        private int DaqTimeSpan = 0;
         private void DaqDataTh()
         {
-            while (IsConnected)
+            while (IsConnected && IsDaqData)
             {
-                if (!IsDaqData)
-                {
-                    break;
-                }
                 try
                 {
-                    Thread.Sleep(DaqTimeSpan * 1000);
+                    Thread.Sleep(DaqTimeSpan * 1000 + 100);
 
                     byte[] dcState = ReadFunc(53026, 7);
                     byte[] pcsData = ReadFunc(53005, 10);
                     byte[] Temp = ReadFunc(53221, 3);
                     byte[] DCBranch1INFO = ReadFunc(53250, 10);
                     byte[] SerialNumber = ReadFunc(53579, 15);
-                    pcsModel = DataDecode(dcState, pcsData, Temp, DCBranch1INFO, SerialNumber);
-                    OnChangeDataState(pcsModel, IsConnected);
+                    lock (Locker)
+                    {
+                        pcsModel = DataDecode(dcState, pcsData, Temp, DCBranch1INFO, SerialNumber);
+                        OnChangeData(this, pcsModel.Clone());
+                        if (IsSaveDaq)
+                        {
+                            SaveData(pcsModel);
+                        }
+                    }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    LogUtils.Error("PCS相关报错", ex);
                     break;
                 }
             }
         }
 
+        private void SaveData(PCSModel model)
+        {
+            PCSInfoModel pcsInfoModel = new PCSInfoModel();
+            pcsInfoModel.ID = int.Parse(ID);
+            pcsInfoModel.DCPower = model.DcBranch1DCPower;
+            pcsInfoModel.DCVol = model.DcBranch1DCVol;
+            pcsInfoModel.DCCurrent = model.DcBranch1DCCur;
+            //pcsInfoModel.TotalCharCap = model.;
+            pcsInfoModel.BusVol = model.DcBranch1BUSVol;
+            pcsInfoModel.ModuleTemp = model.ModuleTemperature;
+            pcsInfoModel.EnvTemp = model.AmbientTemperature;
+            //pcsInfoModel.PCSState = ;
+            //pcsInfoModel.SideState = ;
+            pcsInfoModel.HappenTime = DateTime.Now;
+            PCSInfoManage pcsInfoManage = new PCSInfoManage();
+            pcsInfoManage.Insert(pcsInfoModel);
+        }
+
+        public PCSModel GetCurrentData()
+        {
+            PCSModel item = new PCSModel();
+            if (pcsModel != null)
+            {
+                lock (Locker)
+                {
+                    item = pcsModel.Clone() as PCSModel;
+                }
+            }
+            return item;
+        }
 
         private PCSModel DataDecode(byte[] dcstate, byte[] pcsdata, byte[]temp, byte[] dcbranch1info, byte[] serialnumber)
         {
@@ -223,7 +279,7 @@ namespace EMS.Service
         {
             try
             {
-                ushort[] holding_register = _master.ReadHoldingRegisters(0, address, num);
+                ushort[] holding_register = _master.ReadHoldingRegisters(1, address, num);
                 byte[] ret = new byte[holding_register.Length * 2];
                 for (int i = 0; i < holding_register.Length; i++)
                 {
@@ -251,7 +307,6 @@ namespace EMS.Service
         private static int maxReconnectTimes = 3;
         private int reconnectCount = 0;
         private bool IsCommunicationProtectState = false;
-        private Thread CommunicationProtectTr;
 
         private bool CommunicationCheck()
         {
@@ -270,6 +325,8 @@ namespace EMS.Service
                     {
                         IsCommunicationProtectState = true;
                         IsConnected = false;
+                        Thread CommunicationProtectTr = new Thread(CommunicationProtect);
+                        CommunicationProtectTr.IsBackground = true;
                         CommunicationProtectTr.Start();
                         return false;
                     }
@@ -315,9 +372,9 @@ namespace EMS.Service
             }
         }
 
-        public bool WriteFunc(byte slave, PcsCommandAdressEnum address, int value)
+        public bool WriteFunc(byte slave, PcsCommandAdressEnum address, ushort value)
         {
-            return WriteFunc(slave, (ushort)address, (ushort)value);
+            return WriteFunc(slave, (ushort)address, value);
         }
 
 
@@ -328,10 +385,10 @@ namespace EMS.Service
         /// <param name="busvolvalues">BUS侧电压阈值数组</param>
         public void SyncBUSVolInfo(double[] busvolvalues)
         {
-            WriteFunc(PcsId, PcsCommandAdressEnum.HigherVolThreshold, (ushort)(busvolvalues[1] * 10));
-            WriteFunc(PcsId, PcsCommandAdressEnum.LowerVolThreshold, (ushort)(busvolvalues[2] * 10));
-            WriteFunc(PcsId, PcsCommandAdressEnum.HigherVolSetting, (ushort)(busvolvalues[3] * 10));
-            WriteFunc(PcsId, PcsCommandAdressEnum.LowerVolSetting, (ushort)(busvolvalues[4] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.HigherVolThreshold, (ushort)(busvolvalues[0] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.LowerVolThreshold, (ushort)(busvolvalues[1] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.HigherVolSetting, (ushort)(busvolvalues[2] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.LowerVolSetting, (ushort)(busvolvalues[3] * 10));
         }
 
         public byte[] ReadBUSVolInfo()
@@ -357,13 +414,13 @@ namespace EMS.Service
         /// <param name="dcbranch1values">DC侧支路分支值数组</param>
         public void SyncDCBranchInfo(double[] dcbranch1values)
         {
-            WriteFunc(PcsId, PcsCommandAdressEnum.BatteryLowerVolThreshold, (ushort)(dcbranch1values[1] * 10));
-            WriteFunc(PcsId, PcsCommandAdressEnum.EndOfDischargeVol, (ushort)(dcbranch1values[2] * 10));
-            WriteFunc(PcsId, PcsCommandAdressEnum.MutiStrCurRegulationPar, (ushort)(dcbranch1values[3]));
-            WriteFunc(PcsId, PcsCommandAdressEnum.BatteryToppingCharVol, (ushort)(dcbranch1values[4] * 10));
-            WriteFunc(PcsId, PcsCommandAdressEnum.EndOfCharCur, (ushort)(dcbranch1values[5] * 10));
-            WriteFunc(PcsId, PcsCommandAdressEnum.MaxCharCur, (ushort)(dcbranch1values[6] * 10));
-            WriteFunc(PcsId, PcsCommandAdressEnum.MaxDischarCur, (ushort)(dcbranch1values[7] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.BatteryLowerVolThreshold, (ushort)(dcbranch1values[0] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.EndOfDischargeVol, (ushort)(dcbranch1values[1] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.MutiStrCurRegulationPar, (ushort)(dcbranch1values[2]));
+            WriteFunc(PcsId, PcsCommandAdressEnum.BatteryToppingCharVol, (ushort)(dcbranch1values[3] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.EndOfCharCur, (ushort)(dcbranch1values[4] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.MaxCharCur, (ushort)(dcbranch1values[5] * 10));
+            WriteFunc(PcsId, PcsCommandAdressEnum.MaxDischarCur, (ushort)(dcbranch1values[6] * 10));
         }
 
         public byte[] ReadDCBranchInfo()
@@ -485,8 +542,8 @@ namespace EMS.Service
                     valueAddress = PcsCommandAdressEnum.PowerValueSet;
                     break;
             }
-            WriteFunc(PcsId, modeAddress, modeValue);
-            WriteFunc(PcsId, valueAddress, controlValue);
+            //WriteFunc(PcsId, modeAddress, modeValue);
+            //WriteFunc(PcsId, valueAddress, controlValue);
         }
     }
     public enum PcsCommandAdressEnum

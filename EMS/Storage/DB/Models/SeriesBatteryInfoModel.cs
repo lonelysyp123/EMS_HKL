@@ -24,9 +24,12 @@ namespace EMS.Storage.DB.Models
         public int MinTemperatureIndex { get; set; }
         public int MaxTemperatureIndex { get; set; }
 
-        public string AlarmState { get; set; }
-        public string FaultState { get; set; }
-        public string ChargeChannelState { get; set; }
+      
+        public int VolFaultState { get; set; }
+        public int Temp1FaultState {  get; set; }
+        public int Temp2FaultState {  get; set; }
+        public int BalanceFaultState { get;set; }
+
         public double ChargeCapacitySum { get; set; }
 
         public double Voltage0 { get; set; }
