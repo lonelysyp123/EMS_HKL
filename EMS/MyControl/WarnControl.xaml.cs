@@ -32,7 +32,7 @@ namespace EMS.MyControl
             set { SetValue(AlertLevelProperty, value); }
         }
         public static readonly DependencyProperty AlertLevelProperty =
-            DependencyProperty.Register("AlertLevel", typeof(AlarmtLevels), typeof(WarnControl), new PropertyMetadata(AlarmtLevels.Info, OnAlertLevelChanged));
+            DependencyProperty.Register("AlertLevel", typeof(AlarmtLevels), typeof(WarnControl), new PropertyMetadata(AlarmtLevels.NoAlarm, OnAlertLevelChanged));
 
         private static void OnAlertLevelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -94,6 +94,10 @@ namespace EMS.MyControl
                     TextColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EEE94F"));
                     BorderColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EEE94F"));
                     break;
+                    //BorderBackground = Brushes.Transparent;
+                    //TextColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFA12F"));
+                    //BorderColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFA12F"));
+                    //break;
                 case AlarmtLevels.Warning:
                     BorderBackground = Brushes.Transparent;
                     TextColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFA12F"));

@@ -12,6 +12,8 @@ namespace EMS.ViewModel.NewEMSViewModel
 {
     public class EMSMainViewModel : ViewModelBase
     {
+               
+
         public HomePageModel HomePageModel { get; private set; }
         public Monitor_BMSPageModel Monitor_BMSPageModel { get; private set;}
         public Monitor_PCSPageModel Monitor_PCSPageModel { get; private set; }
@@ -36,6 +38,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         private static int SmartMeterCount = 1;
         public EMSMainViewModel()
         {
+
             EnergyManagementSystem.Initialization(new EnergyManagementSystem());
             bmsServices = new BMSDataService[BCMUCount];
             for (int i = 0; i < BCMUCount; i++)

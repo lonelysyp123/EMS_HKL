@@ -70,6 +70,16 @@ namespace EMS.ViewModel
             }
         }
 
+        private SolidColorBrush _temperatureColor;
+        public SolidColorBrush TemperatureColor
+        {
+            get => _temperatureColor;
+            set
+            {
+                SetProperty(ref _temperatureColor, value);
+            }
+        }
+
         private double _soc;
         public double SOC
         {
@@ -90,8 +100,8 @@ namespace EMS.ViewModel
             }
         }
 
-        private int _soh;
-        public int SOH
+        private double _soh;
+        public double SOH
         {
             get => _soh;
             set

@@ -460,6 +460,10 @@ namespace EMS.ViewModel.NewEMSViewModel
             InitBMS();
             InitPcs();
             InitSmartMeter();
+
+            IsEnabled_BMS = true;
+            IsEnabled_PCS = true;
+            IsEnabled_Ammeter = true;
         }
 
         private void InitPcs() 

@@ -1,6 +1,7 @@
 ﻿using EMS.Model;
 using EMS.Service;
 using EMS.ViewModel;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,8 +34,33 @@ namespace EMS.Api
         public static void Connect2DcBus(string bcmuid) 
         {
             var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == bcmuid);
-            item.InNet();
+            item.OnGrid();
         }
+
+        public static void Disconnect2DcBus(string bcmuid)
+        {
+            var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == bcmuid);
+            item.OffGrid();
+        }
+
+        public static void ResetBMSFault(string bcmuid)
+        {
+            var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == bcmuid);
+            item.ResetFault();
+        }
+
+        public static byte[] GetBMSProtectSet(string bcmuid)
+        {
+            var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == bcmuid);
+            byte[] data = item.GetProetctSet();
+            return data;
+        }
+
+
+
+
+
+
 
         public static BatteryTotalModel[] GetNextBMSData()
         {
@@ -153,6 +179,58 @@ namespace EMS.Api
         {
             List<double> sOCTotalList = GetTotalSOC();
             return sOCTotalList.Average();
+        }
+        public static void SyncBCMUInfo1(int index, ushort[] values)
+        {
+            EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices[index].SyncBCMUInfo1(values);
+        }
+        public static void SyncBCMUInfo2(int index, ushort[] values)
+        {
+            EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices[index].SyncBCMUInfo2(values);
+        }
+        public static void SyncBCMUInfo3(int index, ushort[] values)
+        {
+            EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices[index].SyncBCMUInfo3(values);
+        }
+        public static void SyncBCMUInfo4(int index, ushort[] values)
+        {
+            EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices[index].SyncBCMUInfo4(values);
+        }
+        public static void SyncBCMUInfo5(int index, ushort[] values)
+        {
+            EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices[index].SyncBCMUInfo5(values);
+        }
+        public static void SyncBCMUInfo6(int index, ushort[] values)
+        {
+            EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices[index].SyncBCMUInfo6(values);
+        }
+        public static void SyncBCMUInfo7(int index, ushort[] values)
+        {
+            EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices[index].SyncBCMUInfo7(values);
+        }
+        public static void SyncBCMUInfo8(int index, ushort[] values)
+        {
+            EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices[index].SyncBCMUInfo8(values);
+        }
+        public static void SyncBCMUInfo9(int index, ushort[] values)
+        {
+            EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices[index].SyncBCMUInfo9(values);
+        }
+        public static void SyncBCMUInfo10(int index, ushort[] values)
+        {
+            EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices[index].SyncBCMUInfo10(values);
+        }
+        public static void SyncBCMUInfo11(int index, ushort[] values)
+        {
+            EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices[index].SyncBCMUInfo11(values);
+        }
+        public static void SyncBCMUInfo12(int index, ushort[] values)
+        {
+            EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices[index].SyncBCMUInfo12(values);
+        }
+        public static void SyncBCMUInfo13(int index, ushort[] values)
+        {
+            EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices[index].SyncBCMUInfo13(values);
         }
     }
 }
