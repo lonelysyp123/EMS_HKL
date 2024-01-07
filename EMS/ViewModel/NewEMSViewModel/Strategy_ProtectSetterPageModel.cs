@@ -867,13 +867,41 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             //PCSInfoModel model = pcsService.DCBranchInfo();
             //解析model
-        }
+            byte[] dcbranch1data;
+            dcbranch1data = PcsApi.ReadPCSDCBranch1Par();
 
+            //DCCurrentSet = Math.Round(BitConverter.ToInt16(dcbranch1data, 0) * 0.1, 2);
+            //DCPowerSet = Math.Round(BitConverter.ToInt16(dcbranch1data, 2) * 0.1, 2);
+            BTLLimitVol = Math.Round(BitConverter.ToInt16(dcbranch1data, 4) * 0.1, 2);
+            DischargeSTVol = Math.Round(BitConverter.ToInt16(dcbranch1data, 8) * 0.1, 2);
+            MultiBranchCurRegPar = BitConverter.ToInt16(dcbranch1data, 14);
+            BatAveChVol = Math.Round(BitConverter.ToInt16(dcbranch1data, 18) * 0.1, 2);
+            ChCutCurrent = Math.Round(BitConverter.ToInt16(dcbranch1data, 22) * 0.1, 2);
+            MaxChCurrent = Math.Round(BitConverter.ToInt16(dcbranch1data, 24) * 0.1, 2);
+            MaxDisChCurrent = Math.Round(BitConverter.ToInt16(dcbranch1data, 26) * 0.1, 2);
+        }
         private void SyncDCBranchInfo()
         {
             //PCSInfoModel model = new DCBranchInfo();
             //model.xxxx = this.xxxx
             //pcsService.SyncDCBranchInfo(model);
+            try
+            {
+                double[] dcbranch1data = new double[7];
+                dcbranch1data[0] = BTLLimitVol;
+                dcbranch1data[1] = DischargeSTVol;
+                dcbranch1data[2] = MultiBranchCurRegPar;
+                dcbranch1data[3] = BatAveChVol;
+                dcbranch1data[4] = ChCutCurrent;
+                dcbranch1data[5] = MaxChCurrent;
+                dcbranch1data[6] = MaxDisChCurrent;
+                PcsApi.SyncPCSDCBranch1Par(dcbranch1data);
+            }
+            catch (Exception ex)
+            {
+                LogUtils.Error("同步DC侧支路1错误", ex);
+                throw ex;
+            }
         }
 
     }
