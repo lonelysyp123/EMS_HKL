@@ -459,7 +459,7 @@ namespace EMS.Service
                     total.Series[i].Batteries[j].Voltage = BitConverter.ToInt16(obj1, (j + i * 16) * 2) * 0.001;
                     total.Series[i].Batteries[j].Temperature1 = (BitConverter.ToInt16(obj1, (48 + j + i * 32) * 2) - 2731) * 0.1;
                     total.Series[i].Batteries[j].Temperature2 = (BitConverter.ToInt16(obj1, (64 + j + i * 32) * 2) - 2731) * 0.1;
-                    total.Series[i].Batteries[j].SOC = BitConverter.ToInt16(obj1, (144 + i * 16 + j) * 2) * 0.1;
+                    total.Series[i].Batteries[j].SOC = BitConverter.ToInt16(obj1, (144 + i * 16 + j) * 2) * 0.01;
                     total.Series[i].Batteries[j].SOH = BitConverter.ToInt16(obj1, (192 + i * 16 + j) * 2) * 0.1;
                     total.Series[i].Batteries[j].Resistance = BitConverter.ToInt16(obj1, (240 + i * 16 + j) * 2);
                     total.Series[i].Batteries[j].Capacity = BitConverter.ToInt16(obj1, (288 + i * 16 + j) * 2);
@@ -474,7 +474,7 @@ namespace EMS.Service
             total.TotalCurrent = BitConverter.ToInt16(obj, 2) * 0.1;
             total.TotalSOC = BitConverter.ToInt16(obj, 4) * 0.1;
             total.TotalSOH = BitConverter.ToInt16(obj, 6) * 0.1;
-            total.AvgVol = BitConverter.ToInt16(obj, 8) * 0.1;
+            total.AvgVol = BitConverter.ToInt16(obj, 8) *0.001;
             total.MinVoltage = BitConverter.ToInt16(obj, 10) * 0.001;
             total.MaxVoltage = BitConverter.ToInt16(obj, 12) * 0.001;
             var volIndex = BitConverter.ToInt16(obj, 14);
