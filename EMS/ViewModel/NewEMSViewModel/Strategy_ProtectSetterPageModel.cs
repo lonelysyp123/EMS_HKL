@@ -27,16 +27,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string selectedItemBCMU;
-        public string SelectedItemBCMU
-        {
-            get => selectedItemBCMU;
-            set
-            {
-                SetProperty(ref selectedItemBCMU, value);
-            }
-        }
-
         private string selectedBCMUID;
         public string SelectedBCMUID
         {

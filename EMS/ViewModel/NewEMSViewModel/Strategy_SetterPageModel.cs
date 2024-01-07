@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using EMS.Api;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -263,8 +264,8 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public Strategy_SetterPageModel()
         {
-            SwitchAutoManualCommand = new RelayCommand(SwitchAutoManual,() => true);
-            if(TotalStrategyState == "手动运行")
+            SwitchAutoManualCommand = new RelayCommand(SwitchAutoManual, () => true);
+            if (TotalStrategyState == "手动运行")
             {
                 StrategyModeSet = new List<string> { "待机", "恒电流充电", "恒电流放电", "恒功率充电", "恒功率放电" };
                 StrategyControlStartStopCommand = new RelayCommand(StrategyControlStartStop);
@@ -273,7 +274,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                 CommandManualReset = new RelayCommand(ManualReset);
                 CommandManualApply = new RelayCommand(ManualApply);
             }
-            else if(TotalStrategyState == "自动运行")
+            else if (TotalStrategyState == "自动运行")
             {
                 CommandAutoReset = new RelayCommand(AutoReset);
                 ReversePowerSendCommand = new RelayCommand(ReversePowerSend);
@@ -308,23 +309,23 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// </summary>
         private void ManualReset()
         {
-            if(SelectedManualStrategyMode == "待机")
+            if (SelectedManualStrategyMode == "待机")
             {
                 this.StrategyManualValueSet = 0;//
             }
-            if(SelectedManualStrategyMode == "恒电流充电")
+            if (SelectedManualStrategyMode == "恒电流充电")
             {
                 this.StrategyManualValueSet = 1;
             }
-            if(SelectedManualStrategyMode == "恒电流放电")
+            if (SelectedManualStrategyMode == "恒电流放电")
             {
                 this.StrategyManualValueSet = 2;
             }
-            if(SelectedManualStrategyMode == "恒功率充电")
+            if (SelectedManualStrategyMode == "恒功率充电")
             {
                 this.StrategyManualValueSet = 3;
             }
-            if(SelectedManualStrategyMode == "恒功率放电")
+            if (SelectedManualStrategyMode == "恒功率放电")
             {
                 this.StrategyManualValueSet = 4;
             }
@@ -357,33 +358,53 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// </summary>
         private void AutoReset()
         {
-            this.maxSOC = 0;
-            this.minSOC = 0;
-            this.MaxAllowChargingPower = 0;
-            this.MaxAllowDishargingPower = 0;
-            this.EnergyChargingEfficiency = 0;
-            this.EnergyDishargingEfficiency = 0;
-            this.InitialEnergyStorage = 0;
-            this.DemandControlCapacity = 0;
-            this.MaxDemandDescendRate = 0;
-            this.ReversePowerThreshold = 0;
-            this.ReversePowerLowestThreshold = 0;
-            this.ReversePowerDescendRate = 0;
+            this.maxSOC = StrategyApi.GetMaxSoc();
+            this.minSOC = StrategyApi.GetMinSoc();
+            this.MaxAllowChargingPower = StrategyApi.GetMaxChargingPower();
+            this.MaxAllowDishargingPower = StrategyApi.GetMaxDischargingPower();
+            this.EnergyChargingEfficiency = StrategyApi.GetChargingEfficiency();
+            this.EnergyDishargingEfficiency = StrategyApi.GetDischargingEfficiency();
+            this.InitialEnergyStorage = StrategyApi.GetInitialEnergy();
+            this.AvailableEnergyStorageCapacity = StrategyApi.GetEnergyCapacity();
+            FetchAndGetMaxDemandThreshhold();
+            FetchAndGetReversePowerThresholds();
         }
         private void ReversePowerSend()
         {
-            //= this.maxSOC;
-            //= this.minSOC;
-            //= this.MaxAllowChargingPower;
-            //= this.MaxAllowDishargingPower;
-            //= this.EnergyChargingEfficiency;
-            //= this.EnergyDishargingEfficiency;
-            //= this.InitialEnergyStorage;
-            //= this.DemandControlCapacity;
-            //= this.MaxDemandDescendRate;
-            //= this.ReversePowerThreshold;
-            //= this.ReversePowerLowestThreshold;
-            //= this.ReversePowerDescendRate;
+            StrategyApi.SetMaxSoc(this.maxSOC);
+            StrategyApi.SetMinSoc(this.minSOC);
+            StrategyApi.SetMaxChargingPower(this.MaxAllowChargingPower);
+            StrategyApi.SetMaxDischargingPower(this.MaxAllowDishargingPower);
+            StrategyApi.SetChargingEfficiency(this.EnergyChargingEfficiency);
+            StrategyApi.SetDischargingEfficiency(this.EnergyDishargingEfficiency);
+            StrategyApi.SetInitialEnergy(this.InitialEnergyStorage);
+            StrategyApi.SetEnergyCapacity(this.AvailableEnergyStorageCapacity);
+            StrategyApi.SetMaxDemandThreshold(this.demandControlCapacity, this.MaxDemandDescendRate);
+            StrategyApi.SetReversePowerThreshold(this.ReversePowerThreshold, this.ReversePowerLowestThreshold, this.reversePowerDescendRate);
+        }
+        /// <summary>
+        /// 需量控制参数解析
+        /// </summary>
+        private void FetchAndGetMaxDemandThreshhold()
+        {
+            double maxdemandpower, descendrate;
+
+            StrategyApi.GetMaxDemandThreshhold(out maxdemandpower, out descendrate);
+            this.DemandControlCapacity = maxdemandpower;
+            this.MaxDemandDescendRate = descendrate;
+        }
+
+        /// <summary>
+        /// 逆功率保护参数解析
+        /// </summary>
+        private void FetchAndGetReversePowerThresholds()
+        {
+            double threshold, lowestthreshhold, descendrate;
+
+            StrategyApi.GetReversePowerThreshold(out threshold, out lowestthreshhold, out descendrate);
+            this.ReversePowerThreshold = threshold;
+            this.ReversePowerLowestThreshold = lowestthreshhold;
+            this.reversePowerDescendRate = descendrate;
         }
     }
 }
