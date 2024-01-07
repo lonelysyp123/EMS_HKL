@@ -1,15 +1,100 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Animation;
 
 namespace TNCN.EMS.Common.Util
 {
+    public enum IniSectionEnum
+    {
+        BMS = 1,
+        EMS = 2,
+        MQTT = 3,
+        PCS = 4,
+        SmartMeter = 5,
+        Strategy = 6,
+    }
+
     public class IniFileHelper
     {
+        private string _path; //配置文件路径
+        private const string DefaultStringValue = "";
+        private const int DefaultIntegerValue = 0;
+        private const double DefaultDoubleValue = 0;
+        private const bool DefaultBoolValue = false;
+
+        public IniFileHelper(string path)
+        {
+            _path = path;
+            _sectionEnum2String = new Dictionary<IniSectionEnum, string>();
+            _sectionEnum2String.Add(IniSectionEnum.BMS, "BMS");
+            _sectionEnum2String.Add(IniSectionEnum.EMS, "EMS");
+            _sectionEnum2String.Add(IniSectionEnum.MQTT, "MQTT");
+            _sectionEnum2String.Add(IniSectionEnum.PCS, "PCS");
+            _sectionEnum2String.Add(IniSectionEnum.SmartMeter, "SmartMeter");
+            _sectionEnum2String.Add(IniSectionEnum.Strategy, "Strategy");
+        }
+        public void WriteString(IniSectionEnum section, string key, string value)
+        {
+            string sectionName = _sectionEnum2String[section];
+            WritePrivateProfileString(sectionName, key, value, _path);
+        }
+
+        public void WriteInteger(IniSectionEnum section, string key, int value)
+        {
+            string sectionName = _sectionEnum2String[section];
+            WriteInteger(sectionName, key, value, _path);
+        }
+        public void WriteDouble(IniSectionEnum section, string key, double value)
+        {
+            string sectionName = _sectionEnum2String[section];
+            WritePrivateProfileString(sectionName, key, value.ToString(), _path);
+        }
+
+        public void WriteBoolean(IniSectionEnum section, string key, bool value)
+        {
+            string sectionName = _sectionEnum2String[section];
+            WriteBoolean(sectionName, key, value, _path);
+        }
+
+        public string ReadString(IniSectionEnum section, string key) {
+            string sectionName = _sectionEnum2String[section];
+            return ReadString(sectionName, key, DefaultStringValue, _path);
+        }
+
+        public int ReadInteger(IniSectionEnum section, string key)
+        {
+            string sectionName = _sectionEnum2String[section];
+            return ReadInteger(sectionName, key, DefaultIntegerValue, _path);
+        }
+
+        public bool ReadBoolean(IniSectionEnum section, string key)
+        {
+            string sectionName = _sectionEnum2String[section];
+            return ReadBoolean(sectionName, key, DefaultBoolValue, _path);
+        }
+
+        public double ReadDouble(IniSectionEnum section, string key)
+        {
+            string sectionName = _sectionEnum2String[section];
+            StringBuilder stringBuffer = new StringBuilder(255);
+            GetPrivateProfileString(sectionName, key, "", stringBuffer, 255, _path);
+            double result = DefaultDoubleValue;
+            try {
+                result = Convert.ToDouble(stringBuffer.ToString());
+            }catch (Exception e) {
+                Console.WriteLine(e.ToString());
+                result = DefaultDoubleValue;
+            }
+            return result;
+        }
+
         private const int MAX_BUFFER = 32767;
         [DllImport("kernel32.dll", EntryPoint = "WritePrivateProfileString", CharSet = CharSet.Ansi)]
         private static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
@@ -19,6 +104,9 @@ namespace TNCN.EMS.Common.Util
 
         [DllImport("kernel32.dll", EntryPoint = "GetPrivateProfileInt", CharSet = CharSet.Ansi)]
         private static extern int GetPrivateProfileInt(string lpApplicationName, string lpKeyName, int nDefault, string lpFileName);
+
+        private Dictionary<IniSectionEnum, string> _sectionEnum2String;
+
 
         /// <summary>
         /// 向INI写入数据

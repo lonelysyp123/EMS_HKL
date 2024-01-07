@@ -138,6 +138,10 @@ namespace EMS.Api
         {
             EnergyManagementSystem.GlobalInstance.Controller.GetReversePowerThreshold(out threshold, out lowestthreshold, out descendrate);
         }
+
+        public BessCommand GetManualCommand() { return EnergyManagementSystem.GlobalInstance.Controller.ManualCommand; }
+        
+        public void SetManualCommand(BessCommand command) { EnergyManagementSystem.GlobalInstance.Controller.SetManualCommand(command); }
     }
 
 }
