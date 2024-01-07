@@ -62,7 +62,7 @@
                                 Foreground="White"
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
-                              
+                              Cursor="Hand"
                                 Command="{Binding Command_OffGrid}" />
                     </StackPanel>
                     <StackPanel Grid.Row="1"
@@ -81,7 +81,7 @@
                                 Foreground="White"
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
-                                
+                                Cursor="Hand"
                                 Command="{Binding Command_OnGrid}" />
                     </StackPanel>
                     <StackPanel Grid.Row="1"
@@ -100,7 +100,7 @@
                                 Foreground="White"
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
-                                
+                                Cursor="Hand"
                                 Command="{Binding Command_ResetFault}" />
                     </StackPanel>
                 </Grid>
@@ -156,7 +156,9 @@
                                 FontWeight="Bold"
                                 Foreground="White"
                                 Background="#1890FF"
-                                BorderThickness="0,0,0,0" />
+                                BorderThickness="0,0,0,0"
+                                Cursor="Hand"/>
+                        
                         <Button Content="关闭"
                                 Command="{Binding CloseChargeChannelCommand}"
                                 Width="80"
@@ -166,7 +168,8 @@
                                 Margin="20,0,0,0"
                                 Foreground="White"
                                 Background="#1890FF"
-                                BorderThickness="0,0,0,0" />
+                                BorderThickness="0,0,0,0"
+                                Cursor="Hand"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1"
                                 Grid.Row="1"
@@ -190,7 +193,9 @@
                                 FontWeight="Bold"
                                 Foreground="White"
                                 Background="#1890FF"
-                                BorderThickness="0,0,0,0" />
+                                BorderThickness="0,0,0,0" 
+                                Cursor="Hand"
+                                />
                     </StackPanel>
                 </Grid>
             </Border>
