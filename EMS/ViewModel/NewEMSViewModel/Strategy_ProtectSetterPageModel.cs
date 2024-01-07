@@ -821,9 +821,11 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
         private void SyncInfo13()
         {
-            //BCMUInfoModel model = new BCMUInfoModel();
-            //model.xxxx = this.xxxx
-            //bmsService.SyncInfo(model);
+            ushort[] values = new ushort[3];
+            values[0] = (ushort)IsoRLowLimitLv1;
+
+            int bcmuid = int.Parse(SelectedBCMUID);
+            BmsApi.SyncBCMUInfo13(bcmuid - 1, values);
         }
 
 
