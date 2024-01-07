@@ -34,7 +34,19 @@ namespace EMS.Common.StrategyManage
         private double _reversePowerLowestThreshold;
         private double _reversePowerDescendRate;
         private double _dcBusConnectionChargingPowerFactor = .1;
-    
+        private double _maxSoc;
+        private double _minSoc;
+        private double _maxChargingPower;
+        private double _maxDischargingPower;
+
+        public double MaxSoc {  get { return _maxSoc; } }
+        public void SetMaxSoc(double maxSoc) { _maxSoc = maxSoc; }
+        public double MinSoc {  get { return _minSoc; } }
+        public void SetMinSoc(double minSoc) { _minSoc = minSoc; }
+        public double MaxChargingPower { get {  return _maxChargingPower; } }
+        public void SetMaxChargingPower(double maxChargingPower) { _maxChargingPower = maxChargingPower; }
+        public double MaxDischargingPower { get { return _maxDischargingPower; } }
+        public void SetMaxDischargingPower(double maxDischargingPower) { _maxChargingPower = maxDischargingPower; }
 
         private BessCommand _currentCommand;
         private IntraDayScheduler _scheduler;

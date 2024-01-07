@@ -77,6 +77,18 @@ namespace EMS.ViewModel.NewEMSViewModel
 				SetProperty(ref _password, value);
 			}
 		}
+
+		private bool _isEnabled_Save;
+
+		public bool IsEnabled_Save
+        {
+			get => _isEnabled_Save;
+			set
+			{
+				SetProperty(ref _isEnabled_Save, value);
+			}
+		}
+
 		#endregion
 
 		#region Command

@@ -62,7 +62,7 @@
                                 Foreground="White"
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
-                              
+                              Cursor="Hand"
                                 Command="{Binding Command_OffGrid}" />
                     </StackPanel>
                     <StackPanel Grid.Row="1"
@@ -81,7 +81,7 @@
                                 Foreground="White"
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
-                                
+                                Cursor="Hand"
                                 Command="{Binding Command_OnGrid}" />
                     </StackPanel>
                     <StackPanel Grid.Row="1"
@@ -100,7 +100,7 @@
                                 Foreground="White"
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
-                                
+                                Cursor="Hand"
                                 Command="{Binding Command_ResetFault}" />
                     </StackPanel>
                 </Grid>
@@ -156,7 +156,9 @@
                                 FontWeight="Bold"
                                 Foreground="White"
                                 Background="#1890FF"
-                                BorderThickness="0,0,0,0" />
+                                BorderThickness="0,0,0,0"
+                                Cursor="Hand"/>
+                        
                         <Button Content="关闭"
                                 Command="{Binding CloseChargeChannelCommand}"
                                 Width="80"
@@ -166,7 +168,15 @@
                                 Margin="20,0,0,0"
                                 Foreground="White"
                                 Background="#1890FF"
-                                BorderThickness="0,0,0,0" />
+                                BorderThickness="0,0,0,0"
+                                Cursor="Hand"/>
+                        <StackPanel 
+           Margin="40,0,0,0"
+            Style="{StaticResource ContentPanel}">
+                            <TextBlock Text="充电通道:" />
+                            <TextBlock Text="{Binding ChargeChannelStateNumber}"
+               Margin="10,0,10,0" />
+                        </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.Column="1"
                                 Grid.Row="1"
@@ -190,7 +200,9 @@
                                 FontWeight="Bold"
                                 Foreground="White"
                                 Background="#1890FF"
-                                BorderThickness="0,0,0,0" />
+                                BorderThickness="0,0,0,0" 
+                                Cursor="Hand"
+                                />
                     </StackPanel>
                 </Grid>
             </Border>
@@ -247,7 +259,7 @@
                                 <TextBlock Text="离网" />
                                 <Border Width="15"
                                         Height="15"
-                                        Background="{Binding OffGrid}"
+                                        Background="Transparent"
                                         CornerRadius="75"
                                         Margin="20,0,0,0" />
                             </StackPanel>
@@ -257,7 +269,7 @@
                                 <TextBlock Text="并网" />
                                 <Border Width="15"
                                         Height="15"
-                                        Background="{Binding ConnectedGrid}"
+                                        Background="Transparent"
                                         CornerRadius="75"
                                         Margin="20,0,0,0" />
                             </StackPanel>
@@ -871,13 +883,7 @@
                                            Margin="10,0,10,0" />
                                 <TextBlock Text="AH" />
                             </StackPanel>
-                            <StackPanel Grid.Row="1"
-                                        Grid.Column="3"
-                                        Style="{StaticResource ContentPanel}">
-                                <TextBlock Text="充电通道:" />
-                                <TextBlock Text="{Binding ChargeChannelStateNumber}"
-                                           Margin="10,0,10,0" />
-                            </StackPanel>
+                            
                         </Grid>
                         <!--BMU告警状态-->
                         <!--<Grid Grid.Row="2">

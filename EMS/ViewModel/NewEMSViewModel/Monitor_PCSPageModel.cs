@@ -1169,7 +1169,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             });
         }
 
-        public void PCSStateDistribution(bool isconnected, bool isdaqdata)
+        public void PCSStateDistribution(bool isconnected, bool isdaqdata, bool issavedata)
         {
 
         }

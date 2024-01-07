@@ -32,7 +32,7 @@ namespace EMS.Service
                 if(_isConnected != value)
                 {
                     _isConnected = value;
-                    OnChangeState(this, _isConnected, _isDaqData);
+                    OnChangeState(this, _isConnected, _isDaqData, _isSaveDaq);
                 }
             }
         }
@@ -46,7 +46,21 @@ namespace EMS.Service
                 if (_isDaqData != value)
                 {
                     _isDaqData = value;
-                    OnChangeState(this, _isConnected, _isDaqData);
+                    OnChangeState(this, _isConnected, _isDaqData, _isSaveDaq);
+                }
+            }
+        }
+
+        private bool _isSaveDaq;
+        public bool IsSaveDaq
+        {
+            get => _isSaveDaq;
+            private set
+            {
+                if (_isSaveDaq != value)
+                {
+                    _isSaveDaq = value;
+                    OnChangeState(this, _isConnected, _isDaqData, _isSaveDaq);
                 }
             }
         }
@@ -56,7 +70,7 @@ namespace EMS.Service
         private int Port;
         private TcpClient _client;
         private ModbusMaster _master;
-        private Action<object, bool, bool> OnChangeState;
+        private Action<object, bool, bool, bool> OnChangeState;
         private Action<object, object> OnChangeData;
 
         public BMSDataService()
@@ -116,9 +130,10 @@ namespace EMS.Service
 
             // 连接成功后开始采集数据
             StartDaqData();
+            StartSaveData();
         }
 
-        public void RegisterState(Action<object, bool, bool> action)
+        public void RegisterState(Action<object, bool, bool, bool> action)
         {
             OnChangeState = action;
         }
@@ -142,6 +157,16 @@ namespace EMS.Service
             }
         }
 
+        public void StartSaveData()
+        {
+            IsSaveDaq = true;
+        }
+
+        public void StopSaveData()
+        {
+            IsSaveDaq = false;
+        }
+
         private int DaqTimeSpan = 0;
         //public BlockingCollection<BatteryTotalModel> BatteryTotalModels;
         private static object Locker;
@@ -157,7 +182,7 @@ namespace EMS.Service
 
                     byte[] BCMUData = new byte[48];
                     Array.Copy(ReadFunc(361, 24), 0, BCMUData, 0, 48);
-
+                    //Array.Copy(ReadFunc(405, 1), 0, BCMUData, 48, 2);
                     byte[] BMUIDData = { 0 };
                     byte[] BMUData = new byte[720];
                     Array.Copy(ReadFunc(1, 120), 0, BMUData, 0, 240);
@@ -181,6 +206,10 @@ namespace EMS.Service
                     {
                         CurrentBatteryTotalModel = DataDecode(BCMUData, BCMUStateData, BMUIDData, BMUData, BMUStateData);
                         OnChangeData(this, CurrentBatteryTotalModel.Clone());
+                        if (IsSaveDaq)
+                        {
+                            SaveData(CurrentBatteryTotalModel);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -188,6 +217,70 @@ namespace EMS.Service
                     LogUtils.Error("BMS相关报错", ex);
                     break;
                 }
+            }
+        }
+
+        private void SaveData(BatteryTotalModel total)
+        {
+            DateTime date = DateTime.Now;
+            TotalBatteryInfoModel TotalModel = new TotalBatteryInfoModel();
+            TotalModel.HappenTime = date;
+            TotalModel.BCMUID = ID;
+            TotalModel.Voltage = total.TotalVoltage;
+            TotalModel.Current = total.TotalCurrent;
+            TotalModel.SOC = total.TotalSOC;
+            TotalModel.SOH = total.TotalSOH;
+            TotalModel.AverageTemperature = total.AverageTemperature;
+            TotalModel.MinVoltage = total.MinVoltage;
+            TotalModel.MinVoltageIndex = total.MinVoltageIndex;
+            TotalModel.MaxVoltage = total.MaxVoltage;
+            TotalModel.MaxVoltageIndex = total.MaxVoltageIndex;
+            TotalModel.MinTemperature = total.MinTemperature;
+            TotalModel.MinTemperatureIndex = total.MinTemperatureIndex;
+            TotalModel.MaxTemperature = total.MaxTemperature;
+            TotalModel.MaxTemperatureIndex = total.MaxTemperatureIndex;
+            TotalModel.BCMUState = total.StateBCMU;
+            TotalModel.FaultState1 = total.FaultStateBCMUTotalFlag;
+            TotalModel.FaultState2 = total.FaultStateBCMUFlag1;
+            TotalModel.FaultState3 = total.FaultStateBCMUFlag2;
+            TotalModel.AlarmState1 = total.AlarmStateBCMUFlag1;
+            TotalModel.AlarmState2 = total.AlarmStateBCMUFlag2;
+            TotalModel.AlarmState3 = total.AlarmStateBCMUFlag3;
+            TotalModel.BalanceChannel = total.BalanceChannel;
+            TotalBatteryInfoManage TotalManage = new TotalBatteryInfoManage();
+            TotalManage.Insert(TotalModel);
+
+            for (int i = 0; i < total.Series.Count; i++)
+            {
+                SeriesBatteryInfoModel SeriesModel = new SeriesBatteryInfoModel();
+                SeriesModel.BCMUID = ID;
+                SeriesModel.BMUID = total.Series[i].BMUID;
+                SeriesModel.MinVoltage = total.Series[i].MinVoltage;
+                SeriesModel.MinVoltageIndex = total.Series[i].MinVoltageIndex;
+                SeriesModel.MaxVoltage = total.Series[i].MaxVoltage;
+                SeriesModel.MaxVoltageIndex = total.Series[i].MaxVoltageIndex;
+                SeriesModel.MinTemperature = total.Series[i].MinTemperature;
+                SeriesModel.MinTemperatureIndex = total.Series[i].MinTemperatureIndex;
+                SeriesModel.MaxTemperature = total.Series[i].MaxTemperature;
+                SeriesModel.MaxTemperatureIndex = total.Series[i].MaxTemperatureIndex;
+                SeriesModel.VolFaultState = total.Series[i].VolFaultInfo;
+                SeriesModel.Temp1FaultState = total.Series[i].TempFaultInfo1;
+                SeriesModel.Temp2FaultState = total.Series[i].TempFaultInfo2;
+                SeriesModel.BalanceFaultState = total.Series[i].BalanceFaultFaultInfo;
+                
+                SeriesModel.ChargeCapacitySum = total.Series[i].ChargeCapacitySum;
+                SeriesModel.HappenTime = date;
+                for (int j = 0; j < total.Series[i].Batteries.Count; j++)
+                {
+                    typeof(SeriesBatteryInfoModel).GetProperty("Voltage" + j).SetValue(SeriesModel, total.Series[i].Batteries[j].Voltage);
+                    typeof(SeriesBatteryInfoModel).GetProperty("Capacity" + j).SetValue(SeriesModel, total.Series[i].Batteries[j].Capacity);
+                    typeof(SeriesBatteryInfoModel).GetProperty("SOC" + j).SetValue(SeriesModel, total.Series[i].Batteries[j].SOC);
+                    typeof(SeriesBatteryInfoModel).GetProperty("Resistance" + j).SetValue(SeriesModel, total.Series[i].Batteries[j].Resistance);
+                    typeof(SeriesBatteryInfoModel).GetProperty("Temperature" + (j * 2)).SetValue(SeriesModel, total.Series[i].Batteries[j].Temperature1);
+                    typeof(SeriesBatteryInfoModel).GetProperty("Temperature" + (j * 2 + 1)).SetValue(SeriesModel, total.Series[i].Batteries[j].Temperature2);
+                }
+                SeriesBatteryInfoManage SeriesManage = new SeriesBatteryInfoManage();
+                SeriesManage.Insert(SeriesModel);
             }
         }
 
@@ -343,7 +436,7 @@ namespace EMS.Service
                 total.Series[i].TempFaultInfo2 = BitConverter.ToUInt16(obj3, (4 + i * 4) * 2);
                 total.Series[i].BalanceFaultFaultInfo = BitConverter.ToUInt16(obj3, (5 + 4 * i) * 2);
 
-                total.Series[i].ChargeChannelStateNumber = "0";
+          
 
                 // BMUID
                 //byte[] BMUIDArray = new byte[16];
@@ -384,7 +477,6 @@ namespace EMS.Service
             var volIndex = BitConverter.ToInt16(obj, 14);
             total.MaxVoltageIndex = (volIndex >> 8) & 0xFF;
             total.MinVoltageIndex = (volIndex) & 0xFF;
-
             total.AverageTemperature = (BitConverter.ToInt16(obj, 16) - 2731) * 0.1;
             total.MinTemperature = (BitConverter.ToInt16(obj, 18) - 2731) * 0.1;
             total.MaxTemperature = (BitConverter.ToInt16(obj, 20) - 2731) * 0.1;
@@ -405,6 +497,7 @@ namespace EMS.Service
             total.NomVoltage = BitConverter.ToInt16(obj, 42);
             total.BatteryCount = BitConverter.ToInt16(obj, 44);
             total.BatteryCycles = BitConverter.ToInt16(obj, 46);
+            total.BalanceChannel = 0;
             total.FaultStateBCMUTotalFlag = BitConverter.ToInt16(obj2, 0);
             total.FaultStateBCMUFlag1 = BitConverter.ToInt16(obj2, 2);
             total.FaultStateBCMUFlag2 = BitConverter.ToInt16(obj2, 4);

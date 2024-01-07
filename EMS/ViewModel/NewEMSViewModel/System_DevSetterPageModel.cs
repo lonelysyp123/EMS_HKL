@@ -359,6 +359,77 @@ namespace EMS.ViewModel.NewEMSViewModel
                 SetProperty(ref acquisitionCycle_Ammeter, value);
             }
         }
+
+        private bool _isEnabled_BMS;
+
+        public bool IsEnabled_BMS
+        {
+            get => _isEnabled_BMS;
+            set
+            {
+                SetProperty(ref _isEnabled_BMS, value);
+            }
+        }
+
+        private bool _isEnabled_PCS;
+
+        public bool IsEnabled_PCS
+        {
+            get => _isEnabled_PCS;
+            set
+            {
+                SetProperty(ref _isEnabled_PCS, value);
+            }
+        }
+
+        private bool _isEnabled_Ammeter;
+
+        public bool IsEnabled_Ammeter
+        {
+            get => _isEnabled_Ammeter;
+            set
+            {
+                SetProperty(ref _isEnabled_Ammeter, value);
+            }
+        }
+
+        private string _currentTime;
+
+        public string CurrentTime
+        {
+            get => _currentTime;
+            set
+            {
+                SetProperty(ref _currentTime, value);
+            }
+        }
+
+        private bool _isEnabled_Time;
+
+        public bool IsEnabled_Time
+        {
+            get => _isEnabled_Time;
+            set
+            {
+                SetProperty(ref _isEnabled_Time, value);
+            }
+        }
+
+
+        private bool _isEnabled_Save;
+
+        public bool IsEnabled_Save
+        {
+            get => _isEnabled_Save;
+            set
+            {
+                SetProperty(ref _isEnabled_Save, value);
+            }
+        }
+
+
+
+
         #endregion
 
         #region Command
@@ -367,6 +438,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         public RelayCommand SmartMeterConfigCommand { get; private set; }
         public RelayCommand TimeCollatingCommand { get; private set; }
         public RelayCommand DevDataPointConfigCommand { get; private set; }
+        
 
         #endregion
 
@@ -388,6 +460,10 @@ namespace EMS.ViewModel.NewEMSViewModel
             InitBMS();
             InitPcs();
             InitSmartMeter();
+
+            IsEnabled_BMS = true;
+            IsEnabled_PCS = true;
+            IsEnabled_Ammeter = true;
         }
 
         private void InitPcs() 

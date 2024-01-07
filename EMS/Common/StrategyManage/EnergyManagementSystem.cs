@@ -51,8 +51,6 @@ namespace EMS.Model
         {
             _pcsDataService = pcsdataservice;
         }
-
-        
     }
 
 
@@ -67,6 +65,21 @@ namespace EMS.Model
         private object _database_manager;
         private object _cloud_manager;
         private MqttClientManager mqttClientManager;
+
+        private double _chargingEfficiency;
+        private double _dischargingEfficiency;
+        private double _initialEnergy;
+        private double _energyCapacity;
+
+        public double ChargingEfficiency { get { return _chargingEfficiency; } }
+        public double DischargingEfficiency { get { return _dischargingEfficiency; } }
+        public double InitialEnergy { get { return _initialEnergy; } }
+        public double EnergyCapacity { get { return _energyCapacity; } }
+        public void SetChargingEfficiency(double efficiency) { _chargingEfficiency = efficiency; }
+        public void SetDischargingEfficiency(double efficiency) { _dischargingEfficiency = efficiency; }
+        public void SetInitialEnergy(double  energy) { _initialEnergy = energy; }
+        public void SetEnergyCapacity(double capacity) { _energyCapacity = capacity; }
+
 
         private static EnergyManagementSystem _globalInstance;
 

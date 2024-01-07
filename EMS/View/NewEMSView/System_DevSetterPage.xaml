@@ -509,7 +509,7 @@
                         <TextBlock Text="当前时间校对:"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center" />
-                        <TextBlock Text="{Binding CurrentTome}"
+                        <TextBlock Text="{Binding CurrentTime}"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center"
                                    Margin="40,0,40,0" />
@@ -522,7 +522,7 @@
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
                                 IsEnabled="{Binding IsEnabled_Time}"
-                                Command="{Binding Command_Time}" />
+                                Command="{Binding TimeCollatingCommand}" />
                     </StackPanel>
                 </Grid>
             </Border>
@@ -560,7 +560,7 @@
                                 BorderThickness="0,0,0,0"
                                 Margin="20,0,0,0"
                                 IsEnabled="{Binding IsEnabled_Time}"
-                                Command="{Binding UploadFile}" />
+                                Command="{Binding DevDataPointConfigCommand}" />
                     </StackPanel>
                 </Grid>
             </Border>
