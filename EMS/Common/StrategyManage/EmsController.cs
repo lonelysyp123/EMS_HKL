@@ -49,9 +49,13 @@ namespace EMS.Common.StrategyManage
         public void SetMaxDischargingPower(double maxDischargingPower) { _maxChargingPower = maxDischargingPower; }
 
         private BessCommand _currentCommand;
+        private BessCommand _manualCommand;
         private IntraDayScheduler _scheduler;
         private ContingencyStatusEnum _contingencyStatus;
         private DateTime _lastActiveTimestamp; // used to indicate the system operation thread is still alive.
+        
+        public BessCommand ManualCommand {  get { return _manualCommand; } }
+        public void SetManualCommand(BessCommand command) { _manualCommand = command; }
         public List<BatteryStrategyModel> DailyPattern { get; set; }
 
         public void SetMode(bool automationMode, bool maxDemandpowermode, bool reversePowermode, bool dailyPatternMode)
