@@ -130,7 +130,7 @@ namespace EMS.Service
 
             // 连接成功后开始采集数据
             StartDaqData();
-            
+            StartSaveData();
         }
 
         public void RegisterState(Action<object, bool, bool, bool> action)
