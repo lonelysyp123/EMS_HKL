@@ -589,10 +589,10 @@ namespace EMS.Service
             return ReadFunc(40200, 34);
         }
 
-        public void SyncBCMUInfo(ushort[] values)
-        {
-            WriteFunc(40200, values);
-        }
+        //public void SyncBCMUInfo(ushort[] values)
+        //{
+        //    WriteFunc(40200, values);
+        //}
 
         /// <summary>
         /// 通用批量写入函数

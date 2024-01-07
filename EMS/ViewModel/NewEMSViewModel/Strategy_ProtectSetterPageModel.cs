@@ -695,7 +695,10 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         private void SyncInfo1()
         {
-           
+            ushort[] maxvol=new ushort[3];
+            //maxvol.(ClusterVolUpLimitLv1);
+            int bcmuid = int.Parse(SelectedBCMUID);
+            BmsApi.SyncBCMUInfo1(bcmuid-1,maxvol);
         }
 
         private void SyncInfo2()

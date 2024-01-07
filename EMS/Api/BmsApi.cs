@@ -179,5 +179,10 @@ namespace EMS.Api
             List<double> sOCTotalList = GetTotalSOC();
             return sOCTotalList.Average();
         }
+
+        public static void SyncBCMUInfo1(int index, ushort[] values)
+        {
+            EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices[index].SyncBCMUInfo1(values);
+        }
     }
 }
