@@ -47,22 +47,76 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         /// <summary>
         /// 设置值
-        /// </summary>
-        
-
-        #region Command
+        /// </summary>       
+        private double strategyManualValueSet;
+        public double StrategyManualValueSet
+        {
+            get { return strategyManualValueSet; }
+            set
+            {
+                SetProperty(ref strategyManualValueSet, value);
+            }
+        }
+        #region Command   
         public RelayCommand SwitchAutoManualCommand { get; set; }
         public RelayCommand StrategyControlStartStopCommand { get; set; }
         public RelayCommand DemandControlStartStopCommand { get; set; }
         public RelayCommand InversePowerProtectionStartStopCommand { get; set; }
+        /// <summary>
+        /// 重置
+        /// </summary>
+        private string isEnabled_ManualReset;
+        public string IsEnabled_ManualReset
+        {
+            get { return isEnabled_ManualReset; }
+            set
+            {
+                SetProperty(ref isEnabled_ManualReset, value);
+            }
+        }
         public RelayCommand CommandManualReset { get; set; }
+        /// <summary>
+        /// 应用
+        /// </summary>
+        private string isEnabled_ManualApply;
+        public string IsEnabled_ManualApply
+        {
+            get { return isEnabled_ManualApply; }
+            set
+            {
+                SetProperty(ref isEnabled_ManualApply, value);
+            }
+        }
         public RelayCommand CommandManualApply { get; set; }
+        /// <summary>
+        /// 重置
+        /// </summary>
+        private string isEnabled_AutoReset;
+        public string IsEnabled_AutoReset
+        {
+            get { return isEnabled_AutoReset; }
+            set
+            {
+                SetProperty(ref isEnabled_AutoReset, value);
+            }
+        }
         public RelayCommand CommandAutoReset { get; set; }
+        /// <summary>
+        /// 应用
+        /// </summary>
+        private string isAutoStrategyBtnEnabled;
+        public string IsAutoStrategyBtnEnabled
+        {
+            get { return isAutoStrategyBtnEnabled; }
+            set
+            {
+                SetProperty(ref isAutoStrategyBtnEnabled, value);
+            }
+        }
         public RelayCommand ReversePowerSendCommand { get; set; }
-
         #endregion
 
-        #region AutoRunMode
+        #region AutoRunModePara
         /*最大SOC*/
         private double maxSOC;
         public double MaxSOC
@@ -174,13 +228,13 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /*逆功率保护限制*/
-        private double protectionLimit;
-        public double ProtectionLimit
+        private double reversePowerThreshold;
+        public double ReversePowerThreshold
         {
-            get { return protectionLimit; }
+            get { return reversePowerThreshold; }
             set
             {
-                SetProperty(ref protectionLimit, value);
+                SetProperty(ref reversePowerThreshold, value);
             }
         }
 
@@ -212,6 +266,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             SwitchAutoManualCommand = new RelayCommand(SwitchAutoManual,() => true);
             if(TotalStrategyState == "手动运行")
             {
+                StrategyModeSet = new List<string> { "待机", "恒电流充电", "恒电流放电", "恒功率充电", "恒功率放电" };
                 StrategyControlStartStopCommand = new RelayCommand(StrategyControlStartStop);
                 DemandControlStartStopCommand = new RelayCommand(DemandControlStartStop);
                 InversePowerProtectionStartStopCommand = new RelayCommand(InversePowerProtectionStartStop);
@@ -233,7 +288,9 @@ namespace EMS.ViewModel.NewEMSViewModel
             //模式切换
             TotalStrategyState = TotalStrategyState == "手动运行" ? "自动运行" : "手动运行";
         }
-
+        /// <summary>
+        /// 充放电策略控制启停，需量控制启停，逆功率保护启停
+        /// </summary>
         private void StrategyControlStartStop()
         {
 
@@ -246,21 +303,68 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
 
         }
+        /// <summary>
+        /// 手动运行的重置应用
+        /// </summary>
         private void ManualReset()
         {
-            this.//
+            if(SelectedManualStrategyMode == "待机")
+            {
+                this.StrategyManualValueSet = 0;//
+            }
+            if(SelectedManualStrategyMode == "恒电流充电")
+            {
+                this.StrategyManualValueSet = 1;
+            }
+            if(SelectedManualStrategyMode == "恒电流放电")
+            {
+                this.StrategyManualValueSet = 2;
+            }
+            if(SelectedManualStrategyMode == "恒功率充电")
+            {
+                this.StrategyManualValueSet = 3;
+            }
+            if(SelectedManualStrategyMode == "恒功率放电")
+            {
+                this.StrategyManualValueSet = 4;
+            }
         }
         private void ManualApply()
         {
             //
         }
+        /// <summary>
+        /// 自动运行的重置应用
+        /// </summary>
         private void AutoReset()
         {
-
+            this.maxSOC = 0;
+            this.minSOC = 0;
+            this.MaxAllowChargingPower = 0;
+            this.MaxAllowDishargingPower = 0;
+            this.EnergyChargingEfficiency = 0;
+            this.EnergyDishargingEfficiency = 0;
+            this.InitialEnergyStorage = 0;
+            this.DemandControlCapacity = 0;
+            this.MaxDemandDescendRate = 0;
+            this.ReversePowerThreshold = 0;
+            this.ReversePowerLowestThreshold = 0;
+            this.ReversePowerDescendRate = 0;
         }
         private void ReversePowerSend()
         {
-
+            //= this.maxSOC;
+            //= this.minSOC;
+            //= this.MaxAllowChargingPower;
+            //= this.MaxAllowDishargingPower;
+            //= this.EnergyChargingEfficiency;
+            //= this.EnergyDishargingEfficiency;
+            //= this.InitialEnergyStorage;
+            //= this.DemandControlCapacity;
+            //= this.MaxDemandDescendRate;
+            //= this.ReversePowerThreshold;
+            //= this.ReversePowerLowestThreshold;
+            //= this.ReversePowerDescendRate;
         }
     }
 }

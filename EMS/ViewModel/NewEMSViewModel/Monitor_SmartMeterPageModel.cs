@@ -162,20 +162,20 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public void DataRefresh(SmartMeterModel model)
         {
-            Voltage_A = model.Voltage_A;
-            Voltage_B = model.Voltage_B;
-            Voltage_C = model.Voltage_C;
-            Current_A = model.Electric_A;
-            Current_B = model.Electric_B;
-            Current_C = model.Electric_C;
-            ActivePower_A = model.ActivePower_A;
-            ActivePower_B = model.ActivePower_B;
-            ActivePower_C = model.ActivePower_C;
-            ActivePower_Total = model.ActivePower_Total;
-            WattlessPower_A = model.ReactivePower_A;
-            WattlessPower_B = model.ReactivePower_B;
-            WattlessPower_C = model.ReactivePower_C;
-            WattlessPower_Total = model.ReactivePower_Total;
+            this.Voltage_A = model.Voltage_A;
+            this.Voltage_B = model.Voltage_B;
+            this.Voltage_C = model.Voltage_C;
+            this.Current_A = model.Electric_A;
+            this.Current_B = model.Electric_B;
+            this.Current_C = model.Electric_C;
+            this.ActivePower_A = model.ActivePower_A;
+            this.ActivePower_B = model.ActivePower_B;
+            this.ActivePower_C = model.ActivePower_C;
+            this.ActivePower_Total = model.ActivePower_Total;
+            this.WattlessPower_A = model.ReactivePower_A;
+            this.WattlessPower_B = model.ReactivePower_B;
+            this.WattlessPower_C = model.ReactivePower_C;
+            this.WattlessPower_Total = model.ReactivePower_Total;
         }
     }
 }
