@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using EMS.Api;
+using EMS.Model;
+using OxyPlot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,14 +62,77 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
         #region Command   
         public RelayCommand SwitchAutoManualCommand { get; set; }
+        /// <summary>
+        /// 充放电策略控制
+        /// </summary>
+        private bool isDailyPatternBtnOpen;
+        public bool IsDailyPatternBtnOpen
+        {
+            get { return isDailyPatternBtnOpen; }
+            set
+            {
+                SetProperty(ref isDailyPatternBtnOpen, value);
+            }
+        }
+        private bool isAutoStrategyControlBtnEnabled = true;
+        public bool IsAutoStrategyControlBtnEnabled
+        {
+            get { return isAutoStrategyControlBtnEnabled; }
+            set
+            {
+                SetProperty(ref isAutoStrategyControlBtnEnabled, value);
+            }
+        }
         public RelayCommand StrategyControlStartStopCommand { get; set; }
+        /// <summary>
+        /// 需量控制
+        /// </summary>
+        private bool isMaxDemandControlBtnOpen;
+        public bool IsMaxDemandControlBtnOpen
+        {
+            get { return isMaxDemandControlBtnOpen; }
+            set
+            {
+                SetProperty(ref isMaxDemandControlBtnOpen, value);
+            }
+        }
+        private bool isAutoDemandControlBtnEnabled = true;
+        public bool IsAutoDemandControlBtnEnabled
+        {
+            get { return isAutoDemandControlBtnEnabled; }
+            set
+            {
+                SetProperty(ref isAutoDemandControlBtnEnabled, value);
+            }
+        }
         public RelayCommand DemandControlStartStopCommand { get; set; }
+        /// <summary>
+        /// 需量控制
+        /// </summary>
+        private bool isReversePowerBtnOpen;
+        public bool IsReversePowerBtnOpen
+        {
+            get { return isReversePowerBtnOpen; }
+            set
+            {
+                SetProperty(ref isReversePowerBtnOpen, value);
+            }
+        }
+        private bool isAutoReversePowerBtnEnabled = true;
+        public bool IsAutoReversePowerBtnEnabled
+        {
+            get { return isAutoReversePowerBtnEnabled; }
+            set
+            {
+                SetProperty(ref isAutoReversePowerBtnEnabled, value);
+            }
+        }
         public RelayCommand InversePowerProtectionStartStopCommand { get; set; }
         /// <summary>
         /// 重置
         /// </summary>
-        private string isEnabled_ManualReset;
-        public string IsEnabled_ManualReset
+        private bool isEnabled_ManualReset = true;
+        public bool IsEnabled_ManualReset
         {
             get { return isEnabled_ManualReset; }
             set
@@ -79,8 +144,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 应用
         /// </summary>
-        private string isEnabled_ManualApply;
-        public string IsEnabled_ManualApply
+        private bool isEnabled_ManualApply = true;
+        public bool IsEnabled_ManualApply
         {
             get { return isEnabled_ManualApply; }
             set
@@ -92,8 +157,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 重置
         /// </summary>
-        private string isEnabled_AutoReset;
-        public string IsEnabled_AutoReset
+        private bool isEnabled_AutoReset = true;
+        public bool IsEnabled_AutoReset
         {
             get { return isEnabled_AutoReset; }
             set
@@ -105,8 +170,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 应用
         /// </summary>
-        private string isAutoStrategyBtnEnabled;
-        public string IsAutoStrategyBtnEnabled
+        private bool isAutoStrategyBtnEnabled = true;
+        public bool IsAutoStrategyBtnEnabled
         {
             get { return isAutoStrategyBtnEnabled; }
             set
@@ -265,12 +330,16 @@ namespace EMS.ViewModel.NewEMSViewModel
         public Strategy_SetterPageModel()
         {
             SwitchAutoManualCommand = new RelayCommand(SwitchAutoManual, () => true);
+            StrategyControlStartStopCommand = new RelayCommand(StrategyControlStartStop);
+            DemandControlStartStopCommand = new RelayCommand(DemandControlStartStop);
+            InversePowerProtectionStartStopCommand = new RelayCommand(InversePowerProtectionStartStop);
             if (TotalStrategyState == "手动运行")
             {
                 StrategyModeSet = new List<string> { "待机", "恒电流充电", "恒电流放电", "恒功率充电", "恒功率放电" };
-                StrategyControlStartStopCommand = new RelayCommand(StrategyControlStartStop);
-                DemandControlStartStopCommand = new RelayCommand(DemandControlStartStop);
-                InversePowerProtectionStartStopCommand = new RelayCommand(InversePowerProtectionStartStop);
+                if(SelectedManualStrategyMode == "待机")
+                {
+
+                }
                 CommandManualReset = new RelayCommand(ManualReset);
                 CommandManualApply = new RelayCommand(ManualApply);
             }
@@ -305,31 +374,54 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         }
         /// <summary>
-        /// 手动运行的重置应用
+        /// 手动运行的重置
         /// </summary>
         private void ManualReset()
         {
             if (SelectedManualStrategyMode == "待机")
             {
-                this.StrategyManualValueSet = 0;//
+                BessCommand currentCommand = StrategyApi.GetManualCommand();
+                if (currentCommand.BatteryStrategy == (BatteryStrategyEnum)SelectedManualMode.Standby)
+                {
+                    this.StrategyManualValueSet = currentCommand.Value;
+                }
             }
             if (SelectedManualStrategyMode == "恒电流充电")
             {
-                this.StrategyManualValueSet = 1;
+                BessCommand currentCommand = StrategyApi.GetManualCommand();
+                if (currentCommand.BatteryStrategy == (BatteryStrategyEnum)SelectedManualMode.ConstantCurrentCharge)
+                {
+                    this.StrategyManualValueSet = currentCommand.Value;
+                }
             }
             if (SelectedManualStrategyMode == "恒电流放电")
             {
-                this.StrategyManualValueSet = 2;
+                BessCommand currentCommand = StrategyApi.GetManualCommand();
+                if (currentCommand.BatteryStrategy == (BatteryStrategyEnum)SelectedManualMode.ConstantCurrentDischarge)
+                {
+                    this.StrategyManualValueSet = currentCommand.Value;
+                }
             }
             if (SelectedManualStrategyMode == "恒功率充电")
             {
-                this.StrategyManualValueSet = 3;
+                BessCommand currentCommand = StrategyApi.GetManualCommand();
+                if (currentCommand.BatteryStrategy == (BatteryStrategyEnum)SelectedManualMode.ConstantPowerCharge)
+                {
+                    this.StrategyManualValueSet = currentCommand.Value;
+                }
             }
             if (SelectedManualStrategyMode == "恒功率放电")
             {
-                this.StrategyManualValueSet = 4;
+                BessCommand currentCommand = StrategyApi.GetManualCommand();
+                if (currentCommand.BatteryStrategy == (BatteryStrategyEnum)SelectedManualMode.ConstantPowerDischarge)
+                {
+                    this.StrategyManualValueSet = currentCommand.Value;
+                }
             }
         }
+        /// <summary>
+        /// 手动运行的应用
+        /// </summary>
         private void ManualApply()
         {
             if (SelectedManualStrategyMode == "待机")
@@ -405,6 +497,14 @@ namespace EMS.ViewModel.NewEMSViewModel
             this.ReversePowerThreshold = threshold;
             this.ReversePowerLowestThreshold = lowestthreshhold;
             this.reversePowerDescendRate = descendrate;
+        }
+        public enum SelectedManualMode
+        {
+            Standby = 0,
+            ConstantCurrentCharge = 1,
+            ConstantCurrentDischarge = 2,
+            ConstantPowerCharge = 3,
+            ConstantPowerDischarge = 4,
         }
     }
 }

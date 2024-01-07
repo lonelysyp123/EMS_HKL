@@ -619,12 +619,10 @@ namespace EMS.ViewModel.NewEMSViewModel
         public RelayCommand SyncDCBranchInfoCommand { get; set; }
         #endregion
 
-        private BMSDataService bmsDataService;
-        private PCSDataService pcsDataService;
 
-        public Strategy_ProtectSetterPageModel(BMSDataService bmsDataService, PCSDataService pcsDataService)
+        public Strategy_ProtectSetterPageModel()
         {
-            bcmuIdInfo = new List<string> { "BCMUID(1)", "BCMUID(2)", "BCMUID(3)", "BCMUID(4)", "BCMUID(5)", "BCMUID(6)" };
+            bcmuIdInfo = new List<string> { "1", "2", "3", "4", "5", "6" };
 
             ReadDBInfoCommand = new RelayCommand(ReadDBInfo);
             ReadBCMUInfoCommand = new RelayCommand(ReadBCMUInfo);
