@@ -99,9 +99,10 @@
                     IsConnect:True、False；
                     BatteryClusterStatus：Charge、Discharge、Stand-->
                     <localControl:BCMUConnectGraph x:Name="BMU1Flag"
-                                                   AlarmtLevel="{Binding AlarmBCMU1}"
-                                                   IsConnect="{Binding IsConnectBCMU1}"
-                                                   BatteryClusterStatus="{Binding StatusBCMU1}" />
+                                                   AlarmtLevel="{Binding BCMUTotalFault}"
+                                                   IsConnect="{Binding IsOnGrid}"
+                                                   BatteryClusterStatus="{Binding CurrentOri}" />
+                    
                 </Grid>
                 <Grid Grid.Row="2"
                       x:Name="BMU1Info">
@@ -165,9 +166,9 @@
             </Grid>
                 <Grid Grid.Row="1">
                     <localControl:BCMUConnectGraph x:Name="BMU2Flag"
-                                                   AlarmtLevel="{Binding AlarmBCMU2}"
-                                                   IsConnect="{Binding IsConnectBCMU2}"
-                                                   BatteryClusterStatus="{Binding StatusBCMU2}" />
+                                                    AlarmtLevel="{Binding BCMUTotalFault}"
+  IsConnect="{Binding IsOnGrid}"
+  BatteryClusterStatus="{Binding CurrentOri}" />
                 </Grid>
                 <Grid Grid.Row="2"
                       x:Name="BMU2Info">
@@ -241,9 +242,9 @@
             </Grid>
                 <Grid Grid.Row="1">
                     <localControl:BCMUConnectGraph x:Name="BMU3Flag"
-                                                   AlarmtLevel="{Binding AlarmBCMU3}"
-                                                   IsConnect="{Binding IsConnectBCMU3}"
-                                                   BatteryClusterStatus="{Binding StatusBCMU3}" />
+                                                    AlarmtLevel="{Binding BCMUTotalFault}"
+  IsConnect="{Binding IsOnGrid}"
+  BatteryClusterStatus="{Binding CurrentOri}" />
                 </Grid>
                 <Grid Grid.Row="2"
                       x:Name="BMU3Info">
@@ -307,9 +308,9 @@
             </Grid>
                 <Grid Grid.Row="1">
                     <localControl:BCMUConnectGraph x:Name="BMU4Flag"
-                                                   AlarmtLevel="{Binding AlarmBCMU4}"
-                                                   IsConnect="{Binding IsConnectBCMU4}"
-                                                   BatteryClusterStatus="{Binding StatusBCMU4}" />
+                                                   AlarmtLevel="{Binding BCMUTotalFault}"
+  IsConnect="{Binding IsOnGrid}"
+  BatteryClusterStatus="{Binding CurrentOri}" />
                 </Grid>
                 <Grid Grid.Row="2"
                       x:Name="BMU4Info">
@@ -373,9 +374,9 @@
             </Grid>
                 <Grid Grid.Row="1">
                     <localControl:BCMUConnectGraph x:Name="BMU5Flag"
-                                                   AlarmtLevel="{Binding AlarmBCMU5}"
-                                                   IsConnect="{Binding IsConnectBCMU5}"
-                                                   BatteryClusterStatus="{Binding StatusBCMU5}" />
+                                                  AlarmtLevel="{Binding BCMUTotalFault}"
+  IsConnect="{Binding IsOnGrid}"
+  BatteryClusterStatus="{Binding CurrentOri}" />
                 </Grid>
                 <Grid Grid.Row="2"
                       x:Name="BMU5Info">
@@ -444,9 +445,9 @@
             </Grid>
             <Grid Grid.Row="1">
                     <localControl:BCMUConnectGraph x:Name="BMU6Flag"
-                                                   AlarmtLevel="{Binding AlarmBCMU6}"
-                                                   IsConnect="{Binding IsConnectBCMU6}"
-                                                   BatteryClusterStatus="{Binding StatusBCMU6}" />
+                                                   AlarmtLevel="{Binding BCMUTotalFault}"
+  IsConnect="{Binding IsOnGrid}"
+  BatteryClusterStatus="{Binding CurrentOri}" />
                 </Grid>
                 <Grid Grid.Row="2"
                       x:Name="BMU6Info">

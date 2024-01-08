@@ -30,16 +30,32 @@ namespace EMS.Common.StrategyManage
 
         private double _maxDemandPower; //负载侧最大功率极限：通常为负载侧变压器额定功率
         private double _maxDemandPowerDescendRate;
-        private double _reversePowerThreshold;
-        private double _reversePowerLowestThreshold;
+        private double _reversePowerActionThreshold;
+        private double _reversePowerStopThreshold;
         private double _reversePowerDescendRate;
-        private double _dcBusConnectionChargingPowerFactor = .1;
-    
+        private double _dcBusConnectionChargingPowerFactor;
+        private double _maxSoc;
+        private double _minSoc;
+        private double _maxChargingPower;
+        private double _maxDischargingPower;
+
+        public double MaxSoc {  get { return _maxSoc; } }
+        public void SetMaxSoc(double maxSoc) { _maxSoc = maxSoc; }
+        public double MinSoc {  get { return _minSoc; } }
+        public void SetMinSoc(double minSoc) { _minSoc = minSoc; }
+        public double MaxChargingPower { get {  return _maxChargingPower; } }
+        public void SetMaxChargingPower(double maxChargingPower) { _maxChargingPower = maxChargingPower; }
+        public double MaxDischargingPower { get { return _maxDischargingPower; } }
+        public void SetMaxDischargingPower(double maxDischargingPower) { _maxChargingPower = maxDischargingPower; }
 
         private BessCommand _currentCommand;
+        private BessCommand _manualCommand;
         private IntraDayScheduler _scheduler;
         private ContingencyStatusEnum _contingencyStatus;
         private DateTime _lastActiveTimestamp; // used to indicate the system operation thread is still alive.
+        
+        public BessCommand ManualCommand {  get { return _manualCommand; } }
+        public void SetManualCommand(BessCommand command) { _manualCommand = command; }
         public List<BatteryStrategyModel> DailyPattern { get; set; }
 
         public void SetMode(bool automationMode, bool maxDemandpowermode, bool reversePowermode, bool dailyPatternMode)
@@ -75,14 +91,14 @@ namespace EMS.Common.StrategyManage
 
         public void SetReversePowerThreshold(double threshold, double lowestthreshhold, double descendrate)
         {
-            _reversePowerThreshold = threshold;
-            _reversePowerLowestThreshold = lowestthreshhold;
+            _reversePowerActionThreshold = threshold;
+            _reversePowerStopThreshold = lowestthreshhold;
             _reversePowerDescendRate = descendrate;
         }
         public void GetReversePowerThreshold(out double threshold, out double lowestthreshold, out double descendrate)
         {
-            threshold = _reversePowerThreshold;
-            lowestthreshold = _reversePowerLowestThreshold;
+            threshold = _reversePowerActionThreshold;
+            lowestthreshold = _reversePowerStopThreshold;
             descendrate = _reversePowerDescendRate;
         }
         public Dictionary<int, List<BatteryStrategyModel>> DailyPatterns { get; set; }

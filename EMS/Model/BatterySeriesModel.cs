@@ -17,7 +17,7 @@ namespace EMS.Model
         public int TempFaultInfo1 { get; set; }
         public int TempFaultInfo2 { get; set; }
         public int BalanceFaultFaultInfo { get; set; }
-        public string ChargeChannelStateNumber {  get; set; }
+        
         public ushort ChargeChannelState {  get; set; }
         public double ChargeCapacitySum { get; set; }
         public double MinVoltage {  get; set; }

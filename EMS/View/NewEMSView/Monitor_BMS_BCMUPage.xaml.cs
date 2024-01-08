@@ -41,6 +41,7 @@ namespace EMS.View.NewEMSView
                 Battery battery = new Battery();
                 Grid.SetRow(battery, l / 7 + 1);
                 Grid.SetColumn(battery, l % 7 + 1);
+                
                 battery.Margin = new Thickness(5);
                 Binding binding = new Binding() { Path = new PropertyPath("SOC") };
                 battery.SetBinding(Battery.SOCProperty, binding);

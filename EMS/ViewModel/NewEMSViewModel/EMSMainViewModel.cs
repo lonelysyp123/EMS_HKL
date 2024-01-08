@@ -12,6 +12,8 @@ namespace EMS.ViewModel.NewEMSViewModel
 {
     public class EMSMainViewModel : ViewModelBase
     {
+               
+
         public HomePageModel HomePageModel { get; private set; }
         public Monitor_BMSPageModel Monitor_BMSPageModel { get; private set;}
         public Monitor_PCSPageModel Monitor_PCSPageModel { get; private set; }
@@ -36,19 +38,22 @@ namespace EMS.ViewModel.NewEMSViewModel
         private static int SmartMeterCount = 1;
         public EMSMainViewModel()
         {
+
             EnergyManagementSystem.Initialization(new EnergyManagementSystem());
             bmsServices = new BMSDataService[BCMUCount];
             for (int i = 0; i < BCMUCount; i++)
             {
-                bmsServices[i] = new BMSDataService((i+1).ToString());
+                BMSDataService service = new BMSDataService((i + 1).ToString());
+                bmsServices[i] = service;
                 bmsServices[i].RegisterState(DataCallBack_BMS);
                 bmsServices[i].RegisterState(StateCallBack_BMS);
-                EnergyManagementSystem.GlobalInstance.BMSManager.AddBMSDev(bmsServices[i]);
+                EnergyManagementSystem.GlobalInstance.BMSManager.AddBMSDev(service);
             }
 
             pcsService = new PCSDataService("1");
             pcsService.RegisterState(DataCallBack_PCS);
             pcsService.RegisterState(StateCallBack_PCS);
+            EnergyManagementSystem.GlobalInstance.PcsManager.SetPCS(pcsService);
 
             smService = new SmartMeterDataService();
             //smServices[i].RegisterState();    // 状态回调
@@ -68,9 +73,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             System_DevInfoPageModel = new System_DevInfoPageModel();
             System_DevSetterPageModel = new System_DevSetterPageModel();
             System_MqttSetterPageModel = new System_MqttSetterPageModel();
-
-            EnergyManagementSystem.Initialization(new EnergyManagementSystem());
-            EnergyManagementSystem.GlobalInstance.PcsManager.SetPCS(pcsService);
         }
 
         private void DataCallBack_BMS(object sender, object model)
