@@ -66,6 +66,7 @@ namespace TestEMS.ApiTest
             string filePath = "E:\\project\\temp\\EMS_HKL\\EMS\\Config\\SystemConfig.ini";
             bool exists = File.Exists(filePath);
             Assert.IsTrue(exists);
+            IniFileHelper iniFile = new IniFileHelper(filePath);
             if (exists)
             {
                 //IniFileHelper.Write("MQTT", "IP", "127.0.0.1", filePath);
@@ -77,7 +78,7 @@ namespace TestEMS.ApiTest
                 string[] keys = { "IP", "Port", "UserName", "Password", "ClientId" };
                 string[] values = { "127.0.0.1", "1883", "admin", "zhny2020", "tncn.ems.local" };
 
-                IniFileHelper.AddSectionWithKeyValues("MQTT", keys.ToList(), values.ToList(), filePath);
+                iniFile.AddSectionWithKeyValues("MQTT", keys.ToList(), values.ToList());
             }
         }
 
@@ -86,21 +87,22 @@ namespace TestEMS.ApiTest
         {
             string filePath = "E:\\project\\temp\\EMS_HKL\\EMS\\Config\\SystemConfig.ini";
             bool exists = File.Exists(filePath);
+            IniFileHelper iniFile = new IniFileHelper(filePath);
             Assert.IsTrue(exists);
             if (exists) {
-                string ip = IniFileHelper.Read("MQTT", "IP", filePath);
+                string ip = iniFile.ReadString(IniSectionEnum.MQTT, "IP");
                 Assert.AreEqual(ip, "127.0.0.1", true);
 
-                string port = IniFileHelper.Read("MQTT", "Port", filePath);
+                string port = iniFile.ReadString(IniSectionEnum.MQTT, "Port");
                 Assert.AreEqual(port, port, "1883");
 
-                string userName = IniFileHelper.Read("MQTT", "UserName", filePath);
+                string userName = iniFile.ReadString(IniSectionEnum.MQTT, "UserName");
                 Assert.AreEqual(userName, "admin", true);
 
-                string password = IniFileHelper.Read("MQTT", "Password", filePath);
+                string password = iniFile.ReadString(IniSectionEnum.MQTT, "Password");
                 Assert.AreEqual(password, "zhny2020", true);
 
-                string clientId = IniFileHelper.Read("MQTT", "ClientId", filePath);
+                string clientId = iniFile.ReadString(IniSectionEnum.MQTT, "ClientId");
                 Assert.AreEqual(clientId, "tncn.ems.local", true);
             }
 
