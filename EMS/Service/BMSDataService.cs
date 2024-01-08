@@ -1,4 +1,5 @@
-﻿using EMS.Common;
+﻿using ControlzEx.Standard;
+using EMS.Common;
 using EMS.Common.Modbus.ModbusTCP;
 using EMS.Model;
 using EMS.Storage.DB.DBManage;
@@ -66,23 +67,23 @@ namespace EMS.Service
         }
 
         public string ID { get; private set; }
-        private string IP = "127.0.0.1";
-        private int Port;
+        private string IP = "0.0.0.0";
+        private int Port = 0;
         private TcpClient _client;
         private ModbusMaster _master;
         private Action<object, bool, bool, bool> OnChangeState;
         private Action<object, object> OnChangeData;
 
-        public BMSDataService()
-        {
-            Locker = new object();
-            StartDataService();
-        }
+        //public BMSDataService()
+        //{
+        //    Locker = new object();
+        //    StartDataService();
+        //}
 
         public BMSDataService(string id)
         {
             ID = id;
-            Locker = new object();
+            //Locker = new object();
             StartDataService();
         }
 
@@ -153,6 +154,7 @@ namespace EMS.Service
                     Thread th = new Thread(DaqDataTh);
                     th.IsBackground = true;
                     th.Start();
+                    LogUtils.Debug("BMS id:" + ID + " 开始采集数据");
                 }
             }
         }
@@ -160,16 +162,18 @@ namespace EMS.Service
         public void StartSaveData()
         {
             IsSaveDaq = true;
+            LogUtils.Debug("BMS id:" + ID + " 开始保存数据");
         }
 
         public void StopSaveData()
         {
             IsSaveDaq = false;
+            LogUtils.Debug("BMS id:" + ID + " 停止保存数据");
         }
 
         private int DaqTimeSpan = 0;
         //public BlockingCollection<BatteryTotalModel> BatteryTotalModels;
-        private static object Locker;
+        //private static object Locker;
         public BatteryTotalModel CurrentBatteryTotalModel;
         private void DaqDataTh()
         {
@@ -179,6 +183,19 @@ namespace EMS.Service
                 {
                     Thread.Sleep(DaqTimeSpan * 1000 + 100);
 
+                    //var dataRefreshedFlag = ReadFunc(470, 1);
+                    //if (BitConverter.ToInt16(dataRefreshedFlag, 0) == 0x55aa || BitConverter.ToInt16(dataRefreshedFlag, 0) == 0x0000)
+                    //{
+                    //    WriteFunc(551, 0x55AA);
+                    //    Thread.Sleep(100);
+                    //    WriteFunc(551, 0x0000);
+                    //    Thread.Sleep(100);
+                    //}
+                    //else
+                    //{
+                    //    WriteFunc(551, 0x0000);
+                    //    Thread.Sleep(100);
+                    //}
 
                     byte[] BCMUData = new byte[48];
                     Array.Copy(ReadFunc(361, 24), 0, BCMUData, 0, 48);
@@ -202,19 +219,19 @@ namespace EMS.Service
                     Array.Copy(ReadFunc(467, 3), 0, BCMUStateData, 6, 6);
 
                     //batteryTotalModels.Enqueue(DataDecode(BCMUData, BCMUStateData, BMUIDData, BMUData, BMUStateData));
-                    lock (Locker)
-                    {
+                    //lock (Locker)
+                    //{
                         CurrentBatteryTotalModel = DataDecode(BCMUData, BCMUStateData, BMUIDData, BMUData, BMUStateData);
                         OnChangeData(this, CurrentBatteryTotalModel.Clone());
                         if (IsSaveDaq)
                         {
                             SaveData(CurrentBatteryTotalModel);
                         }
-                    }
+                    //}
                 }
                 catch (Exception ex)
                 {
-                    LogUtils.Error("BMS相关报错", ex);
+                    LogUtils.Error("BMS id:" + ID, ex);
                     break;
                 }
             }
@@ -289,10 +306,10 @@ namespace EMS.Service
             BatteryTotalModel item = new BatteryTotalModel();
             if (CurrentBatteryTotalModel != null)
             {
-                lock (Locker)
-                {
+                //lock (Locker)
+                //{
                     item = CurrentBatteryTotalModel.Clone() as BatteryTotalModel;
-                }
+                //}
             }
             return item;
         }
@@ -319,7 +336,7 @@ namespace EMS.Service
             }
             catch (Exception ex)
             {
-                LogUtils.Warn("读取数据失败", ex);
+                LogUtils.Warn("BMS id:"+ID+"读取数据失败", ex);
                 if (!_client.Connected && !IsCommunicationProtectState)
                 {
                     if (CommunicationCheck())
@@ -362,7 +379,7 @@ namespace EMS.Service
             }
         }
 
-        private static int reconnectIntervalLong =60 * 1000 * 5; // ms
+        private static int reconnectIntervalLong =1 * 1000 * 5; // ms
         private void CommunicationProtect()
         {
             while (!IsConnected)
@@ -372,6 +389,7 @@ namespace EMS.Service
                 {
                     _master = ModbusIpMaster.CreateIp(_client);
                     IsConnected = true;
+                    StartDaqData();
                     LogUtils.Debug("保护机制重连成功，设备上线");
                 }
                 else
@@ -456,7 +474,7 @@ namespace EMS.Service
                     total.Series[i].Batteries[j].Voltage = BitConverter.ToInt16(obj1, (j + i * 16) * 2) * 0.001;
                     total.Series[i].Batteries[j].Temperature1 = (BitConverter.ToInt16(obj1, (48 + j + i * 32) * 2) - 2731) * 0.1;
                     total.Series[i].Batteries[j].Temperature2 = (BitConverter.ToInt16(obj1, (64 + j + i * 32) * 2) - 2731) * 0.1;
-                    total.Series[i].Batteries[j].SOC = BitConverter.ToInt16(obj1, (144 + i * 16 + j) * 2) * 0.1;
+                    total.Series[i].Batteries[j].SOC = BitConverter.ToInt16(obj1, (144 + i * 16 + j) * 2) * 0.01;
                     total.Series[i].Batteries[j].SOH = BitConverter.ToInt16(obj1, (192 + i * 16 + j) * 2) * 0.1;
                     total.Series[i].Batteries[j].Resistance = BitConverter.ToInt16(obj1, (240 + i * 16 + j) * 2);
                     total.Series[i].Batteries[j].Capacity = BitConverter.ToInt16(obj1, (288 + i * 16 + j) * 2);
@@ -471,7 +489,7 @@ namespace EMS.Service
             total.TotalCurrent = BitConverter.ToInt16(obj, 2) * 0.1;
             total.TotalSOC = BitConverter.ToInt16(obj, 4) * 0.1;
             total.TotalSOH = BitConverter.ToInt16(obj, 6) * 0.1;
-            total.AvgVol = BitConverter.ToInt16(obj, 8) * 0.1;
+            total.AvgVol = BitConverter.ToInt16(obj, 8) *0.001;
             total.MinVoltage = BitConverter.ToInt16(obj, 10) * 0.001;
             total.MaxVoltage = BitConverter.ToInt16(obj, 12) * 0.001;
             var volIndex = BitConverter.ToInt16(obj, 14);
@@ -526,6 +544,7 @@ namespace EMS.Service
         public void StopDaqData()
         {
             IsDaqData = false;
+            LogUtils.Debug("BMS id:" + ID + " 停止采集数据");
         }
 
         public int[] ReadNetInfo()
@@ -569,8 +588,14 @@ namespace EMS.Service
             }
             catch (Exception ex)
             {
-                LogUtils.Error(ex.ToString());
-                throw ex;
+                LogUtils.Warn("BMS id:" + ID + "写入数据失败", ex);
+                if (!_client.Connected && !IsCommunicationProtectState)
+                {
+                    if (CommunicationCheck())
+                    {
+                        WriteFunc(address, value);
+                    }
+                }
             }
         }
 
