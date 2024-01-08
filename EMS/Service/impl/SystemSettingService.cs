@@ -11,7 +11,7 @@ using System.Windows.Controls;
 
 namespace EMS.Service.impl
 {
-    public class SystemSettingService
+    public class SystemSettingService : ISystemSettingService
     {
         public SystemSettingService() { }
 

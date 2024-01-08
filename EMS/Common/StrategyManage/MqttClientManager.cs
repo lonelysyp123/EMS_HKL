@@ -12,6 +12,9 @@ using TNCN.EMS.Service;
 using Newtonsoft.Json;
 using System.Threading;
 using EMS.Properties;
+using EMS.Service;
+using EMS.Service.impl;
+using EMS.Storage.DB.Models;
 
 namespace TNCN.EMS.Common.StrategyManage
 {
@@ -21,20 +24,11 @@ namespace TNCN.EMS.Common.StrategyManage
 
         public IMqttClientService MqttClientService { get { return mqttClientService; } }
 
-        private string[] subscribeTopics = new string[]
-        {
-             "hkl2/ems/bms/bcmu/setting/set",
-             "hkl2/ems/pcs/setting/dcSideRoad1/set",
-             "hkl2/ems/pcs/setting/busSide/set",
-             "hkl2/ems/strategy/set"
-        };
-        public MqttClientManager() {
-            //TODO （MQTT brocker配置从配置文件获取）
-            MqttConnectInfoModel mqttConnectInfo = new MqttConnectInfoModel("116.62.159.155", 1883, null, null, null, 55);
-            mqttConnectInfo.Topics = subscribeTopics.ToList();
-            mqttClientService = new MqttClientService();
-            mqttClientService.StartMqttClient(mqttConnectInfo);
+        ISystemSettingService systemSettingService;
 
+        public MqttClientManager() {
+
+            mqttClientService.ConnectMqtt();
             Task task = new Task(() => { PublishAsync(); });
             task.Start();
         }
