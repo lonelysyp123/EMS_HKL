@@ -16,6 +16,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Markup;
 using System.Windows.Media.Animation;
 using System.Windows;
+using EMS.Storage.DB.Models;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
@@ -133,7 +134,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         #endregion
 
         #region List
-        public List<string> SelectedBatteryList;
+        public List<string> SelectedSmartMeterList;
         /// <summary>
         /// 查询数据集合
         /// </summary>
@@ -153,8 +154,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             EndTime1 = DateTime.Today.ToString();
             StartTime2 = "00:00:00";
             EndTime2 = "00:00:00";
-            SelectedBatteryList = new List<string>();
-            DataTypeList_SelectionChanged = new RelayCommand(SwitchBatteryData);
+            SelectedSmartMeterList = new List<string>();
+            DataTypeList_SelectionChanged = new RelayCommand(SwitchSmartMeterData);
 
         }
 
@@ -169,13 +170,7 @@ namespace EMS.ViewModel.NewEMSViewModel
 
             if (TryCombinTime(StartTime1, StartTime2, out DateTime StartTime) && TryCombinTime(EndTime1, EndTime2, out DateTime EndTime))
             {
-                //for (int i = 0; i < 14; i++)
-                //{
-                //    DisplayDataList.Add(QueryBatteryInfo(SelectedTotal, SelectedSeries, (i + 1).ToString(), StartTime, EndTime));
-                //}
-
-                DisplayDataList.Add(QueryBatteryInfo(StartTime, EndTime));
-
+                DisplayDataList.Add(QuerySmartMeterInfo(StartTime, EndTime));
             }
             else
             {
@@ -197,67 +192,57 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// </summary>
         /// <param name="startTime">开始时间</param>
         /// <param name="endTime">停止时间</param>
-        private List<double[]> QueryBatteryInfo(DateTime startTime, DateTime endTime)
+        private List<double[]> QuerySmartMeterInfo(DateTime startTime, DateTime endTime)
         {
             SeriesBatteryInfoManage SeriesManage = new SeriesBatteryInfoManage();
+            //SmartMeterManage SeriesManage = new SmartMeterManage();
             var SeriesList = SeriesManage.Find(startTime, endTime);
             List<double[]> obj = new List<double[]>();
-            //if (int.TryParse(sort, out int Sort))
             {
-                // 查询Battery数据
-                List<double> vols = new List<double>();
-                List<double> caps = new List<double>();
-                List<double> socList = new List<double>();
-                List<double> resistances = new List<double>();
-                List<double> temperature1List = new List<double>();
-                List<double> temperature2List = new List<double>();
+                // 查询SmartMeter数据
+                List<double> selectedBaudRateList = new List<double>();
+                List<double> selectedParityList = new List<double>();
+                List<double> selectedStopBitsList = new List<double>();
+                List<double> selectedDataBitsList = new List<double>();
+                List<double> acquisitionCycleList = new List<double>();
                 List<DateTime> times = new List<DateTime>();
-                //for (int i = 1; i < SeriesList.Count; i++)
-                //{
-                //    var item0 = typeof(SeriesBatteryInfoModel).GetProperty("Voltage" + (Sort - 1)).GetValue(SeriesList[i]);
-                //    if (double.TryParse(item0.ToString(), out double vol))
-                //    {
-                //        vols.Add(vol);
-                //    }
+                for (int i = 1; i < SeriesList.Count; i++)
+                {
+                    var item0 = typeof(SmartMeterDBModel).GetProperty("SelectedBaudRate").GetValue(SeriesList[i]);
+                    if (double.TryParse(item0.ToString(), out double selectedBaudRate))
+                    {
+                        selectedBaudRateList.Add(selectedBaudRate);
+                    }
 
-                //    var item1 = typeof(SeriesBatteryInfoModel).GetProperty("Capacity" + (Sort - 1)).GetValue(SeriesList[i]);
-                //    if (double.TryParse(item1.ToString(), out double cap))
-                //    {
-                //        caps.Add(cap);
-                //    }
+                    var item1 = typeof(SmartMeterDBModel).GetProperty("SelectedParity").GetValue(SeriesList[i]);
+                    if (double.TryParse(item1.ToString(), out double selectedParity))
+                    {
+                        selectedParityList.Add(selectedParity);
+                    }
 
-                //    var item2 = typeof(SeriesBatteryInfoModel).GetProperty("SOC" + (Sort - 1)).GetValue(SeriesList[i]);
-                //    if (double.TryParse(item2.ToString(), out double soc))
-                //    {
-                //        socList.Add(soc);
-                //    }
+                    var item2 = typeof(SmartMeterDBModel).GetProperty("SelectedStopBits").GetValue(SeriesList[i]);
+                    if (double.TryParse(item2.ToString(), out double selectedStopBits))
+                    {
+                        selectedStopBitsList.Add(selectedStopBits);
+                    }
 
-                //    var item3 = typeof(SeriesBatteryInfoModel).GetProperty("Resistance" + (Sort - 1)).GetValue(SeriesList[i]);
-                //    if (double.TryParse(item3.ToString(), out double resistance))
-                //    {
-                //        resistances.Add(resistance);
-                //    }
+                    var item3 = typeof(SmartMeterDBModel).GetProperty("SelectedDataBits").GetValue(SeriesList[i]);
+                    if (double.TryParse(item3.ToString(), out double selectedDataBits))
+                    {
+                        selectedDataBitsList.Add(selectedDataBits);
+                    }
 
-                //    var item4 = typeof(SeriesBatteryInfoModel).GetProperty("Temperature" + (Sort - 1) * 2).GetValue(SeriesList[i]);
-                //    if (double.TryParse(item4.ToString(), out double temperature1))
-                //    {
-                //        temperature1List.Add(temperature1);
-                //    }
-
-                //    var item5 = typeof(SeriesBatteryInfoModel).GetProperty("Temperature" + ((Sort - 1) * 2 + 1)).GetValue(SeriesList[i]);
-                //    if (double.TryParse(item5.ToString(), out double temperature2))
-                //    {
-                //        temperature2List.Add(temperature2);
-                //    }
-
-                //    times.Add(SeriesList[i].HappenTime);
-                //}
-                obj.Add(vols.ToArray());
-                obj.Add(socList.ToArray());
-                obj.Add(resistances.ToArray());
-                obj.Add(temperature1List.ToArray());
-                obj.Add(temperature2List.ToArray());
-                obj.Add(caps.ToArray());
+                    var item4 = typeof(SmartMeterDBModel).GetProperty("AcquisitionCycle").GetValue(SeriesList[i]);
+                    if (double.TryParse(item4.ToString(), out double acquisitionCycle))
+                    {
+                        acquisitionCycleList.Add(acquisitionCycle);
+                    }
+                }
+                obj.Add(selectedBaudRateList.ToArray());
+                obj.Add(selectedParityList.ToArray());
+                obj.Add(selectedStopBitsList.ToArray());
+                obj.Add(selectedDataBitsList.ToArray());
+                obj.Add(acquisitionCycleList.ToArray());
                 TimeList.Add(times.ToArray());
             }
             return obj;
@@ -267,17 +252,17 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// 选择数据类型
         /// </summary>
         /// <param name="type">数据类型</param>
-        public void SwitchBatteryData()
+        public void SwitchSmartMeterData()
         {
             InitChart();
             DisplayDataModel.Series.Clear();
-            for (int i = 0; i < SelectedBatteryList.Count; i++)
+            for (int i = 0; i < SelectedSmartMeterList.Count; i++)
             {
                 LineSeries lineSeries = new LineSeries();
-                lineSeries.Title = SelectedBatteryList[i];
+                lineSeries.Title = SelectedSmartMeterList[i];
                 lineSeries.MarkerSize = 3;
                 lineSeries.MarkerType = MarkerType.Circle;
-                if (int.TryParse(SelectedBatteryList[i], out int index))
+                if (int.TryParse(SelectedSmartMeterList[i], out int index))
                 {
                     if (DisplayDataList.Count > 0 && DisplayDataList.Count > index - 1)
                     {

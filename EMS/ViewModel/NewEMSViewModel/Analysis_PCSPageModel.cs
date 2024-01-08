@@ -195,7 +195,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <param name="endTime">停止时间</param>
         private List<double[]> PCSInfo( DateTime startTime, DateTime endTime)
         {
-            SeriesBatteryInfoManage SeriesManage = new SeriesBatteryInfoManage();
+            PCSInfoManage SeriesManage = new PCSInfoManage();
             var SeriesList = SeriesManage.Find( startTime, endTime);
             List<double[]> obj = new List<double[]>();
 

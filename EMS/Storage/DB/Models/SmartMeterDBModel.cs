@@ -17,6 +17,7 @@ namespace EMS.Storage.DB.Models
         public int SelectedDataBits { get; set; }
         public int AcquisitionCycle { get; set; }
 
+        //public DateTime HappenTime { get; set; }
         public SmartMeterDBModel() { }
     }
 }
