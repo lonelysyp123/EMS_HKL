@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using EMS.Model;
+using EMS.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -354,17 +355,41 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// BMS数据展示
         /// </summary>
         /// <param name="model"></param>
-        public void DataDisPlayBMS(BatteryTotalModel model)
+        public void DataDisPlayBMS(List<BatteryTotalModel> models)
         {
+            List<double>SingleSOC = new List<double>();
+            List<double>SingleSOH = new List<double>();
+            foreach (BatteryTotalModel model in models)
+            {
+                SingleSOC.Add(model.TotalSOC);
+                SingleSOH.Add(model.TotalSOH);
+            }
+            TotalSOC = SingleSOC.Average().ToString();
+            TotalSOH = SingleSOH.Average().ToString();
             InstalledPower = 0.ToString();
             EnergyStorageCapacity = 0.ToString();
-            TotalSOC = 0.ToString();
-            TotalSOH = 0.ToString();
+           
         }
 
-        public void StateDisPlayBMS(bool isconnected)
+        public void StateDisPlayBMS(List<BMSDataService> bMSDataService)
         {
-            
+            bool bmsstateflag = false;
+            foreach (BMSDataService service in bMSDataService)
+            {
+                if(service.IsConnected==true)
+                {
+                  bmsstateflag=true;
+                }
+
+            }
+            if(!bmsstateflag)
+            {
+                StateFill_BMSRun = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+            }
+            else
+            {
+                StateFill_BMSRun = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
+            }
         }
 
         /// <summary>
@@ -384,8 +409,16 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// 电表数据展示
         /// </summary>
         /// <param name="model"></param>
-        public void DataDisPlaySM(SmartMeterModel model, bool isconnected)
+        public void DataDisPlaySM(SmartMeterModel model, SmartMeterDataService service)
         {
+            if(service.IsConnected==true)
+            {
+                StateFill_AmmeterRun = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
+            }
+            else
+            {
+                StateFill_AmmeterRun = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+            }
 
         }
 
@@ -404,8 +437,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         //台账信息
         //InstalledPower
         //EnergyStorageCapacity
-        //TotalSOC
-        //TotalSOH
+        //TotalSOC--搞定
+        //TotalSOH--搞定
 
         //系统概况
         //ChargingCapacity
