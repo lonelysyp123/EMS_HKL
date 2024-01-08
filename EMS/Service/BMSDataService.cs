@@ -1,4 +1,5 @@
-﻿using EMS.Common;
+﻿using ControlzEx.Standard;
+using EMS.Common;
 using EMS.Common.Modbus.ModbusTCP;
 using EMS.Model;
 using EMS.Storage.DB.DBManage;
@@ -181,6 +182,21 @@ namespace EMS.Service
                 try
                 {
                     Thread.Sleep(DaqTimeSpan * 1000 + 100);
+
+                    //var dataRefreshedFlag = ReadFunc(470, 1);
+                    //if (BitConverter.ToInt16(dataRefreshedFlag, 0) == 0x55aa || BitConverter.ToInt16(dataRefreshedFlag, 0) == 0x0000)
+                    //{
+                    //    WriteFunc(551, 0x55AA);
+                    //    Thread.Sleep(100);
+                    //    WriteFunc(551, 0x0000);
+                    //    Thread.Sleep(100);
+                    //}
+                    //else
+                    //{
+                    //    WriteFunc(551, 0x0000);
+                    //    Thread.Sleep(100);
+                    //}
+
                     byte[] BCMUData = new byte[48];
                     Array.Copy(ReadFunc(361, 24), 0, BCMUData, 0, 48);
                     //Array.Copy(ReadFunc(405, 1), 0, BCMUData, 48, 2);
@@ -373,6 +389,7 @@ namespace EMS.Service
                 {
                     _master = ModbusIpMaster.CreateIp(_client);
                     IsConnected = true;
+                    StartDaqData();
                     LogUtils.Debug("保护机制重连成功，设备上线");
                 }
                 else
@@ -571,8 +588,14 @@ namespace EMS.Service
             }
             catch (Exception ex)
             {
-                LogUtils.Error(ex.ToString());
-                throw ex;
+                LogUtils.Warn("BMS id:" + ID + "写入数据失败", ex);
+                if (!_client.Connected && !IsCommunicationProtectState)
+                {
+                    if (CommunicationCheck())
+                    {
+                        WriteFunc(address, value);
+                    }
+                }
             }
         }
 
