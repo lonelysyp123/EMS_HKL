@@ -180,5 +180,10 @@ namespace EMS.Service.impl
 
             return true;
         }
+
+        public bool AddSmartMeter(int id, string selectedCommPort, int selectedBaudRate, int selectedStopBits, int SelectedDataBits, int acquisitionCycle)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

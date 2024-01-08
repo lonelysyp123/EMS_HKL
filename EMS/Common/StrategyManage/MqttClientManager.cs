@@ -28,6 +28,7 @@ namespace TNCN.EMS.Common.StrategyManage
 
         public MqttClientManager() {
 
+            mqttClientService = new MqttClientService();
             mqttClientService.ConnectMqtt();
             Task task = new Task(() => { PublishAsync(); });
             task.Start();

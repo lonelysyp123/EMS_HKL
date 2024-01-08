@@ -78,7 +78,7 @@ namespace EMS.ViewModel.NewEMSViewModel
 			}
 		}
 
-		private bool _isEnabled_Save;
+		private bool _isEnabled_Save = true;
 
 		public bool IsEnabled_Save
         {
