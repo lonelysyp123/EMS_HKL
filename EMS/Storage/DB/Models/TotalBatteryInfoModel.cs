@@ -11,6 +11,7 @@ namespace EMS.Storage.DB.Models
     {
         [Key]
         public int ID { get; set; }
+        public DateTime HappenTime { get; set; }
         public string BCMUID { get; set; }
         public double Voltage { get; set; }
         public double Current { get; set; }
@@ -25,6 +26,15 @@ namespace EMS.Storage.DB.Models
         public double MaxTemperature { get; set; }
         public int MinTemperatureIndex { get; set; }
         public int MaxTemperatureIndex { get; set; }
-        public DateTime HappenTime { get; set; }
+        public int FaultState1 { get; set; }
+        public int FaultState2 { get; set;}
+        public int FaultState3 { get; set;}
+        public int AlarmState1 {  get; set; }
+        public int AlarmState2 { get;set; }
+        public int AlarmState3 { get;set; }
+        public int BCMUState {  get; set; }
+        public int BalanceChannel { get; set; }
+
+       
     }
 } 

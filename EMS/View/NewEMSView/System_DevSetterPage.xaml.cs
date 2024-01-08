@@ -31,8 +31,6 @@ namespace EMS.View.NewEMSView
         {
             InitializeComponent();
             this.DataContext = viewmodel;
-            viewmodel.Configuaration = new Configuaration();
-            SmartMeterGrid.DataContext = viewmodel.Configuaration;
             SmartMeterBtn.DataContext = viewmodel;
         }
 
@@ -47,11 +45,6 @@ namespace EMS.View.NewEMSView
                 // 在这里处理选中的文件路径
                 //this.FilePathTextBox.Text = filePath;
             }
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace EMS.Storage.DB.Models
 {
     public class PCSInfoModel
     {
+        [Key]
         public int ID { get; set; }
         public double DCPower { get; set; }
         public double DCVol { get; set; }

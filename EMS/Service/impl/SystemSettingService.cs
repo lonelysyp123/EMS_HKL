@@ -141,7 +141,7 @@ namespace EMS.Service.impl
             return smartMeterManage.Get();
         }
 
-        public bool AddSmartMeter(int id, string selectedCommPort, int selectedBaudRate, int selectedStopBits, int SelectedDataBits, int acquisitionCycle)
+        public bool AddSmartMeter(int id, string selectedCommPort, int selectedBaudRate, int selectedStopBits, int SelectedDataBits, int SelectedParity, int acquisitionCycle)
         {
             try
             {
@@ -151,6 +151,7 @@ namespace EMS.Service.impl
                 smartMeterDBModel.SelectedBaudRate = selectedBaudRate;
                 smartMeterDBModel.SelectedStopBits = selectedStopBits;
                 smartMeterDBModel.SelectedDataBits = SelectedDataBits;
+                smartMeterDBModel.SelectedParity = SelectedParity;
                 smartMeterDBModel.AcquisitionCycle = acquisitionCycle;
 
                 SmartMeterManage smartMeterManage = new SmartMeterManage();
