@@ -433,9 +433,7 @@ namespace EMS.Service
         private void DataDecode_BMU(byte[] obj1, byte[] obj2, byte[] obj3, ref BatteryTotalModel total)
         {
             for (int i = 0; i < total.Series.Count; i++)
-            {
-
-
+            {                 
                 total.Series[i].ChargeChannelState = 0;
                 total.Series[i].ChargeCapacitySum = 0;
                 total.Series[i].MinVoltage = BitConverter.ToInt16(obj1, (337 + i * 4) * 2) * 0.001; ;
@@ -453,8 +451,6 @@ namespace EMS.Service
                 total.Series[i].TempFaultInfo1 = BitConverter.ToUInt16(obj3, (3 + i * 4) * 2);
                 total.Series[i].TempFaultInfo2 = BitConverter.ToUInt16(obj3, (4 + i * 4) * 2);
                 total.Series[i].BalanceFaultFaultInfo = BitConverter.ToUInt16(obj3, (5 + 4 * i) * 2);
-
-          
 
                 // BMUID
                 //byte[] BMUIDArray = new byte[16];
@@ -485,6 +481,7 @@ namespace EMS.Service
 
         private void DataDecode_BCMU(byte[] obj, byte[] obj2, ref BatteryTotalModel total)
         {
+            total.BCMUID = ID;
             total.TotalVoltage = BitConverter.ToInt16(obj, 0) * 0.1;
             total.TotalCurrent = BitConverter.ToInt16(obj, 2) * 0.1;
             total.TotalSOC = BitConverter.ToInt16(obj, 4) * 0.1;
