@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMS.Model;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -94,6 +95,39 @@ namespace TNCN.EMS.Common.Util
             }
             return result;
         }
+        public static void Read(IniSectionEnum section, string key, out string result)
+        {
+            result = EnergyManagementSystem.GlobalInstance.Configuration.ReadString(section, key);
+        }
+        public static void Read(IniSectionEnum section, string key, out int result)
+        {
+            result = EnergyManagementSystem.GlobalInstance.Configuration.ReadInteger(section, key);
+        }
+        public static void Read(IniSectionEnum section, string key, out bool result)
+        {
+            result = EnergyManagementSystem.GlobalInstance.Configuration.ReadBoolean(section, key);
+        }
+        public static void Read(IniSectionEnum section, string key, out double result)
+        {
+            result = EnergyManagementSystem.GlobalInstance.Configuration.ReadDouble(section, key);
+        }
+
+        public static void Write(IniSectionEnum section, string key, string value)
+        {
+            EnergyManagementSystem.GlobalInstance.Configuration.WriteString(section, key, value);
+        }
+        public static void Write(IniSectionEnum section, string key, int value)
+        {
+            EnergyManagementSystem.GlobalInstance.Configuration.WriteInteger(section, key, value);
+        }
+        public static void Write(IniSectionEnum section, string key, bool value)
+        {
+            EnergyManagementSystem.GlobalInstance.Configuration.WriteBoolean(section, key, value);
+        }
+        public static void Write(IniSectionEnum section, string key, double value)
+        {
+            EnergyManagementSystem.GlobalInstance.Configuration.WriteDouble(section, key, value);
+        }
 
         private const int MAX_BUFFER = 32767;
         [DllImport("kernel32.dll", EntryPoint = "WritePrivateProfileString", CharSet = CharSet.Ansi)]
@@ -114,7 +148,7 @@ namespace TNCN.EMS.Common.Util
         /// <PARAM name="section">节点名</PARAM>
         /// <PARAM name="key">键名</PARAM>
         /// <PARAM name="value">值（字符串）</PARAM>
-        public static void Write(string section, string key, string value, string path)
+        private static void Write(string section, string key, string value, string path)
         {
             WritePrivateProfileString(section, key, value, path);
         }
@@ -126,7 +160,7 @@ namespace TNCN.EMS.Common.Util
         /// <PARAM name="Key">键名</PARAM>
         /// <PARAM name="Path">值名</PARAM>
         /// <returns>值（字符串）</returns>
-        public static string Read(string section, string key, string path)
+        private static string Read(string section, string key, string path)
         {
             StringBuilder temp = new StringBuilder(255);
             GetPrivateProfileString(section, key, "", temp, 255, path);
@@ -141,7 +175,7 @@ namespace TNCN.EMS.Common.Util
         /// <param name="defaultValue" />
         /// <param name="path"></param>
         /// <returns></returns>
-        public static string ReadString(string sectionName, string keyName, string defaultValue, string path)
+        private static string ReadString(string sectionName, string keyName, string defaultValue, string path)
         {
             const int MAXSIZE = 255;
             StringBuilder temp = new StringBuilder(MAXSIZE);
@@ -156,7 +190,7 @@ namespace TNCN.EMS.Common.Util
         /// <param name="keyName"></param>
         /// <param name="value"></param>
         /// <param name="path"></param>
-        public static void WriteString(string sectionName, string keyName, string value, string path)
+        private static void WriteString(string sectionName, string keyName, string value, string path)
         {
             WritePrivateProfileString(sectionName, keyName, value, path);
         }
@@ -169,7 +203,7 @@ namespace TNCN.EMS.Common.Util
         /// <param name="defaultValue"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static int ReadInteger(string sectionName, string keyName, int defaultValue, string path)
+        private static int ReadInteger(string sectionName, string keyName, int defaultValue, string path)
         {
             return GetPrivateProfileInt(sectionName, keyName, defaultValue, path);
         }
@@ -181,7 +215,7 @@ namespace TNCN.EMS.Common.Util
         /// <param name="keyName"></param>
         /// <param name="value"></param>
         /// <param name="path"></param>
-        public static void WriteInteger(string sectionName, string keyName, int value, string path)
+        private static void WriteInteger(string sectionName, string keyName, int value, string path)
         {
             WritePrivateProfileString(sectionName, keyName, value.ToString(), path);
         }
@@ -194,7 +228,7 @@ namespace TNCN.EMS.Common.Util
         /// <param name="defaultValue"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static bool ReadBoolean(string sectionName, string keyName, bool defaultValue, string path)
+        private static bool ReadBoolean(string sectionName, string keyName, bool defaultValue, string path)
         {
             int temp = defaultValue ? 1 : 0;
             int result = GetPrivateProfileInt(sectionName, keyName, temp, path);
@@ -208,7 +242,7 @@ namespace TNCN.EMS.Common.Util
         /// <param name="keyName"></param>
         /// <param name="value"></param>
         /// <param name="path"></param>
-        public static void WriteBoolean(string sectionName, string keyName, bool value, string path)
+        private static void WriteBoolean(string sectionName, string keyName, bool value, string path)
         {
             string temp = value ? "1 " : "0 ";
             WritePrivateProfileString(sectionName, keyName, temp, path);
@@ -220,9 +254,9 @@ namespace TNCN.EMS.Common.Util
         /// <param name="sectionName"></param>
         /// <param name="keyName"></param>
         /// <param name="path"></param>
-        public static void DeleteKey(string sectionName, string keyName, string path)
+        public void DeleteKey(string sectionName, string keyName)
         {
-            WritePrivateProfileString(sectionName, keyName, null, path);
+            WritePrivateProfileString(sectionName, keyName, null, _path);
         }
 
         /// <summary>
@@ -230,9 +264,9 @@ namespace TNCN.EMS.Common.Util
         /// </summary>
         /// <param name="sectionName"></param>
         /// <param name="path"></param>
-        public static void EraseSection(string sectionName, string path)
+        public void EraseSection(string sectionName)
         {
-            WritePrivateProfileString(sectionName, null, null, path);
+            WritePrivateProfileString(sectionName, null, null, _path);
         }
 
         /// <summary>
@@ -243,12 +277,12 @@ namespace TNCN.EMS.Common.Util
         /// <param name="values"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static void AddSectionWithKeyValues(string section, List<string> keys, List<string> values, string path)
+        public void AddSectionWithKeyValues(string section, List<string> keys, List<string> values)
         {
             //添加配置信息
             for (int i = 0; i < keys.Count; i++)
             {
-                WriteString(section, keys[i], values[i], path);
+                WriteString(section, keys[i], values[i], _path);
             }
         }
     }
