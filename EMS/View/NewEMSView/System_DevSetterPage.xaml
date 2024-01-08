@@ -281,7 +281,7 @@
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
                                 IsEnabled="{Binding IsEnabled_BMS}"
-                                Command="{Binding Command_BMS}" />
+                                Command="{Binding BMSConfigCommand}" />
                     </StackPanel>
                 </Grid>
             </Border>
@@ -345,7 +345,7 @@
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
                                 IsEnabled="{Binding IsEnabled_PCS}"
-                                Command="{Binding Command_PCS}" />
+                                Command="{Binding PCSConfigCommand}" />
                     </StackPanel>
                 </Grid>
             </Border>
@@ -356,7 +356,7 @@
                     Margin="20,15,0,0"
                     Padding="20,15"
                     CornerRadius="15">
-                <Grid>
+                <Grid x:Name="SmartMeterGrid">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition />
@@ -383,7 +383,9 @@
                                    Background="White"
                                    Foreground="Black"
                                    ItemsSource="{Binding CommPorts}"
-                                   SelectedItem="{Binding SelectedCommPort}"
+                                   SelectedValue="{Binding SelectedCommPort}"
+                                   DisplayMemberPath="DeviceID"
+                                   SelectedValuePath="Description"
                                    BorderThickness="1,1,1,1">
                         </ComboBox>
                     </StackPanel>
@@ -399,7 +401,9 @@
                                    Background="White"
                                    Foreground="Black"
                                    ItemsSource="{Binding BaudRates}"
-                                   SelectedItem="{Binding SelectedBaudRate}"
+                                   SelectedValue="{Binding SelectedBaudRate}"
+                                   DisplayMemberPath="BaudRateName"
+                                   SelectedValuePath="BaudRateValue"
                                    BorderThickness="1,1,1,1">
                         </ComboBox>
                     </StackPanel>
@@ -431,7 +435,9 @@
                                    Background="White"
                                    Foreground="Black"
                                    ItemsSource="{Binding StopBitsList}"
-                                   SelectedItem="{Binding SelectedStopBits}"
+                                   SelectedValue="{Binding SelectedStopBits}"
+                                   DisplayMemberPath="StopBitsName"
+                                   SelectedValuePath="StopBitsValue"
                                    BorderThickness="1,1,1,1">
                         </ComboBox>
                     </StackPanel>
@@ -447,7 +453,9 @@
                                    Background="White"
                                    Foreground="Black"
                                    ItemsSource="{Binding Parities}"
-                                   SelectedItem="{Binding SelectedParity}"
+                                   SelectedValue="{Binding SelectedParity}"
+                                   DisplayMemberPath="ParityName"
+                                   SelectedValuePath="ParityValue"
                                    BorderThickness="1,1,1,1">
                         </ComboBox>
                     </StackPanel>
@@ -462,7 +470,8 @@
                     </StackPanel>
                     <StackPanel Grid.Row="2"
                                 Grid.Column="4"
-                                Style="{StaticResource ContentPanel}">
+                                Style="{StaticResource ContentPanel}"
+                                x:Name="SmartMeterBtn">
                         <Button Content="应    用"
                                 Width="80"
                                 Height="30"
@@ -472,7 +481,7 @@
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
                                 IsEnabled="{Binding IsEnabled_Ammeter}"
-                                Command="{Binding Command_Ammeter}" />
+                                Command="{Binding SmartMeterConfigCommand}" />
                     </StackPanel>
                 </Grid>
             </Border>
@@ -500,7 +509,7 @@
                         <TextBlock Text="当前时间校对:"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center" />
-                        <TextBlock Text="{Binding CurrentTome}"
+                        <TextBlock Text="{Binding CurrentTime}"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center"
                                    Margin="40,0,40,0" />
@@ -513,7 +522,7 @@
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
                                 IsEnabled="{Binding IsEnabled_Time}"
-                                Command="{Binding Command_Time}" />
+                                Command="{Binding TimeCollatingCommand}" />
                     </StackPanel>
                 </Grid>
             </Border>
@@ -551,7 +560,7 @@
                                 BorderThickness="0,0,0,0"
                                 Margin="20,0,0,0"
                                 IsEnabled="{Binding IsEnabled_Time}"
-                                Command="{Binding UploadFile}" />
+                                Command="{Binding DevDataPointConfigCommand}" />
                     </StackPanel>
                 </Grid>
             </Border>

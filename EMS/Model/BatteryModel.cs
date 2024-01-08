@@ -14,7 +14,7 @@ namespace EMS.Model
         public double Temperature2 {  get; set; }
         public double SOC {  get; set; }
         public int Resistance {  get; set; }
-        public int SOH {  get; set; }
+        public double SOH {  get; set; }
         public double Capacity {  get; set; }
         public int BatteryNumber {  get; set; }
 

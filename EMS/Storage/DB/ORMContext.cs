@@ -1,4 +1,5 @@
-﻿using EMS.Storage.DB.Models;
+﻿using EMS.Storage.DB.DBManage;
+using EMS.Storage.DB.Models;
 using SQLite.CodeFirst;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,26 @@ namespace EMS.Storage.DB
             // 如果不存在数据库，则创建之
             Database.SetInitializer(new SqliteDropCreateDatabaseWhenModelChanges<ORMContext>(modelBuilder));
         }
+
+        /// <summary>
+        /// MQTT
+        /// </summary>
+        public DbSet<SmartMeterDBModel> SmartMeterModels { get; set; }
+
+        /// <summary>
+        /// MQTT
+        /// </summary>
+        public DbSet<MqttModel> MqttModels { get; set; }
+
+        /// <summary>
+        /// PCS
+        /// </summary>
+        public DbSet<PcsModel> PcsModels { get; set; }
+
+        /// <summary>
+        /// BMS
+        /// </summary>
+        public DbSet<BcmuModel> BcmuModels { get; set; }
 
         /// <summary>
         /// 系统配置

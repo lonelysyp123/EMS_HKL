@@ -12,6 +12,8 @@ namespace EMS.ViewModel.NewEMSViewModel
 {
     public class EMSMainViewModel : ViewModelBase
     {
+               
+
         public HomePageModel HomePageModel { get; private set; }
         public Monitor_BMSPageModel Monitor_BMSPageModel { get; private set;}
         public Monitor_PCSPageModel Monitor_PCSPageModel { get; private set; }
@@ -28,28 +30,32 @@ namespace EMS.ViewModel.NewEMSViewModel
         public System_MqttSetterPageModel System_MqttSetterPageModel { get; private set; }
 
         public BMSDataService[] bmsServices { get; private set; }
-        public SmartMeterDataService[] smServices { get; private set; }
-        //public PCSDataService[] pcsServices { get; private set; }
+        public SmartMeterDataService smService { get; private set; }
+        public PCSDataService pcsService { get; private set; }
 
         private static int BCMUCount = 6;
         private static int PCSCount = 1;
         private static int SmartMeterCount = 1;
         public EMSMainViewModel()
         {
+
+            EnergyManagementSystem.Initialization(new EnergyManagementSystem());
             bmsServices = new BMSDataService[BCMUCount];
-            for (int i = 0; i < bmsServices.Length; i++)
+            for (int i = 0; i < BCMUCount; i++)
             {
-                bmsServices[i] = new BMSDataService();
-                bmsServices[i].RegisterState(ServiceDataCallBack);
-                bmsServices[i].RegisterState(OnChangeState);
+                bmsServices[i] = new BMSDataService((i+1).ToString());
+                bmsServices[i].RegisterState(DataCallBack_BMS);
+                bmsServices[i].RegisterState(StateCallBack_BMS);
+                EnergyManagementSystem.GlobalInstance.BMSManager.AddBMSDev(bmsServices[i]);
             }
-            smServices = new SmartMeterDataService[SmartMeterCount];
-            for(int i = 0;i < SmartMeterCount;i++)
-            {
-                smServices[i] = new SmartMeterDataService();
-                //smServices[i].RegisterState();    // 状态回调
-                //smServices[i].RegisterState();    // 数据回调
-            }
+
+            pcsService = new PCSDataService("1");
+            pcsService.RegisterState(DataCallBack_PCS);
+            pcsService.RegisterState(StateCallBack_PCS);
+
+            smService = new SmartMeterDataService();
+            //smServices[i].RegisterState();    // 状态回调
+            //smServices[i].RegisterState();    // 数据回调
 
             HomePageModel = new HomePageModel();
             Monitor_BMSPageModel = new Monitor_BMSPageModel();
@@ -60,39 +66,52 @@ namespace EMS.ViewModel.NewEMSViewModel
             Analysis_SmartMeterPageModel = new Analysis_SmartMeterPageModel();
             FaultLogPageModel = new FaultLogPageModel();
             Strategy_AnalysisPageModel = new Strategy_AnalysisPageModel();
-            //Strategy_ProtectSetterPageModel = new Strategy_ProtectSetterPageModel();
+            Strategy_ProtectSetterPageModel = new Strategy_ProtectSetterPageModel();
             Strategy_SetterPageModel = new Strategy_SetterPageModel();
             //System_DevInfoPageModel = new System_DevInfoPageModel();
             System_DevSetterPageModel = new System_DevSetterPageModel();
             System_MqttSetterPageModel = new System_MqttSetterPageModel();
+
+            EnergyManagementSystem.Initialization(new EnergyManagementSystem());
+            EnergyManagementSystem.GlobalInstance.PcsManager.SetPCS(pcsService);
         }
 
-        private void ServiceDataCallBack(object sender, BatteryTotalModel model)
+        private void DataCallBack_BMS(object sender, object model)
         {
             var service = sender as BMSDataService;
             int index = -1;
-            if (service.ID == "BCMU1") index = 1;
-            else if (service.ID == "BCMU2") index = 2;
-            else if (service.ID == "BCMU3") index = 3;
-            else if (service.ID == "BCMU4") index = 4;
-            else if (service.ID == "BCMU5") index = 5;
-            else if (service.ID == "BCMU6") index = 6;
+            if (service.ID == "1") index = 1;
+            else if (service.ID == "2") index = 2;
+            else if (service.ID == "3") index = 3;
+            else if (service.ID == "4") index = 4;
+            else if (service.ID == "5") index = 5;
+            else if (service.ID == "6") index = 6;
 
-            Monitor_BMSPageModel.bmuViewModels[index - 1].DataDistribution(model);
+            Monitor_BMSPageModel.bmuViewModels[index - 1].DataDistribution(model as BatteryTotalModel);
         }
 
-        private void OnChangeState(object sender, bool isConnected, bool isDaqData)
+        private void StateCallBack_BMS(object sender, bool isConnected, bool isDaqData, bool isSaveData)
         {
             var service = sender as BMSDataService;
             int index = -1;
-            if (service.ID == "BCMU1") index = 1;
-            else if (service.ID == "BCMU2") index = 2;
-            else if (service.ID == "BCMU3") index = 3;
-            else if (service.ID == "BCMU4") index = 4;
-            else if (service.ID == "BCMU5") index = 5;
-            else if (service.ID == "BCMU6") index = 6;
+            if (service.ID == "1") index = 1;
+            else if (service.ID == "2") index = 2;
+            else if (service.ID == "3") index = 3;
+            else if (service.ID == "4") index = 4;
+            else if (service.ID == "5") index = 5;
+            else if (service.ID == "6") index = 6;
 
-            //Monitor_BMSPageModel.bmuViewModels[index - 1].DataDistribution();
+            Monitor_BMSPageModel.bmuViewModels[index - 1].StateDistribution(isConnected, isDaqData, isSaveData);
+        }
+
+        private void DataCallBack_PCS(object sender, object model)
+        {
+            Monitor_PCSPageModel.PCSDataDistribution(model as PCSModel);
+        }
+
+        private void StateCallBack_PCS(object sender, bool isConnected, bool isDaqData, bool isSaveData)
+        {
+            Monitor_PCSPageModel.PCSStateDistribution(isConnected, isDaqData, isSaveData);
         }
     }
 }

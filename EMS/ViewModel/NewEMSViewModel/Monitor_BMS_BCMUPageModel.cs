@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using ControlzEx.Standard;
+using EMS.Api;
 using EMS.Common;
 using EMS.Model;
 using EMS.MyControl;
+using EMS.Service;
 using EMS.View.NewEMSView;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,8 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Markup.Localizer;
 using System.Windows.Media;
+using TNCN.EMS.Common.Mqtt;
+using static EMS.MyControl.BCMUConnectGraph;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
@@ -69,15 +73,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private SolidColorBrush alarmcolor;
-        public SolidColorBrush Alarmcolor
-        {
-            get => alarmcolor;
-            set
-            {
-                SetProperty(ref alarmcolor, value);
-            }
-        }
+        
 
         private string remainingSOC;
         public string RemainingSOC
@@ -213,6 +209,20 @@ namespace EMS.ViewModel.NewEMSViewModel
                 SetProperty(ref minTemperatureIndex, value);
             }
         }
+
+
+        private string chargeChannelStateNumber;
+
+        public string ChargeChannelStateNumber
+        {
+            get => chargeChannelStateNumber;
+            set
+            {
+                SetProperty(ref chargeChannelStateNumber, value);
+            }
+        }
+
+
 
         /// <summary>
         /// 额定容量
@@ -1095,7 +1105,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string selectedCluster;
+        private string selectedCluster = "A";
         public string SelectedCluster
         {
             get { return selectedCluster; }
@@ -1115,82 +1125,288 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string chargeChannelStateNumber;
-        public string ChargeChannelStateNumber
+     
+
+        private int bcmuFaultStateFlag1;
+        public int BCMUFaultStateFlag1
         {
-            get { return chargeChannelStateNumber; }
+            get { return bcmuFaultStateFlag1; }
             set
             {
-                SetProperty(ref chargeChannelStateNumber, value);
+                SetProperty(ref bcmuFaultStateFlag1, value);
+            }
+        }
+        private int bcmuFaultStateFlag2;
+        public int BCMUFaultStateFlag2
+        {
+            get { return bcmuFaultStateFlag2; }
+            set
+            {
+                SetProperty(ref bcmuFaultStateFlag2, value);
+            }
+        }
+        private int bcmuFaultStateFlag3;
+        public int BCMUFaultStateFlag3
+        {
+            get { return bcmuFaultStateFlag3; }
+            set
+            {
+                SetProperty(ref bcmuFaultStateFlag3, value);
             }
         }
 
-        private AlarmtLevels wran_BMU_1;
-        public AlarmtLevels Wran_BMU_1
+        private int bcmuAlarmStateFlag1;
+        public int BCMUAlarmStateFlag1
         {
-            get { return wran_BMU_1; }
+            get { return bcmuAlarmStateFlag1; }
             set
             {
-                SetProperty(ref wran_BMU_1, value);
+                SetProperty(ref bcmuAlarmStateFlag1, value);
+            }
+        }
+        private int bcmuAlarmStateFlag2;
+        public int BCMUAlarmStateFlag2
+        {
+            get { return bcmuAlarmStateFlag2; }
+            set
+            {
+                SetProperty(ref bcmuAlarmStateFlag2, value);
+            }
+        }
+        private int bcmuAlarmStateFlag3;
+        public int BCMUAlarmStateFlag3
+        {
+            get { return bcmuAlarmStateFlag3; }
+            set
+            {
+                SetProperty(ref bcmuAlarmStateFlag3, value);
             }
         }
 
-        private AlarmtLevels fault_BMU_1;
-        public AlarmtLevels Fault_BMU_1
+        private int stateBCMUFlag;
+        public int StateBCMUFlag
         {
-            get { return fault_BMU_1; }
+            get { return stateBCMUFlag; }
             set
             {
-                SetProperty(ref fault_BMU_1, value);
+                SetProperty(ref stateBCMUFlag, value);
+
             }
         }
+
+
+
+        private FaultLevels bcmuTotalFault;
+
+        public FaultLevels BCMUTotalFault
+        {
+            get => bcmuTotalFault;
+            set
+            {
+                SetProperty(ref bcmuTotalFault, value);
+            }
+        }
+
+
+        private bool isOnGrid;
+
+        public bool IsOnGrid
+        {
+            get => isOnGrid;
+            set
+            {
+                SetProperty(ref isOnGrid, value);
+            }
+        }
+
+
+        private BCMUStatus currentOri;
+
+        public BCMUStatus CurrentOri
+        {
+            get => currentOri;
+            set
+            {
+                SetProperty(ref currentOri, value);
+            }
+        }
+
+
+
+
+        public BatteryViewModel[] BatteryViewModelList;
+
         #endregion
 
         #region Command
 
         public RelayCommand ToMonitor_BMS_BCMUPageCommand { get;private set;}
         public RelayCommand Command_OffGrid { get; private set; }
-
+        public RelayCommand Command_OnGrid { get; private set; }
+        public RelayCommand Command_ResetFault { get; private set; }
         #endregion
-
-        public Monitor_BMS_BCMUPageModel()
+        private string id { get; set; }
+        public Monitor_BMS_BCMUPageModel(string id)
         {
+            this.id =id;
             ToMonitor_BMS_BCMUPageCommand = new RelayCommand(ToMonitor_BMS_BCMUPage);
             Command_OffGrid = new RelayCommand(OffGridCommand);
+            Command_OnGrid = new RelayCommand(OnGridCommand);
+            Command_ResetFault = new RelayCommand(ResetFault);
+
+            BatteryViewModelList = new BatteryViewModel[14];
+            for (int i = 0; i < BatteryViewModelList.Length; i++)
+            {
+                BatteryViewModelList[i] = new BatteryViewModel();
+            }
+        }
+
+       
+        private void ResetFault()
+        {
+            BmsApi.ResetBMSFault(id);
+        }
+
+        private void OnGridCommand()
+        {
+            BmsApi.Connect2DcBus(id);
         }
 
         private void OffGridCommand()
         {
-
+            BmsApi.Disconnect2DcBus(id);
         }
 
         public void DataDistribution(BatteryTotalModel model)
         {
-            RemainingSOC = model.TotalSOC.ToString();
-            ClusterVoltage = model.TotalVoltage.ToString();
-            PresentCurrent = model.TotalCurrent.ToString();
-            MaxCellVoltage = model.MaxVoltage.ToString();
-            MinCellVoltage = model.MinVoltage.ToString();
-            MaxTemperature = model.MaxTemperature.ToString();
-            MaxCellVoltageIndex = model.MaxTemperatureIndex.ToString();
-           MinCellVoltageIndex = model.MinTemperatureIndex.ToString();
-            MaxTemperatureIndex = model.MaxTemperatureIndex.ToString();
-            MinTemperatureIndex = model.MinTemperatureIndex.ToString();
-            RatedBatteryNumber = model.BatteryCount.ToString();
-            RatedCapacity = model.NomCapacity.ToString();
-            RatedVoltage = model.NomVoltage.ToString();
+            try
+            {
+                RemainingSOC = model.TotalSOC.ToString();
+                ClusterVoltage = model.TotalVoltage.ToString();
+                PresentCurrent = model.TotalCurrent.ToString();
+                AvgClusterVol = model.AvgVol.ToString();
+                AvgClusterTemp = model.AverageTemperature.ToString();
+                MaxCellVoltage = model.MaxVoltage.ToString();
+                MinCellVoltage = model.MinVoltage.ToString();
+                MaxTemperature = model.MaxTemperature.ToString();
+                MinTemperature = model.MinTemperature.ToString();
+                MaxCellVoltageIndex = model.MaxVoltageIndex.ToString();
+                MinCellVoltageIndex = model.MinVoltageIndex.ToString();
+                MaxTemperatureIndex = model.MaxTemperatureIndex.ToString();
+                MinTemperatureIndex = model.MinTemperatureIndex.ToString();
+                RatedBatteryNumber = model.BatteryCount.ToString();
+                RatedCapacity = model.NomCapacity.ToString();
+                RatedVoltage = model.NomVoltage.ToString();
+                BCMUFaultStateFlag1 = model.FaultStateBCMUTotalFlag;
+                BCMUFaultStateFlag2 = model.FaultStateBCMUFlag1;
+                BCMUFaultStateFlag3 = model.FaultStateBCMUFlag2;
+                BCMUAlarmStateFlag1 = model.AlarmStateBCMUFlag1;
+                BCMUAlarmStateFlag2 = model.AlarmStateBCMUFlag2;
+                BCMUAlarmStateFlag3 = model.AlarmStateBCMUFlag3;
+                StateBCMUFlag = model.StateBCMU;
+                HighCotainerTemperature1 = model.VolContainerTemperature1.ToString();
+                HighCotainerTemperature2 = model.VolContainerTemperature2.ToString();
+                HighCotainerTemperature3 = model.VolContainerTemperature3.ToString();
+                HighCotainerTemperature4 = model.VolContainerTemperature4.ToString();
+                ChargeChannelStateNumber = model.BalanceChannel.ToString();
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    StateBCMUChange(StateBCMUFlag);
+                    bool faultResult = AnalyseBCMUFault(BCMUFaultStateFlag1, BCMUFaultStateFlag2, BCMUFaultStateFlag3);
+                    int alarmResult =AnalyseBCMUAlarm(BCMUAlarmStateFlag1, BCMUAlarmStateFlag2, BCMUAlarmStateFlag3);
+                    BMUInfo(model);
+                    if (faultResult)
+                    {
+                        BCMUTotalFault = FaultLevels.Error;
+                    }
+                    else
+                    {
+                        switch(alarmResult)
+                        {
+                            case 0:
+                                {
+                                    BCMUTotalFault = FaultLevels.NoAlarm;
+                                }break;
+                                case 1:
+                                {
+                                    BCMUTotalFault = FaultLevels.Info;
+                                }break;
+                                case 2:
+                                {
+                                    BCMUTotalFault = FaultLevels.Warning;
+                                }break;
+                                case 3:
+                                {
+                                    BCMUTotalFault = FaultLevels.Error;
+                                }break;
+                        }
+                    }
+                });
+                
 
-            HighCotainerTemperature1 = model.VolContainerTemperature1.ToString();
-            HighCotainerTemperature2 = model.VolContainerTemperature2.ToString();
-            HighCotainerTemperature3 = model.VolContainerTemperature3.ToString();
-            HighCotainerTemperature4 = model.VolContainerTemperature4.ToString();
-
-            AnalyseBCMUFault(model.FaultStateBCMUTotalFlag, model.FaultStateBCMUFlag1, model.FaultStateBCMUFlag2);
-            AnalyseBCMUAlarm(model.AlarmStateBCMUFlag1,model.AlarmStateBCMUFlag2 , model.AlarmStateBCMUFlag3);
-            BMUInfo(model);
+                
+            }
+            catch (Exception ex)
+            {
+                LogUtils.Error($"BCMU{id}",ex);
+                throw ex;
+            }
+          
         }
 
-       
+
+        private void StateBCMUChange(int state)
+        {
+            if (state == 1)
+            {
+                ChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
+                DisChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                StandStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                OffNetStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                isOnGrid = true;
+                CurrentOri = BCMUStatus.Charge;
+
+
+            }
+            else if (state == 2)
+            {
+                ChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                DisChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
+                StandStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                OffNetStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                IsOnGrid = true;
+                CurrentOri = BCMUStatus.Discharge;
+            }
+            else if (state == 3)
+            {
+                ChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                DisChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                StandStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
+                OffNetStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                IsOnGrid= true;
+                CurrentOri = BCMUStatus.Stand;
+            }
+            else if (state == 4)
+            {
+                ChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                DisChargeStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                StandStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                OffNetStateBCMU = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
+                IsOnGrid = false;
+            }
+        }
+        public void StateDistribution(bool isconnected, bool isdaqdata,bool issavedata)
+        {
+            if (isconnected) 
+            { 
+
+            }
+
+            if (isdaqdata)
+            {
+
+            }
+        }
 
 
         private void ToMonitor_BMS_BCMUPage()
@@ -1209,22 +1425,77 @@ namespace EMS.ViewModel.NewEMSViewModel
         {  
             int i = Array.IndexOf(Cluster, SelectedCluster);
             AnlyseBMUFault(model.Series[i].VolFaultInfo, model.Series[i].TempFaultInfo1, model.Series[i].TempFaultInfo2, model.Series[i].BalanceFaultFaultInfo);
+            BatteryInfo(model.Series[i]);
 
         }
+
+        private void BatteryInfo(BatterySeriesModel model)
+        {
+            for (int j = 0; j < BatteryViewModelList.Length; j++)
+            {
+                BatteryViewModelList[j].Voltage = model.Batteries[j].Voltage;
+                BatteryViewModelList[j].Temperature1 = model.Batteries[j].Temperature1;
+                BatteryViewModelList[j].Temperature2 = model.Batteries[j].Temperature2;
+                BatteryViewModelList[j].SOC = model.Batteries[j].SOC;
+                BatteryViewModelList[j].SOH = model.Batteries[j].SOH;
+                BatteryViewModelList[j].Resistance = model.Batteries[j].Resistance;
+                BatteryViewModelList[j].Capacity = model.Batteries[j].Capacity;
+                BatteryViewModelList[j].BatteryNumber = j + 1;
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    if (j == (model.MaxVoltageIndex - 1))
+                    {
+                        BatteryViewModelList[j].VoltageColor = new SolidColorBrush(Colors.Red);
+                    }
+                    else if (j == (model.MinVoltageIndex - 1))
+                    {
+                        BatteryViewModelList[j].VoltageColor = new SolidColorBrush(Colors.LightBlue);
+                    }
+                    else
+                    {
+                        BatteryViewModelList[j].VoltageColor = new SolidColorBrush(Colors.Black);
+                    }
+
+                    if (j == (model.MaxTemperatureIndex - 1))
+                    {
+                        BatteryViewModelList[j].TemperatureColor = new SolidColorBrush(Colors.Red);
+                    }
+                    else if (j == (model.MinTemperatureIndex - 1))
+                    {
+                        BatteryViewModelList[j].TemperatureColor = new SolidColorBrush(Colors.LightBlue);
+                    }
+                    else
+                    {
+                        BatteryViewModelList[j].TemperatureColor = new SolidColorBrush(Colors.Black);
+                    }
+                });
+                
+            }
+        }
+
         /// <summary>
         /// 分析BCMU故障
         /// </summary>
         /// <param name="flag1"></param>
         /// <param name="flag2"></param>
         /// <param name="flag3"></param>
-        private void AnalyseBCMUFault(int flag1, int flag2, int flag3)
+        private bool AnalyseBCMUFault(int flag1, int flag2, int flag3)
         {
+            bool faultresult = false;
             List<int> flag1bitposition = new List<int>();
             List<int> flag2bitposition = new List<int>();
             List<int> flag3bitposition = new List<int>();
             flag1bitposition = GetBitPosition(flag1);
             flag2bitposition = GetBitPosition(flag2);
             flag3bitposition = GetBitPosition(flag3);
+            if (flag1bitposition.Count != 0 || flag2bitposition.Count != 0 || flag3bitposition.Count != 0)
+            {
+                faultresult = true;
+            }
+            else
+            {
+                faultresult = false;
+            }
             foreach (var item in flag1bitposition)
             {
                 switch (item)
@@ -1382,32 +1653,39 @@ namespace EMS.ViewModel.NewEMSViewModel
 
                 }
             }
-
+            return faultresult;
         }
 
         /// <summary>
         /// 分析BCMU告警
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
-        private void AnalyseBCMUAlarm(int value1, int value2, int value3)
+        private int AnalyseBCMUAlarm(int value1, int value2, int value3)
         {
+            int colorflag1;
+            int colorflag2;
+            int colorflag3;
+            int colorflag4;
             int j1 = 0;
             int j2 = 0;
-            if ((value1 & 0x0100) != 0) { IsoRPLowAlarm = AlarmtLevels.Error; } else { IsoRNLowAlarm = AlarmtLevels.NoAlarm; }      //bit0
-            if ((value1 & 0x0200) != 0) { IsoRNLowAlarm = AlarmtLevels.Error; } else { IsoRNLowAlarm = AlarmtLevels.NoAlarm; } //bit1
-            if ((value1 & 0x0400) != 0) { HVPEShortAlarm = AlarmtLevels.Error; } else { HVPEShortAlarm = AlarmtLevels.NoAlarm; }//bit2
+            if ((value1 & 0x0100) != 0) { IsoRPLowAlarm = AlarmtLevels.Error;} else { IsoRNLowAlarm = AlarmtLevels.NoAlarm; }      //bit0
+            if ((value1 & 0x0200) != 0) { IsoRNLowAlarm = AlarmtLevels.Error;   } else { IsoRNLowAlarm = AlarmtLevels.NoAlarm; } //bit1
+            if ((value1 & 0x0400) != 0) { HVPEShortAlarm = AlarmtLevels.Error; } else { HVPEShortAlarm = AlarmtLevels.NoAlarm;  }//bit2
             if ((value1 & 0x0800) != 0) { BATPEAlarm = AlarmtLevels.Error; } else { BATPEAlarm = AlarmtLevels.NoAlarm; }  //bit3
             if ((IsoRPLowAlarm == AlarmtLevels.Error) || (IsoRNLowAlarm == AlarmtLevels.Error) || (HVPEShortAlarm == AlarmtLevels.Error) || (BATPEAlarm == AlarmtLevels.Error))
             {
-                IsoRTotalAlarm = AlarmtLevels.NoAlarm;
+                IsoRTotalAlarm = AlarmtLevels.Error;
+                colorflag1 = 3;
             }
             else
             {
-                IsoRTotalAlarm = AlarmtLevels.Error;
+                IsoRTotalAlarm = AlarmtLevels.NoAlarm;
+                colorflag1 = 0;
             }
 
             List<int> result21 = new List<int>();
             result21 = GetBitPosition(value2);
+            
             foreach (var item in result21)
             {
                 switch (item)
@@ -1416,26 +1694,28 @@ namespace EMS.ViewModel.NewEMSViewModel
                         {
                             HighConTemp1Alarm = AlarmtLevels.Warning;
                             HighConTempTotalAlarm = AlarmtLevels.Warning;
+                            
                         }
                         break;
                     case 1:
                         {
                             HighConTemp2Alarm = AlarmtLevels.Warning;
                             HighConTempTotalAlarm = AlarmtLevels.Warning;
-
+                            
                         }
                         break;
                     case 2:
                         {
                             HighConTemp3Alarm = AlarmtLevels.Warning;
                             HighConTempTotalAlarm = AlarmtLevels.Warning;
-
+                            
                         }
                         break;
                     case 3:
                         {
                             HighConTemp4Alarm = AlarmtLevels.Warning;
                             HighConTempTotalAlarm = AlarmtLevels.Warning;
+                            
                         }
                         break;
                     default:
@@ -1445,10 +1725,20 @@ namespace EMS.ViewModel.NewEMSViewModel
                             HighConTemp3Alarm = AlarmtLevels.NoAlarm;
                             HighConTemp4Alarm = AlarmtLevels.NoAlarm;
                             HighConTempTotalAlarm = AlarmtLevels.NoAlarm;
+                            
                         }
                         break;
                 }
             }
+            if(HighConTempTotalAlarm == AlarmtLevels.NoAlarm)
+            {
+                colorflag2 = 0;
+            }
+            else
+            {
+                colorflag2 = 2;
+            }
+
             Dictionary<int, int> result2 = new Dictionary<int, int>();
 
             Dictionary<int, int> result3 = new Dictionary<int, int>();
@@ -1472,7 +1762,27 @@ namespace EMS.ViewModel.NewEMSViewModel
                     result3.Add(j2, twoBitValue);
                 }
             }
-
+            if(result2.Count!=0)
+            {
+                colorflag3 = result2.Max(pair => pair.Value);
+            }
+            else
+            {
+                colorflag3 = 0;
+            }
+           if(result3.Count!=0)
+            {
+                colorflag4 = result3.Max(pair => pair.Value);
+            }
+            else
+            {
+                colorflag4 = 0;
+            }
+           
+            int colorflagresult = Math.Max(colorflag1,colorflag2);
+            colorflagresult = Math.Max(colorflagresult,colorflag3);
+            colorflagresult = Math.Max(colorflagresult,colorflag4);
+            
             foreach (var item in result2)
             {
 
@@ -1481,30 +1791,30 @@ namespace EMS.ViewModel.NewEMSViewModel
 
                     case 4:
                         {
-                            if (item.Value == 1) SingleVolLowAlarm = AlarmtLevels.Info;
-                            if (item.Value == 2) SingleVolLowAlarm = AlarmtLevels.Warning;
-                            if (item.Value == 3) SingleVolLowAlarm = AlarmtLevels.Error;
-                        }
+                            if (item.Value == 1) { SingleVolLowAlarm = AlarmtLevels.Info;  }
+                            if (item.Value == 2) {SingleVolLowAlarm = AlarmtLevels.Warning;  }
+                            if (item.Value == 3) { SingleVolLowAlarm = AlarmtLevels.Error;  }
+                            }
                         break;
                     case 5:
                         {
-                            if (item.Value == 1) SingleVolUpAlarm = AlarmtLevels.Info;
-                            if (item.Value == 2) SingleVolUpAlarm = AlarmtLevels.Warning;
-                            if (item.Value == 3) SingleVolUpAlarm = AlarmtLevels.Error;
+                            if (item.Value == 1) {SingleVolUpAlarm = AlarmtLevels.Info;  }
+                            if (item.Value == 2) {SingleVolUpAlarm = AlarmtLevels.Warning;  }
+                            if (item.Value == 3) {SingleVolUpAlarm = AlarmtLevels.Error;  }
                         }
                         break;
                     case 6:
                         {
-                            if (item.Value == 1) ClusterVolLowAlarm = AlarmtLevels.Info;
-                            if (item.Value == 2) ClusterVolLowAlarm = AlarmtLevels.Warning;
-                            if (item.Value == 3) ClusterVolLowAlarm = AlarmtLevels.Error;
-                        }
+                            if (item.Value == 1){ ClusterVolLowAlarm = AlarmtLevels.Info;   }
+                            if (item.Value == 2) { ClusterVolLowAlarm = AlarmtLevels.Warning; }
+                                if (item.Value == 3){ ClusterVolLowAlarm = AlarmtLevels.Error;  }
+                            }
                         break;
                     case 7:
                         {
-                            if (item.Value == 1) ClusterVolUpAlarm = AlarmtLevels.Info;
-                            if (item.Value == 2) ClusterVolUpAlarm = AlarmtLevels.Warning;
-                            if (item.Value == 3) ClusterVolUpAlarm = AlarmtLevels.Error;
+                            if (item.Value == 1){ ClusterVolUpAlarm = AlarmtLevels.Info;  }
+                            if (item.Value == 2){ ClusterVolUpAlarm = AlarmtLevels.Warning; }
+                            if (item.Value == 3){ ClusterVolUpAlarm = AlarmtLevels.Error;  }
                         }
                         break;
                     default:
@@ -1595,6 +1905,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                 }
 
             }
+            return colorflagresult;
 
         }
         /// <summary>

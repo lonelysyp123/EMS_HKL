@@ -1,6 +1,9 @@
 ﻿using EMS.Common;
 using EMS.Model;
+using EMS.Storage.DB.DBManage;
 using EMS.ViewModel;
+using EMS.ViewModel.NewEMSViewModel;
+using log4net.Repository.Hierarchy;
 using Modbus.Device;
 using System;
 using System.Collections.Concurrent;
@@ -27,7 +30,7 @@ namespace EMS.Service
                 if (_isConnected != value)
                 {
                     _isConnected = value;
-                    OnChangeState(_isConnected, _isDaqData);
+                    OnChangeState(this, _isConnected, _isDaqData);
                 }
             }
         }
@@ -41,69 +44,83 @@ namespace EMS.Service
                 if (_isDaqData != value)
                 {
                     _isDaqData = value;
-                    OnChangeState(_isConnected, _isDaqData);
+                    OnChangeState(this, _isConnected, _isDaqData);
                 }
             }
         }
 
-        private Action<bool, bool> OnChangeState;
+        public string ID;
+        private Action<object, bool, bool> OnChangeState;
+        private Action<object, object> OnChangeData;
         private SerialPort SerialPortInstance;
-        public Configuaration Configuaration;
+        private Configuaration Configuaration;
+        private static object Locker;
 
         public SmartMeterDataService()
         {
-            smartMeterModels = new BlockingCollection<SmartMeterModel>(new ConcurrentQueue<SmartMeterModel>(),300);
+            
         }
 
-        public void RegisterState(Action<bool, bool> action)
+        public SmartMeterDataService(string id)
+        {
+            ID = id;
+            Locker = new object();
+            Configuaration = new Configuaration();
+            StartDataService();
+        }
+
+        private void StartDataService()
+        {
+            Thread thread = new Thread(TryConnect);
+            thread.IsBackground = true;
+            thread.Start();
+        }
+
+        private void TryConnect()
+        {
+            while (!IsConnected)
+            {
+                // 从数据库中获取链接信息
+                SmartMeterManage smConfigInfo = new SmartMeterManage();
+                var items = smConfigInfo.Get();
+                if (items != null && items.Count > 0)
+                {
+                    var item = items.Find(x => x.Id.ToString() == ID);
+                    if (item != null)
+                    {
+                        Configuaration.SelectedCommPort = item.SelectedCommPort;
+                        Configuaration.SelectedBaudRate = item.SelectedBaudRate;
+                        Configuaration.SelectedParity = (Parity)item.SelectedParity;
+                        Configuaration.SelectedStopBits = (StopBits)item.SelectedStopBits;
+                        Configuaration.SelectedDataBits = item.SelectedDataBits;
+                        Configuaration.AcquisitionCycle_Ammeter = item.AcquisitionCycle;
+                    }
+                }
+                
+                if (Open())
+                {
+                    IsConnected = true;
+                }
+                else
+                {
+                    continue;
+                }
+
+                Thread.Sleep(1000);
+            }
+
+            // 连接成功后开始采集数据
+            StartDaqData();
+        }
+
+        public void RegisterState(Action<object, bool, bool> action)
         {
             OnChangeState = action;
         }
 
-        public void SetCommunicationConfig(Configuaration configuaration)
+        public void RegisterState(Action<object, object> action)
         {
-            Configuaration = configuaration;
-        }
-
-        public bool Connect()
-        {
-            if (!IsConnected)
-            {
-                if (Open())
-                {
-                    IsConnected = true;
-                    return true;
-                }
-
-                // 采集状态
-                if (IsDaqData)
-                {
-                    StartDaqData();
-                }
-                return true;
-            }
-            return false;
-        }
-
-        public bool Disconnect()
-        {
-            if (IsConnected)
-            {
-                if (IsDaqData)
-                {
-                    StopDaqData();
-                }
-
-                if (SerialPortInstance != null)
-                {
-                    if (SerialPortInstance.IsOpen)
-                    {
-                        SerialPortInstance.Close();
-                    }
-                }
-                IsConnected = false;
-            }
-            return true;
+            OnChangeData = action;
         }
 
         public void StopDaqData()
@@ -151,8 +168,8 @@ namespace EMS.Service
             DaqTimeSpan = value;
         }
 
-        private int DaqTimeSpan = 1;
-        public BlockingCollection<SmartMeterModel> smartMeterModels;
+        private int DaqTimeSpan = 0;
+        public SmartMeterModel CurrentSmartMeterModel;
         // CS校验不计算0xFE, 0xFE, 0xFE, 0xFE
         byte[] Request_GetVoltage_A = new byte[] { 0x68, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x68, 0x11, 0x04, 0x02, 0x01, 0x01, 0x00, 0xA4, 0x16 };
         byte[] Response_GetVoltage_A = new byte[] { 0xFE, 0xFE, 0xFE, 0xFE, 0x68, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x68, 0x91, 0x08, 0x33, 0x33, 0x33, 0x33, 0x00, 0x00, 0x00, 0x00, 0x44, 0x16 };
@@ -178,13 +195,30 @@ namespace EMS.Service
                     {
                         model.Voltage_B = Voltage_B;
                     }
-                    smartMeterModels.TryAdd(model);
+                    lock (Locker)
+                    {
+                        CurrentSmartMeterModel = model;
+                        OnChangeData(this, CurrentSmartMeterModel.Clone());
+                    }
                 }
                 catch (Exception)
                 {
                     break;
                 }
             }
+        }
+
+        public SmartMeterModel GetCurrentData()
+        {
+            SmartMeterModel item = new SmartMeterModel();
+            if (CurrentSmartMeterModel != null)
+            {
+                lock (Locker)
+                {
+                    item = CurrentSmartMeterModel.Clone() as SmartMeterModel;
+                }
+            }
+            return item;
         }
 
         private byte[] ReadDataForCmd(byte[] Request, int num)
