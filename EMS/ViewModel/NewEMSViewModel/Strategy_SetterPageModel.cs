@@ -28,7 +28,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 模式
         /// </summary>
-        private List<string> strategyModeSet;
+        private List<string> strategyModeSet = new List<string> { "待机", "恒电流充电", "恒电流放电", "恒功率充电", "恒功率放电" };
         public List<string> StrategyModeSet
         {
             get { return strategyModeSet; }
@@ -107,7 +107,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
         public RelayCommand DemandControlStartStopCommand { get; set; }
         /// <summary>
-        /// 需量控制
+        /// 逆功率控制
         /// </summary>
         private bool isReversePowerBtnOpen;
         public bool IsReversePowerBtnOpen
@@ -335,11 +335,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             InversePowerProtectionStartStopCommand = new RelayCommand(InversePowerProtectionStartStop);
             if (TotalStrategyState == "手动运行")
             {
-                StrategyModeSet = new List<string> { "待机", "恒电流充电", "恒电流放电", "恒功率充电", "恒功率放电" };
-                if(SelectedManualStrategyMode == "待机")
-                {
-
-                }
                 CommandManualReset = new RelayCommand(ManualReset);
                 CommandManualApply = new RelayCommand(ManualApply);
             }
@@ -357,21 +352,30 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             //模式切换
             TotalStrategyState = TotalStrategyState == "手动运行" ? "自动运行" : "手动运行";
+            bool automationMode = TotalStrategyState == "手动运行" ? true : false;
+            StrategyApi.SetMode(automationMode, this.IsDailyPatternBtnOpen, this.IsMaxDemandControlBtnOpen, this.IsReversePowerBtnOpen);
         }
         /// <summary>
         /// 充放电策略控制启停，需量控制启停，逆功率保护启停
         /// </summary>
         private void StrategyControlStartStop()
         {
-
+            
+            //充放电策略控制启停
+            bool automationMode = TotalStrategyState == "手动运行" ? true : false;
+            StrategyApi.SetMode(automationMode, this.IsDailyPatternBtnOpen, this.IsMaxDemandControlBtnOpen, this.IsReversePowerBtnOpen);
         }
         private void DemandControlStartStop()
         {
-
+            //需量控制启停
+            bool automationMode = TotalStrategyState == "手动运行" ? true : false;
+            StrategyApi.SetMode(automationMode, this.IsDailyPatternBtnOpen, this.IsMaxDemandControlBtnOpen, this.IsReversePowerBtnOpen);
         }
         private void InversePowerProtectionStartStop()
         {
-
+            //
+            bool automationMode = TotalStrategyState == "手动运行" ? true : false;
+            StrategyApi.SetMode(automationMode, this.IsDailyPatternBtnOpen, this.IsMaxDemandControlBtnOpen, this.IsReversePowerBtnOpen);
         }
         /// <summary>
         /// 手动运行的重置
@@ -426,23 +430,28 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             if (SelectedManualStrategyMode == "待机")
             {
-                //= this.StrategyManualValueSet;
+                var manualCommand = new BessCommand(this.StrategyManualValueSet, (BatteryStrategyEnum)SelectedManualMode.Standby);
+                StrategyApi.SetManualCommand(manualCommand);
             }
             if (SelectedManualStrategyMode == "恒电流充电")
             {
-                //= this.StrategyManualValueSet;
+                var manualCommand = new BessCommand(this.StrategyManualValueSet, (BatteryStrategyEnum)SelectedManualMode.ConstantCurrentCharge);
+                StrategyApi.SetManualCommand(manualCommand);
             }
             if (SelectedManualStrategyMode == "恒电流放电")
             {
-                //= this.StrategyManualValueSet;
+                var manualCommand = new BessCommand(this.StrategyManualValueSet, (BatteryStrategyEnum)SelectedManualMode.ConstantCurrentDischarge);
+                StrategyApi.SetManualCommand(manualCommand);
             }
             if (SelectedManualStrategyMode == "恒功率充电")
             {
-                //= this.StrategyManualValueSet;
+                var manualCommand = new BessCommand(this.StrategyManualValueSet, (BatteryStrategyEnum)SelectedManualMode.ConstantPowerCharge);
+                StrategyApi.SetManualCommand(manualCommand);
             }
             if (SelectedManualStrategyMode == "恒功率放电")
             {
-                //= this.StrategyManualValueSet;
+                var manualCommand = new BessCommand(this.StrategyManualValueSet, (BatteryStrategyEnum)SelectedManualMode.ConstantPowerDischarge);
+                StrategyApi.SetManualCommand(manualCommand);
             }
         }
         /// <summary>
@@ -506,5 +515,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             ConstantPowerCharge = 3,
             ConstantPowerDischarge = 4,
         }
+
+
+
     }
 }

@@ -17,7 +17,7 @@ namespace EMS.ViewModel.NewEMSViewModel
     {
         
         //BCMU簇选择
-        private List<string> bcmuIdInfo;
+        private List<string> bcmuIdInfo = new List<string> { "1", "2", "3", "4", "5", "6" };
         public List<string> BCMUIDInfo
         {
             get => bcmuIdInfo;
@@ -27,7 +27,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string selectedBCMUID;
+        private string selectedBCMUID = "1";
         public string SelectedBCMUID
         {
             get => selectedBCMUID;
@@ -622,8 +622,6 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public Strategy_ProtectSetterPageModel()
         {
-            bcmuIdInfo = new List<string> { "1", "2", "3", "4", "5", "6" };
-
             ReadDBInfoCommand = new RelayCommand(ReadDBInfo);
             ReadBCMUInfoCommand = new RelayCommand(ReadBCMUInfo);
             SyncInfo1Command = new RelayCommand(SyncInfo1);
