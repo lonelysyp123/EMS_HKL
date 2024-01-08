@@ -27,7 +27,6 @@ namespace TNCN.EMS.Common.StrategyManage
         ISystemSettingService systemSettingService;
 
         public MqttClientManager() {
-
             mqttClientService = new MqttClientService();
             mqttClientService.ConnectMqtt();
             Task task = new Task(() => { PublishAsync(); });
