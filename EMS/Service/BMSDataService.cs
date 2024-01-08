@@ -84,6 +84,7 @@ namespace EMS.Service
         {
             ID = id;
             //Locker = new object();
+            BatteryTotalModels = new BlockingCollection<BatteryTotalModel>(new ConcurrentQueue<BatteryTotalModel>(), 300);
             StartDataService();
         }
 
@@ -172,7 +173,7 @@ namespace EMS.Service
         }
 
         private int DaqTimeSpan = 0;
-        //public BlockingCollection<BatteryTotalModel> BatteryTotalModels;
+        private BlockingCollection<BatteryTotalModel> BatteryTotalModels;
         //private static object Locker;
         public BatteryTotalModel CurrentBatteryTotalModel;
         private void DaqDataTh()
@@ -223,6 +224,7 @@ namespace EMS.Service
                     //{
                         CurrentBatteryTotalModel = DataDecode(BCMUData, BCMUStateData, BMUIDData, BMUData, BMUStateData);
                         OnChangeData(this, CurrentBatteryTotalModel.Clone());
+                        BatteryTotalModels.Add(CurrentBatteryTotalModel.Clone() as BatteryTotalModel);
                         if (IsSaveDaq)
                         {
                             SaveData(CurrentBatteryTotalModel);
@@ -303,15 +305,11 @@ namespace EMS.Service
 
         public BatteryTotalModel GetCurrentData()
         {
-            BatteryTotalModel item = new BatteryTotalModel();
-            if (CurrentBatteryTotalModel != null)
+            if (BatteryTotalModels.TryTake(out BatteryTotalModel item))
             {
-                //lock (Locker)
-                //{
-                    item = CurrentBatteryTotalModel.Clone() as BatteryTotalModel;
-                //}
+                return item;
             }
-            return item;
+            return null;
         }
 
         /// <summary>

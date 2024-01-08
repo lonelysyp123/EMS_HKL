@@ -54,7 +54,6 @@ namespace EMS.Service
         private Action<object, object> OnChangeData;
         private SerialPort SerialPortInstance;
         private Configuaration Configuaration;
-        private static object Locker;
 
         public SmartMeterDataService()
         {
@@ -64,7 +63,6 @@ namespace EMS.Service
         public SmartMeterDataService(string id)
         {
             ID = id;
-            Locker = new object();
             Configuaration = new Configuaration();
             StartDataService();
         }
@@ -195,11 +193,9 @@ namespace EMS.Service
                     {
                         model.Voltage_B = Voltage_B;
                     }
-                    lock (Locker)
-                    {
-                        CurrentSmartMeterModel = model;
-                        OnChangeData(this, CurrentSmartMeterModel.Clone());
-                    }
+
+                    CurrentSmartMeterModel = model;
+                    OnChangeData(this, CurrentSmartMeterModel.Clone());
                 }
                 catch (Exception)
                 {
@@ -213,10 +209,7 @@ namespace EMS.Service
             SmartMeterModel item = new SmartMeterModel();
             if (CurrentSmartMeterModel != null)
             {
-                lock (Locker)
-                {
-                    item = CurrentSmartMeterModel.Clone() as SmartMeterModel;
-                }
+                item = CurrentSmartMeterModel.Clone() as SmartMeterModel;
             }
             return item;
         }

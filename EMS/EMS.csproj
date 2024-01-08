@@ -292,6 +292,7 @@
       <DependentUpon>WarnControl3.xaml</DependentUpon>
     </Compile>
     <Compile Include="Service\BMSDataService.cs" />
+    <Compile Include="Service\DataServiceBase.cs" />
     <Compile Include="Service\IDataService.cs" />
     <Compile Include="Service\impl\MqttClientService.cs" />
     <Compile Include="Service\impl\SystemSettingService.cs" />

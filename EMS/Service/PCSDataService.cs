@@ -73,12 +73,11 @@ namespace EMS.Service
         private Action<object, object> OnChangeData;
         public static byte PcsId = 1;
         public PCSModel pcsModel;
-        private static object Locker;
 
         public PCSDataService(string id)
         {
             ID = id;
-            Locker = new object();
+            PCSModels = new BlockingCollection<PCSModel>(new ConcurrentQueue<PCSModel>(), 300);
             StartDataService();
         }
 
@@ -162,6 +161,7 @@ namespace EMS.Service
         }
 
         private int DaqTimeSpan = 0;
+        private BlockingCollection<PCSModel> PCSModels;
         private void DaqDataTh()
         {
             while (IsConnected && IsDaqData)
@@ -175,14 +175,12 @@ namespace EMS.Service
                     byte[] Temp = ReadFunc(53221, 3);
                     byte[] DCBranch1INFO = ReadFunc(53250, 10);
                     byte[] SerialNumber = ReadFunc(53579, 15);
-                    lock (Locker)
+                    pcsModel = DataDecode(dcState, pcsData, Temp, DCBranch1INFO, SerialNumber);
+                    OnChangeData(this, pcsModel.Clone());
+                    PCSModels.Add(pcsModel.Clone() as PCSModel);
+                    if (IsSaveDaq)
                     {
-                        pcsModel = DataDecode(dcState, pcsData, Temp, DCBranch1INFO, SerialNumber);
-                        OnChangeData(this, pcsModel.Clone());
-                        if (IsSaveDaq)
-                        {
-                            SaveData(pcsModel);
-                        }
+                        SaveData(pcsModel);
                     }
                 }
                 catch (Exception ex)
@@ -213,21 +211,17 @@ namespace EMS.Service
 
         public PCSModel GetCurrentData()
         {
-            PCSModel item = new PCSModel();
-            if (pcsModel != null)
+            if (PCSModels.TryTake(out PCSModel item))
             {
-                lock (Locker)
-                {
-                    item = pcsModel.Clone() as PCSModel;
-                }
+                return item;
             }
-            return item;
+            return null;
         }
 
-        private PCSModel DataDecode(byte[] dcstate, byte[] pcsdata, byte[]temp, byte[] dcbranch1info, byte[] serialnumber)
+        private PCSModel DataDecode(byte[] dcstate, byte[] pcsdata, byte[] temp, byte[] dcbranch1info, byte[] serialnumber)
         {
             PCSModel item = new PCSModel();
-            if (dcstate !=null)
+            if (dcstate != null)
             {
                 item.ModuleOnLineFlag = BitConverter.ToUInt16(dcstate, 0);
                 item.ModuleRunFlag = BitConverter.ToUInt16(dcstate, 4);
@@ -250,7 +244,7 @@ namespace EMS.Service
                 item.ModuleTemperature = Math.Round(BitConverter.ToUInt16(temp, 0) * 0.1 - 20, 2);
                 item.AmbientTemperature = Math.Round(BitConverter.ToUInt16(temp, 4) * 0.1 - 20, 2);
             }
-            if (dcbranch1info!=null)
+            if (dcbranch1info != null)
             {
                 item.DcBranch1DCPower = Math.Round(BitConverter.ToUInt16(dcbranch1info, 0) * 0.1 - 1500, 2);
                 item.DcBranch1DCVol = Math.Round(BitConverter.ToUInt16(dcbranch1info, 2) * 0.1, 2);
@@ -261,7 +255,7 @@ namespace EMS.Service
                 item.DcBranch1DisCharLow = BitConverter.ToUInt16(dcbranch1info, 12);
                 item.DcBranch1BUSVol = Math.Round(BitConverter.ToUInt16(dcbranch1info, 18) * 0.1, 2);
             }
-            if (serialnumber!=null)
+            if (serialnumber != null)
             {
                 item.SNAdress = new ushort[11];
                 for (int i = 0; i < 11; i++)
@@ -423,7 +417,7 @@ namespace EMS.Service
 
         public byte[] ReadDCBranchInfo()
         {
-             return ReadFunc(53651, 14);
+            return ReadFunc(53651, 14);
         }
 
         /// <summary>
@@ -447,7 +441,7 @@ namespace EMS.Service
         /// </summary>
         /// <param name="pcsmancharset">设置值</param>
         /// <param name="pcsmancharmodelset">设置模式</param>
-        public void ManChar(string pcsmancharmodelset,double pcsmancharset)
+        public void ManChar(string pcsmancharmodelset, double pcsmancharset)
         {
             if (pcsmancharmodelset == "设置电流调节")
             {
