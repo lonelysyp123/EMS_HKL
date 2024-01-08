@@ -110,7 +110,7 @@ namespace EMS.Api
             {
                 List<string>bcmualarm = new List<string>();
                 List<string>bcmufault = new List<string>();
-               
+
                 bcmualarm = service.GetCurrentData().AlarmStateBCMU.ToList();
                 bcmufault = service.GetCurrentData().FaultyStateBCMU.ToList();
                 totalalarminfo.AddRange(bcmualarm);
@@ -123,7 +123,6 @@ namespace EMS.Api
                 }
                 
             }
-            List<string>newlist = new List<string>();
             
             totalalarminfo=totalalarminfo.Distinct().ToList();
             return totalalarminfo;
