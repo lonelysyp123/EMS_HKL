@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using EMS.Model;
+using EMS.Storage.DB.DBManage;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,6 +8,7 @@ using System.Data.Entity.Core.Objects.DataClasses;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
@@ -102,6 +104,23 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public void InitView()
         {
+            //AlarmandFaultInfoManage manage = new AlarmandFaultInfoManage();
+            //var entities =manage.Get();
+            //int i =0;
+            //foreach (var entity in entities)
+            //{
+            //    i++;
+            //    FaultLogModel faultLogModel = new FaultLogModel()
+            //    {
+            //        FaultNumber = i.ToString(),
+            //        FaultDevice = entity.Device,
+            //        FaultId = entity.id.ToString(),
+            //        FaultModule = entity.Module.ToString(),
+            //        FaultTime = entity.HappenTime.ToString(),
+            //        FaultName = entity.Type.ToString(),
+            //        FaultGrade = entity.level.ToString()
+            //    };
+            //}
             for (int i = 0; i < 100; i++)
             {
                 FaultLogDataList.Add(new FaultLogModel()
