@@ -25,7 +25,7 @@ namespace EMS.Service
     public class SmartElectricityMeter: DataServiceBase<SmartElectricityMeterModel>
     {
         private SerialPort SerialPortInstance;
-        private Configuaration Configuaration;
+        //private Configuaration Configuaration;
         private ModbusMaster _master;
 
         public SmartElectricityMeterDataService(string id)
