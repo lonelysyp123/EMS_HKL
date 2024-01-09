@@ -29,6 +29,27 @@ namespace EMS.Api
     public static class PcsApi
     {
         /// <summary>
+        /// 建议实现方案：
+        /// 1、将采集的PCS数据放到一个线程安全固定长度的队列中。可用本项目的ConcurrentQueueLength
+        /// 2、该方法是从队列中取出一个采集的对象数据
+        /// 获取采集的PCS数据
+        /// </summary>
+        /// <returns></returns>
+        public static PCSModel GetNextPCSData()
+        {
+            return null;
+        }
+            /// <summary>
+            ///  对PCS发送控制指令，需要包含一定的验证，检查下发指令是否合理，否则报错，该API不能是阻塞函数，需要立刻返回。如遇到异常，需要抛出异常。
+            ///  如果下发指令和当前PCS正在执行的指令一致，可以避免重复下发。
+            /// </summary>
+            /// <returns>指令下发是否成功</returns>
+        public static void SendPcsCommand(BessCommand command)
+        {
+             EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.SendPcsCommand(command);
+        }
+
+        /// <summary>
         /// 获取PCS保护参数接口
         /// </summary>
         /// <returns></returns>
@@ -51,16 +72,6 @@ namespace EMS.Api
         {
             //需实现设置DCBranch相关逻辑
             return null;
-        }
-
-        /// <summary>
-        ///  对PCS发送控制指令，需要包含一定的验证，检查下发指令是否合理，否则报错，该API不能是阻塞函数，需要立刻返回。如遇到异常，需要抛出异常。
-        ///  如果下发指令和当前PCS正在执行的指令一致，可以避免重复下发。
-        /// </summary>
-        /// <returns>指令下发是否成功</returns>
-        public static void SendPcsCommand(BessCommand command)
-        {
-             EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.SendPcsCommand(command);
         }
 
         /// <summary>

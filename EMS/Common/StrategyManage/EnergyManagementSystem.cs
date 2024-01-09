@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TNCN.EMS.Common.StrategyManage;
+using TNCN.EMS.Common.Util;
 
 namespace EMS.Model
 {
@@ -65,6 +66,7 @@ namespace EMS.Model
         private object _database_manager;
         private object _cloud_manager;
         private MqttClientManager mqttClientManager;
+        private IniFileHelper _configuration;
 
         private double _chargingEfficiency;
         private double _dischargingEfficiency;
@@ -80,6 +82,7 @@ namespace EMS.Model
         public void SetInitialEnergy(double  energy) { _initialEnergy = energy; }
         public void SetEnergyCapacity(double capacity) { _energyCapacity = capacity; }
 
+        public IniFileHelper Configuration { get { return _configuration; } }
 
         private static EnergyManagementSystem _globalInstance;
 
