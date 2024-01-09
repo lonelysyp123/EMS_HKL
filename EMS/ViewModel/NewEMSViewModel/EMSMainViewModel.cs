@@ -12,8 +12,6 @@ namespace EMS.ViewModel.NewEMSViewModel
 {
     public class EMSMainViewModel : ViewModelBase
     {
-               
-
         public HomePageModel HomePageModel { get; private set; }
         public Monitor_BMSPageModel Monitor_BMSPageModel { get; private set;}
         public Monitor_PCSPageModel Monitor_PCSPageModel { get; private set; }
@@ -28,14 +26,11 @@ namespace EMS.ViewModel.NewEMSViewModel
         public System_DevInfoPageModel System_DevInfoPageModel {  get; private set; }
         public System_DevSetterPageModel System_DevSetterPageModel { get; private set; }
         public System_MqttSetterPageModel System_MqttSetterPageModel { get; private set; }
-
         public BMSDataService[] bmsServices { get; private set; }
         public SmartMeterDataService smService { get; private set; }
         public PCSDataService pcsService { get; private set; }
 
         private static int BCMUCount = 6;
-        private static int PCSCount = 1;
-        private static int SmartMeterCount = 1;
         public EMSMainViewModel()
         {
 
@@ -55,7 +50,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             pcsService.RegisterState(StateCallBack_PCS);
             EnergyManagementSystem.GlobalInstance.PcsManager.SetPCS(pcsService);
 
-            smService = new SmartMeterDataService();
+            smService = new SmartMeterDataService("1");
             //smServices[i].RegisterState();    // 状态回调
             //smServices[i].RegisterState();    // 数据回调
 

@@ -294,14 +294,14 @@
       <DependentUpon>WarnControl3.xaml</DependentUpon>
     </Compile>
     <Compile Include="Service\BMSDataService.cs" />
+    <Compile Include="Service\DataServiceBase.cs" />
     <Compile Include="Service\IDataService.cs" />
     <Compile Include="Service\impl\MqttClientService.cs" />
     <Compile Include="Service\impl\SystemSettingService.cs" />
     <Compile Include="Service\IMqttClientService.cs" />
     <Compile Include="Service\ISystemSettingService.cs" />
-    <Compile Include="Service\ModbusTCPDataService.cs" />
-    <Compile Include="Service\SmartElectricityMeterDataService.cs" />
     <Compile Include="Service\SmartMeterDataService.cs" />
+    <Compile Include="Service\SmartElectricityMeterDataService.cs" />
     <Compile Include="Service\PCSDataService.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmandFaultInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmParameterSettingInfoManage.cs" />

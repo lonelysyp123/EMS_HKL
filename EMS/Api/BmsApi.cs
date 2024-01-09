@@ -74,12 +74,6 @@ namespace EMS.Api
             return data;
         }
 
-
-
-
-
-
-
         public static BatteryTotalModel[] GetNextBMSData()
         {
             DateTime dateTime = DateTime.Now;
