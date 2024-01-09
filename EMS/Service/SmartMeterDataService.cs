@@ -11,72 +11,29 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls.WebParts;
+using System.Xml.Linq;
 
 namespace EMS.Service
 {
-    public class SmartMeterDataService
+    public class SmartMeterDataService : DataServiceBase<SmartMeterModel>
     {
-        private bool _isConnected;
-        public bool IsConnected
-        {
-            get => _isConnected;
-            private set
-            {
-                if (_isConnected != value)
-                {
-                    _isConnected = value;
-                    OnChangeState(this, _isConnected, _isDaqData);
-                }
-            }
-        }
-
-        private bool _isDaqData;
-        public bool IsDaqData
-        {
-            get => _isDaqData;
-            private set
-            {
-                if (_isDaqData != value)
-                {
-                    _isDaqData = value;
-                    OnChangeState(this, _isConnected, _isDaqData);
-                }
-            }
-        }
-
-        public string ID;
-        private Action<object, bool, bool> OnChangeState;
-        private Action<object, object> OnChangeData;
         private SerialPort SerialPortInstance;
         private Configuaration Configuaration;
-        private static object Locker;
-
-        public SmartMeterDataService()
-        {
-            
-        }
 
         public SmartMeterDataService(string id)
+            :base(id)
         {
-            ID = id;
-            Locker = new object();
+            DevType = "SM";
             Configuaration = new Configuaration();
-            StartDataService();
         }
 
-        private void StartDataService()
-        {
-            Thread thread = new Thread(TryConnect);
-            thread.IsBackground = true;
-            thread.Start();
-        }
-
-        private void TryConnect()
+        protected override void TryConnect()
         {
             while (!IsConnected)
             {
@@ -111,35 +68,7 @@ namespace EMS.Service
 
             // 连接成功后开始采集数据
             StartDaqData();
-        }
-
-        public void RegisterState(Action<object, bool, bool> action)
-        {
-            OnChangeState = action;
-        }
-
-        public void RegisterState(Action<object, object> action)
-        {
-            OnChangeData = action;
-        }
-
-        public void StopDaqData()
-        {
-            IsDaqData = false;
-        }
-
-        public void StartDaqData()
-        {
-            if (IsConnected)
-            {
-                if (!IsDaqData)
-                {
-                    IsDaqData = true;
-                    Thread th = new Thread(DaqDataTh);
-                    th.IsBackground = true;
-                    th.Start();
-                }
-            }
+            StartSaveData();
         }
 
         private bool Open()
@@ -163,19 +92,12 @@ namespace EMS.Service
             }
         }
 
-        public void SetDaqTimeSpan(int value)
-        {
-            DaqTimeSpan = value;
-        }
-
-        private int DaqTimeSpan = 0;
-        public SmartMeterModel CurrentSmartMeterModel;
         // CS校验不计算0xFE, 0xFE, 0xFE, 0xFE
         byte[] Request_GetVoltage_A = new byte[] { 0x68, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x68, 0x11, 0x04, 0x02, 0x01, 0x01, 0x00, 0xA4, 0x16 };
         byte[] Response_GetVoltage_A = new byte[] { 0xFE, 0xFE, 0xFE, 0xFE, 0x68, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x68, 0x91, 0x08, 0x33, 0x33, 0x33, 0x33, 0x00, 0x00, 0x00, 0x00, 0x44, 0x16 };
         byte[] Request_GetVoltage_B = new byte[0];
         byte[] Response_GetVoltage_B = new byte[0];
-        private void DaqDataTh()
+        protected override void DaqDataTh()
         {
             while (IsConnected && IsDaqData)
             {
@@ -195,10 +117,13 @@ namespace EMS.Service
                     {
                         model.Voltage_B = Voltage_B;
                     }
-                    lock (Locker)
+
+                    CurrentModel = model;
+                    OnChangeData(this, CurrentModel.Clone());
+                    Models.Add(CurrentModel.Clone() as SmartMeterModel);
+                    if (IsSaveDaq)
                     {
-                        CurrentSmartMeterModel = model;
-                        OnChangeData(this, CurrentSmartMeterModel.Clone());
+                        SaveData(CurrentModel);
                     }
                 }
                 catch (Exception)
@@ -208,17 +133,9 @@ namespace EMS.Service
             }
         }
 
-        public SmartMeterModel GetCurrentData()
+        private void SaveData(SmartMeterModel model)
         {
-            SmartMeterModel item = new SmartMeterModel();
-            if (CurrentSmartMeterModel != null)
-            {
-                lock (Locker)
-                {
-                    item = CurrentSmartMeterModel.Clone() as SmartMeterModel;
-                }
-            }
-            return item;
+            // 电表存储相关操作
         }
 
         private byte[] ReadDataForCmd(byte[] Request, int num)
@@ -247,36 +164,32 @@ namespace EMS.Service
             return new byte[num];
         }
 
-        private static int reconnectInterval = 150; // ms
-        private static int maxReconnectTimes = 3;
-        private int reconnectCount = 0;
-        private bool IsCommunicationProtectState = false;
-        private Thread CommunicationProtectTr;
         private bool CommunicationCheck()
         {
+            int count = 0;
             while (true)
             {
                 try
                 {
                     SerialPortInstance.Open();
-                    reconnectCount = 0;
                     return true;
                 }
                 catch (Exception)
                 {
-                    reconnectCount++;
-                    if (reconnectCount > maxReconnectTimes)
+                    count++;
+                    if (count > maxReconnectTimes)
                     {
                         IsCommunicationProtectState = true;
                         IsConnected = false;
+                        Thread CommunicationProtectTr = new Thread(CommunicationProtect);
+                        CommunicationProtectTr.IsBackground = true;
                         CommunicationProtectTr.Start();
                         return false;
                     }
                 }
             }
         }
-
-        private static int reconnectIntervalLong = 60 * 1000 * 5; // ms
+  
         private void CommunicationProtect()
         {
             while (!IsConnected)
@@ -286,12 +199,11 @@ namespace EMS.Service
                 {
                     SerialPortInstance.Open();
                     IsConnected = true;
-                    LogUtils.Debug("电表保护机制重连成功，设备上线");
+                    LogUtils.Debug("保护机制重连成功，"+ DevType + " ID:" + ID + "上线");
                 }
                 catch (Exception)
                 {
-                    LogUtils.Debug("电表保护机制重连失败，继续尝试重新链接");
-                    continue;
+                    LogUtils.Debug("保护机制重连失败, "+ DevType + " ID:" + ID + "下线");
                 }
             }
         }

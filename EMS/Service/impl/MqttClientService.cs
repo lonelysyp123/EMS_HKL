@@ -1,5 +1,7 @@
 ﻿using EMS.Model;
 using EMS.Service;
+using EMS.Service.impl;
+using EMS.Storage.DB.Models;
 using log4net;
 using MQTTnet;
 using MQTTnet.Client;
@@ -28,6 +30,7 @@ namespace TNCN.EMS.Service
         private bool isConnected = false;
         private MqttConnectInfoModel mqttConnectInfo;
         private bool isAlarm = false;
+        private ISystemSettingService systemSettingService;
         /// <summary>
         /// 订阅的消息队列
         /// </summary>
@@ -36,10 +39,21 @@ namespace TNCN.EMS.Service
         /// 发布的消息队列
         /// </summary>
         private ConcurrentQueueLength<PublishMessageModel> publishMessageModels;
+        /// <summary>
+        /// 订阅的topic
+        /// </summary>
+        private string[] subscribeTopics = new string[]
+        {
+             "hkl2/ems/bms/bcmu/setting/set",
+             "hkl2/ems/pcs/setting/dcSideRoad1/set",
+             "hkl2/ems/pcs/setting/busSide/set",
+             "hkl2/ems/strategy/set"
+        };
 
         public MqttClientService() {
             this.subscribeMessageModels = new ConcurrentQueueLength<SubscribeMessageModel>(MAX_QUEUE_SZIE);
             this.publishMessageModels = new ConcurrentQueueLength<PublishMessageModel>(MAX_QUEUE_SZIE);
+            this.systemSettingService = new SystemSettingService();
         }
 
         public ConcurrentQueueLength<SubscribeMessageModel> GetSubscribeMessageModels() { 
@@ -128,6 +142,19 @@ namespace TNCN.EMS.Service
             return false;
         }
 
+        public void ConnectMqtt()
+        {
+            List<MqttModel> mqttInfos = systemSettingService.GetMqttInfo();
+            MqttModel mqttModel;
+            if (mqttInfos != null && mqttInfos.Count > 0)
+            {
+                mqttModel = mqttInfos.Find(item => item.Id == 1);
+                MqttConnectInfoModel mqttConnectInfo = new MqttConnectInfoModel(mqttModel.Ip, mqttModel.Port, mqttModel.UserName, mqttModel.Password, mqttModel.ClientId, 55);
+                mqttConnectInfo.Topics = subscribeTopics.ToList();
+                StartMqttClient(mqttConnectInfo);
+            }
+        }
+
 
         /// <summary>
         /// 从本地线程安全队列，发布消息到MQTT指定topic
@@ -173,7 +200,8 @@ namespace TNCN.EMS.Service
 
                     if (!this.isConnected)
                     {
-                        mqttClient.ReconnectAsync();
+                        mqttClient.Dispose();
+                        ConnectMqtt();
                         publishMessageModels.Enqueue(publishMessageModel);
                     }
                 }
@@ -181,7 +209,6 @@ namespace TNCN.EMS.Service
                     Thread.Sleep(10);
                 }
             }
-            
         }
 
         public bool IsAlarm()

@@ -35,27 +35,10 @@ namespace EMS.ViewModel
 
         private StrategyManager()
         {
-
+             
         }
 
-        /// <summary>
-        ///  得到手动模式下用户设定的控制指令
-        /// </summary>
-        /// <returns>手动模式下用户设定的控制指令</returns>
-        public BessCommand GetManualCommand() { return new BessCommand(); }
-
-
-        public double GetReversePowerflowProtectionThreshold() { return 0; } // 逆功率保护用户设置的阈值
-
-        public double GetAutomaticControlTolerance() { return 0.1; } //自动模式下的公差
-
-        public double GetChargingDiscount() { return 0.6; } //充电模式中的降功率因数
-
-        public double GetDischargingDiscount() { return 0.6; } //放电模式中的降功率因数
-
-        public int GetSystemSamplePeriod() { return 500; } //系统采样频率
         public List<string> GetBMSAlarmandFaultInfo() { return null ; }
         public List<string>GetSystemErrors() { return null ; }
-        public double GetDemandControlCapacity() { return 4000; } //总变压器容量
     }
 }

@@ -11,7 +11,7 @@ using System.Windows.Controls;
 
 namespace EMS.Service.impl
 {
-    public class SystemSettingService
+    public class SystemSettingService : ISystemSettingService
     {
         public SystemSettingService() { }
 
@@ -141,7 +141,7 @@ namespace EMS.Service.impl
             return smartMeterManage.Get();
         }
 
-        public bool AddSmartMeter(int id, string selectedCommPort, int selectedBaudRate, int selectedStopBits, int SelectedDataBits, int SelectedParity, int acquisitionCycle)
+        public bool AddSmartMeter(int id, string selectedCommPort, int selectedBaudRate, int selectedStopBits, int selectedDataBits, int selectedParity, int acquisitionCycle)
         {
             try
             {
@@ -150,8 +150,8 @@ namespace EMS.Service.impl
                 smartMeterDBModel.SelectedCommPort = selectedCommPort;
                 smartMeterDBModel.SelectedBaudRate = selectedBaudRate;
                 smartMeterDBModel.SelectedStopBits = selectedStopBits;
-                smartMeterDBModel.SelectedDataBits = SelectedDataBits;
-                smartMeterDBModel.SelectedParity = SelectedParity;
+                smartMeterDBModel.SelectedDataBits = selectedDataBits;
+                smartMeterDBModel.SelectedParity = selectedParity;
                 smartMeterDBModel.AcquisitionCycle = acquisitionCycle;
 
                 SmartMeterManage smartMeterManage = new SmartMeterManage();

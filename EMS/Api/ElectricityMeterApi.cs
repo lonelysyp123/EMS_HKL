@@ -11,6 +11,18 @@ namespace EMS.Api
 {
     public static class ElectricityMeterApi
     {
+        /// <summary>
+        /// 建议实现方案：
+        /// 1、将采集的智能电表数据放到一个线程安全固定长度的队列中。可用本项目的ConcurrentQueueLength
+        /// 2、该方法是从队列中取出一个采集的对象数据
+        /// 获取采集的智能电表数据
+        /// </summary>
+        /// <returns></returns>
+        public static SmartMeterModel GetNextElectricityMeterData()
+        {
+            return null;
+        }
+
         public static ThreePhaseValue GetVoltage(int index = 0)
         {
             return EnergyManagementSystem.GlobalInstance.SmartMeterManager.SmartMeters[index].GetThreePhaseVoltage();
