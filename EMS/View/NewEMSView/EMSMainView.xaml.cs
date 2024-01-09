@@ -25,8 +25,7 @@ namespace EMS.View.NewEMSView
     /// </summary>
     public partial class EMSMainView : System.Windows.Window
     {
-        private double _originalWidth; // 假设原始设计宽度
-        private double _originalHeight; // 假设原始设计高度
+
 
 
         private EMSMainViewModel viewmodel;
@@ -36,9 +35,6 @@ namespace EMS.View.NewEMSView
             viewmodel = new EMSMainViewModel();
             Navigation(new HomePage(viewmodel.HomePageModel), null);
 
-            // 初始化原始设计尺寸
-            _originalWidth = 1920;
-            _originalHeight = 1080;
         }
 
         private void Navigation(Page page, ToggleButton button, ToggleButton parent = null, ToggleButton grandpa = null)

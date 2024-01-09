@@ -195,8 +195,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             DisplayDataModel = new PlotModel();
             DisplayDataList = new List<List<double[]>>();
             TimeList = new List<DateTime[]>();
-            DataTypeList_SelectionChanged = new RelayCommand(SwitchBatteryData);
-            BatteryList_SelectionChanged = new RelayCommand<SelectionChangedEventArgs>(OnBatteryListSelectionChanged);
+            //DataTypeList_SelectionChanged = new RelayCommand(SwitchBatteryData);
+            //BatteryList_SelectionChanged = new RelayCommand<SelectionChangedEventArgs>(OnBatteryListSelectionChanged);
 
         }
 
@@ -246,7 +246,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         private List<double[]> QueryBatteryInfo(string BCMUID, string BMUID, string sort, DateTime startTime, DateTime endTime)
         {
             SeriesBatteryInfoManage SeriesManage = new SeriesBatteryInfoManage();
-            var SeriesList = SeriesManage.Find(BCMUID, BMUID, startTime, endTime);
+            string BCMUTotal = $"BCMU({BCMUID})";
+            var SeriesList = SeriesManage.Find(BCMUTotal, BMUID, startTime, endTime);
             List<double[]> obj = new List<double[]>();
             if (int.TryParse(sort, out int Sort))
             {
@@ -314,25 +315,25 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnBatteryListSelectionChanged(SelectionChangedEventArgs e)
-        {
-            if (e.AddedItems.Count > 0)
-            {
-                foreach (var item in e.AddedItems)
-                {
-                    SelectedBatteryList.Add((item as ListBoxItem).Content.ToString());
-                }
-            }
-            if (e.RemovedItems.Count > 0)
-            {
-                foreach (var item in e.RemovedItems)
-                {
-                    SelectedBatteryList.Remove((item as ListBoxItem).Content.ToString());
+        //private void OnBatteryListSelectionChanged(SelectionChangedEventArgs e)
+        //{
+        //    if (e.AddedItems.Count > 0)
+        //    {
+        //        foreach (var item in e.AddedItems)
+        //        {
+        //            SelectedBatteryList.Add((item as ListBoxItem).Content.ToString());
+        //        }
+        //    }
+        //    if (e.RemovedItems.Count > 0)
+        //    {
+        //        foreach (var item in e.RemovedItems)
+        //        {
+        //            SelectedBatteryList.Remove((item as ListBoxItem).Content.ToString());
 
-                }
-            }
-            SwitchBatteryData();
-        }
+        //        }
+        //    }
+        //    SwitchBatteryData();
+        //}
 
         /// <summary>
         /// 查询电池串数据

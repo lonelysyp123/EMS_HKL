@@ -46,12 +46,13 @@
                     <ListBox Grid.Column="0"
                              SelectionMode="Extended"
                              Foreground="White"
-                             BorderThickness="0,0,0,0">
-                        <bh:Interaction.Triggers>
+                             BorderThickness="0,0,0,0"
+                             SelectionChanged="BatteryList_SelectionChanged">
+                        <!--<bh:Interaction.Triggers>
                             <bh:EventTrigger EventName="SelectionChanged">
                                 <bh:InvokeCommandAction Command="{Binding BatteryList_SelectionChanged}" />
                             </bh:EventTrigger>
-                        </bh:Interaction.Triggers>
+                        </bh:Interaction.Triggers>-->
                         <ListBoxItem Content="1"
                                      BorderThickness="1,1,1,1"
                                      Margin="0,10,0,0"
@@ -127,12 +128,13 @@
                              BorderThickness="0,0,0,0"
                              SelectedItem="{Binding SelectedType}"
                              SelectedIndex="{Binding SelectedTypeIndex}"
+                             SelectionChanged="DataTypeList_SelectionChanged"
                              Foreground="Black">
-                        <bh:Interaction.Triggers>
+                        <!--<bh:Interaction.Triggers>
                             <bh:EventTrigger EventName="SelectionChanged">
                                 <bh:InvokeCommandAction Command="{Binding DataTypeList_SelectionChanged}" />
                             </bh:EventTrigger>
-                        </bh:Interaction.Triggers>
+                        </bh:Interaction.Triggers>-->
                         <ListBoxItem Content="Voltage"
                                      BorderThickness="1,1,1,1"
                                      Margin="0,10,0,0"

@@ -157,7 +157,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             DisplayDataModel = new PlotModel();
             DisplayDataList = new List<List<double[]>>();
             SelectedPCSList = new List<string>();
-            DataTypeList_SelectionChanged = new RelayCommand(SwitchPCSData);
+            //DataTypeList_SelectionChanged = new RelayCommand(SwitchPCSData);
 
         }
 

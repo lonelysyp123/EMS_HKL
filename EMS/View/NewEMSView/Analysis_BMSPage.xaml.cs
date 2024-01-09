@@ -20,14 +20,50 @@ namespace EMS.View.NewEMSView
     public partial class Analysis_BMSPage : Page
     {
 
+        //public Analysis_BMSPage()
+        //{
+        //    InitializeComponent();
+        //}
+        //public Analysis_BMSPage(Analysis_BMSPageModel viewmodel)
+        //{
+        //    InitializeComponent();
+        //    this.DataContext = viewmodel;
+        //}
+
+        private Analysis_BMSPageModel vm;
         public Analysis_BMSPage()
         {
             InitializeComponent();
+
+            vm = new Analysis_BMSPageModel();
+            this.DataContext = vm;
         }
-        public Analysis_BMSPage(Analysis_BMSPageModel viewmodel)
+
+        private void BatteryList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            InitializeComponent();
-            this.DataContext = viewmodel;
+            if (e.AddedItems.Count > 0)
+            {
+                foreach (var item in e.AddedItems)
+                {
+                    vm.SelectedBatteryList.Add((item as ListBoxItem).Content.ToString());
+                }
+            }
+
+            if (e.RemovedItems.Count > 0)
+            {
+                foreach (var item in e.RemovedItems)
+                {
+                    vm.SelectedBatteryList.Remove((item as ListBoxItem).Content.ToString());
+
+                }
+            }
+
+            vm.SwitchBatteryData();
+        }
+
+        private void DataTypeList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            vm.SwitchBatteryData();
         }
     }
 }
