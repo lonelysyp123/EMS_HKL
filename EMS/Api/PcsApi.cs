@@ -37,7 +37,7 @@ namespace EMS.Api
         /// <returns></returns>
         public static PCSModel GetNextPCSData()
         {
-            return null;
+            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.GetCurrentData();
         }
             /// <summary>
             ///  对PCS发送控制指令，需要包含一定的验证，检查下发指令是否合理，否则报错，该API不能是阻塞函数，需要立刻返回。如遇到异常，需要抛出异常。

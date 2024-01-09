@@ -420,8 +420,8 @@ namespace EMS.Service
                     valueAddress = PcsCommandAdressEnum.PowerValueSet;
                     break;
             }
-            //WriteFunc(PcsId, modeAddress, modeValue);
-            //WriteFunc(PcsId, valueAddress, controlValue);
+            WriteFunc(PCSId, (ushort)modeAddress, (ushort)modeValue);
+            WriteFunc(PCSId, (ushort)valueAddress, (ushort)controlValue);
         }
     }
     public enum PcsCommandAdressEnum

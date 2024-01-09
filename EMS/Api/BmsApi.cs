@@ -21,6 +21,8 @@ namespace EMS.Api
             return item.GetCurrentData();
         }
 
+        
+
         /// <summary>
         /// 获取BMS保护参数接口
         /// </summary>
