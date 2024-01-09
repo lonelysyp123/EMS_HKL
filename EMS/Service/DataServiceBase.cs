@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMS.Common;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace EMS.Service
 {
-    public class DataServiceBase<TModel>
+    public class DataServiceBase<TModel> : IDataService where TModel : class
     {
         private bool _isConnected;
         public bool IsConnected
         {
             get => _isConnected;
-            private set
+            protected set
             {
                 if (_isConnected != value)
                 {
@@ -28,7 +29,7 @@ namespace EMS.Service
         public bool IsDaqData
         {
             get => _isDaqData;
-            private set
+            protected set
             {
                 if (_isDaqData != value)
                 {
@@ -42,7 +43,7 @@ namespace EMS.Service
         public bool IsSaveDaq
         {
             get => _isSaveDaq;
-            private set
+            protected set
             {
                 if (_isSaveDaq != value)
                 {
@@ -52,26 +53,92 @@ namespace EMS.Service
             }
         }
 
-        private static int reconnectInterval = 150; // ms
-        private static int maxReconnectTimes = 3;
-        private int MaxReconnectCount = 3;
-        private int DaqTimeSpan = 1;
-        private static int reconnectIntervalLong = 60 * 1000 * 5; // ms
+        protected int reconnectInterval = 150; // ms
+        protected int maxReconnectTimes = 3;
+        protected int DaqTimeSpan = 1;
+        protected int reconnectIntervalLong = 60 * 1000 * 5; // ms
+        protected string DevType;
 
-        private Action<object, bool, bool, bool> OnChangeState;
-        private Action<object, object> OnChangeData;
-        private BlockingCollection<TModel> Models;
-        private bool IsCommunicationProtectState = false;
+        protected Action<object, bool, bool, bool> OnChangeState;
+        protected Action<object, object> OnChangeData;
+        protected BlockingCollection<TModel> Models;
+        protected bool IsCommunicationProtectState = false;
 
-        public TModel CurrentModel { get; private set; }
-        public string ID { get; private set; }
+        public TModel CurrentModel { get; protected set; }
+        public string ID { get;protected set; }
         
 
-        public DataServiceBase()
+        public DataServiceBase(string id)
         {
+            ID = id;
             Models = new BlockingCollection<TModel>(new ConcurrentQueue<TModel>(), 300);
+            StartDataService();
         }
 
+        public void StartDaqData()
+        {
+            if (IsConnected)
+            {
+                IsDaqData = true;
+                Thread th = new Thread(DaqDataTh);
+                th.IsBackground = true;
+                th.Start();
+                LogUtils.Debug(DevType + " ID:" + ID + " 开始采集数据");
+            }
+        }
 
+        protected virtual void DaqDataTh()
+        {
+
+        }
+
+        public void StopDaqData()
+        {
+            IsDaqData = false;
+            LogUtils.Debug(DevType+" ID:" + ID + " 停止采集数据");
+        }
+
+        public void StartSaveData()
+        {
+            IsSaveDaq = true;
+            LogUtils.Debug(DevType + " ID:" + ID + " 开始保存数据");
+        }
+
+        public void StopSaveData()
+        {
+            IsSaveDaq = false;
+            LogUtils.Debug(DevType + " ID:" + ID + " 停止保存数据");
+        }
+
+        protected void StartDataService()
+        {
+            Thread thread = new Thread(TryConnect);
+            thread.IsBackground = true;
+            thread.Start();
+        }
+
+        protected virtual void TryConnect()
+        {
+            // 底层尝试连接函数
+        }
+
+        public void RegisterState(Action<object, bool, bool, bool> action)
+        {
+            OnChangeState = action;
+        }
+
+        public void RegisterState(Action<object, object> action)
+        {
+            OnChangeData = action;
+        }
+
+        public TModel GetCurrentData()
+        {
+            if (Models.TryTake(out TModel item))
+            {
+                return item;
+            }
+            return null;
+        }
     }
 }

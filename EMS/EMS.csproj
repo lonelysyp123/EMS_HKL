@@ -298,7 +298,6 @@
     <Compile Include="Service\impl\SystemSettingService.cs" />
     <Compile Include="Service\IMqttClientService.cs" />
     <Compile Include="Service\ISystemSettingService.cs" />
-    <Compile Include="Service\ModbusTCPDataService.cs" />
     <Compile Include="Service\SmartMeterDataService.cs" />
     <Compile Include="Service\PCSDataService.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmandFaultInfoManage.cs" />

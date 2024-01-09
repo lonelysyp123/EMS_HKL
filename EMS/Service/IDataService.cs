@@ -8,6 +8,9 @@ namespace EMS.Service
 {
     public interface IDataService
     {
-
+        void StartDaqData();
+        void StopDaqData();
+        void StartSaveData();
+        void StopSaveData();
     }
 }
