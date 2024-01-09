@@ -267,6 +267,7 @@
     <Compile Include="Model\PublishMessageModel.cs" />
     <Compile Include="Model\SerialPortSettingsModel.cs" />
     <Compile Include="Model\SmartMeterModel.cs" />
+    <Compile Include="Model\StrategyModel.cs" />
     <Compile Include="Model\SubscribeMessageModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
     <Compile Include="MyControl\BCMUConnectGraph.xaml.cs">

@@ -50,7 +50,10 @@
                                     Grid.Column="1">
                             <TextBlock Text="当前执行策略:"
                                        HorizontalAlignment="Left"
-                                       VerticalAlignment="Center" />
+                                       VerticalAlignment="Center" >
+                                <Run Text="  " />
+                                <Run Text="{Binding CurrentStragy}" />
+                            </TextBlock>
                             <TextBlock Text="{Binding TotalStrategyState}"
                                        Margin="20,0,0,0"
                                        HorizontalAlignment="Center"
@@ -165,7 +168,7 @@
                     </Grid>
                     <DataGrid
                               x:Name="DataGrid"
-                              Margin="860,-364,-740,152"
+                              Margin="0,79,10,0"
                               Background="white"
                               AutoGenerateColumns="False"
                               IsReadOnly="True"
@@ -176,7 +179,7 @@
                               ItemsSource="{Binding TotalStrategies}"
                               SelectionMode="Extended"
                               SelectedItem="{Binding SelectedStrategy}"
-                              ScrollViewer.CanContentScroll="True">
+                              ScrollViewer.CanContentScroll="True" Grid.Row="2" Grid.RowSpan="2">
                         <DataGrid.ColumnHeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="HorizontalContentAlignment"
@@ -273,47 +276,46 @@
                     <Grid Grid.Row="0">
                         <localControl:TitleBorder Text="计划曲线" />
                     </Grid>
-                    
+
                     <Grid x:Name="LayoutRoot" Grid.Row="1">
-                        <c1:C1Chart HorizontalAlignment="Left" Margin="335,80,0,0" VerticalAlignment="Top">
+                        <c1:C1Chart  ChartType="steparea" Name="c1Chart1" Palette="Flow" MouseWheel="chart_MouseWheel" Foreground="Black">
+                            <c1:C1Chart.View>
+                                <c1:ChartView>
+                                    <c1:ChartView.Layers>
+                                        <c1:ChartPanel>
+                                            <c1:ChartPanelObject DataPoint="NaN,0" HorizontalAlignment="Stretch">
+                                                <Border BorderBrush="#1890FF" BorderThickness="0,2,0,0" Margin="0,-1,0,0" />
+                                            </c1:ChartPanelObject>
+                                        </c1:ChartPanel>
+                                        <c1:ChartPanel >
+                                            <c1:ChartPanelObject x:Name="vline" Attach="DataX" Action="MouseMove" DataPoint="-1, NaN" VerticalContentAlignment="Stretch" HorizontalAlignment="Center">
+                                                <Border Background="#1890FF" BorderBrush="#1890FF" Padding="1" BorderThickness="1 0 0 0" />
+                                            </c1:ChartPanelObject>
+                                            <c1:ChartPanelObject x:Name="dot" Attach="DataX" Action="MouseMove" DataPoint="0.5,0.5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <Grid DataContext="{Binding RelativeSource={x:Static RelativeSource.Self},Path=Parent}">
+                                                    <Ellipse Fill="White" Stroke="#1890FF" StrokeThickness="1" Width="30" Height="30" />
+                                                    <TextBlock x:Name="label" Text="{Binding DataPoint.Y, StringFormat=n0}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </c1:ChartPanelObject>
+                                        </c1:ChartPanel>
+                                    </c1:ChartView.Layers>
+                                    <c1:ChartView.AxisX>
+                                        <c1:Axis Scale="0.1">
+                                            <c1:Axis.ScrollBar>
+                                                <c1:AxisScrollBar />
+                                            </c1:Axis.ScrollBar>
+                                        </c1:Axis>
+                                    </c1:ChartView.AxisX>
+                                </c1:ChartView>
+                            </c1:C1Chart.View>
                             <c1:C1Chart.Data>
-                                <c1:ChartData SeriesItemsSource="{Binding MyReports}" >
-                                    <c1:ChartData.SeriesItemTemplate>
-                                        <DataTemplate>
-                                            <c1:XYDataSeries ItemsSource="{Binding Data}"
-                                                             ValueBinding="{Binding Y}"
-                                                             Label="{Binding label}"
-                                                             XValueBinding="{Binding X}"/>
-                                        </DataTemplate>
-                                    </c1:ChartData.SeriesItemTemplate>
+                                <c1:ChartData ItemsSource="{Binding TotalStrategies}" ItemNameBinding="{Binding StrategyStartTime}" >
+                                    <c1:DataSeries Name="dataSerues" ValueBinding="{Binding StrategyValue}" >
+                                    </c1:DataSeries>
                                 </c1:ChartData>
                             </c1:C1Chart.Data>
-                            <c1:C1ChartLegend/>
                         </c1:C1Chart>
-
-
                     </Grid>
-                    <!--<UniformGrid Grid.Row="2">
-                        <lvc:CartesianChart Series="{Binding ColunmSeriesCollection}"
-                                            LegendLocation="Right">
-                            -->
-                    <!--x轴-->
-                    <!--
-                            <lvc:CartesianChart.AxisX>
-                                <lvc:Axis Labels="{Binding ColumnXLabels}">
-
-                                </lvc:Axis>
-                            </lvc:CartesianChart.AxisX>
-                            -->
-                    <!--y轴-->
-                    <!--
-                            <lvc:CartesianChart.AxisY>
-                                <lvc:Axis>
-
-                                </lvc:Axis>
-                            </lvc:CartesianChart.AxisY>
-                        </lvc:CartesianChart>
-                    </UniformGrid>-->
                 </Grid>
             </Border>
         </Grid>

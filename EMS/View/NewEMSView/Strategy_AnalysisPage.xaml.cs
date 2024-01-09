@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using EMS.ViewModel;
+using EMS.ViewModel.NewEMSViewModel;
 
 namespace EMS.View.NewEMSView
 {
@@ -27,10 +28,25 @@ namespace EMS.View.NewEMSView
         public Strategy_AnalysisPage()
         {
             InitializeComponent();
-            viewmodel = new DataAnalysisViewModel();
-            this.DataContext = viewmodel;
+            c1Chart1.View.AxisY.Min = -1600;
+            c1Chart1.View.AxisY.Max = 1600;
+            c1Chart1.View.AxisX.Scale += 1;
+            c1Chart1.View.AxisY.Scale += 1;
+            this.DataContext = new Strategy_AnalysisPageModel();
         }
-
+        private void chart_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Delta == -120)
+            {
+                c1Chart1.View.AxisX.Scale += 0.1;
+                c1Chart1.View.AxisY.Scale += 0.1;
+            }
+            else if (e.Delta == 120)
+            {
+                c1Chart1.View.AxisX.Scale -= 0.1;
+                c1Chart1.View.AxisY.Scale -= 0.1;
+            }
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 

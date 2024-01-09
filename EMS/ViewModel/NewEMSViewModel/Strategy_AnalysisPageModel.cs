@@ -10,6 +10,7 @@ using OxyPlot.Legends;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 
@@ -18,51 +19,6 @@ namespace EMS.ViewModel.NewEMSViewModel
 {
     public class Strategy_AnalysisPageModel: ObservableObject
     {
-        public class StrategyModel : ObservableObject
-        {
-            #region ObservableObject        
-            private int _strategyNumber;
-            public int StrategyNumber
-
-            {
-                get => _strategyNumber;
-                set
-                {
-                    SetProperty(ref _strategyNumber, value);
-                }
-            }
-            private string _strategyMode;
-            public string StrategyMode
-
-            {
-                get => _strategyMode;
-                set
-                {
-                    SetProperty(ref _strategyMode, value);
-                }
-            }
-
-            private double _strategyValue;
-            public double StrategyValue
-            {
-                get => _strategyValue;
-                set
-                {
-                    SetProperty(ref _strategyValue, value);
-                }
-            }
-
-            private string _strategyStartTime;
-            public string StrategyStartTime
-            {
-                get => _strategyStartTime;
-                set
-                {
-                    SetProperty(ref _strategyStartTime, value);
-                }
-            }
-            #endregion
-        }
         #region Strategy_AnalysisPageModel Params
         private string _strategyStartTimeSet;
         public string StrategyStartTimeSet
@@ -71,6 +27,15 @@ namespace EMS.ViewModel.NewEMSViewModel
             set
             {
                 SetProperty(ref _strategyStartTimeSet, value);
+            }
+        }
+        private string _currentStragy;
+        public string CurrentStragy
+        {
+            get => _currentStragy;
+            set
+            {
+                SetProperty(ref _currentStragy, value);
             }
         }
         private double _strategyValueSet;
@@ -114,7 +79,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 界面显示的list
         /// </summary>
-        public ObservableCollection<StrategyModel> _totalStrategies = new ObservableCollection<StrategyModel>();
+        private ObservableCollection<StrategyModel> _totalStrategies = new ObservableCollection<StrategyModel>();
         public ObservableCollection<StrategyModel> TotalStrategies
         {
             get => _totalStrategies;
@@ -215,42 +180,12 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
         #endregion
-        #region planLine
-        private DateTime _selectedDate;
-        /// <summary>
-        /// 某天-日期
-        /// </summary>
-        public DateTime SelectedDate
-        {
-            get => _selectedDate;
-            set
-            {
-                SetProperty(ref _selectedDate, value);
-            }
-        }
-        private PlotModel _displayData;
-        /// <summary>
-        /// 图表数据
-        /// </summary>
-        public PlotModel DisplayDataModel
-        {
-            get => _displayData;
-            set
-            {
-                SetProperty(ref _displayData, value);
-            }
-        }
-        /// <summary>
-        /// 查询数据集合
-        /// </summary>
-        public List<List<double[]>> DisplayDataList;
-        public List<DateTime[]> TimeList;
-        #endregion
+
         public RelayCommand BatteryStrategyAddRowCommand { get; set; }
         public RelayCommand BatteryStrategySendCommand { get; set; }
         public RelayCommand BatteryStrategyRemoveRowCommand { get; set; }
         public Strategy_AnalysisPageModel()
-        {
+        {                
             IsAutoStrategyBtnEnabled = false;
             StrategyStartTimeSet = "00:00:00";
             BatteryStrategyAddRowCommand = new RelayCommand(BatteryStrategyAddRow);//添加
@@ -275,13 +210,14 @@ namespace EMS.ViewModel.NewEMSViewModel
         private void BatteryStrategyAddRow()
         {
             StrategyModel newStrategy = new StrategyModel();
+            
             newStrategy.StrategyStartTime = StrategyStartTimeSet;
             newStrategy.StrategyMode = SelectedStrategyMode;
             newStrategy.StrategyValue = StrategyValueSet;
             bool sameTimeCheck = TotalStrategies.ToList().Any(Item => Item.StrategyStartTime == StrategyStartTimeSet);
             bool stringValidityCheck = CheckTimeStringValidity(newStrategy.StrategyStartTime);
             bool otherCheck = true;
-
+           
             if (SelectedStrategyMode == "待机")
             {
                 newStrategy.StrategyValue = 0;
@@ -292,8 +228,8 @@ namespace EMS.ViewModel.NewEMSViewModel
                 otherCheck = false;
             }
             if ((!sameTimeCheck) && stringValidityCheck & otherCheck)
-            {
-                TotalStrategies.Add(newStrategy);
+            {                 
+                TotalStrategies.Add(newStrategy);                
                 SortStrategy();
             }
             else
@@ -306,11 +242,11 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// </summary>
         private void SendDailyPatern()
         {
-            int.TryParse(SelectedStrategySeries, out int number);
+            int.TryParse(SelectedStrategySeries, out int number);            
             BatteryStrategyArray.Clear();
             PCSStrategyDailyPatternInfoManage manage = new PCSStrategyDailyPatternInfoManage();
             if (TotalStrategies.Count != 0)
-            {
+            {                
                 manage.Delete(number);
                 foreach (var strategy in TotalStrategies)
                 {
@@ -376,7 +312,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                 // BatteryStrategyArray.Reverse();
                 StrategyApi.SetDailyPattern(BatteryStrategyArray);
                 EnergyManagementSystem.GlobalInstance.RestartOperationThread();
-
+                CurrentStragy = SelectedStrategySeries; //当前执行策略  
             }
             else
             {
@@ -403,13 +339,15 @@ namespace EMS.ViewModel.NewEMSViewModel
         private void BatteryStrategyRemoveRow()
         {
             TotalStrategies.Remove(SelectedStrategy);
-            SortStrategy();
+            SortStrategy1();
         }
-        /// <summary>
-        /// 排序
-        /// </summary>
-        private void SortStrategy()
+        private void SortStrategy1()
         {
+            if (TotalStrategies.Count > 1)
+            {
+                TotalStrategies.RemoveAt(TotalStrategies.Count - 1);
+            }
+            //TotalStrategies.RemoveAt(TotalStrategies.Count-1);
             var total = TotalStrategies.OrderBy(TotalStrategies => TotalStrategies.StrategyStartTime).ToList();
             TotalStrategies.Clear();
             for (int i = 0; i < total.Count; i++)
@@ -420,6 +358,39 @@ namespace EMS.ViewModel.NewEMSViewModel
             {
                 TotalStrategies.Add(strategy);
             }
+            StrategyModel model = new StrategyModel();
+            model.StrategyNumber = total.Count + 1;
+            model.StrategyValue = total.ToArray()[0].StrategyValue;
+            model.StrategyMode = total.ToArray()[0].StrategyMode;
+            model.StrategyStartTime = total.ToArray()[0].StrategyStartTime;
+            TotalStrategies.Add(model);
+        }
+        /// <summary>
+        /// 排序
+        /// </summary>
+        private void SortStrategy()
+        {
+            if (TotalStrategies.Count > 1)
+            {
+                TotalStrategies.RemoveAt(TotalStrategies.Count - 2);
+            }
+            //TotalStrategies.RemoveAt(TotalStrategies.Count-1);
+            var total = TotalStrategies.OrderBy(TotalStrategies => TotalStrategies.StrategyStartTime).ToList();
+            TotalStrategies.Clear();
+            for (int i = 0; i < total.Count; i++)
+            {
+                total[i].StrategyNumber = i + 1;
+            }
+            foreach (var strategy in total)
+            {
+                TotalStrategies.Add(strategy);
+            }
+            StrategyModel model = new StrategyModel();
+            model.StrategyNumber = total.Count+1;
+            model.StrategyValue = total.ToArray()[0].StrategyValue;
+            model.StrategyMode = total.ToArray()[0].StrategyMode;
+            model.StrategyStartTime = total.ToArray()[0].StrategyStartTime;            
+            TotalStrategies.Add(model);
         }
         private void ChangeUnit()
         {
@@ -497,80 +468,6 @@ namespace EMS.ViewModel.NewEMSViewModel
                 return false;
             }
         }
-        /// <summary>
-        /// 初始化图表控件（定义X，Y轴）
-        /// </summary>
-        private void InitChart()
-        {
-            //! Legend
-            DisplayDataModel.Legends.Clear();
-            var l = new Legend
-            {
-                LegendBorder = OxyColors.White,
-
-                LegendBackground = OxyColor.FromAColor(200, OxyColors.White),
-                LegendPosition = LegendPosition.TopRight,
-                LegendPlacement = LegendPlacement.Inside,
-                LegendOrientation = LegendOrientation.Vertical,
-            };
-            DisplayDataModel.Legends.Add(l);
-
-            //! Axes
-            DisplayDataModel.Axes.Clear();
-
-            DisplayDataModel.Axes.Add(new LinearAxis()
-            {
-                Position = AxisPosition.Left,
-                Title = "计划值",
-
-            });
-            DisplayDataModel.Axes.Add(new DateTimeAxis()
-            {
-                Position = AxisPosition.Bottom,
-                Title = "时间",
-                IntervalType = DateTimeIntervalType.Seconds,
-                StringFormat = "HH:mm:ss",
-
-            });
-        }
-        /// <summary>
-        /// 计划曲线
-        /// </summary>
-        public void SwitchValueData()
-        {
-            MyReport report = new MyReport();
-            ObservableCollection<MyData> data = new ObservableCollection<MyData>();//data显示数据类 x 横坐标 Y纵坐标
-            data.Add(new MyData() { X = "1", Y = 8 });
-            data.Add(new MyData() { X = "2", Y = 7 });
-            data.Add(new MyData() { X = "3", Y = 4 });
-            data.Add(new MyData() { X = "4", Y = 3 });
-            data.Add(new MyData() { X = "5", Y = 1 });
-            report.Data = data;
-            report.label = "电流";
-
-            MyReport report2 = new MyReport();
-            ObservableCollection<MyData> data2 = new ObservableCollection<MyData>();
-            data2.Add(new MyData() { X = "6", Y = 5 });
-            data2.Add(new MyData() { X = "8", Y = 1 });
-            data2.Add(new MyData() { X = "9", Y = 4 });
-            data2.Add(new MyData() { X = "12", Y = 3 });
-            report2.Data = data2;
-            report2.label = "功率";
-
-            MyReports = new ObservableCollection<MyReport>();
-            MyReports.Add(report);
-            MyReports.Add(report2);
-        }
-        public ObservableCollection<MyReport> MyReports { get; set; }
     }
-    public class MyReport
-    {
-        public string label { get; set; }
-        public ObservableCollection<MyData> Data { get; set; }
-    }
-    public class MyData
-    {
-        public string X { get; set; }
-        public double Y { get; set; }
-    }
+
 }
