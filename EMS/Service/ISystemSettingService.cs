@@ -16,6 +16,6 @@ namespace EMS.Service
         List<MqttModel> GetMqttInfo();
         bool AddMqtt(int id, string ip, int port, string clientId, string userName, string password);
         List<SmartMeterDBModel> GetSmartMeterList();
-        bool AddSmartMeter(int id, string selectedCommPort, int selectedBaudRate, int selectedStopBits, int SelectedDataBits, int acquisitionCycle);
+        bool AddSmartMeter(int id, string selectedCommPort, int selectedBaudRate, int selectedStopBits, int selectedDataBits, int selectedParity, int acquisitionCycle);
     }
 }
