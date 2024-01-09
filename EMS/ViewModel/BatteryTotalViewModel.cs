@@ -607,7 +607,7 @@ namespace EMS.ViewModel
             DaqDataImage = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OffDaq.png"));
             RecordDataImage = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OffRecord.png"));
 
-            service = new BMSDataService();
+            //service = new BMSDataService();
             //service.RegisterState(ServiceStateCallBack);
         }
 

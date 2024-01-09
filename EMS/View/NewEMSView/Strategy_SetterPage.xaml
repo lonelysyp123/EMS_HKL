@@ -147,7 +147,7 @@
                                       Style="{DynamicResource ToggleButtonStyle}"
                                       Cursor="Hand"
                                       IsChecked="{Binding IsDailyPatternBtnOpen}"
-                                      IsEnabled="{Binding IsAutoStrategyBtnEnabled}"
+                                      IsEnabled="{Binding IsAutoStrategyControlBtnEnabled}"
                                       Command="{Binding StrategyControlStartStopCommand}">
                         </ToggleButton>
                     </StackPanel>
@@ -164,7 +164,7 @@
                                       Style="{DynamicResource ToggleButtonStyle}"
                                       Cursor="Hand"
                                       IsChecked="{Binding IsMaxDemandControlBtnOpen}"
-                                      IsEnabled="{Binding IsAutoStrategyBtnEnabled}"
+                                      IsEnabled="{Binding IsAutoDemandControlBtnEnabled}"
                                       Command="{Binding DemandControlStartStopCommand}">
                         </ToggleButton>
                     </StackPanel>
@@ -181,7 +181,7 @@
                                       Style="{DynamicResource ToggleButtonStyle}"
                                       Cursor="Hand"
                                       IsChecked="{Binding IsReversePowerBtnOpen}"
-                                      IsEnabled="{Binding IsAutoStrategyBtnEnabled}"
+                                      IsEnabled="{Binding IsAutoReversePowerBtnEnabled}"
                                       Command="{Binding InversePowerProtectionStartStopCommand}">
                         </ToggleButton>
                     </StackPanel>

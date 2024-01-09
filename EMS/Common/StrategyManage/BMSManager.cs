@@ -11,7 +11,7 @@ namespace EMS.Common.StrategyManage
 {
     public class BMSManager
     {
-        public List<BMSDataService> BMSDataServices { get; set; } //封装，不能set
+        public List<BMSDataService> BMSDataServices { get; set; }
 
         public BMSManager()
         {

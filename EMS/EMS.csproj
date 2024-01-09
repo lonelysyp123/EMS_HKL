@@ -44,6 +44,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
     </DocumentationFile>
+    <CodeAnalysisRuleSet>ConcurrencyRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -267,7 +268,7 @@
     <Compile Include="Model\BMSParameterSettingModel.cs" />
     <Compile Include="Model\PublishMessageModel.cs" />
     <Compile Include="Model\SerialPortSettingsModel.cs" />
-    <Compile Include="Model\SmartElectricityMeter.cs" />
+    <Compile Include="Model\SmartElectricityMeterModel.cs" />
     <Compile Include="Model\SmartMeterModel.cs" />
     <Compile Include="Model\SubscribeMessageModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
@@ -293,14 +294,14 @@
       <DependentUpon>WarnControl3.xaml</DependentUpon>
     </Compile>
     <Compile Include="Service\BMSDataService.cs" />
+    <Compile Include="Service\DataServiceBase.cs" />
     <Compile Include="Service\IDataService.cs" />
     <Compile Include="Service\impl\MqttClientService.cs" />
     <Compile Include="Service\impl\SystemSettingService.cs" />
     <Compile Include="Service\IMqttClientService.cs" />
     <Compile Include="Service\ISystemSettingService.cs" />
-    <Compile Include="Service\ModbusTCPDataService.cs" />
-    <Compile Include="Service\SmartElectricityMeterDataService.cs" />
     <Compile Include="Service\SmartMeterDataService.cs" />
+    <Compile Include="Service\SmartElectricityMeterDataService.cs" />
     <Compile Include="Service\PCSDataService.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmandFaultInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmParameterSettingInfoManage.cs" />

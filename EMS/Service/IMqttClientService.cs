@@ -21,6 +21,10 @@ namespace TNCN.EMS.Service
         /// <returns></returns>
         bool PublishAsync(string topic, byte[] data);
         /// <summary>
+        /// 连接mqtt brocker
+        /// </summary>
+        void ConnectMqtt();
+        /// <summary>
         /// 获取订阅的消息列表
         /// </summary>
         /// <returns></returns>

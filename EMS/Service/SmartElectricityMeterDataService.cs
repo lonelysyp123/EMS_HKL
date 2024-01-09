@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls.WebParts;
 
 namespace EMS.Service
 {
@@ -21,7 +22,7 @@ namespace EMS.Service
                 if (_isConnected != value)
                 {
                     _isConnected = value;
-                    OnChangeState(this, _isConnected, _isDaqData);
+                    OnChangeState(_isConnected, _isDaqData);
                 }
             }
         }
@@ -35,17 +36,12 @@ namespace EMS.Service
                 if (_isDaqData != value)
                 {
                     _isDaqData = value;
-                    OnChangeState(this, _isConnected, _isDaqData);
+                    OnChangeState(_isConnected, _isDaqData);
                 }
             }
         }
 
-        public string ID;
-        private Action<object, bool, bool> OnChangeState;
-        private Action<object, object> OnChangeData;
-        private SerialPort SerialPortInstance;
-        private Configuaration Configuaration;
-        private static object Locker;
+        private Action<bool, bool> OnChangeState;
 
         public SmartElectricityMeterDataService()
         {

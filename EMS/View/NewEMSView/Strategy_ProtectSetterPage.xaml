@@ -82,7 +82,7 @@
                                    Background="White"
                                    Foreground="Black"
                                    ItemsSource="{Binding BCMUIDInfo}"
-                                   SelectedItem="{Binding SelectedItemBCMU}"
+                                   SelectedItem="{Binding SelectedBCMUID}"
                                    BorderThickness="1,1,1,1">
                         </ComboBox>
                     </StackPanel>
