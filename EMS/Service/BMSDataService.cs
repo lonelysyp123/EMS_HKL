@@ -84,7 +84,7 @@ namespace EMS.Service
                     Thread.Sleep(DaqTimeSpan * 1000 + 100);
 
                     byte[] BCMUData = new byte[48];
-                    Array.Copy(ReadFunc(361, 24), 0, BCMUData, 0, 48);
+                    Array.Copy(ReadFunc(361, 26), 0, BCMUData, 0, 52);
                     //Array.Copy(ReadFunc(405, 1), 0, BCMUData, 48, 2);
                     byte[] BMUIDData = { 0 };
                     byte[] BMUData = new byte[720];
