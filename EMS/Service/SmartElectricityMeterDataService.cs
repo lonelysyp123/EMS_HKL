@@ -1,4 +1,5 @@
-﻿using EMS.ViewModel.NewEMSViewModel;
+﻿using EMS.Storage.DB.DBManage;
+using EMS.ViewModel.NewEMSViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,65 +9,121 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls.WebParts;
+using EMS.Common;
+using EMS.Model;
+using EMS.ViewModel;
+using log4net.Repository.Hierarchy;
+using Modbus.Device;
+using System.Collections.Concurrent;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
+using System.Xml.Linq;
 
 namespace EMS.Service
 {
-    public class SmartElectricityMeterDataService
+    public class SmartElectricityMeter: DataServiceBase<SmartElectricityMeterModel>
     {
-        private bool _isConnected;
-        public bool IsConnected
-        {
-            get => _isConnected;
-            private set
-            {
-                if (_isConnected != value)
-                {
-                    _isConnected = value;
-                    OnChangeState(_isConnected, _isDaqData);
-                }
-            }
-        }
-
-        private bool _isDaqData;
-        public bool IsDaqData
-        {
-            get => _isDaqData;
-            private set
-            {
-                if (_isDaqData != value)
-                {
-                    _isDaqData = value;
-                    OnChangeState(_isConnected, _isDaqData);
-                }
-            }
-        }
-
-        private Action<bool, bool> OnChangeState;
-
-        public SmartElectricityMeterDataService()
-        {
-
-        }
+        private SerialPort SerialPortInstance;
+        private Configuaration Configuaration;
+        private ModbusMaster _master;
 
         public SmartElectricityMeterDataService(string id)
+            : base(id)
         {
-            ID = id;
-            Locker = new object();
+            DevType = "SEM";
             Configuaration = new Configuaration();
-            StartDataService();
         }
 
-        private void StartDataService()
+        protected override void TryConnect()
         {
-            Thread thread = new Thread(TryConnect);
-            thread.IsBackground = true;
-            thread.Start();
+            while (!IsConnected)
+            {
+                // 从数据库中获取链接信息
+                SmartMeterManage smConfigInfo = new SmartMeterManage();
+                var items = smConfigInfo.Get();
+                if (items != null && items.Count > 0)
+                {
+                    var item = items.Find(x => x.Id.ToString() == ID);
+                    if (item != null)
+                    {
+                        Configuaration.SelectedCommPort = item.SelectedCommPort;
+                        Configuaration.SelectedBaudRate = item.SelectedBaudRate;
+                        Configuaration.SelectedParity = (Parity)item.SelectedParity;
+                        Configuaration.SelectedStopBits = (StopBits)item.SelectedStopBits;
+                        Configuaration.SelectedDataBits = item.SelectedDataBits;
+                        Configuaration.AcquisitionCycle_Ammeter = item.AcquisitionCycle;
+                    }
+                }
+
+                if (Open())
+                {
+                    IsConnected = true;
+                }
+                else
+                {
+                    continue;
+                }
+
+                Thread.Sleep(1000);
+            }
+
+            // 连接成功后开始采集数据
+            StartDaqData();
+            StartSaveData();
+        }
+
+        private bool Open()
+        {
+            try
+            {
+                SerialPortInstance = new SerialPort();
+                SerialPortInstance.PortName = Configuaration.SelectedCommPort;
+                SerialPortInstance.BaudRate = Configuaration.SelectedBaudRate;
+                SerialPortInstance.DataBits = Configuaration.SelectedDataBits;
+                SerialPortInstance.StopBits = Configuaration.SelectedStopBits;
+                SerialPortInstance.Parity = Configuaration.SelectedParity;
+                SerialPortInstance.ReadTimeout = 100;
+                SerialPortInstance.Open();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
 
 
 
-
+        private byte[] ReadFunc(ushort address, ushort num)
+        {
+            try
+            {
+                ushort[] holding_register = _master.ReadHoldingRegisters(1, address, num);
+                byte[] ret = new byte[holding_register.Length * 2];
+                for (int i = 0; i < holding_register.Length; i++)
+                {
+                    var objs = BitConverter.GetBytes(holding_register[i]);
+                    ret[i * 2] = objs[0];
+                    ret[i * 2 + 1] = objs[1];
+                }
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                LogUtils.Warn(DevType + " ID:" + ID + "读取数据失败", ex);
+                if (!_client.Connected && !IsCommunicationProtectState)
+                {
+                    if (CommunicationCheck())
+                    {
+                        return ReadFunc(address, num);
+                    }
+                }
+                return new byte[num * 2];
+            }
+        }
 
         public enum SmartEleMeterCommandAddressEnum
         {
