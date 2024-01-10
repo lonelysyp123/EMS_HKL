@@ -17,6 +17,7 @@ using System.Windows.Markup;
 using System.Windows.Media.Animation;
 using System.Windows;
 using EMS.Storage.DB.Models;
+using System.Diagnostics;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
@@ -168,7 +169,7 @@ namespace EMS.ViewModel.NewEMSViewModel
 
             if (TryCombinTime(StartTime1, StartTime2, out DateTime StartTime) && TryCombinTime(EndTime1, EndTime2, out DateTime EndTime))
             {
-                //DisplayDataList.Add(SmartMeterInfo(StartTime, EndTime));
+                DisplayDataList.Add(SmartMeterInfo(StartTime, EndTime));
             }
             else
             {
@@ -190,124 +191,125 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// </summary>
         /// <param name="startTime">开始时间</param>
         /// <param name="endTime">停止时间</param>
-        //private List<double[]> SmartMeterInfo(DateTime startTime, DateTime endTime)
-        //{
-        //    SmartMeterInfoManage SeriesManage = new SmartMeterInfoManage();
-        //    var SeriesList = SeriesManage.Find(startTime, endTime);
-        //    List<double[]> obj = new List<double[]>();
-        //    // 查询电表数据
-        //    List<double> voltage_AList = new List<double>();
-        //    List<double> voltage_BList = new List<double>();
-        //    List<double> voltage_CList = new List<double>();
-        //    List<double> electric_AList = new List<double>();
-        //    List<double> electric_BList = new List<double>();
-        //    List<double> electric_CList = new List<double>();
-        //    List<double> activePower_AList = new List<double>();
-        //    List<double> activePower_BList = new List<double>();
-        //    List<double> activePower_CList = new List<double>();
-        //    List<double> activePower_TotalList = new List<double>();
-        //    List<double> reactivePower_AList = new List<double>();
-        //    List<double> reactivePower_BList = new List<double>();
-        //    List<double> reactivePower_CList = new List<double>();
-        //    List<double> reactivePower_TotalList = new List<double>();
-        //    List<DateTime> times = new List<DateTime>();
-        //    if(SeriesList!=null)
-        //    {
-        //for (int i = 1; i < SeriesList.Count; i++)
-        //    {
-        //        var item0 = typeof(SmartMeterInfoModel).GetProperty("Voltage_A").GetValue(SeriesList[i]);
-        //        if (double.TryParse(item0.ToString(), out double voltage_A))
-        //        {
-        //            voltage_AList.Add(voltage_A);
-        //        }
-        //        var item1 = typeof(SmartMeterInfoModel).GetProperty("Voltage_B").GetValue(SeriesList[i]);
-        //        if (double.TryParse(item1.ToString(), out double voltage_B))
-        //        {
-        //            voltage_BList.Add(voltage_B);
-        //        }
-        //        var item2 = typeof(SmartMeterInfoModel).GetProperty("Voltage_C").GetValue(SeriesList[i]);
-        //        if (double.TryParse(item2.ToString(), out double voltage_C))
-        //        {
-        //            voltage_CList.Add(voltage_C);
-        //        }
+        private List<double[]> SmartMeterInfo(DateTime startTime, DateTime endTime)
+        {
+            ElectricMeterInfoManage SeriesManage = new ElectricMeterInfoManage();
+            var SeriesList = SeriesManage.Find(startTime, endTime);
+            List<double[]> obj = new List<double[]>();
+            // 查询电表数据
+            List<double> voltage_AList = new List<double>();
+            List<double> voltage_BList = new List<double>();
+            List<double> voltage_CList = new List<double>();
+            List<double> current_AList = new List<double>();
+            List<double> current_BList = new List<double>();
+            List<double> current_CList = new List<double>();
+            List<double> activePower_AList = new List<double>();
+            List<double> activePower_BList = new List<double>();
+            List<double> activePower_CList = new List<double>();
+            List<double> activePower_TotalList = new List<double>();
+            List<double> reactivePower_AList = new List<double>();
+            List<double> reactivePower_BList = new List<double>();
+            List<double> reactivePower_CList = new List<double>();
+            List<double> reactivePower_TotalList = new List<double>();
+            List<DateTime> times = new List<DateTime>();
+            Debug.WriteLine(SeriesList.Count,"55555555");
+            if (SeriesList != null)
+            {
+                for (int i = 1; i < SeriesList.Count; i++)
+                {
+                    var item0 = typeof(ElectricMeterInfoModel).GetProperty("Voltage_A").GetValue(SeriesList[i]);
+                    if (double.TryParse(item0.ToString(), out double voltage_A))
+                    {
+                        voltage_AList.Add(voltage_A);
+                    }
+                    var item1 = typeof(ElectricMeterInfoModel).GetProperty("Voltage_B").GetValue(SeriesList[i]);
+                    if (double.TryParse(item1.ToString(), out double voltage_B))
+                    {
+                        voltage_BList.Add(voltage_B);
+                    }
+                    var item2 = typeof(ElectricMeterInfoModel).GetProperty("Voltage_C").GetValue(SeriesList[i]);
+                    if (double.TryParse(item2.ToString(), out double voltage_C))
+                    {
+                        voltage_CList.Add(voltage_C);
+                    }
 
-        //        var item3 = typeof(SmartMeterInfoModel).GetProperty("Electric_A").GetValue(SeriesList[i]);
-        //        if (double.TryParse(item3.ToString(), out double electric_A))
-        //        {
-        //            electric_AList.Add(electric_A);
-        //        }
-        //        var item4 = typeof(SmartMeterInfoModel).GetProperty("Electric_B").GetValue(SeriesList[i]);
-        //        if (double.TryParse(item4.ToString(), out double electric_B))
-        //        {
-        //            electric_BList.Add(electric_B);
-        //        }
-        //        var item5 = typeof(SmartMeterInfoModel).GetProperty("Electric_C").GetValue(SeriesList[i]);
-        //        if (double.TryParse(item5.ToString(), out double electric_C))
-        //        {
-        //            electric_CList.Add(electric_C);
-        //        }
+                    var item3 = typeof(ElectricMeterInfoModel).GetProperty("Current_A").GetValue(SeriesList[i]);
+                    if (double.TryParse(item3.ToString(), out double current_A))
+                    {
+                        current_AList.Add(current_A);
+                    }
+                    var item4 = typeof(ElectricMeterInfoModel).GetProperty("Current_B").GetValue(SeriesList[i]);
+                    if (double.TryParse(item4.ToString(), out double current_B))
+                    {
+                        current_BList.Add(current_B);
+                    }
+                    var item5 = typeof(ElectricMeterInfoModel).GetProperty("Current_C").GetValue(SeriesList[i]);
+                    if (double.TryParse(item5.ToString(), out double current_C))
+                    {
+                        current_CList.Add(current_C);
+                    }
 
-        //        var item6 = typeof(SmartMeterInfoModel).GetProperty("ActivePower_A").GetValue(SeriesList[i]);
-        //        if (double.TryParse(item6.ToString(), out double activePower_A))
-        //        {
-        //            activePower_AList.Add(activePower_A);
-        //        }
-        //        var item7 = typeof(SmartMeterInfoModel).GetProperty("ActivePower_B").GetValue(SeriesList[i]);
-        //        if (double.TryParse(item7.ToString(), out double activePower_B))
-        //        {
-        //            activePower_BList.Add(activePower_B);
-        //        }
-        //        var item8 = typeof(SmartMeterInfoModel).GetProperty("ActivePower_C").GetValue(SeriesList[i]);
-        //        if (double.TryParse(item8.ToString(), out double activePower_C))
-        //        {
-        //            activePower_CList.Add(activePower_C);
-        //        }
-        //        var item9 = typeof(SmartMeterInfoModel).GetProperty("ActivePower_Total").GetValue(SeriesList[i]);
-        //        if (double.TryParse(item9.ToString(), out double activePower_Total))
-        //        {
-        //            activePower_TotalList.Add(activePower_Total);
-        //        }
+                    var item6 = typeof(ElectricMeterInfoModel).GetProperty("ActivePowerA").GetValue(SeriesList[i]);
+                    if (double.TryParse(item6.ToString(), out double activePowerA))
+                    {
+                        activePower_AList.Add(activePowerA);
+                    }
+                    var item7 = typeof(ElectricMeterInfoModel).GetProperty("ActivePowerB").GetValue(SeriesList[i]);
+                    if (double.TryParse(item7.ToString(), out double activePowerB))
+                    {
+                        activePower_BList.Add(activePowerB);
+                    }
+                    var item8 = typeof(ElectricMeterInfoModel).GetProperty("ActivePowerC").GetValue(SeriesList[i]);
+                    if (double.TryParse(item8.ToString(), out double activePowerC))
+                    {
+                        activePower_CList.Add(activePowerC);
+                    }
+                    var item9 = typeof(ElectricMeterInfoModel).GetProperty("ActivePower_Total").GetValue(SeriesList[i]);
+                    if (double.TryParse(item9.ToString(), out double activePower_Total))
+                    {
+                        activePower_TotalList.Add(activePower_Total);
+                    }
 
-        //        var item10 = typeof(SmartMeterInfoModel).GetProperty("ReactivePower_A").GetValue(SeriesList[i]);
-        //        if (double.TryParse(item10.ToString(), out double reactivePower_A))
-        //        {
-        //            reactivePower_AList.Add(reactivePower_A);
-        //        }
-        //        var item11 = typeof(SmartMeterInfoModel).GetProperty("ReactivePower_B").GetValue(SeriesList[i]);
-        //        if (double.TryParse(item3.ToString(), out double reactivePower_B))
-        //        {
-        //            reactivePower_BList.Add(reactivePower_B);
-        //        }
-        //        var item12 = typeof(SmartMeterInfoModel).GetProperty("ReactivePower_C").GetValue(SeriesList[i]);
-        //        if (double.TryParse(item3.ToString(), out double reactivePower_C))
-        //        {
-        //            reactivePower_CList.Add(reactivePower_C);
-        //        }
-        //        var item13 = typeof(SmartMeterInfoModel).GetProperty("ReactivePower_Total").GetValue(SeriesList[i]);
-        //        if (double.TryParse(item3.ToString(), out double reactivePower_Total))
-        //        {
-        //            reactivePower_TotalList.Add(reactivePower_Total);
-        //        }
-        //        times.Add(SeriesList[i].HappenTime);
-        //    }
-        //    }
-        //    obj.Add(voltage_AList.ToArray());
-        //    obj.Add(voltage_BList.ToArray());
-        //    obj.Add(voltage_CList.ToArray());
-        //    obj.Add(electric_AList.ToArray());
-        //    obj.Add(electric_BList.ToArray());
-        //    obj.Add(electric_CList.ToArray());
-        //    obj.Add(activePower_AList.ToArray());
-        //    obj.Add(activePower_BList.ToArray());
-        //    obj.Add(activePower_CList.ToArray());
-        //    obj.Add(activePower_TotalList.ToArray());
-        //    obj.Add(reactivePower_AList.ToArray());
-        //    obj.Add(reactivePower_BList.ToArray());
-        //    obj.Add(reactivePower_CList.ToArray());
-        //    obj.Add(reactivePower_TotalList.ToArray());
-        //    TimeList.Add(times.ToArray());
-        //    return obj;
-        //}
+                    var item10 = typeof(ElectricMeterInfoModel).GetProperty("ReactivePowerA").GetValue(SeriesList[i]);
+                    if (double.TryParse(item10.ToString(), out double reactivePowerA))
+                    {
+                        reactivePower_AList.Add(reactivePowerA);
+                    }
+                    var item11 = typeof(ElectricMeterInfoModel).GetProperty("ReactivePowerB").GetValue(SeriesList[i]);
+                    if (double.TryParse(item3.ToString(), out double reactivePowerB))
+                    {
+                        reactivePower_BList.Add(reactivePowerB);
+                    }
+                    var item12 = typeof(ElectricMeterInfoModel).GetProperty("ReactivePowerC").GetValue(SeriesList[i]);
+                    if (double.TryParse(item3.ToString(), out double reactivePowerC))
+                    {
+                        reactivePower_CList.Add(reactivePowerC);
+                    }
+                    var item13 = typeof(ElectricMeterInfoModel).GetProperty("ReactivePower_Total").GetValue(SeriesList[i]);
+                    if (double.TryParse(item3.ToString(), out double reactivePower_Total))
+                    {
+                        reactivePower_TotalList.Add(reactivePower_Total);
+                    }
+                    times.Add(SeriesList[i].HappenTime);
+                }
+            }
+            obj.Add(voltage_AList.ToArray());
+            obj.Add(voltage_BList.ToArray());
+            obj.Add(voltage_CList.ToArray());
+            obj.Add(current_AList.ToArray());
+            obj.Add(current_BList.ToArray());
+            obj.Add(current_CList.ToArray());
+            obj.Add(activePower_AList.ToArray());
+            obj.Add(activePower_BList.ToArray());
+            obj.Add(activePower_CList.ToArray());
+            obj.Add(activePower_TotalList.ToArray());
+            obj.Add(reactivePower_AList.ToArray());
+            obj.Add(reactivePower_BList.ToArray());
+            obj.Add(reactivePower_CList.ToArray());
+            obj.Add(reactivePower_TotalList.ToArray());
+            TimeList.Add(times.ToArray());
+            return obj;
+        }
 
         /// <summary>
         /// 选择数据类型
@@ -317,14 +319,18 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             InitChart();
             DisplayDataModel.Series.Clear();
+            Debug.WriteLine(DisplayDataList.Count,"66666666666");
             for (int i = 0; i < DisplayDataList.Count; i++)
             {
                 LineSeries lineSeries = new LineSeries();
                 lineSeries.Title = SelectedType.Content.ToString();
+                Debug.WriteLine(lineSeries.Title,"000000000");
                 lineSeries.MarkerSize = 3;
                 lineSeries.MarkerType = MarkerType.Circle;
                 for (int j = 0; j < DisplayDataList[i][SelectedTypeIndex].Length; j++)
                 {
+                    Debug.WriteLine(TimeList[i][j],"2222222222");
+                    Debug.WriteLine(DisplayDataList[i][SelectedTypeIndex][j], "44444444444");
                     lineSeries.Points.Add(DateTimeAxis.CreateDataPoint(TimeList[i][j], DisplayDataList[i][SelectedTypeIndex][j]));
                 }
                 DisplayDataModel.Series.Add(lineSeries);

@@ -67,21 +67,21 @@ namespace EMS.Storage.DB.DBManage
         /// <param name="StartTime">开始时间</param>
         /// <param name="EndTime">结束时间</param>
         /// <returns>数据列表</returns>
-        public List<ElectricMeterInfoModel> Find(string BCMUID, string BMUID, DateTime StartTime, DateTime EndTime)
-        {
-            try
-            {
-                using (var db = new ORMContext())
-                {
-                    var result = db.ElectricMeterInfos.Where(p => p.HappenTime >= StartTime && p.HappenTime <= EndTime).ToList();
-                    return result;
-                }
-            }
-            catch
-            {
-                return null;
-            }
-        }
+        //public List<ElectricMeterInfoModel> Find(string BCMUID, string BMUID, DateTime StartTime, DateTime EndTime)
+        //{
+        //    try
+        //    {
+        //        using (var db = new ORMContext())
+        //        {
+        //            var result = db.ElectricMeterInfos.Where(p => p.HappenTime >= StartTime && p.HappenTime <= EndTime).ToList();
+        //            return result;
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        return null;
+        //    }
+        //}
 
         public bool Insert(ElectricMeterInfoModel entity)
         {

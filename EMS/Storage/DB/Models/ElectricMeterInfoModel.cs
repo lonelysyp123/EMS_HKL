@@ -21,9 +21,11 @@ namespace EMS.Storage.DB.Models
         public double ActivePowerA { get; set; }
         public double ActivePowerB { get; set; }
         public double ActivePowerC { get; set; }
+        public double ActivePower_Total { get; set; }
         public double ReactivePowerA { get; set; }
         public double ReactivePowerB { get; set; }
         public double ReactivePowerC { get; set; }
+        public double ReactivePower_Total { get; set; }
         public DateTime HappenTime { get; set; }
 
     }

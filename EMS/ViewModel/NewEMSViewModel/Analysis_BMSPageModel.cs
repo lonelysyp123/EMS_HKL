@@ -248,15 +248,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <param name="endTime">停止时间</param>
         private List<double[]> QueryBatteryInfo(string BCMUID, string BMUID, string sort, DateTime startTime, DateTime endTime)
         {
-            Debug.WriteLine(BCMUID, "11111111");
-            Debug.WriteLine(BMUID, "222222222");
-            Debug.WriteLine(sort, "3333333");
-            Debug.WriteLine(startTime, "44444444");
-            Debug.WriteLine(endTime, "555555");
             SeriesBatteryInfoManage SeriesManage = new SeriesBatteryInfoManage();
-            //string BCMUTotal = $"BCMU({BCMUID})";
             var SeriesList = SeriesManage.Find(BCMUID, BMUID, startTime, endTime);
-
             List<double[]> obj = new List<double[]>();
             if (int.TryParse(sort, out int Sort))
             {
@@ -268,6 +261,8 @@ namespace EMS.ViewModel.NewEMSViewModel
                 List<double> temperature1List = new List<double>();
                 List<double> temperature2List = new List<double>();
                 List<DateTime> times = new List<DateTime>();
+                Debug.WriteLine(SeriesList, "0000000000");
+
                 if (SeriesList!=null)
                 {
                     for (int i = 1; i < SeriesList.Count; i++)
@@ -427,6 +422,8 @@ namespace EMS.ViewModel.NewEMSViewModel
                             {
                                 for (int j = 0; j < DisplayDataList[index - 1][SelectedTypeIndex].Length; j++)
                                 {
+                                    Debug.WriteLine(TimeList[index - 1][j],"11111111111");
+                                    Debug.WriteLine(DisplayDataList[index - 1][SelectedTypeIndex][j], "22222222");
                                     lineSeries.Points.Add(DateTimeAxis.CreateDataPoint(TimeList[index - 1][j], DisplayDataList[index - 1][SelectedTypeIndex][j]));
                                 }
                                 DisplayDataModel.Series.Add(lineSeries);

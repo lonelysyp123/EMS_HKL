@@ -131,7 +131,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// ListBox选择改变
         /// </summary>
-        public RelayCommand DataTypeList_SelectionChanged { get; private set; }
+        //public RelayCommand DataTypeList_SelectionChanged { get; private set; }
         #endregion
 
         #region List
@@ -206,6 +206,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             List<double> moduleTemp1List = new List<double>();
             List<double> envTempList = new List<double>();
             List<DateTime> times = new List<DateTime>();
+            Debug.WriteLine(SeriesList.Count,"000000000000");
             if (SeriesList != null)
             {
                 for (int i = 1; i < SeriesList.Count; i++)
@@ -281,6 +282,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                 lineSeries.MarkerType = MarkerType.Circle;
                 for (int j = 0; j < DisplayDataList[i][SelectedTypeIndex].Length; j++)
                 {
+                    Debug.WriteLine(DisplayDataList[i][SelectedTypeIndex][j],"111111111111111");
                     lineSeries.Points.Add(DateTimeAxis.CreateDataPoint(TimeList[i][j], DisplayDataList[i][SelectedTypeIndex][j]));
                 }
                 DisplayDataModel.Series.Add(lineSeries);
