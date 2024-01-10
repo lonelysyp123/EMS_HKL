@@ -90,7 +90,7 @@ namespace EMS.Service
                     byte[] SerialNumber = ReadFunc(53579, 15);
                     CurrentModel = DataDecode(dcState, pcsData, Temp, DCBranch1INFO, SerialNumber);
                     OnChangeData(this, CurrentModel.Clone());
-                    Models.Add(CurrentModel.Clone() as PCSModel);
+                    Models.TryAdd(CurrentModel.Clone() as PCSModel);
                     if (IsSaveDaq)
                     {
                         SaveData(CurrentModel);

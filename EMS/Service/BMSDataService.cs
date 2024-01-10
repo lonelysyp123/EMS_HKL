@@ -106,7 +106,7 @@ namespace EMS.Service
 
                     CurrentModel = DataDecode(BCMUData, BCMUStateData, BMUIDData, BMUData, BMUStateData);
                     OnChangeData(this, CurrentModel.Clone());
-                    Models.Add(CurrentModel.Clone() as BatteryTotalModel);
+                    Models.TryAdd(CurrentModel.Clone() as BatteryTotalModel);
                     if (IsSaveDaq)
                     {
                         SaveData(CurrentModel);

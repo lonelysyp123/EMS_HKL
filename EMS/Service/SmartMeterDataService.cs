@@ -120,7 +120,7 @@ namespace EMS.Service
 
                     CurrentModel = model;
                     OnChangeData(this, CurrentModel.Clone());
-                    Models.Add(CurrentModel.Clone() as SmartMeterModel);
+                    Models.TryAdd(CurrentModel.Clone() as SmartMeterModel);
                     if (IsSaveDaq)
                     {
                         SaveData(CurrentModel);
