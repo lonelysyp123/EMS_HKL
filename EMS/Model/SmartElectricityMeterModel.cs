@@ -32,15 +32,15 @@ namespace EMS.Model
         /// <summary>
         /// 电压
         /// </summary>
-        public double Voltage { get; set; }
+        public float Voltage { get; set; }
         /// <summary>
         /// 电流
         /// </summary>
-        public double Current { get; set; }
+        public float Current { get; set; }
         /// <summary>
         /// 功率
         /// </summary>
-        public double Power { get; set; }
+        public float Power { get; set; }
         /// <summary>
         /// 总正向有功电能
         /// </summary>
@@ -122,5 +122,9 @@ namespace EMS.Model
         /// </summary>
         public double CurrMonthValleyReverseActiveEnergy { get; set; }
 
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 }

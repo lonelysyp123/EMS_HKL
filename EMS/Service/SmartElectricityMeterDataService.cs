@@ -19,6 +19,9 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
+using OxyPlot;
+using System.Windows.Markup;
 
 namespace EMS.Service
      
@@ -95,8 +98,145 @@ namespace EMS.Service
             }
         }
 
+        // CS校验不计算0xFE, 0xFE, 0xFE, 0xFE
+        byte[] Request_GetVoltage_A = new byte[] { 0x68, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x68, 0x11, 0x04, 0x02, 0x01, 0x01, 0x00, 0xA4, 0x16 };
+        byte[] Response_GetVoltage_A = new byte[] { 0xFE, 0xFE, 0xFE, 0xFE, 0x68, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x68, 0x91, 0x08, 0x33, 0x33, 0x33, 0x33, 0x00, 0x00, 0x00, 0x00, 0x44, 0x16 };
+        byte[] Request_GetVoltage_B = new byte[0];
+        byte[] Response_GetVoltage_B = new byte[0];
+        protected override void DaqDataTh()
+        {
+            while (IsConnected && IsDaqData)
+            {
+                try
+                {
+                    Thread.Sleep(DaqTimeSpan * 500);
+                    // 采集数据
+                    SmartElectricityMeterModel model = new SmartElectricityMeterModel();
+                    var Data_Voltage_A = ReadDataForCmd(Request_GetVoltage_A, Response_GetVoltage_A.Length);
+                    if (DataDecode(Data_Voltage_A, Response_GetVoltage_A, out int Voltage_A))
+                    {
+                        model.Voltage_A = Voltage_A;
+                    }
 
+                    var Data_Voltage_B = ReadDataForCmd(Request_GetVoltage_B, Response_GetVoltage_B.Length);
+                    if (DataDecode(Data_Voltage_A, Response_GetVoltage_A, out int Voltage_B))
+                    {
+                        model.Voltage_B = Voltage_B;
+                    }
 
+                    CurrentModel = model;
+                    OnChangeData(this, CurrentModel.Clone());
+                    Models.Add(CurrentModel.Clone() as SmartElectricityMeterModel);
+                    if (IsSaveDaq)
+                    {
+                        SaveData(CurrentModel);
+                    }
+                }
+                catch (Exception)
+                {
+                    break;
+                }
+            }
+        }
+
+        private void SaveData(SmartElectricityMeterModel model)
+        {
+            // 电表存储相关操作
+        }
+
+        private byte[] ReadDataForCmd(byte[] Request, int num)
+        {
+            try
+            {
+                var readBytes = new byte[num];
+                SerialPortInstance.Write(Request, 0, Request.Length);
+                SerialPortInstance.Read(readBytes, 0, num);
+                return readBytes;
+            }
+            catch (InvalidOperationException)
+            {
+                //串口断开，尝试重连
+                if (!SerialPortInstance.IsOpen && !IsCommunicationProtectState)
+                {
+                    if (CommunicationCheck())
+                    {
+                        var readBytes = new byte[num];
+                        SerialPortInstance.Write(Request, 0, Request.Length);
+                        SerialPortInstance.Read(readBytes, 0, num);
+                        return readBytes;
+                    }
+                }
+            }
+            return new byte[num];
+        }
+
+        private bool CommunicationCheck()
+        {
+            int count = 0;
+            while (true)
+            {
+                try
+                {
+                    SerialPortInstance.Open();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    count++;
+                    if (count > maxReconnectTimes)
+                    {
+                        IsCommunicationProtectState = true;
+                        IsConnected = false;
+                        Thread CommunicationProtectTr = new Thread(CommunicationProtect);
+                        CommunicationProtectTr.IsBackground = true;
+                        CommunicationProtectTr.Start();
+                        return false;
+                    }
+                }
+            }
+        }
+
+        private void CommunicationProtect()
+        {
+            while (!IsConnected)
+            {
+                Thread.Sleep(reconnectIntervalLong);
+                try
+                {
+                    SerialPortInstance.Open();
+                    IsConnected = true;
+                    LogUtils.Debug("保护机制重连成功，" + DevType + " ID:" + ID + "上线");
+                }
+                catch (Exception)
+                {
+                    LogUtils.Debug("保护机制重连失败, " + DevType + " ID:" + ID + "下线");
+                }
+            }
+        }
+
+        private bool DataDecod(byte[] data, byte[] model, out int value)
+        {
+            if (CheckData(model, data))
+            {
+                byte[] bf = new byte[] { data[data.Length - 6], data[data.Length - 5], data[data.Length - 4], data[data.Length - 3] };
+                value = BitConverter.ToInt32(bf, 0);
+                return true;
+            }
+            value = 0;
+            return false;
+        }
+
+        private SmartElectricityMeterModel DataDecode(byte[] semdata)
+        {
+            SmartElectricityMeterModel item = new SmartElectricityMeterModel();
+            if(semdata != null)
+            {
+                item.Voltage = BitConverter.ToInt32(semdata, 0);
+                item.Current = BitConverter.ToInt32(semdata, 4);
+                item.Power = BitConverter.ToInt32(semdata, 8);
+
+            }
+        }
 
         private byte[] ReadFunc(ushort address, ushort num)
         {
@@ -115,7 +255,7 @@ namespace EMS.Service
             catch (Exception ex)
             {
                 LogUtils.Warn(DevType + " ID:" + ID + "读取数据失败", ex);
-                if (!IsConnected && !IsCommunicationProtectState)
+                if (IsConnected && !IsCommunicationProtectState)
                 {
                     if (CommunicationCheck())
                     {
@@ -125,6 +265,27 @@ namespace EMS.Service
                 return new byte[num * 2];
             }
         }
+
+        public byte[] ReadTotalPrimaryEnergyInfo()
+        {
+            return ReadFunc(12, 2);
+        }
+
+        public byte[] ReadDCBaseInfo()
+        {
+            return ReadFunc(50, 3);
+        }
+
+        public byte[] ReadActiveEnergyInfo()
+        {
+            return ReadFunc(2000, 10);
+        }
+
+        public byte[] ReadReverseActiveEnergyInfo()
+        {
+            return ReadFunc(2140, 10);
+        }
+
 
         public enum SmartEleMeterCommandAddressEnum
         {
