@@ -83,7 +83,7 @@ namespace EMS.Service
                 {
                     Thread.Sleep(DaqTimeSpan * 1000 + 100);
 
-                    byte[] BCMUData = new byte[48];
+                    byte[] BCMUData = new byte[52];
                     Array.Copy(ReadFunc(361, 26), 0, BCMUData, 0, 52);
                     //Array.Copy(ReadFunc(405, 1), 0, BCMUData, 48, 2);
                     byte[] BMUIDData = { 0 };
@@ -106,7 +106,7 @@ namespace EMS.Service
 
                     CurrentModel = DataDecode(BCMUData, BCMUStateData, BMUIDData, BMUData, BMUStateData);
                     OnChangeData(this, CurrentModel.Clone());
-                    Models.Add(CurrentModel.Clone() as BatteryTotalModel);
+                    Models.TryAdd(CurrentModel.Clone() as BatteryTotalModel);
                     if (IsSaveDaq)
                     {
                         SaveData(CurrentModel);
