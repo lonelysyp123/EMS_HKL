@@ -106,6 +106,7 @@ namespace EMS.Model
             _pcs_manager =new PCSManager();
             _smart_meter_manager = new SmartMeterManager();
             mqttClientManager = new MqttClientManager();
+            _configuration = new IniFileHelper("./Config/SystemConfig.ini");
         }
 
         public void Initialization(object _pcs_manager, object _smart_meter_manager, object _database_manager, object _cloud_manager)
