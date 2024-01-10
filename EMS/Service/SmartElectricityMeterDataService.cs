@@ -22,10 +22,10 @@ using System.Xml.Linq;
 
 namespace EMS.Service
 {
-    public class SmartElectricityMeter: DataServiceBase<SmartElectricityMeterModel>
+    public class SmartElectricityMeterDataService : DataServiceBase<SmartElectricityMeterModel>
     {
         private SerialPort SerialPortInstance;
-        //private Configuaration Configuaration;
+        private Configuaration Configuaration;
         private ModbusMaster _master;
 
         public SmartElectricityMeterDataService(string id)
@@ -40,8 +40,8 @@ namespace EMS.Service
             while (!IsConnected)
             {
                 // 从数据库中获取链接信息
-                SmartMeterManage smConfigInfo = new SmartMeterManage();
-                var items = smConfigInfo.Get();
+                SmartMeterManage semConfigInfo = new SmartMeterManage();
+                var items = semConfigInfo.Get();
                 if (items != null && items.Count > 0)
                 {
                     var item = items.Find(x => x.Id.ToString() == ID);
