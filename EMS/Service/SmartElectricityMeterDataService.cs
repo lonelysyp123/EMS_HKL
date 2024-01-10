@@ -129,16 +129,16 @@ namespace EMS.Service
         public enum SmartEleMeterCommandAddressEnum
         {
             [Description("总正向一次侧电能")]
-            SEMTotalForwardPrimaryEnergy = 12,
+            SEMTotalForwardPrimaryEnergy = 12,//读4个字节，高字节在前，低字节在后
             [Description("总反向一次侧电能")]
             SEMTotalReversePrimaryEnergy = 14,
-            [Description("电压")]
+            [Description("电压")]//float
             SEMVoltage = 50,
-            [Description("电流")]
+            [Description("电流")]//float
             SEMCurrent = 52,
-            [Description("功率")]
+            [Description("功率")]//float
             SEMPower = 54,
-            [Description("总正向有功电能")]
+            [Description("总正向有功电能")]//读4个字节，高字节在前，低字节在后
             SEMTotal = 2000,
             [Description("总尖正向有功电能")]
             SEMTotalSpikes = 2002,
