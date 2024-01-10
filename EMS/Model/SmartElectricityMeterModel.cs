@@ -12,15 +12,15 @@ namespace EMS.Model
         /// <summary>
         /// 直流电压
         /// </summary>
-        public double DcVoltage { get; set; }
+        //public double DcVoltage { get; set; }
         /// <summary>
         /// 直流电流
         /// </summary>
-        public double DcCurrent { get; set; }
+        //public double DcCurrent { get; set; }
         /// <summary>
         /// 功率值
         /// </summary>
-        public double PowerValue { get; set; }
+        //public double PowerValue { get; set; }
         /// <summary>
         /// 总正向一次侧电能
         /// </summary>

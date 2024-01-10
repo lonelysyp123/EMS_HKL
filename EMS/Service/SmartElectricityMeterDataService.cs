@@ -21,6 +21,7 @@ using System.Net.Sockets;
 using System.Xml.Linq;
 
 namespace EMS.Service
+     
 {
     public class SmartElectricityMeterDataService : DataServiceBase<SmartElectricityMeterModel>
     {
@@ -40,7 +41,7 @@ namespace EMS.Service
             while (!IsConnected)
             {
                 // 从数据库中获取链接信息
-                SmartMeterManage semConfigInfo = new SmartMeterManage();
+                SmartElectricityMeterManage semConfigInfo = new SmartElectricityMeterManage();
                 var items = semConfigInfo.Get();
                 if (items != null && items.Count > 0)
                 {
@@ -114,7 +115,7 @@ namespace EMS.Service
             catch (Exception ex)
             {
                 LogUtils.Warn(DevType + " ID:" + ID + "读取数据失败", ex);
-                if (!_client.Connected && !IsCommunicationProtectState)
+                if (!IsConnected && !IsCommunicationProtectState)
                 {
                     if (CommunicationCheck())
                     {

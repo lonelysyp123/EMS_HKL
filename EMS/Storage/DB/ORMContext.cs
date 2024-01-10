@@ -37,9 +37,13 @@ namespace EMS.Storage.DB
         }
 
         /// <summary>
-        /// MQTT
+        /// 负荷跟踪电表
         /// </summary>
         public DbSet<SmartMeterDBModel> SmartMeterModels { get; set; }
+        /// <summary>
+        /// 电量计量电表
+        /// </summary>
+        public DbSet<SmartElectricityMeterDBModel> SmartElectricityMeterModels { get; set; }
 
         /// <summary>
         /// MQTT

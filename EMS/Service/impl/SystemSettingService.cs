@@ -1,4 +1,5 @@
-﻿using EMS.Storage.DB.DBManage;
+﻿using EMS.Model;
+using EMS.Storage.DB.DBManage;
 using EMS.Storage.DB.Models;
 using System;
 using System.Collections.Generic;
@@ -141,6 +142,12 @@ namespace EMS.Service.impl
             return smartMeterManage.Get();
         }
 
+        public List<SmartElectricityMeterDBModel> GetSmartElectricityMeterList()
+        {
+            SmartElectricityMeterManage smartElectricityMeterManage = new SmartElectricityMeterManage();
+            return smartElectricityMeterManage.Get();
+        }
+
         public bool AddSmartMeter(int id, string selectedCommPort, int selectedBaudRate, int selectedStopBits, int selectedDataBits, int selectedParity, int acquisitionCycle)
         {
             try
@@ -171,6 +178,46 @@ namespace EMS.Service.impl
                 else
                 {
                     smartMeterManage.Insert(smartMeterDBModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool AddElectricitySmartMeter(int id, string selectedCommPort, int selectedBaudRate, int selectedStopBits, int selectedDataBits, int selectedParity, int acquisitionCycle)
+        {
+            try
+            {
+                SmartElectricityMeterDBModel smartElectricityMeterDBModel = new SmartElectricityMeterDBModel();
+                smartElectricityMeterDBModel.Id = id;
+                smartElectricityMeterDBModel.SelectedCommPort = selectedCommPort;
+                smartElectricityMeterDBModel.SelectedBaudRate = selectedBaudRate;
+                smartElectricityMeterDBModel.SelectedStopBits = selectedStopBits;
+                smartElectricityMeterDBModel.SelectedDataBits = selectedDataBits;
+                smartElectricityMeterDBModel.SelectedParity = selectedParity;
+                smartElectricityMeterDBModel.AcquisitionCycle = acquisitionCycle;
+
+                SmartElectricityMeterManage smartElectricityMeterManage = new SmartElectricityMeterManage();
+                List<SmartElectricityMeterDBModel> smartElectricityMeterDBModels = smartElectricityMeterManage.Get();
+                if (smartElectricityMeterDBModels != null && smartElectricityMeterDBModels.Count > 0)
+                {
+                    SmartElectricityMeterDBModel smartElectricityMeterDBModel1 = smartElectricityMeterDBModels.Find(item => item.Id == id);
+                    if (smartElectricityMeterDBModel1 == null)
+                    {
+                        smartElectricityMeterManage.Insert(smartElectricityMeterDBModel);
+                    }
+                    else
+                    {
+                        smartElectricityMeterManage.Update(smartElectricityMeterDBModel);
+                    }
+                }
+                else
+                {
+                    smartElectricityMeterManage.Insert(smartElectricityMeterDBModel);
                 }
             }
             catch (Exception ex)

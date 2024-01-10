@@ -382,6 +382,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
+        //负荷跟踪表
         private bool _isEnabled_Ammeter;
 
         public bool IsEnabled_Ammeter
@@ -390,6 +391,16 @@ namespace EMS.ViewModel.NewEMSViewModel
             set
             {
                 SetProperty(ref _isEnabled_Ammeter, value);
+            }
+        }
+        //计量电表
+        private bool _isEnabled_Bmmeter;
+        public bool IsEnabled_Bmmeter
+        {
+            get => _isEnabled_Bmmeter;
+            set
+            {
+                SetProperty(ref _isEnabled_Bmmeter, value);
             }
         }
 
@@ -436,6 +447,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         public RelayCommand BMSConfigCommand { get; private set; }
         public RelayCommand PCSConfigCommand { get; private set; }
         public RelayCommand SmartMeterConfigCommand { get; private set; }
+        public RelayCommand SmartElectricityMeterConfigCommand { get; private set; }
         public RelayCommand TimeCollatingCommand { get; private set; }
         public RelayCommand DevDataPointConfigCommand { get; private set; }
         
@@ -449,6 +461,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             BMSConfigCommand = new RelayCommand(BMSConfig);
             PCSConfigCommand = new RelayCommand(PCSConfig);
             SmartMeterConfigCommand = new RelayCommand(SmartMeterConfig);
+            SmartElectricityMeterConfigCommand = new RelayCommand(SmartElectricityMeterConfig);
             TimeCollatingCommand = new RelayCommand(TimeCollating);
             DevDataPointConfigCommand = new RelayCommand(DevDataPointConfig);
             SystemSettingService = new SystemSettingService();
@@ -460,10 +473,12 @@ namespace EMS.ViewModel.NewEMSViewModel
             InitBMS();
             InitPcs();
             InitSmartMeter();
+            InitSmartElectricityMeter();
 
             IsEnabled_BMS = true;
             IsEnabled_PCS = true;
             IsEnabled_Ammeter = true;
+            IsEnabled_Bmmeter = true;
         }
 
         private void InitPcs() 
@@ -550,6 +565,20 @@ namespace EMS.ViewModel.NewEMSViewModel
                 AcquisitionCycle_Ammeter = smartMeterDBModel.AcquisitionCycle;
             }
         }
+        private void InitSmartElectricityMeter()
+        {
+            List<SmartElectricityMeterDBModel> smartElectricityMeterDBModels = SystemSettingService.GetSmartElectricityMeterList();
+            if (smartElectricityMeterDBModels != null && smartElectricityMeterDBModels.Count > 0)
+            {
+                SmartElectricityMeterDBModel smartElectricityMeterDBModel = smartElectricityMeterDBModels.Find(item => item.Id == 1);
+                SelectedCommPort = smartElectricityMeterDBModel.SelectedCommPort;
+                SelectedBaudRate = smartElectricityMeterDBModel.SelectedBaudRate;
+                SelectedStopBits = (StopBits)smartElectricityMeterDBModel.SelectedStopBits;
+                SelectedDataBits = smartElectricityMeterDBModel.SelectedDataBits;
+                selectedParity = (Parity)smartElectricityMeterDBModel.SelectedParity;
+                AcquisitionCycle_Ammeter = smartElectricityMeterDBModel.AcquisitionCycle;
+            }
+        }
 
         private void BMSConfig()
         {
@@ -569,6 +598,11 @@ namespace EMS.ViewModel.NewEMSViewModel
         private void SmartMeterConfig()
         {
             SystemSettingService.AddSmartMeter(1, SelectedCommPort, SelectedBaudRate, System.Convert.ToInt32(SelectedStopBits), SelectedDataBits, System.Convert.ToInt32(SelectedParity), AcquisitionCycle_Ammeter);
+        }
+
+        private void SmartElectricityMeterConfig()
+        {
+            SystemSettingService.AddElectricitySmartMeter(1, SelectedCommPort, SelectedBaudRate, System.Convert.ToInt32(SelectedStopBits), SelectedDataBits, System.Convert.ToInt32(SelectedParity), AcquisitionCycle_Ammeter);
         }
 
         private void TimeCollating()
