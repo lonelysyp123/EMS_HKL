@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using EMS.Api;
 using EMS.Model;
 using System;
 using System.Collections.Generic;
@@ -340,15 +342,17 @@ namespace EMS.ViewModel.NewEMSViewModel
         #endregion
 
         #region Command
-
+     
 
 
         #endregion
 
         public HomePageModel()
         {
-
+            
         }
+
+     
 
         /// <summary>
         /// BMS数据展示

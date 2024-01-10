@@ -260,41 +260,49 @@ namespace EMS.Common.StrategyManage
         {
             if (!_hasContigencyCheckEnabled) return; //未启用则直接return
             ///获取全部故障告警
-            List<string> bmsErrors = StrategyManager.Instance.GetBMSAlarmandFaultInfo();
+            bool bmsfault = false;
+            int bmsalarm = 0;
+            var bmsresult = BmsApi.GetTotalAlarmInfo();
+            bmsfault = bmsresult.Item2;
+            bmsalarm = bmsresult.Item1;
+
             List<string> pcsErrors = PcsApi.GetPCSFaultInfo();
             List<string> systemErrors = StrategyManager.Instance.GetSystemErrors();
 
-            List<int> levels = new List<int>();//等级数组
-            ///如果PCS没故障
-            if (pcsErrors.Count == 0 && systemErrors.Count == 0)
+            
+            
+            if (pcsErrors.Count == 0 && systemErrors.Count == 0&&(!bmsfault))
             {
-                if (bmsErrors.Count > 0)
+               if(bmsalarm==0)
                 {
-                    foreach (var error in bmsErrors)
+                    _contingencyStatus = ContingencyStatusEnum.Normal; //全没故障
+                }else 
+                 {
+                    switch (bmsalarm) //bmsalarm有
                     {
-                        if (error.Contains("异常") && (error.Contains("三级保护")))
-                        {
-                            levels.Add(3);
-                            PcsApi.SetPCSHalt();
-                        }
-                        else if (error.Contains("二级保护"))
-                        {
-                            BessCommand bessCommand = new BessCommand(0, BatteryStrategyEnum.Standby);
-                            PcsApi.SendPcsCommand(bessCommand);
-                            levels.Add(2);
-                        }
-                        else if (error.Contains("一级保护"))
-                        {
-                            levels.Add(1);
-                        }
+                        case 1:
+                            {
+                                _contingencyStatus = ContingencyStatusEnum.Level1;
+                            }
+                            break;
+                        case 2:
+                            {
+                                _contingencyStatus = ContingencyStatusEnum.Level2;
+                            }
+                            break;
+                        case 3:
+                            {
+                                _contingencyStatus = ContingencyStatusEnum.Level3;
+                            }
+                            break;
+
                     }
-                }
+                  }
             }
-            else //如果pcs有故障
+            else   //有故障
             {
-                levels.Add(3);
-            }
-            _contingencyStatus = (ContingencyStatusEnum)(levels.Max());
+                _contingencyStatus = ContingencyStatusEnum.Level3;
+            }                   
             BessCommand command = new BessCommand(0, BatteryStrategyEnum.Standby);
             switch (_contingencyStatus)
             {

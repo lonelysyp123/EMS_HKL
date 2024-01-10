@@ -114,65 +114,93 @@ namespace EMS.Api
         /// 得到BMS所有告警故障信息
         /// </summary>
         /// <returns></returns>
-        public static List<string> GetTotalAlarmInfo()
+        public static (int,bool) GetTotalAlarmInfo()
         {
             List<BMSDataService> services = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices;//获取所有电池数据
-            Dictionary<int,List<int>> TotalAlarmInfo = new Dictionary<int, List<int>> ();
+            List<int>alarmLevel = new List<int>();
+            List<bool>faultState = new List<bool>();
+            int alarmTotalLevel = 0;
+            bool faultTotalState = false;
             Dictionary<int,List<int>>TotalFaultInfo = new Dictionary<int, List<int>> ();
-           for(int i = 0; i < services.Count; i++)
+           
+            for (int i = 0; i < services.Count; i++)
             {
-                int alarmLevel = 0;
-              var item = services[i].GetCurrentData();
-                int alarmflag1 = item.AlarmStateBCMUFlag1;
-                int alarmFlag2 = item.AlarmStateBCMUFlag2;
-                int alarmFlag3 = item.AlarmStateBCMUFlag3;
-                int alarmLevel1 = 0;
-                if (((alarmflag1 >> 8) & 0xFF) != 0)
+                if (services[i].IsConnected)
                 {
-                    alarmLevel1 = 3;
-                }
-                else
-                {
-                    alarmLevel1 = 0;
-                }
+                    var item = services[i].GetCurrentData();
+                    int alarmflag1 = item.AlarmStateBCMUFlag1;
+                    int alarmFlag2 = item.AlarmStateBCMUFlag2;
+                    int alarmFlag3 = item.AlarmStateBCMUFlag3;
+                    int faultFlag = item.FaultStateBCMUTotalFlag;
+                    if ((faultFlag & 1) == 1)
+                    {
+                        faultState.Add(true);
+                    }
+                    else
+                    {
+                        faultState.Add(false);
+                    }
 
-                int alarmLevel21 = 0;
-                if((alarmFlag2&0xFF)!= 0)
-                {
-                    alarmLevel21 = 2;
+                    int alarmLevel1 = 0;
+                    if (((alarmflag1 >> 8) & 0xFF) != 0)
+                    {
+                        alarmLevel1 = 3;
+                    }
+                    else
+                    {
+                        alarmLevel1 = 0;
+                    }
 
+                    int alarmLevel21 = 0;
+                    if ((alarmFlag2 & 0xFF) != 0)
+                    {
+                        alarmLevel21 = 2;
+
+                    }
+                    else
+                    {
+                        alarmLevel21 = 0;
+                    }
+                    int alarmflag22 = (alarmFlag2 >> 8) & 0xFF;
+                    List<int> alarmlevel22List = new List<int>();
+                    int alarmLevel22 = 0;
+                    for (int j = 8; j < 16; j += 2)
+                    {
+                        int twoBitValue = (alarmflag22 >> j) & 0x3;
+                        alarmlevel22List.Add(twoBitValue);
+                    }
+                    alarmLevel22 = alarmlevel22List.Max();
+                    int alarmLevel2 = Math.Max(alarmLevel21, alarmLevel22);
+                    int alarmLevel3 = 0;
+                    List<int> alarmlevel3List = new List<int>();
+                    for (int j = 0; j < 16; j += 2)
+                    {
+                        int twoBitValue = (alarmFlag3 >> j) & 0x3;
+                        alarmlevel3List.Add(twoBitValue);
+                    }
+                    alarmLevel3 = alarmlevel3List.Max();
+                    alarmLevel2 = Math.Max(alarmLevel2, alarmLevel1);
+                    alarmLevel3 = Math.Max(alarmLevel3, alarmLevel2);
+                    alarmLevel.Add(alarmLevel3);
                 }
-                else
-                {
-                    alarmLevel21 = 0;
-                }
-                int alarmflag22 = (alarmFlag2 >> 8) & 0xFF;
+            }
+              
+                
+            alarmTotalLevel = alarmLevel.Max();
+            if (faultState.Contains(true))
+            {
+                faultTotalState = true;
 
             }
+            else
+            {
+                faultTotalState =false;
+            }
+            return (alarmTotalLevel, faultTotalState);
 
-
-
-
-               
         }
 
-        private static List<string> GetActiveFaultyBMU(int flag)
-        {
-            int Value = flag;
-            List<string> INFO = new List<string>();
-            if ((Value & 0x0001) != 0) { INFO.Add("电压传感器异常");  } //bit0
-            if ((Value & 0x0002) != 0) { INFO.Add("温度传感器异常");  }  //bit1
-            if ((Value & 0x0004) != 0) { INFO.Add("内部通讯故障");  }  //bit2
-            if ((Value & 0x0008) != 0) { INFO.Add("输入过压故障");  }  //bit3
-            if ((Value & 0x0010) != 0) { INFO.Add("输入反接故障");  }  //bit4
-            if ((Value & 0x0020) != 0) { INFO.Add("继电器故障");  } //bit5
-            if ((Value & 0x0040) != 0) { INFO.Add("电池损坏故障");  } //bit6
-            if ((Value & 0x0080) != 0) { INFO.Add("关机电路异常");  } //bit7
-            if ((Value & 0x0100) != 0) { INFO.Add("BMIC异常");  } //bit8
-            if ((Value & 0x0200) != 0) { INFO.Add("内部总线异常");  } //bit9
-            if ((Value & 0x0400) != 0) { INFO.Add("开机自检异常");  } //bit10
-            return INFO;
-        }
+        
 
         /// <summary>
         /// 所有SOC、最大最小平均SOC

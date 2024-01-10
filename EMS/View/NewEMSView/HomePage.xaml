@@ -327,6 +327,7 @@
                                        Style="{StaticResource NormalTextblockstyle}"></TextBlock>
                             <TextBlock Text="%"
                                        Style="{StaticResource NormalTextblockstyle}"></TextBlock>
+                          
                         </StackPanel>
                     </Grid>
                 </Border>
