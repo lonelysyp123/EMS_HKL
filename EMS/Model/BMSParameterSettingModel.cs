@@ -16,6 +16,7 @@ namespace EMS.Model
         public double ClusterVolUpLimitLv2 {  get; set; }
         public double ClusterVolUpLimitLv3 { get; set; }
 
+        public BMSParameterSettingModel() { }
         /// <summary>
         /// 组端电压下限
         /// </summary>

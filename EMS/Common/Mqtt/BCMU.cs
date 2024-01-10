@@ -149,6 +149,15 @@ namespace TNCN.EMS.Common.Mqtt
         }
         public BCMU(BatteryTotalModel batteryTotalModel) {
             this.bmus = new List<BMU>();
+            if (batteryTotalModel.BCMUID == null)
+            {
+                this.id = 0;
+            }
+            else {
+                this.id = int.Parse(batteryTotalModel.BCMUID);
+            }
+            
+            Console.WriteLine(batteryTotalModel.BCMUID);
             this.state = batteryTotalModel.StateBCMU;
             this.cl_batt_max_volt = batteryTotalModel.TotalVoltage;
             this.cl_group_curr = batteryTotalModel.TotalCurrent;
