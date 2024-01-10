@@ -17,6 +17,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Markup;
 using System.Windows.Media.Animation;
 using System.Windows;
+using System.Diagnostics;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
@@ -134,7 +135,6 @@ namespace EMS.ViewModel.NewEMSViewModel
         #endregion
 
         #region List
-        public List<string> SelectedPCSList;
         /// <summary>
         /// 查询数据集合
         /// </summary>
@@ -156,7 +156,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             QueryCommand = new RelayCommand(Query);
             DisplayDataModel = new PlotModel();
             DisplayDataList = new List<List<double[]>>();
-            SelectedPCSList = new List<string>();
             //DataTypeList_SelectionChanged = new RelayCommand(SwitchPCSData);
 
         }
@@ -168,10 +167,10 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             DisplayDataList.Clear();
             TimeList.Clear();
-            
+
             if (TryCombinTime(StartTime1, StartTime2, out DateTime StartTime) && TryCombinTime(EndTime1, EndTime2, out DateTime EndTime))
             {
-                DisplayDataList.Add(PCSInfo( StartTime, EndTime));
+                DisplayDataList.Add(PCSInfo(StartTime, EndTime));
             }
             else
             {
@@ -193,21 +192,22 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// </summary>
         /// <param name="startTime">开始时间</param>
         /// <param name="endTime">停止时间</param>
-        private List<double[]> PCSInfo( DateTime startTime, DateTime endTime)
+        private List<double[]> PCSInfo(DateTime startTime, DateTime endTime)
         {
             PCSInfoManage SeriesManage = new PCSInfoManage();
-            var SeriesList = SeriesManage.Find( startTime, endTime);
+            var SeriesList = SeriesManage.Find(startTime, endTime);
             List<double[]> obj = new List<double[]>();
-
-                // 查询PCS数据
-                List<double> dcPowerList = new List<double>();
-                List<double> dcVolList = new List<double>();
-                List<double> dcCurrentList = new List<double>();
-                List<double> totalCharCapList = new List<double>();
-                List<double> busVolList = new List<double>();
-                List<double> moduleTemp1List = new List<double>();
-                List<double> envTempList = new List<double>();
-                List<DateTime> times = new List<DateTime>();
+            // 查询PCS数据
+            List<double> dcPowerList = new List<double>();
+            List<double> dcVolList = new List<double>();
+            List<double> dcCurrentList = new List<double>();
+            List<double> totalCharCapList = new List<double>();
+            List<double> busVolList = new List<double>();
+            List<double> moduleTemp1List = new List<double>();
+            List<double> envTempList = new List<double>();
+            List<DateTime> times = new List<DateTime>();
+            if (SeriesList != null)
+            {
                 for (int i = 1; i < SeriesList.Count; i++)
                 {
                     var item0 = typeof(PCSInfoModel).GetProperty("DCPower").GetValue(SeriesList[i]);
@@ -253,14 +253,15 @@ namespace EMS.ViewModel.NewEMSViewModel
                     }
                     times.Add(SeriesList[i].HappenTime);
                 }
-                obj.Add(dcPowerList.ToArray());
-                obj.Add(dcVolList.ToArray());
-                obj.Add(dcCurrentList.ToArray());
-                obj.Add(totalCharCapList.ToArray());
-                obj.Add(busVolList.ToArray());
-                obj.Add(moduleTemp1List.ToArray());
-                obj.Add(envTempList.ToArray());
-                TimeList.Add(times.ToArray());
+            }
+            obj.Add(dcPowerList.ToArray());
+            obj.Add(dcVolList.ToArray());
+            obj.Add(dcCurrentList.ToArray());
+            obj.Add(totalCharCapList.ToArray());
+            obj.Add(busVolList.ToArray());
+            obj.Add(moduleTemp1List.ToArray());
+            obj.Add(envTempList.ToArray());
+            TimeList.Add(times.ToArray());
             return obj;
         }
 
@@ -272,29 +273,17 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             InitChart();
             DisplayDataModel.Series.Clear();
-            for (int i = 0; i < SelectedPCSList.Count; i++)
+            for (int i = 0; i < DisplayDataList.Count; i++)
             {
                 LineSeries lineSeries = new LineSeries();
-                lineSeries.Title = SelectedPCSList[i];
+                lineSeries.Title = SelectedType.Content.ToString();
                 lineSeries.MarkerSize = 3;
                 lineSeries.MarkerType = MarkerType.Circle;
-                if (int.TryParse(SelectedPCSList[i], out int index))
+                for (int j = 0; j < DisplayDataList[i][SelectedTypeIndex].Length; j++)
                 {
-                    if (DisplayDataList.Count > 0 && DisplayDataList.Count > index - 1)
-                    {
-                        if (DisplayDataList[index - 1].Count > 0)
-                        {
-                            if (DisplayDataList[index - 1][SelectedTypeIndex].Length > 0)
-                            {
-                                for (int j = 0; j < DisplayDataList[index - 1][SelectedTypeIndex].Length; j++)
-                                {
-                                    lineSeries.Points.Add(DateTimeAxis.CreateDataPoint(TimeList[index - 1][j], DisplayDataList[index - 1][SelectedTypeIndex][j]));
-                                }
-                                DisplayDataModel.Series.Add(lineSeries);
-                            }
-                        }
-                    }
+                    lineSeries.Points.Add(DateTimeAxis.CreateDataPoint(TimeList[i][j], DisplayDataList[i][SelectedTypeIndex][j]));
                 }
+                DisplayDataModel.Series.Add(lineSeries);
             }
             DisplayDataModel.InvalidatePlot(true);
         }

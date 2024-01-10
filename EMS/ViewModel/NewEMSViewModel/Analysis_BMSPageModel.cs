@@ -17,6 +17,8 @@ using System.Collections.ObjectModel;
 using System.Windows.Markup;
 using System.Windows.Media.Animation;
 using System.Windows;
+using System.Diagnostics;
+using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 
 namespace EMS.ViewModel.NewEMSViewModel
@@ -156,12 +158,12 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// ListBox选择改变
         /// </summary>
-        public RelayCommand DataTypeList_SelectionChanged { set; get; }
+        //public RelayCommand DataTypeList_SelectionChanged { set; get; }
 
         /// <summary>
         /// 14个电池列表按钮选择
         /// </summary>
-        public RelayCommand<SelectionChangedEventArgs> BatteryList_SelectionChanged { get; set; }
+        //public RelayCommand<SelectionChangedEventArgs> BatteryList_SelectionChanged { get; set; }
 
         #endregion
 
@@ -214,7 +216,8 @@ namespace EMS.ViewModel.NewEMSViewModel
                 {
                     for (int i = 0; i < 14; i++)
                     {
-                        DisplayDataList.Add(QueryBatteryInfo(SelectedTotal, SelectedSeries, (i + 1).ToString(), StartTime, EndTime));
+                        string totalID = $"BCMU({SelectedTotal})";
+                        DisplayDataList.Add(QueryBatteryInfo(totalID, SelectedSeries, (i + 1).ToString(), StartTime, EndTime));
                     }
                 }
                 else
@@ -245,9 +248,15 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <param name="endTime">停止时间</param>
         private List<double[]> QueryBatteryInfo(string BCMUID, string BMUID, string sort, DateTime startTime, DateTime endTime)
         {
+            Debug.WriteLine(BCMUID, "11111111");
+            Debug.WriteLine(BMUID, "222222222");
+            Debug.WriteLine(sort, "3333333");
+            Debug.WriteLine(startTime, "44444444");
+            Debug.WriteLine(endTime, "555555");
             SeriesBatteryInfoManage SeriesManage = new SeriesBatteryInfoManage();
-            string BCMUTotal = $"BCMU({BCMUID})";
-            var SeriesList = SeriesManage.Find(BCMUTotal, BMUID, startTime, endTime);
+            //string BCMUTotal = $"BCMU({BCMUID})";
+            var SeriesList = SeriesManage.Find(BCMUID, BMUID, startTime, endTime);
+
             List<double[]> obj = new List<double[]>();
             if (int.TryParse(sort, out int Sort))
             {
@@ -259,45 +268,48 @@ namespace EMS.ViewModel.NewEMSViewModel
                 List<double> temperature1List = new List<double>();
                 List<double> temperature2List = new List<double>();
                 List<DateTime> times = new List<DateTime>();
-                for (int i = 1; i < SeriesList.Count; i++)
+                if (SeriesList!=null)
                 {
-                    var item0 = typeof(SeriesBatteryInfoModel).GetProperty("Voltage" + (Sort - 1)).GetValue(SeriesList[i]);
-                    if (double.TryParse(item0.ToString(), out double vol))
+                    for (int i = 1; i < SeriesList.Count; i++)
                     {
-                        vols.Add(vol);
-                    }
+                        var item0 = typeof(SeriesBatteryInfoModel).GetProperty("Voltage" + (Sort - 1)).GetValue(SeriesList[i]);
+                        if (double.TryParse(item0.ToString(), out double vol))
+                        {
+                            vols.Add(vol);
+                        }
 
-                    var item1 = typeof(SeriesBatteryInfoModel).GetProperty("Capacity" + (Sort - 1)).GetValue(SeriesList[i]);
-                    if (double.TryParse(item1.ToString(), out double cap))
-                    {
-                        caps.Add(cap);
-                    }
+                        var item1 = typeof(SeriesBatteryInfoModel).GetProperty("Capacity" + (Sort - 1)).GetValue(SeriesList[i]);
+                        if (double.TryParse(item1.ToString(), out double cap))
+                        {
+                            caps.Add(cap);
+                        }
 
-                    var item2 = typeof(SeriesBatteryInfoModel).GetProperty("SOC" + (Sort - 1)).GetValue(SeriesList[i]);
-                    if (double.TryParse(item2.ToString(), out double soc))
-                    {
-                        socList.Add(soc);
-                    }
+                        var item2 = typeof(SeriesBatteryInfoModel).GetProperty("SOC" + (Sort - 1)).GetValue(SeriesList[i]);
+                        if (double.TryParse(item2.ToString(), out double soc))
+                        {
+                            socList.Add(soc);
+                        }
 
-                    var item3 = typeof(SeriesBatteryInfoModel).GetProperty("Resistance" + (Sort - 1)).GetValue(SeriesList[i]);
-                    if (double.TryParse(item3.ToString(), out double resistance))
-                    {
-                        resistances.Add(resistance);
-                    }
+                        var item3 = typeof(SeriesBatteryInfoModel).GetProperty("Resistance" + (Sort - 1)).GetValue(SeriesList[i]);
+                        if (double.TryParse(item3.ToString(), out double resistance))
+                        {
+                            resistances.Add(resistance);
+                        }
 
-                    var item4 = typeof(SeriesBatteryInfoModel).GetProperty("Temperature" + (Sort - 1) * 2).GetValue(SeriesList[i]);
-                    if (double.TryParse(item4.ToString(), out double temperature1))
-                    {
-                        temperature1List.Add(temperature1);
-                    }
+                        var item4 = typeof(SeriesBatteryInfoModel).GetProperty("Temperature" + (Sort - 1) * 2).GetValue(SeriesList[i]);
+                        if (double.TryParse(item4.ToString(), out double temperature1))
+                        {
+                            temperature1List.Add(temperature1);
+                        }
 
-                    var item5 = typeof(SeriesBatteryInfoModel).GetProperty("Temperature" + ((Sort - 1) * 2 + 1)).GetValue(SeriesList[i]);
-                    if (double.TryParse(item5.ToString(), out double temperature2))
-                    {
-                        temperature2List.Add(temperature2);
-                    }
+                        var item5 = typeof(SeriesBatteryInfoModel).GetProperty("Temperature" + ((Sort - 1) * 2 + 1)).GetValue(SeriesList[i]);
+                        if (double.TryParse(item5.ToString(), out double temperature2))
+                        {
+                            temperature2List.Add(temperature2);
+                        }
 
-                    times.Add(SeriesList[i].HappenTime);
+                        times.Add(SeriesList[i].HappenTime);
+                    }
                 }
                 obj.Add(vols.ToArray());
                 obj.Add(socList.ToArray());

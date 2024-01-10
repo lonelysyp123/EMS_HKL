@@ -19,15 +19,18 @@ namespace EMS.View.NewEMSView
 {
     public partial class Analysis_SmartMeterPage : Page
     {
+        private Analysis_SmartMeterPageModel vm;
         public Analysis_SmartMeterPage()
         {
             InitializeComponent();
+
+            vm = new Analysis_SmartMeterPageModel();
+            this.DataContext = vm;
         }
 
-        public Analysis_SmartMeterPage(Analysis_SmartMeterPageModel viewmodel)
+        private void DataTypeList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            InitializeComponent();
-            this.DataContext = viewmodel;
+            vm.SwitchSmartMeterData();
         }
     }
 }

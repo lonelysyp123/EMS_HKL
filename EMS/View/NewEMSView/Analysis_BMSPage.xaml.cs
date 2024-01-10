@@ -20,10 +20,6 @@ namespace EMS.View.NewEMSView
     public partial class Analysis_BMSPage : Page
     {
 
-        //public Analysis_BMSPage()
-        //{
-        //    InitializeComponent();
-        //}
         //public Analysis_BMSPage(Analysis_BMSPageModel viewmodel)
         //{
         //    InitializeComponent();

@@ -145,7 +145,7 @@ namespace EMS.ViewModel
         /// <summary>
         /// 选中的电池集合
         /// </summary>
-        
+
         ///<summary>
         ///禁用Query按钮
         ///</summary>
@@ -173,7 +173,7 @@ namespace EMS.ViewModel
 
         public DataAnalysisViewModel()
         {
-            
+
             QueryCommand = new RelayCommand(Query);
 
             DisplayDataModel = new PlotModel();
@@ -184,7 +184,7 @@ namespace EMS.ViewModel
             StartTime2 = "00:00:00";
             EndTime2 = "00:00:00";
             SelectedBatteryList = new List<string>();
-            
+
 
             //ChartShowNow(storeModel.VolCollect.ToArray());
         }
@@ -206,8 +206,9 @@ namespace EMS.ViewModel
                 if (TryCombinTime(StartTime1, StartTime2, out DateTime StartTime) && TryCombinTime(EndTime1, EndTime2, out DateTime EndTime))
                 {
                     for (int i = 0; i < 14; i++)
-                    { 
-                        DisplayDataList.Add(QueryBatteryInfo(SelectedTotal, SelectedSeries, (i + 1).ToString(), StartTime, EndTime));
+                    {
+                        string totalID = $"BCMU({SelectedTotal})";
+                        DisplayDataList.Add(QueryBatteryInfo(totalID, SelectedSeries, (i + 1).ToString(), StartTime, EndTime));
                     }
                 }
                 else
@@ -222,18 +223,20 @@ namespace EMS.ViewModel
             }
         }
 
-            /// <summary>
-            /// 查询单体电池数据
-            /// </summary>
-            /// <param name="BCMUID">BCMUID</param>
-            /// <param name="BMUID">BMUID</param>
-            /// <param name="sort">电池序号</param>
-            /// <param name="startTime">开始时间</param>
-            /// <param name="endTime">停止时间</param>
+        /// <summary>
+        /// 查询单体电池数据
+        /// </summary>
+        /// <param name="BCMUID">BCMUID</param>
+        /// <param name="BMUID">BMUID</param>
+        /// <param name="sort">电池序号</param>
+        /// <param name="startTime">开始时间</param>
+        /// <param name="endTime">停止时间</param>
         private List<double[]> QueryBatteryInfo(string BCMUID, string BMUID, string sort, DateTime startTime, DateTime endTime)
         {
             SeriesBatteryInfoManage SeriesManage = new SeriesBatteryInfoManage();
+            //string BCMUTotal = $"BCMU({BCMUID})";
             var SeriesList = SeriesManage.Find(BCMUID, BMUID, startTime, endTime);
+
             List<double[]> obj = new List<double[]>();
             if (int.TryParse(sort, out int Sort))
             {
@@ -396,7 +399,7 @@ namespace EMS.ViewModel
         /// <returns>是否合成成功</returns>
         private bool TryCombinTime(string obj1, string obj2, out DateTime CombinTime)
         {
-            if (obj1 != null && obj1 !="")
+            if (obj1 != null && obj1 != "")
             {
                 DateTime time1 = DateTime.Parse(obj1);
                 if (TimeSpan.TryParse(obj2, out TimeSpan time2))
@@ -417,7 +420,7 @@ namespace EMS.ViewModel
             return true;
         }
 
-          
+
 
 
         /// <summary>
@@ -440,16 +443,20 @@ namespace EMS.ViewModel
 
             //! Axes
             DisplayDataModel.Axes.Clear();
-            
-            DisplayDataModel.Axes.Add(new LinearAxis() { Position = AxisPosition.Left, Title = SelectedType.Content.ToString(),
-               
+
+            DisplayDataModel.Axes.Add(new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                Title = SelectedType.Content.ToString(),
+
             });
-            DisplayDataModel.Axes.Add(new DateTimeAxis() { 
-                Position = AxisPosition.Bottom, 
+            DisplayDataModel.Axes.Add(new DateTimeAxis()
+            {
+                Position = AxisPosition.Bottom,
                 Title = "时间",
                 IntervalType = DateTimeIntervalType.Seconds,
                 StringFormat = "HH:mm:ss",
-                
+
             });
         }
     }
