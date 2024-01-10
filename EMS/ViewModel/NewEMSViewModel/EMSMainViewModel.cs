@@ -19,7 +19,6 @@ namespace EMS.ViewModel.NewEMSViewModel
         public Analysis_BMSPageModel Analysis_BMSPageModel { get; private set;}
         public Analysis_PCSPageModel Analysis_PCSPageModel { get; private set;}
         public Analysis_SmartMeterPageModel Analysis_SmartMeterPageModel { get; private set; }
-        public FaultLogPageModel FaultLogPageModel {  get; private set; }
         public Strategy_AnalysisPageModel Strategy_AnalysisPageModel {  get; private set; }
         public Strategy_ProtectSetterPageModel Strategy_ProtectSetterPageModel {  get; private set; }
         public Strategy_SetterPageModel Strategy_SetterPageModel { get; private set; }
@@ -61,7 +60,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             Analysis_BMSPageModel = new Analysis_BMSPageModel();
             Analysis_PCSPageModel = new Analysis_PCSPageModel();
             Analysis_SmartMeterPageModel = new Analysis_SmartMeterPageModel();
-            FaultLogPageModel = new FaultLogPageModel();
             Strategy_AnalysisPageModel = new Strategy_AnalysisPageModel();
             Strategy_ProtectSetterPageModel = new Strategy_ProtectSetterPageModel();
             Strategy_SetterPageModel = new Strategy_SetterPageModel();

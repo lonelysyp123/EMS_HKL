@@ -20,6 +20,7 @@ using System.Web.UI.WebControls.WebParts;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Media.Animation;
+using TNCN.EMS.Common.Util;
 
 namespace EMS.Service
 {

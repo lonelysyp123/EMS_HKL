@@ -71,13 +71,13 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         #endregion
 
-        private List<FaultLogModel> FaultLogDataList;
+        private List<FaultLogModel> FaultLogDataByDB;
         public FaultLogPageModel()
         {
             PageUpdatedCommand = new RelayCommand(PageUpdated);
 
             FaultLogData = new ObservableCollection<FaultLogModel>();
-            FaultLogDataList = new List<FaultLogModel>();
+            FaultLogDataByDB = new List<FaultLogModel>();
             DataCountPerPage = 10;
             MaxPageCount = 1;
             PageIndex = 1;
@@ -86,64 +86,55 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public void InsertFaultLogData(FaultLogModel model)
         {
-            FaultLogDataList.Add(model);
-            if (FaultLogDataList.Count %10 > 1)
+            FaultLogDataByDB.Add(model);
+            if (FaultLogDataByDB.Count %10 > 1)
             {
-                MaxPageCount = FaultLogDataList.Count / 10 + 1;
+                MaxPageCount = FaultLogDataByDB.Count / 10 + 1;
             }
             else
             {
-                MaxPageCount = FaultLogDataList.Count / 10;
+                MaxPageCount = FaultLogDataByDB.Count / 10;
             }
         }
 
         private void PageUpdated()
         {
-            FaultLogData = new ObservableCollection<FaultLogModel>(FaultLogDataList.GetRange((PageIndex - 1) * DataCountPerPage, DataCountPerPage));
+            FaultLogData = new ObservableCollection<FaultLogModel>(FaultLogDataByDB.GetRange((PageIndex - 1) * DataCountPerPage, DataCountPerPage));
         }
 
         public void InitView()
         {
-            //AlarmandFaultInfoManage manage = new AlarmandFaultInfoManage();
-            //var entities =manage.Get();
-            //int i =0;
-            //foreach (var entity in entities)
-            //{
-            //    i++;
-            //    FaultLogModel faultLogModel = new FaultLogModel()
-            //    {
-            //        FaultNumber = i.ToString(),
-            //        FaultDevice = entity.Device,
-            //        FaultId = entity.id.ToString(),
-            //        FaultModule = entity.Module.ToString(),
-            //        FaultTime = entity.HappenTime.ToString(),
-            //        FaultName = entity.Type.ToString(),
-            //        FaultGrade = entity.level.ToString()
-            //    };
-            //}
-            for (int i = 0; i < 100; i++)
+            AlarmandFaultInfoManage manage = new AlarmandFaultInfoManage();
+            var entities = manage.Get();
+            int i = 0;
+            if (entities != null && entities.Count > 0)
             {
-                FaultLogDataList.Add(new FaultLogModel()
+                foreach (var entity in entities)
                 {
-                    FaultNumber = i.ToString(),
-                    FaultDevice = "BMS",
-                    FaultId = "1",
-                    FaultModule = "",
-                    FaultTime = DateTime.Now.ToString(),
-                    FaultName = "未知故障",
-                    FaultGrade = "1",
-                });
-            }
-            if (FaultLogDataList.Count % 10 > 1)
-            {
-                MaxPageCount = FaultLogDataList.Count / 10 + 1;
-            }
-            else
-            {
-                MaxPageCount = FaultLogDataList.Count / 10;
-            }
-            PageUpdated();
+                    i++;
+                    FaultLogModel faultLogModel = new FaultLogModel()
+                    {
+                        FaultNumber = i.ToString(),
+                        FaultDevice = entity.Device,
+                        FaultId = entity.id.ToString(),
+                        FaultModule = entity.Module.ToString(),
+                        FaultTime = entity.HappenTime.ToString(),
+                        FaultName = entity.Type.ToString(),
+                        FaultGrade = entity.level.ToString()
+                    };
+                    FaultLogDataByDB.Add(faultLogModel);
+                }
 
+                if (FaultLogDataByDB.Count % 10 > 1)
+                {
+                    MaxPageCount = FaultLogDataByDB.Count / 10 + 1;
+                }
+                else
+                {
+                    MaxPageCount = FaultLogDataByDB.Count / 10;
+                }
+                PageUpdated();
+            }
         }
     }
 }
