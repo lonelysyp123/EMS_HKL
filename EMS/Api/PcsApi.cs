@@ -37,13 +37,20 @@ namespace EMS.Api
         /// <returns></returns>
         public static PCSModel GetNextPCSData()
         {
-            return EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.GetCurrentData();
+            DateTime dateTime = DateTime.Now;
+            var item = EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.GetCurrentData();
+            if (item != null)
+            {
+                item.CurrentTime = dateTime;
+            }
+            return item;
         }
-            /// <summary>
-            ///  对PCS发送控制指令，需要包含一定的验证，检查下发指令是否合理，否则报错，该API不能是阻塞函数，需要立刻返回。如遇到异常，需要抛出异常。
-            ///  如果下发指令和当前PCS正在执行的指令一致，可以避免重复下发。
-            /// </summary>
-            /// <returns>指令下发是否成功</returns>
+
+        /// <summary>
+        ///  对PCS发送控制指令，需要包含一定的验证，检查下发指令是否合理，否则报错，该API不能是阻塞函数，需要立刻返回。如遇到异常，需要抛出异常。
+        ///  如果下发指令和当前PCS正在执行的指令一致，可以避免重复下发。
+        /// </summary>
+        /// <returns>指令下发是否成功</returns>
         public static void SendPcsCommand(BessCommand command)
         {
              EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.SendPcsCommand(command);
@@ -216,9 +223,9 @@ namespace EMS.Api
         /// <returns></returns>
         public static double PcsGetDcSidePower()
         {
-            double at=0;
-            return at;
-            //return EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.MonitorModel.DcBranch1DCPower;
+            var item = EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.GetCurrentData();
+            return item.DcBranch1DCPower;
+            
         }
 
         public static bool SetPCSSystemClearFault()
@@ -337,23 +344,23 @@ namespace EMS.Api
         /// 获取模组温度
         /// </summary>
         /// <returns></returns>
-        public static double PCSGetModuleTemperature()
-        {
-            double at = 0;
-            return at;
-            //return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.ModuleTemperature;       
-        }
+        //public static double PCSGetModuleTemperature()
+        //{
+        //    double at = 0;
+        //    return at;
+        //    //return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.ModuleTemperature;       
+        //}
 
         /// <summary>
         /// 获取环境温度
         /// </summary>
         /// <returns></returns>
-        public static double PCSGetAmbientTemperature()
-        {
-            double at=0;
-            return at;
-            //return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.AmbientTemperature;
-        }
+        //public static double PCSGetAmbientTemperature()
+        //{
+        //    double at=0;
+        //    return at;
+        //    //return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.AmbientTemperature;
+        //}
 
         private static List<string> GetPCSFault(PCSModel model)
         {
