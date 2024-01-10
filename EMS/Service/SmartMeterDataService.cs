@@ -120,7 +120,7 @@ namespace EMS.Service
 
                     CurrentModel = model;
                     OnChangeData(this, CurrentModel.Clone());
-                    Models.Add(CurrentModel.Clone() as SmartMeterModel);
+                    Models.TryAdd(CurrentModel.Clone() as SmartMeterModel);
                     if (IsSaveDaq)
                     {
                         SaveData(CurrentModel);
@@ -177,7 +177,7 @@ namespace EMS.Service
                 catch (Exception)
                 {
                     count++;
-                    if (count > maxReconnectTimes)
+                    if (count > MaxReconnectTimes)
                     {
                         IsCommunicationProtectState = true;
                         IsConnected = false;
@@ -194,7 +194,7 @@ namespace EMS.Service
         {
             while (!IsConnected)
             {
-                Thread.Sleep(reconnectIntervalLong);
+                Thread.Sleep(ReconnectIntervalLong);
                 try
                 {
                     SerialPortInstance.Open();

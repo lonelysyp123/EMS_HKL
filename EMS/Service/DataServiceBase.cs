@@ -53,10 +53,10 @@ namespace EMS.Service
             }
         }
 
-        protected int reconnectInterval = 150; // ms
-        protected int maxReconnectTimes = 3;
+        protected int ReconnectInterval = 150; // ms
+        protected int MaxReconnectTimes = 3;
         protected int DaqTimeSpan = 1;
-        protected int reconnectIntervalLong = 60 * 1000 * 5; // ms
+        protected int ReconnectIntervalLong = 60 * 1000 * 5; // ms
         protected string DevType;
 
         protected Action<object, bool, bool, bool> OnChangeState;

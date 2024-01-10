@@ -106,7 +106,7 @@ namespace EMS.Service
 
                     CurrentModel = DataDecode(BCMUData, BCMUStateData, BMUIDData, BMUData, BMUStateData);
                     OnChangeData(this, CurrentModel.Clone());
-                    Models.Add(CurrentModel.Clone() as BatteryTotalModel);
+                    Models.TryAdd(CurrentModel.Clone() as BatteryTotalModel);
                     if (IsSaveDaq)
                     {
                         SaveData(CurrentModel);
@@ -224,7 +224,7 @@ namespace EMS.Service
             int count = 0;
             while (true)
             {
-                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(reconnectInterval))
+                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(ReconnectInterval))
                 {
                     _master = ModbusIpMaster.CreateIp(_client);
                     return true;
@@ -232,7 +232,7 @@ namespace EMS.Service
                 else
                 {
                     count++;
-                    if (count > maxReconnectTimes)
+                    if (count > MaxReconnectTimes)
                     {
                         IsCommunicationProtectState = true;
                         IsConnected = false;
@@ -249,8 +249,8 @@ namespace EMS.Service
         {
             while (!IsConnected)
             {
-                Thread.Sleep(reconnectIntervalLong);
-                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(reconnectInterval))
+                Thread.Sleep(ReconnectIntervalLong);
+                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(ReconnectInterval))
                 {
                     _master = ModbusIpMaster.CreateIp(_client);
                     IsConnected = true;
