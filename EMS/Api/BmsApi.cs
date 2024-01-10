@@ -117,27 +117,43 @@ namespace EMS.Api
         public static List<string> GetTotalAlarmInfo()
         {
             List<BMSDataService> services = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices;//获取所有电池数据
-            List<string>totalalarminfo = new List<string>();
-            foreach(var service in services)
+            Dictionary<int,List<int>> TotalAlarmInfo = new Dictionary<int, List<int>> ();
+            Dictionary<int,List<int>>TotalFaultInfo = new Dictionary<int, List<int>> ();
+           for(int i = 0; i < services.Count; i++)
             {
-                List<string>bcmualarm = new List<string>();
-                List<string>bcmufault = new List<string>();
-
-                bcmualarm = service.GetCurrentData().AlarmStateBCMU.ToList();
-                bcmufault = service.GetCurrentData().FaultyStateBCMU.ToList();
-                totalalarminfo.AddRange(bcmualarm);
-                totalalarminfo.AddRange((bcmufault));//BCMU数据得到
-                for (int i = 0;i< service.GetCurrentData().Series.Count;i++)
+                int alarmLevel = 0;
+              var item = services[i].GetCurrentData();
+                int alarmflag1 = item.AlarmStateBCMUFlag1;
+                int alarmFlag2 = item.AlarmStateBCMUFlag2;
+                int alarmFlag3 = item.AlarmStateBCMUFlag3;
+                int alarmLevel1 = 0;
+                if (((alarmflag1 >> 8) & 0xFF) != 0)
                 {
-                    List<string> bmufault = new List<string>();
-                    bmufault = GetActiveFaultyBMU(service.GetCurrentData().Series[i].AlarmStateFlagBMU);
-                    totalalarminfo.AddRange(bmufault);//BMU数据得到
+                    alarmLevel1 = 3;
                 }
-                
+                else
+                {
+                    alarmLevel1 = 0;
+                }
+
+                int alarmLevel21 = 0;
+                if((alarmFlag2&0xFF)!= 0)
+                {
+                    alarmLevel21 = 2;
+
+                }
+                else
+                {
+                    alarmLevel21 = 0;
+                }
+                int alarmflag22 = (alarmFlag2 >> 8) & 0xFF;
+
             }
-            
-            totalalarminfo=totalalarminfo.Distinct().ToList();
-            return totalalarminfo;
+
+
+
+
+               
         }
 
         private static List<string> GetActiveFaultyBMU(int flag)
