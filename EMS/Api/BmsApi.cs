@@ -113,7 +113,7 @@ namespace EMS.Api
         /// <summary>
         /// 得到BMS所有告警故障信息
         /// </summary>
-        /// <returns></returns>
+        /// <returns></returns> <comment>这里描述一下返回的这个Tuple的两个变量的意义
         public static (int,bool) GetTotalAlarmInfo()
         {
             List<BMSDataService> services = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices;//获取所有电池数据
@@ -151,26 +151,26 @@ namespace EMS.Api
                         alarmLevel1 = 0;
                     }
 
-                    int alarmLevel21 = 0;
+                    int alarmLevel2LowerByte = 0; // alarmLevel2的寄存器包含两个Byte，处理方式不同，所以此处分开标识
                     if ((alarmFlag2 & 0xFF) != 0)
                     {
-                        alarmLevel21 = 2;
+                        alarmLevel2LowerByte = 2;
 
                     }
                     else
                     {
-                        alarmLevel21 = 0;
+                        alarmLevel2LowerByte = 0;
                     }
-                    int alarmflag22 = (alarmFlag2 >> 8) & 0xFF;
+                    int alarmflag2HigherByte = (alarmFlag2 >> 8) & 0xFF;
                     List<int> alarmlevel22List = new List<int>();
                     int alarmLevel22 = 0;
                     for (int j = 8; j < 16; j += 2)
                     {
-                        int twoBitValue = (alarmflag22 >> j) & 0x3;
+                        int twoBitValue = (alarmflag2HigherByte >> j) & 0x3;
                         alarmlevel22List.Add(twoBitValue);
                     }
                     alarmLevel22 = alarmlevel22List.Max();
-                    int alarmLevel2 = Math.Max(alarmLevel21, alarmLevel22);
+                    int alarmLevel2 = Math.Max(alarmLevel2LowerByte, alarmLevel22);
                     int alarmLevel3 = 0;
                     List<int> alarmlevel3List = new List<int>();
                     for (int j = 0; j < 16; j += 2)

@@ -260,25 +260,25 @@ namespace EMS.Common.StrategyManage
         {
             if (!_hasContigencyCheckEnabled) return; //未启用则直接return
             ///获取全部故障告警
-            bool bmsfault = false;
-            int bmsalarm = 0;
-            var bmsresult = BmsApi.GetTotalAlarmInfo();
-            bmsfault = bmsresult.Item2;
-            bmsalarm = bmsresult.Item1;
+            bool bmsFault = false;
+            int bmsAlarm = 0;
+            var bmsResult = BmsApi.GetTotalAlarmInfo();
+            bmsFault = bmsResult.Item2;
+            bmsAlarm = bmsResult.Item1;
 
             List<string> pcsErrors = PcsApi.GetPCSFaultInfo();
             List<string> systemErrors = StrategyManager.Instance.GetSystemErrors();
 
             
             
-            if (pcsErrors.Count == 0 && systemErrors.Count == 0&&(!bmsfault))
+            if (pcsErrors.Count == 0 && systemErrors.Count == 0&&(!bmsFault))
             {
-               if(bmsalarm==0)
+               if(bmsAlarm==0)
                 {
                     _contingencyStatus = ContingencyStatusEnum.Normal; //全没故障
                 }else 
                  {
-                    switch (bmsalarm) //bmsalarm有
+                    switch (bmsAlarm) //bmsAlarm有告警
                     {
                         case 1:
                             {
