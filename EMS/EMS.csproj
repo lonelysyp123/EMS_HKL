@@ -303,6 +303,7 @@
     <Compile Include="Storage\DB\DBManage\AlarmandFaultInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmParameterSettingInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\BcmuManage.cs" />
+    <Compile Include="Storage\DB\DBManage\ElectricMeterInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\MqttManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSControlInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSInfoManage.cs" />
@@ -312,6 +313,7 @@
     <Compile Include="Storage\DB\Models\AlarmandFaultInfoModel.cs" />
     <Compile Include="Storage\DB\Models\AlarmParameterSettingModel.cs" />
     <Compile Include="Storage\DB\Models\BcmuModel.cs" />
+    <Compile Include="Storage\DB\Models\ElectricMeterInfoModel.cs" />
     <Compile Include="Storage\DB\Models\MqttModel.cs" />
     <Compile Include="Storage\DB\Models\PCSControlSettingModel.cs" />
     <Compile Include="Storage\DB\Models\PCSInfoModel.cs" />

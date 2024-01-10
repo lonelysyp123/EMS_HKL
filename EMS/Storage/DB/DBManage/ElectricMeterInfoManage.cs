@@ -1,0 +1,122 @@
+﻿using EMS.Model;
+using EMS.Storage.DB.Models;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EMS.Storage.DB.DBManage
+{
+    public class ElectricMeterInfoManage : IManage<ElectricMeterInfoModel>
+    {
+        public bool Delete(ElectricMeterInfoModel entity)
+        {
+            return false;
+        }
+
+        public bool DeleteAll()
+        {
+            return false;
+        }
+
+        public List<ElectricMeterInfoModel> Get()
+        {
+            try
+            {
+                using (var db = new ORMContext())
+                {
+                    var result = db.ElectricMeterInfos.ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 查询数据
+        /// </summary>
+        /// <param name="StartTime">开始时间</param>
+        /// <param name="EndTime">结束时间</param>
+        /// <returns>数据列表</returns>
+        public List<ElectricMeterInfoModel> Find(DateTime StartTime, DateTime EndTime)
+        {
+            try
+            {
+                using (var db = new ORMContext())
+                {
+                    var result = db.ElectricMeterInfos.Where(p => p.HappenTime >= StartTime && p.HappenTime <= EndTime).ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 查询数据
+        /// </summary>
+        /// <param name="BCMUID">BCMUID</param>
+        /// <param name="BMUID">BMUID</param>
+        /// <param name="StartTime">开始时间</param>
+        /// <param name="EndTime">结束时间</param>
+        /// <returns>数据列表</returns>
+        public List<ElectricMeterInfoModel> Find(string BCMUID, string BMUID, DateTime StartTime, DateTime EndTime)
+        {
+            try
+            {
+                using (var db = new ORMContext())
+                {
+                    var result = db.ElectricMeterInfos.Where(p => p.HappenTime >= StartTime && p.HappenTime <= EndTime).ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public bool Insert(ElectricMeterInfoModel entity)
+        {
+            try
+            {
+                using (var db = new ORMContext())
+                {
+                    var result = db.ElectricMeterInfos.Add(entity);
+                    db.SaveChanges();
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool Update(ElectricMeterInfoModel entity)
+        {
+            try
+            {
+                using (var db = new ORMContext())
+                {
+                    var result = db.ElectricMeterInfos.Attach(entity);
+                    db.Entry(entity).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+    }
+}
+
