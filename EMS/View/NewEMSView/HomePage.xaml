@@ -302,7 +302,7 @@
                                        Style="{StaticResource NormalTextblockstyle}"></TextBlock>
                             <TextBlock Text="{Binding EnergyStorageCapacity}"
                                        Style="{StaticResource NormalTextblockstyle}"></TextBlock>
-                            <TextBlock Text="kWh"
+                            <TextBlock Text="MWh"
                                        Style="{StaticResource NormalTextblockstyle}"></TextBlock>
 
                         </StackPanel>

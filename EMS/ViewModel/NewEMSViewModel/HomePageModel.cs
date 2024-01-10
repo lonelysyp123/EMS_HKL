@@ -366,9 +366,10 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
             TotalSOC = SingleSOC.Average().ToString();
             TotalSOH = SingleSOH.Average().ToString();
-            InstalledPower = 0.ToString();
-            EnergyStorageCapacity = 0.ToString();
-           
+            InstalledPower = 400.ToString();
+            EnergyStorageCapacity = 4.ToString();
+   
+
         }
 
         public void StateDisPlayBMS(List<BMSDataService> bMSDataService)
@@ -430,20 +431,20 @@ namespace EMS.ViewModel.NewEMSViewModel
         //StateFill_HeavyFaults
         //StateFill_CrisisFaults
         //StateFill_CloudTelecom
-        //StateFill_BMSRun
+        //StateFill_BMSRun--搞定
         //StateFill_PCSRun
         //StateFill_AmmeterRun
 
         //台账信息
-        //InstalledPower
-        //EnergyStorageCapacity
+        //InstalledPower--定值
+        //EnergyStorageCapacity--定值
         //TotalSOC--搞定
         //TotalSOH--搞定
 
         //系统概况
-        //ChargingCapacity
-        //DischargeCapacity
-        //CurrentPower
+        //ChargingCapacity--搞定
+        //DischargeCapacity--搞定
+        //CurrentPower--搞定
         //StationPower
 
         //状态
