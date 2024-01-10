@@ -5,6 +5,7 @@ using EMS.Model;
 using EMS.Storage.DB.DBManage;
 using EMS.Storage.DB.Models;
 using Modbus.Device;
+using Newtonsoft.Json.Linq;
 using OxyPlot.Series;
 using System;
 using System.Collections.Concurrent;
@@ -580,8 +581,14 @@ namespace EMS.Service
             }
             catch (Exception ex)
             {
-                LogUtils.Error(ex.ToString());
-                throw ex;
+                LogUtils.Warn(DevType + " ID:" + ID + "写入数据失败", ex);
+                if (!_client.Connected && !IsCommunicationProtectState)
+                {
+                    if (CommunicationCheck())
+                    {
+                        WriteFunc(address, values);
+                    }
+                }
             }
         }
 
