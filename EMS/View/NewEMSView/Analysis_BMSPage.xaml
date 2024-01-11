@@ -47,8 +47,6 @@
                              SelectionMode="Extended"
                              Foreground="White"
                              BorderThickness="0,0,0,0"
-                             SelectedItem="{Binding SelectedNumber}"
-                             ItemsSource="{Binding SelectedNumberIndex}"
                              SelectionChanged="BatteryList_SelectionChanged">
                         <ListBoxItem Content="1"
                                      Foreground="Black"
