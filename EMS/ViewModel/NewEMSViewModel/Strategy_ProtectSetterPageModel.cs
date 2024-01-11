@@ -8,8 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EMS.Storage;
+using EMS.Storage.DB.DBManage;
 using TNCN.EMS.Common.Mqtt;
+using EMS.Storage.DB.Models;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
@@ -617,6 +618,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         public RelayCommand SyncBUSVolInfoCommand { get; set; }
         public RelayCommand ReadDCBranchInfoCommand { get; set; }
         public RelayCommand SyncDCBranchInfoCommand { get; set; }
+
+        public RelayCommand SyncInfoDB1Command {  get; set; }
         #endregion
 
 
@@ -641,14 +644,57 @@ namespace EMS.ViewModel.NewEMSViewModel
             SyncBUSVolInfoCommand = new RelayCommand(SyncBUSVolInfo);
             ReadDCBranchInfoCommand = new RelayCommand(ReadDCBranchInfo);
             SyncDCBranchInfoCommand = new RelayCommand(SyncDCBranchInfo);
+            SyncInfoDB1Command = new RelayCommand(SyncInfoDB1);
         }
 
         private void ReadDBInfo()
         {
-            //
+            AlarmParameterSettingInfoManage manage = new AlarmParameterSettingInfoManage();
+
+            var entities = manage.Find(SelectedBCMUID);
+            foreach (var entity in entities)
+            {
+                if (entity != null)
+                {
+                    IsoRLowLimitLv1 = entity.IsoRLow;
+                    SingleVolDiffLv1 = entity.DiffVol1;
+                    SingleVolDiffLv2 = entity.DiffVol2;
+                    SingleVolDiffLv3 = entity.DiffVol3;
+                    SOCLowLimitLv1 = entity.SOCLow1;
+                    SOCLowLimitLv2 = entity.SOCLow2;
+                    SOCLowLimitLv3 = entity.SOCLow3;
+                    CurCharLv1 = entity.CurChar1;
+                    CurCharLv2 = entity.CurChar2;
+                    CurCharLv3 = entity.CurChar3;
+                    CurDischarLv1 = entity.CurDischar1;
+                    CurDischarLv2 = entity.CurDischar2;
+                    CurDischarLv3 = entity.CurDischar3;
+                    TempCharUpLimitLv1 = entity.TempCharUp1;
+                    TempCharUpLimitLv2 = entity.TempCharUp2;
+                    TempCharUpLimitLv3 = entity.TempCharUp3;
+                    TempCharLowLimitLv1 = entity.TempCharLow1;
+                    TempCharLowLimitLv2 = entity.TempCharLow2;
+                    TempCharLowLimitLv3 = entity.TempCharLow3;
+                    TempDischarUpLimitLv1 = entity.TempDischarUp1;
+                    TempDischarUpLimitLv2 = entity.TempDischarUp2;
+                    TempDischarUpLimitLv3 = entity.TempDischarUp3;
+                    SingleVolUpLimitLv1 = entity.SingleVolUp1;
+                    SingleVolUpLimitLv2 = entity.SingleVolUp2;
+                    SingleVolUpLimitLv3 = entity.SingleVolUp3;
+                    SingleVolLowLimitLv1 = entity.SingleVolLow1;
+                    SingleVolLowLimitLv2 = entity.SingleVolLow2;
+                    SingleVolLowLimitLv3 = entity.SingleVolLow3;
+                    ClusterVolUpLimitLv1 = entity.ClusterVolUp1;
+                    ClusterVolUpLimitLv2 = entity.ClusterVolUp2;
+                    ClusterVolUpLimitLv3 = entity.ClusterVolUp3;
+                    ClusterVolLowLimitLv1 = entity.ClusterVolLow1;
+                    ClusterVolLowLimitLv2 = entity.ClusterVolLow2;
+                    ClusterVolLowLimitLv3 = entity.ClusterVolLow3;
+                }
+            }
         }
 
-
+        
 
         private void ReadBCMUInfo()
         {
@@ -705,6 +751,62 @@ namespace EMS.ViewModel.NewEMSViewModel
             values[2] = (ushort)ClusterVolUpLimitLv3;
             int bcmuid = int.Parse(SelectedBCMUID);
             BmsApi.SyncBCMUInfo1(bcmuid - 1, values);
+        }
+
+        
+        public void SyncInfoDB1()
+        {
+            AlarmParameterSettingInfoManage manage = new AlarmParameterSettingInfoManage();
+            AlarmParameterSettingModel model = new AlarmParameterSettingModel()
+            {
+                ClusterVolUp1 = ClusterVolUpLimitLv1,
+                ClusterVolUp2 = ClusterVolUpLimitLv2,
+                ClusterVolUp3 = ClusterVolUpLimitLv3,
+                BCMUID = SelectedBCMUID,
+                ClusterVolLow1 = ClusterVolLowLimitLv1,
+                ClusterVolLow2 = ClusterVolLowLimitLv2,
+                ClusterVolLow3 = ClusterVolLowLimitLv3,
+                SingleVolUp1 = SingleVolUpLimitLv1,
+                SingleVolUp2 = SingleVolUpLimitLv2,
+                SingleVolUp3 = SingleVolUpLimitLv3,
+                SingleVolLow1 = SingleVolLowLimitLv1,
+                SingleVolLow2 = SingleVolLowLimitLv2,
+                SingleVolLow3 = SingleVolLowLimitLv3,
+                TempCharUp1 = TempCharUpLimitLv1,
+                TempCharUp2 = TempCharUpLimitLv2,
+                TempCharUp3 = TempCharUpLimitLv3,
+                TempCharLow1 = TempCharLowLimitLv1,
+                TempCharLow2 = TempCharLowLimitLv2,
+                TempCharLow3 = TempCharLowLimitLv3,
+                TempDischarUp1 = TempDischarUpLimitLv1,
+                TempDischarUp2 = TempDischarUpLimitLv2,
+                TempDischarUp3 = TempDischarUpLimitLv3,
+                TempDischarLow1 = TempDischarLowLimitLv1,
+                TempDischarLow2 = TempDischarLowLimitLv2,
+                TempDischarLow3 = TempDischarLowLimitLv3,
+                CurChar1 = CurCharLv1,
+                CurChar2 = CurCharLv2,
+                CurChar3 = CurCharLv3,
+                CurDischar1 = CurDischarLv1,
+                CurDischar2 = CurDischarLv2,
+                CurDischar3 = CurDischarLv3,
+                DiffVol1 = SingleVolDiffLv1,
+                DiffVol2 = SingleVolDiffLv2,
+                DiffVol3 = SingleVolDiffLv3,
+                SOCLow1 = SOCLowLimitLv1,
+                SOCLow2 = SOCLowLimitLv2,
+                SOCLow3 = SOCLowLimitLv3,
+                IsoRLow = IsoRLowLimitLv1
+            };
+            var result = manage.Find(SelectedBCMUID);
+            if (result.Count==0)
+            {
+                manage.Insert(model);
+            }
+            else
+            {
+                manage.Update(model);
+            }
         }
         private void SyncInfo2()
         {

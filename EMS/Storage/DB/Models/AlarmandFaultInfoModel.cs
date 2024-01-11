@@ -17,9 +17,5 @@ namespace EMS.Storage.DB.Models
         public string Type{ get; set;}
         public int level { get; set; }
         public DateTime HappenTime { get; set; }
-        
-
-        
-
     }
 }
