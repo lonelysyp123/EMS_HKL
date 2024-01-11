@@ -38,12 +38,16 @@ namespace EMS.Api
         public static PCSModel GetNextPCSData()
         {
             DateTime dateTime = DateTime.Now;
-            var item = EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.GetCurrentData();
-            if (item != null)
+            if (EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService != null)
             {
-                item.CurrentTime = dateTime;
+                var item = EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.GetCurrentData();
+                if (item != null)
+                {
+                    item.CurrentTime = dateTime;
+                }
+                return item;
             }
-            return item;
+            return null;
         }
 
         /// <summary>
