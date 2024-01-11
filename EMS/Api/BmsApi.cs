@@ -21,6 +21,26 @@ namespace EMS.Api
             return item.GetCurrentData();
         }
 
+        
+
+        /// <summary>
+        /// 获取BMS保护参数接口
+        /// </summary>
+        /// <returns></returns>
+        public static BMSParameterSettingModel GetBMSParam(string bcmuid)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// 设置BMS保护参数接口
+        /// </summary>
+        /// <returns></returns>
+        public static BMSParameterSettingModel SetBMSParam(string bcmuid)
+        {
+            return null;
+        }
+
         /// <summary>
         /// 返回当前BMS系统的额定功率(最大充放电功率)，需要根据当前连接的电池簇动态调整
         /// </summary>
@@ -55,12 +75,6 @@ namespace EMS.Api
             byte[] data = item.GetProetctSet();
             return data;
         }
-
-
-
-
-
-
 
         public static BatteryTotalModel[] GetNextBMSData()
         {

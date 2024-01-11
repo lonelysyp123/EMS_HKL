@@ -12,8 +12,6 @@ namespace EMS.ViewModel.NewEMSViewModel
 {
     public class EMSMainViewModel : ViewModelBase
     {
-               
-
         public HomePageModel HomePageModel { get; private set; }
         public Monitor_BMSPageModel Monitor_BMSPageModel { get; private set;}
         public Monitor_PCSPageModel Monitor_PCSPageModel { get; private set; }
@@ -21,21 +19,17 @@ namespace EMS.ViewModel.NewEMSViewModel
         public Analysis_BMSPageModel Analysis_BMSPageModel { get; private set;}
         public Analysis_PCSPageModel Analysis_PCSPageModel { get; private set;}
         public Analysis_SmartMeterPageModel Analysis_SmartMeterPageModel { get; private set; }
-        public FaultLogPageModel FaultLogPageModel {  get; private set; }
         public Strategy_AnalysisPageModel Strategy_AnalysisPageModel {  get; private set; }
         public Strategy_ProtectSetterPageModel Strategy_ProtectSetterPageModel {  get; private set; }
         public Strategy_SetterPageModel Strategy_SetterPageModel { get; private set; }
         public System_DevInfoPageModel System_DevInfoPageModel {  get; private set; }
         public System_DevSetterPageModel System_DevSetterPageModel { get; private set; }
         public System_MqttSetterPageModel System_MqttSetterPageModel { get; private set; }
-
         public BMSDataService[] bmsServices { get; private set; }
         public SmartMeterDataService smService { get; private set; }
         public PCSDataService pcsService { get; private set; }
 
         private static int BCMUCount = 6;
-        private static int PCSCount = 1;
-        private static int SmartMeterCount = 1;
         public EMSMainViewModel()
         {
 
@@ -55,7 +49,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             pcsService.RegisterState(StateCallBack_PCS);
             EnergyManagementSystem.GlobalInstance.PcsManager.SetPCS(pcsService);
 
-            smService = new SmartMeterDataService();
+            smService = new SmartMeterDataService("1");
             //smServices[i].RegisterState();    // 状态回调
             //smServices[i].RegisterState();    // 数据回调
 
@@ -66,7 +60,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             Analysis_BMSPageModel = new Analysis_BMSPageModel();
             Analysis_PCSPageModel = new Analysis_PCSPageModel();
             Analysis_SmartMeterPageModel = new Analysis_SmartMeterPageModel();
-            FaultLogPageModel = new FaultLogPageModel();
             Strategy_AnalysisPageModel = new Strategy_AnalysisPageModel();
             Strategy_ProtectSetterPageModel = new Strategy_ProtectSetterPageModel();
             Strategy_SetterPageModel = new Strategy_SetterPageModel();

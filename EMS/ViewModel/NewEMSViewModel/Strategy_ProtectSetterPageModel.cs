@@ -17,17 +17,17 @@ namespace EMS.ViewModel.NewEMSViewModel
     {
         
         //BCMU簇选择
-        private List<string> _bcmuId;
-        public List<string> BcmuId
+        private List<string> bcmuIdInfo = new List<string> { "1", "2", "3", "4", "5", "6" };
+        public List<string> BCMUIDInfo
         {
-            get => _bcmuId;
+            get => bcmuIdInfo;
             set 
             {
-                SetProperty(ref _bcmuId, value);
+                SetProperty(ref bcmuIdInfo, value);
             }
         }
 
-        private string selectedBCMUID;
+        private string selectedBCMUID = "1";
         public string SelectedBCMUID
         {
             get => selectedBCMUID;
@@ -619,8 +619,6 @@ namespace EMS.ViewModel.NewEMSViewModel
         public RelayCommand SyncDCBranchInfoCommand { get; set; }
         #endregion
 
-        private BMSDataService bmsDataService;
-        private PCSDataService pcsDataService;
 
         public Strategy_ProtectSetterPageModel()
         {
@@ -643,7 +641,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             SyncBUSVolInfoCommand = new RelayCommand(SyncBUSVolInfo);
             ReadDCBranchInfoCommand = new RelayCommand(ReadDCBranchInfo);
             SyncDCBranchInfoCommand = new RelayCommand(SyncDCBranchInfo);
-            
         }
 
         private void ReadDBInfo()
@@ -812,7 +809,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             ushort[] values = new ushort[3];
             values[0] = (ushort)IsoRLowLimitLv1;
-            
+
             int bcmuid = int.Parse(SelectedBCMUID);
             BmsApi.SyncBCMUInfo13(bcmuid - 1, values);
         }
@@ -824,7 +821,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             //解析model
             byte[] busvoldata;
             busvoldata = PcsApi.ReadPCSBUSVolPar();
-            
+
             BUSUpperLimitVolThresh = Math.Round(BitConverter.ToInt16(busvoldata, 0) * 0.1, 2);
             BUSLowerLimitVolThresh = Math.Round(BitConverter.ToInt16(busvoldata, 2) * 0.1, 2);
             BUSHVolSetting = Math.Round(BitConverter.ToInt16(busvoldata, 4) * 0.1, 2);
@@ -858,7 +855,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             //解析model
             byte[] dcbranch1data;
             dcbranch1data = PcsApi.ReadPCSDCBranch1Par();
-            
+
             //DCCurrentSet = Math.Round(BitConverter.ToInt16(dcbranch1data, 0) * 0.1, 2);
             //DCPowerSet = Math.Round(BitConverter.ToInt16(dcbranch1data, 2) * 0.1, 2);
             BTLLimitVol = Math.Round(BitConverter.ToInt16(dcbranch1data, 4) * 0.1, 2);
@@ -869,7 +866,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             MaxChCurrent = Math.Round(BitConverter.ToInt16(dcbranch1data, 24) * 0.1, 2);
             MaxDisChCurrent = Math.Round(BitConverter.ToInt16(dcbranch1data, 26) * 0.1, 2);
         }
-
         private void SyncDCBranchInfo()
         {
             //PCSInfoModel model = new DCBranchInfo();

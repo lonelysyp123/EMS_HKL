@@ -268,6 +268,7 @@
     <Compile Include="Model\BMSParameterSettingModel.cs" />
     <Compile Include="Model\PublishMessageModel.cs" />
     <Compile Include="Model\SerialPortSettingsModel.cs" />
+    <Compile Include="Model\SmartElectricityMeterModel.cs" />
     <Compile Include="Model\SmartMeterModel.cs" />
     <Compile Include="Model\SubscribeMessageModel.cs" />
     <Compile Include="Model\SystemConfigurationBase.cs" />
@@ -293,13 +294,14 @@
       <DependentUpon>WarnControl3.xaml</DependentUpon>
     </Compile>
     <Compile Include="Service\BMSDataService.cs" />
+    <Compile Include="Service\DataServiceBase.cs" />
     <Compile Include="Service\IDataService.cs" />
     <Compile Include="Service\impl\MqttClientService.cs" />
     <Compile Include="Service\impl\SystemSettingService.cs" />
     <Compile Include="Service\IMqttClientService.cs" />
     <Compile Include="Service\ISystemSettingService.cs" />
-    <Compile Include="Service\ModbusTCPDataService.cs" />
     <Compile Include="Service\SmartMeterDataService.cs" />
+    <Compile Include="Service\SmartElectricityMeterDataService.cs" />
     <Compile Include="Service\PCSDataService.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmandFaultInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmParameterSettingInfoManage.cs" />
@@ -791,7 +793,9 @@
     <None Include="bin\Debug\log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Config\SystemConfig.ini" />
+    <Content Include="Config\SystemConfig.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
