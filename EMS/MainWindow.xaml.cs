@@ -54,7 +54,7 @@ namespace EMS
             PCS_ConnectColor.DataContext = pCSMainViewModel;
             PCS_IP.DataContext = pCSMainViewModel;
             SelectedPage("DaqDataRaBtn");
-            EnergyManagementSystem.GlobalInstance.Initialization(null, null, null, null);
+            EnergyManagementSystem.GlobalInstance.Initialization(null, null, null, null, null);
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
