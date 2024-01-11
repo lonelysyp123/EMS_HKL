@@ -406,6 +406,7 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         }
 
+        #region 电表数据刷新方法
         public void DataRefresh(SmartMeterModel model, SmartElectricityMeterModel semodel)
         {
             /// <summary>
@@ -464,5 +465,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             this.CurrMonthFlatReverseActiveEnergy = semodel.CurrMonthFlatReverseActiveEnergy;
             this.CurrMonthValleyReverseActiveEnergy = semodel.CurrMonthValleyReverseActiveEnergy;
         }
+        #endregion
     }
 }
