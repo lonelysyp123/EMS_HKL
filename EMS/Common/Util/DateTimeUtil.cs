@@ -8,7 +8,11 @@ namespace TNCN.EMS.Common.Util
 {
     public static class DateTimeUtil
     {
-        // DateTime --> long
+        /// <summary>
+        /// DateTime --> long
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
         public static long ConvertDateTimeToLong(DateTime dt)
         {
             DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
@@ -19,7 +23,11 @@ namespace TNCN.EMS.Common.Util
         }
 
 
-        // long --> DateTime
+        /// <summary>
+        /// long --> DateTime
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
         public static DateTime ConvertLongToDateTime(long d)
         {
             DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
