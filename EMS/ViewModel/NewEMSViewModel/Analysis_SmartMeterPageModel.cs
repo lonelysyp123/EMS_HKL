@@ -24,16 +24,21 @@ namespace EMS.ViewModel.NewEMSViewModel
     public class Analysis_SmartMeterPageModel : ViewModelBase
     {
         #region Property
-        private PlotModel _smDisplayData;
+        private PlotModel _smDisplayDataModel;
         /// <summary>
         /// 图表数据
         /// </summary>
         public PlotModel SMDisplayDataModel
         {
-            get => _smDisplayData;
+            get => _smDisplayDataModel;
             set
             {
-                SetProperty(ref _smDisplayData, value);
+                //SetProperty(ref _smDisplayData, value);
+                if (_smDisplayDataModel != value)
+                {
+                    _smDisplayDataModel = value;
+                    OnPropertyChanged(nameof(SMDisplayDataModel));
+                }
             }
         }
 
@@ -131,10 +136,6 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// </summary>
         public RelayCommand ExportCommand { set; get; }
 
-        /// <summary>
-        /// ListBox选择改变
-        /// </summary>
-        //public RelayCommand DataTypeList_SelectionChanged { get; private set; }
         #endregion
 
         #region List

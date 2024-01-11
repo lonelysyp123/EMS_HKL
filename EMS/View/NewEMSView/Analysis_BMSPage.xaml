@@ -266,7 +266,8 @@
 
                     <Grid Grid.Row="2">
                         <oxy:PlotView Model="{Binding BMSDisplayDataModel}"
-                                      Background="AliceBlue">
+                                      Background="AliceBlue"
+                                      x:Name="BMSPlotView">
 
                         </oxy:PlotView>
                     </Grid>

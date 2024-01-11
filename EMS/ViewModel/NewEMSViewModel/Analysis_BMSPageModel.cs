@@ -26,16 +26,21 @@ namespace EMS.ViewModel.NewEMSViewModel
     public class Analysis_BMSPageModel : ViewModelBase
     {
         #region Property
-        private PlotModel _bmsDisplayData;
+        private PlotModel _bmsDisplayDataModel;
         /// <summary>
         /// 图表数据
         /// </summary>
         public PlotModel BMSDisplayDataModel
         {
-            get => _bmsDisplayData;
+            get => _bmsDisplayDataModel;
             set
             {
-                SetProperty(ref _bmsDisplayData, value);
+                //SetProperty(ref _bmsDisplayData, value);
+                if (_bmsDisplayDataModel != value)
+                {
+                    _bmsDisplayDataModel = value;
+                    OnPropertyChanged(nameof(BMSDisplayDataModel));
+                }
             }
         }
 
@@ -126,7 +131,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             get => _selectedType;
             set
             {
-                //SetProperty(ref _selectedType, value);
+
                 if (SetProperty(ref _selectedType, value))
                 {
                     SwitchBatteryData();

@@ -23,7 +23,7 @@ namespace EMS.View.NewEMSView
         public Analysis_PCSPage(Analysis_PCSPageModel viewmodel)
         {
             InitializeComponent();
-            this.DataContext = viewmodel;
+            DataContext = viewmodel;
         }
 
     }

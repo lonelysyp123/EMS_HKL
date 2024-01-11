@@ -176,16 +176,43 @@ namespace EMS.View.NewEMSView
 
         private void AnalysisViewMenu_BMS_Checked(object sender, RoutedEventArgs e)
         {
+            // 先从当前页面中找到并解除PlotView与PlotModel的绑定（如果存在）
+            if (PageContent.Content is Page currentPage && currentPage.DataContext is Analysis_BMSPageModel viewModel)
+            {
+                var plotView = currentPage.FindName("BMSDisplayDataModel") as OxyPlot.Wpf.PlotView;
+                if (plotView != null)
+                {
+                    plotView.Model = null; // 解除绑定
+                }
+            }
             Navigation(new Analysis_BMSPage(viewmodel.Analysis_BMSPageModel), sender as ToggleButton, AnalysisViewMenu);
         }
 
         private void AnalysisViewMenu_PCS_Checked(object sender, RoutedEventArgs e)
         {
+            // 先从当前页面中找到并解除PlotView与PlotModel的绑定（如果存在）
+            if (PageContent.Content is Page currentPage && currentPage.DataContext is Analysis_PCSPageModel viewModel)
+            {
+                var plotView = currentPage.FindName("PCSDisplayDataModel") as OxyPlot.Wpf.PlotView;
+                if (plotView != null)
+                {
+                    plotView.Model = null; // 解除绑定
+                }
+            }
             Navigation(new Analysis_PCSPage(viewmodel.Analysis_PCSPageModel), sender as ToggleButton, AnalysisViewMenu);
         }
 
         private void AnalysisViewMenu_SmartMeter_Checked(object sender, RoutedEventArgs e)
         {
+            // 先从当前页面中找到并解除PlotView与PlotModel的绑定（如果存在）
+            if (PageContent.Content is Page currentPage && currentPage.DataContext is Analysis_SmartMeterPageModel viewModel)
+            {
+                var plotView = currentPage.FindName("SMDisplayDataModel") as OxyPlot.Wpf.PlotView;
+                if (plotView != null)
+                {
+                    plotView.Model = null; // 解除绑定
+                }
+            }
             Navigation(new Analysis_SmartMeterPage(viewmodel.Analysis_SmartMeterPageModel), sender as ToggleButton, AnalysisViewMenu);
         }
 

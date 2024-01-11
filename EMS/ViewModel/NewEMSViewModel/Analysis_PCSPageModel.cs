@@ -24,16 +24,21 @@ namespace EMS.ViewModel.NewEMSViewModel
     public class Analysis_PCSPageModel : ViewModelBase
     {
         #region Property
-        private PlotModel _pcsDisplayData;
+        private PlotModel _pcsDisplayDataModel;
         /// <summary>
         /// 图表数据
         /// </summary>
         public PlotModel PCSDisplayDataModel
         {
-            get => _pcsDisplayData;
+            get => _pcsDisplayDataModel;
             set
             {
-                SetProperty(ref _pcsDisplayData, value);
+                //SetProperty(ref _pcsDisplayData, value);
+                if (_pcsDisplayDataModel != value)
+                {
+                    _pcsDisplayDataModel = value;
+                    OnPropertyChanged(nameof(PCSDisplayDataModel));
+                }
             }
         }
 
@@ -131,10 +136,6 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// </summary>
         public RelayCommand ExportCommand { set; get; }
 
-        /// <summary>
-        /// ListBox选择改变
-        /// </summary>
-        //public RelayCommand DataTypeList_SelectionChanged { get; private set; }
         #endregion
 
         #region List

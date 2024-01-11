@@ -22,7 +22,7 @@ namespace EMS.View.NewEMSView
         public Analysis_SmartMeterPage(Analysis_SmartMeterPageModel viewmodel)
         {
             InitializeComponent();
-            this.DataContext = viewmodel;
+            DataContext = viewmodel;
         }
     }
 }
