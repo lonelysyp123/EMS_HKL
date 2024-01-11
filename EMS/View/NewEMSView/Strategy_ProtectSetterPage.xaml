@@ -787,7 +787,7 @@
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
                                     Margin="10 0 10 0"
-                                    Command="{Binding SyncInfoDB1Command}"/>
+                                    Command="{Binding SyncInfoDBCommand}"/>
                             <Button Content="读取数据库"
                                     FontSize="11"
                                     Width="80"

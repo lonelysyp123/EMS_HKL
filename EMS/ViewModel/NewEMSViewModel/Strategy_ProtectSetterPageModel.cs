@@ -619,7 +619,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         public RelayCommand ReadDCBranchInfoCommand { get; set; }
         public RelayCommand SyncDCBranchInfoCommand { get; set; }
 
-        public RelayCommand SyncInfoDB1Command {  get; set; }
+        public RelayCommand SyncInfoDBCommand {  get; set; }
         #endregion
 
 
@@ -644,7 +644,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             SyncBUSVolInfoCommand = new RelayCommand(SyncBUSVolInfo);
             ReadDCBranchInfoCommand = new RelayCommand(ReadDCBranchInfo);
             SyncDCBranchInfoCommand = new RelayCommand(SyncDCBranchInfo);
-            SyncInfoDB1Command = new RelayCommand(SyncInfoDB1);
+            SyncInfoDBCommand = new RelayCommand(SyncInfoDB);
         }
 
         private void ReadDBInfo()
@@ -754,7 +754,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         
-        public void SyncInfoDB1()
+        public void SyncInfoDB()
         {
             AlarmParameterSettingInfoManage manage = new AlarmParameterSettingInfoManage();
             AlarmParameterSettingModel model = new AlarmParameterSettingModel()
