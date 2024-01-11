@@ -90,7 +90,7 @@ namespace EMS.Service
                     byte[] SerialNumber = ReadFunc(53579, 15);
                     CurrentModel = DataDecode(dcState, pcsData, Temp, DCBranch1INFO, SerialNumber);
                     OnChangeData(this, CurrentModel.Clone());
-                    Models.Add(CurrentModel.Clone() as PCSModel);
+                    Models.TryAdd(CurrentModel.Clone() as PCSModel);
                     if (IsSaveDaq)
                     {
                         SaveData(CurrentModel);
@@ -206,7 +206,7 @@ namespace EMS.Service
             int count = 0;
             while (true)
             {
-                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(reconnectInterval))
+                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(ReconnectInterval))
                 {
                     _master = ModbusIpMaster.CreateIp(_client);
                     return true;
@@ -214,7 +214,7 @@ namespace EMS.Service
                 else
                 {
                     count++;
-                    if (count > maxReconnectTimes)
+                    if (count > MaxReconnectTimes)
                     {
                         IsCommunicationProtectState = true;
                         IsConnected = false;
@@ -231,8 +231,8 @@ namespace EMS.Service
         {
             while (!IsConnected)
             {
-                Thread.Sleep(reconnectIntervalLong);
-                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(reconnectInterval))
+                Thread.Sleep(ReconnectIntervalLong);
+                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(ReconnectInterval))
                 {
                     _master = ModbusIpMaster.CreateIp(_client);
                     IsConnected = true;
