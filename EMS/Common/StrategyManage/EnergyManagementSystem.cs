@@ -103,6 +103,7 @@ namespace EMS.Model
             _operationThread = null;
             _bms_manager = new BMSManager();
             _controller = new EmsController();
+
             _pcs_manager =new PCSManager();
             _smart_meter_manager = new SmartMeterManager();
             mqttClientManager = new MqttClientManager();
