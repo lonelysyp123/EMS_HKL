@@ -132,7 +132,7 @@ namespace EMS.View.NewEMSView
                 AnalysisViewMenu_PCS.Visibility = Visibility.Collapsed;
                 AnalysisViewMenu_SmartMeter.Visibility = Visibility.Collapsed;
             }
-            Navigation(new Analysis_BMSPage(), sender as ToggleButton);
+            Navigation(new Analysis_BMSPage(viewmodel.Analysis_BMSPageModel), sender as ToggleButton);
         }
 
         private void FaultViewMenu_Checked(object sender, RoutedEventArgs e)
@@ -176,7 +176,7 @@ namespace EMS.View.NewEMSView
 
         private void AnalysisViewMenu_BMS_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Analysis_BMSPage(), sender as ToggleButton, AnalysisViewMenu);
+            Navigation(new Analysis_BMSPage(viewmodel.Analysis_BMSPageModel), sender as ToggleButton, AnalysisViewMenu);
         }
 
         private void AnalysisViewMenu_PCS_Checked(object sender, RoutedEventArgs e)
