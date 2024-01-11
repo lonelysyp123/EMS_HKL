@@ -147,6 +147,20 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
+        
+        private string _selectedNumber;
+        /// <summary>
+        /// 选中的电池序号
+        /// </summary>
+        public string SelectedNumber
+        {
+            get => _selectedNumber;
+            set
+            {
+                SetProperty(ref _selectedNumber, value);
+            }
+        }
+
         #endregion
 
         #region Command
@@ -163,16 +177,12 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         #endregion
 
-        #region List
-        public List<string> SelectedBatteryList;
         /// <summary>
         /// 查询数据集合
         /// </summary>
         public List<List<double[]>> DisplayDataList;
 
         public List<DateTime[]> TimeList;
-
-        #endregion
 
 
         /// <summary>
@@ -187,7 +197,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             EndTime1 = DateTime.Today.ToString();
             StartTime2 = "00:00:00";
             EndTime2 = "00:00:00";
-            SelectedBatteryList = new List<string>();
             QueryCommand = new RelayCommand(Query);
             ExportCommand = new RelayCommand(Export);
             BMSDisplayDataModel = new PlotModel();
@@ -400,32 +409,30 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             InitChart();
             BMSDisplayDataModel.Series.Clear();
-            for (int i = 0; i < SelectedBatteryList.Count; i++)
+            LineSeries lineSeries = new LineSeries();
+            lineSeries.Title = SelectedNumber;
+            lineSeries.MarkerSize = 3;
+            lineSeries.MarkerType = MarkerType.Circle;
+            if (int.TryParse(SelectedNumber, out int index))
             {
-                LineSeries lineSeries = new LineSeries();
-                lineSeries.Title = SelectedBatteryList[i];
-                lineSeries.MarkerSize = 3;
-                lineSeries.MarkerType = MarkerType.Circle;
-                if (int.TryParse(SelectedBatteryList[i], out int index))
+                if (DisplayDataList.Count > 0 && DisplayDataList.Count > index - 1)
                 {
-                    if (DisplayDataList.Count > 0 && DisplayDataList.Count > index - 1)
+                    if (DisplayDataList[index - 1].Count > 0)
                     {
-                        if (DisplayDataList[index - 1].Count > 0)
+                        if (DisplayDataList[index - 1][SelectedTypeIndex].Length > 0)
                         {
-                            if (DisplayDataList[index - 1][SelectedTypeIndex].Length > 0)
+                            for (int j = 0; j < DisplayDataList[index - 1][SelectedTypeIndex].Length; j++)
                             {
-                                for (int j = 0; j < DisplayDataList[index - 1][SelectedTypeIndex].Length; j++)
-                                {
-                                    Debug.WriteLine(TimeList[index - 1][j],"11111111111");
-                                    Debug.WriteLine(DisplayDataList[index - 1][SelectedTypeIndex][j], "22222222");
-                                    lineSeries.Points.Add(DateTimeAxis.CreateDataPoint(TimeList[index - 1][j], DisplayDataList[index - 1][SelectedTypeIndex][j]));
-                                }
-                                BMSDisplayDataModel.Series.Add(lineSeries);
+                                Debug.WriteLine(TimeList[index - 1][j], "11111111111");
+                                Debug.WriteLine(DisplayDataList[index - 1][SelectedTypeIndex][j], "22222222");
+                                lineSeries.Points.Add(DateTimeAxis.CreateDataPoint(TimeList[index - 1][j], DisplayDataList[index - 1][SelectedTypeIndex][j]));
                             }
+                            BMSDisplayDataModel.Series.Add(lineSeries);
                         }
                     }
                 }
             }
+
             BMSDisplayDataModel.InvalidatePlot(true);
         }
 
