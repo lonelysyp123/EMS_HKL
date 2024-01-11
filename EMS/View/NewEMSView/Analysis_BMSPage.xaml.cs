@@ -57,9 +57,9 @@ namespace EMS.View.NewEMSView
             vm.SwitchBatteryData();
         }
 
-        private void DataTypeList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            vm.SwitchBatteryData();
-        }
+        //private void DataTypeList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    vm.SwitchBatteryData();
+        //}
     }
 }

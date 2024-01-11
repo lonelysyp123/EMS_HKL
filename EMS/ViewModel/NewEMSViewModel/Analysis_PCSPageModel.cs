@@ -24,16 +24,16 @@ namespace EMS.ViewModel.NewEMSViewModel
     public class Analysis_PCSPageModel : ViewModelBase
     {
         #region Property
-        private PlotModel _displayData;
+        private PlotModel _pcsDisplayData;
         /// <summary>
         /// 图表数据
         /// </summary>
-        public PlotModel DisplayDataModel
+        public PlotModel PCSDisplayDataModel
         {
-            get => _displayData;
+            get => _pcsDisplayData;
             set
             {
-                SetProperty(ref _displayData, value);
+                SetProperty(ref _pcsDisplayData, value);
             }
         }
 
@@ -98,7 +98,10 @@ namespace EMS.ViewModel.NewEMSViewModel
             get => _selectedType;
             set
             {
-                SetProperty(ref _selectedType, value);
+                if(SetProperty(ref _selectedType, value))
+                {
+                    SwitchPCSData();
+                }
             }
         }
 
@@ -154,10 +157,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             TimeList = new List<DateTime[]>();
             ExportCommand = new RelayCommand(Export);
             QueryCommand = new RelayCommand(Query);
-            DisplayDataModel = new PlotModel();
+            PCSDisplayDataModel = new PlotModel();
             DisplayDataList = new List<List<double[]>>();
-            //DataTypeList_SelectionChanged = new RelayCommand(SwitchPCSData);
-
         }
 
         /// <summary>
@@ -273,7 +274,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         public void SwitchPCSData()
         {
             InitChart();
-            DisplayDataModel.Series.Clear();
+            PCSDisplayDataModel.Series.Clear();
             for (int i = 0; i < DisplayDataList.Count; i++)
             {
                 LineSeries lineSeries = new LineSeries();
@@ -285,9 +286,9 @@ namespace EMS.ViewModel.NewEMSViewModel
                     Debug.WriteLine(DisplayDataList[i][SelectedTypeIndex][j],"111111111111111");
                     lineSeries.Points.Add(DateTimeAxis.CreateDataPoint(TimeList[i][j], DisplayDataList[i][SelectedTypeIndex][j]));
                 }
-                DisplayDataModel.Series.Add(lineSeries);
+                PCSDisplayDataModel.Series.Add(lineSeries);
             }
-            DisplayDataModel.InvalidatePlot(true);
+            PCSDisplayDataModel.InvalidatePlot(true);
         }
 
         /// <summary>
@@ -329,7 +330,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         private void InitChart()
         {
             //! Legend
-            DisplayDataModel.Legends.Clear();
+            PCSDisplayDataModel.Legends.Clear();
             var l = new Legend
             {
                 LegendBorder = OxyColors.White,
@@ -339,18 +340,18 @@ namespace EMS.ViewModel.NewEMSViewModel
                 LegendPlacement = LegendPlacement.Inside,
                 LegendOrientation = LegendOrientation.Vertical,
             };
-            DisplayDataModel.Legends.Add(l);
+            PCSDisplayDataModel.Legends.Add(l);
 
             //! Axes
-            DisplayDataModel.Axes.Clear();
+            PCSDisplayDataModel.Axes.Clear();
 
-            DisplayDataModel.Axes.Add(new LinearAxis()
+            PCSDisplayDataModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Left,
                 Title = SelectedType.Content.ToString(),
 
             });
-            DisplayDataModel.Axes.Add(new DateTimeAxis()
+            PCSDisplayDataModel.Axes.Add(new DateTimeAxis()
             {
                 Position = AxisPosition.Bottom,
                 Title = "时间",

@@ -20,29 +20,11 @@ namespace EMS.View.NewEMSView
     public partial class Analysis_PCSPage : Page
     {
 
-        //public Analysis_PCSPage()
-        //{
-        //    InitializeComponent();
-        //}
-
-        //public Analysis_PCSPage(Analysis_PCSPageModel viewmodel)
-        //{
-        //    InitializeComponent();
-        //    this.DataContext = viewmodel;
-        //}
-
-        private Analysis_PCSPageModel vm;
-        public Analysis_PCSPage()
+        public Analysis_PCSPage(Analysis_PCSPageModel viewmodel)
         {
             InitializeComponent();
-
-            vm = new Analysis_PCSPageModel();
-            this.DataContext = vm;
+            this.DataContext = viewmodel;
         }
 
-        private void DataTypeList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            vm.SwitchPCSData();
-        }
     }
 }

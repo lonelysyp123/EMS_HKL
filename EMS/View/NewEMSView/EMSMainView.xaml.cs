@@ -181,12 +181,12 @@ namespace EMS.View.NewEMSView
 
         private void AnalysisViewMenu_PCS_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Analysis_PCSPage(), sender as ToggleButton, AnalysisViewMenu);
+            Navigation(new Analysis_PCSPage(viewmodel.Analysis_PCSPageModel), sender as ToggleButton, AnalysisViewMenu);
         }
 
         private void AnalysisViewMenu_SmartMeter_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Analysis_SmartMeterPage(), sender as ToggleButton, AnalysisViewMenu);
+            Navigation(new Analysis_SmartMeterPage(viewmodel.Analysis_SmartMeterPageModel), sender as ToggleButton, AnalysisViewMenu);
         }
 
         private void StrategyViewMenu_Setter_Checked(object sender, RoutedEventArgs e)

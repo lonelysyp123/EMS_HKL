@@ -40,7 +40,6 @@
                 <Grid>
                     <ListBox HorizontalAlignment="Center"
                              BorderThickness="0,0,0,0"
-                            
                              SelectedItem="{Binding SelectedType}"
                              SelectedIndex="{Binding SelectedTypeIndex}"
                              Foreground="Black">
@@ -141,7 +140,7 @@
                                    Margin="20,0,0,0"
                                    Foreground="#1E1E1E"></Label>
                             <DatePicker x:Name="Test1"
-                                        Width="100"
+                                       
                                         Height="30"
                                         Background="White"
                                         VerticalContentAlignment="Center"
@@ -163,7 +162,7 @@
                                         VerticalContentAlignment="Center"
                                         Text="{Binding EndTime1, Mode=TwoWay}"
                                         Foreground="Black"
-                                        Width="100"
+                                        
                                         Background="White"></DatePicker>
                             <trl:DateInput Width="90"
                                            Height="30"
@@ -191,7 +190,7 @@
                     </Grid>
 
                     <Grid Grid.Row="2">
-                        <oxy:PlotView Model="{Binding DisplayDataModel}"
+                        <oxy:PlotView Model="{Binding SMDisplayDataModel}"
                                       Background="AliceBlue">
 
                         </oxy:PlotView>

@@ -24,16 +24,16 @@ namespace EMS.ViewModel.NewEMSViewModel
     public class Analysis_SmartMeterPageModel : ViewModelBase
     {
         #region Property
-        private PlotModel _displayData;
+        private PlotModel _smDisplayData;
         /// <summary>
         /// 图表数据
         /// </summary>
-        public PlotModel DisplayDataModel
+        public PlotModel SMDisplayDataModel
         {
-            get => _displayData;
+            get => _smDisplayData;
             set
             {
-                SetProperty(ref _displayData, value);
+                SetProperty(ref _smDisplayData, value);
             }
         }
 
@@ -98,7 +98,10 @@ namespace EMS.ViewModel.NewEMSViewModel
             get => _selectedType;
             set
             {
-                SetProperty(ref _selectedType, value);
+                if(SetProperty(ref _selectedType, value))
+                {
+                    SwitchSmartMeterData();
+                }
             }
         }
 
@@ -147,15 +150,13 @@ namespace EMS.ViewModel.NewEMSViewModel
 
             QueryCommand = new RelayCommand(Query);
             ExportCommand = new RelayCommand(Export);
-            DisplayDataModel = new PlotModel();
+            SMDisplayDataModel = new PlotModel();
             DisplayDataList = new List<List<double[]>>();
             TimeList = new List<DateTime[]>();
             StartTime1 = DateTime.Today.ToString();
             EndTime1 = DateTime.Today.ToString();
             StartTime2 = "00:00:00";
             EndTime2 = "00:00:00";
-            //DataTypeList_SelectionChanged = new RelayCommand(SwitchSmartMeterData);
-
         }
 
         /// <summary>
@@ -318,7 +319,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         public void SwitchSmartMeterData()
         {
             InitChart();
-            DisplayDataModel.Series.Clear();
+            SMDisplayDataModel.Series.Clear();
             Debug.WriteLine(DisplayDataList.Count,"66666666666");
             for (int i = 0; i < DisplayDataList.Count; i++)
             {
@@ -333,9 +334,9 @@ namespace EMS.ViewModel.NewEMSViewModel
                     Debug.WriteLine(DisplayDataList[i][SelectedTypeIndex][j], "44444444444");
                     lineSeries.Points.Add(DateTimeAxis.CreateDataPoint(TimeList[i][j], DisplayDataList[i][SelectedTypeIndex][j]));
                 }
-                DisplayDataModel.Series.Add(lineSeries);
+                SMDisplayDataModel.Series.Add(lineSeries);
             }
-            DisplayDataModel.InvalidatePlot(true);
+            SMDisplayDataModel.InvalidatePlot(true);
         }
 
         /// <summary>
@@ -377,7 +378,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         private void InitChart()
         {
             //! Legend
-            DisplayDataModel.Legends.Clear();
+            SMDisplayDataModel.Legends.Clear();
             var l = new Legend
             {
                 LegendBorder = OxyColors.White,
@@ -387,18 +388,18 @@ namespace EMS.ViewModel.NewEMSViewModel
                 LegendPlacement = LegendPlacement.Inside,
                 LegendOrientation = LegendOrientation.Vertical,
             };
-            DisplayDataModel.Legends.Add(l);
+            SMDisplayDataModel.Legends.Add(l);
 
             //! Axes
-            DisplayDataModel.Axes.Clear();
+            SMDisplayDataModel.Axes.Clear();
 
-            DisplayDataModel.Axes.Add(new LinearAxis()
+            SMDisplayDataModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Left,
                 Title = SelectedType.Content.ToString(),
 
             });
-            DisplayDataModel.Axes.Add(new DateTimeAxis()
+            SMDisplayDataModel.Axes.Add(new DateTimeAxis()
             {
                 Position = AxisPosition.Bottom,
                 Title = "时间",

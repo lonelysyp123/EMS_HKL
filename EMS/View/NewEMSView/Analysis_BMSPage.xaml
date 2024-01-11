@@ -47,12 +47,9 @@
                              SelectionMode="Extended"
                              Foreground="White"
                              BorderThickness="0,0,0,0"
+                             SelectedItem="{Binding SelectedNumber}"
+                             ItemsSource="{Binding SelectedNumberIndex}"
                              SelectionChanged="BatteryList_SelectionChanged">
-                        <!--<bh:Interaction.Triggers>
-                            <bh:EventTrigger EventName="SelectionChanged">
-                                <bh:InvokeCommandAction Command="{Binding BatteryList_SelectionChanged}" />
-                            </bh:EventTrigger>
-                        </bh:Interaction.Triggers>-->
                         <ListBoxItem Content="1"
                                      Foreground="Black"
                                      BorderThickness="1,1,1,1"
@@ -143,13 +140,7 @@
                              BorderThickness="0,0,0,0"
                              SelectedItem="{Binding SelectedType}"
                              SelectedIndex="{Binding SelectedTypeIndex}"
-                             SelectionChanged="DataTypeList_SelectionChanged"
                              Foreground="Black">
-                        <!--<bh:Interaction.Triggers>
-                            <bh:EventTrigger EventName="SelectionChanged">
-                                <bh:InvokeCommandAction Command="{Binding DataTypeList_SelectionChanged}" />
-                            </bh:EventTrigger>
-                        </bh:Interaction.Triggers>-->
                         <ListBoxItem Content="Voltage"
                                      BorderThickness="1,1,1,1"
                                      Margin="0,10,0,0"
@@ -228,7 +219,7 @@
                                    Margin="20,0,0,0"
                                    Foreground="#1E1E1E"></Label>
                             <DatePicker x:Name="Test1"
-                                        Width="100"
+                                        
                                         Height="30"
                                         Background="White"
                                         VerticalContentAlignment="Center"
@@ -250,7 +241,7 @@
                                         VerticalContentAlignment="Center"
                                         Text="{Binding EndTime1, Mode=TwoWay}"
                                         Foreground="Black"
-                                        Width="100"
+                                       
                                         Background="White"></DatePicker>
                             <trl:DateInput Width="90"
                                            Height="30"
@@ -278,7 +269,7 @@
                     </Grid>
 
                     <Grid Grid.Row="2">
-                        <oxy:PlotView Model="{Binding DisplayDataModel}"
+                        <oxy:PlotView Model="{Binding BMSDisplayDataModel}"
                                       Background="AliceBlue">
 
                         </oxy:PlotView>

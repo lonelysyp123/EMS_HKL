@@ -26,16 +26,16 @@ namespace EMS.ViewModel.NewEMSViewModel
     public class Analysis_BMSPageModel : ViewModelBase
     {
         #region Property
-        private PlotModel _displayData;
+        private PlotModel _bmsDisplayData;
         /// <summary>
         /// 图表数据
         /// </summary>
-        public PlotModel DisplayDataModel
+        public PlotModel BMSDisplayDataModel
         {
-            get => _displayData;
+            get => _bmsDisplayData;
             set
             {
-                SetProperty(ref _displayData, value);
+                SetProperty(ref _bmsDisplayData, value);
             }
         }
 
@@ -126,7 +126,11 @@ namespace EMS.ViewModel.NewEMSViewModel
             get => _selectedType;
             set
             {
-                SetProperty(ref _selectedType, value);
+                //SetProperty(ref _selectedType, value);
+                if (SetProperty(ref _selectedType, value))
+                {
+                    SwitchBatteryData();
+                }
             }
         }
 
@@ -142,6 +146,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                 SetProperty(ref _selectedTypeIndex, value);
             }
         }
+
         #endregion
 
         #region Command
@@ -155,15 +160,6 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// </summary>
         public RelayCommand ExportCommand { set; get; }
 
-        /// <summary>
-        /// ListBox选择改变
-        /// </summary>
-        //public RelayCommand DataTypeList_SelectionChanged { set; get; }
-
-        /// <summary>
-        /// 14个电池列表按钮选择
-        /// </summary>
-        //public RelayCommand<SelectionChangedEventArgs> BatteryList_SelectionChanged { get; set; }
 
         #endregion
 
@@ -194,11 +190,9 @@ namespace EMS.ViewModel.NewEMSViewModel
             SelectedBatteryList = new List<string>();
             QueryCommand = new RelayCommand(Query);
             ExportCommand = new RelayCommand(Export);
-            DisplayDataModel = new PlotModel();
+            BMSDisplayDataModel = new PlotModel();
             DisplayDataList = new List<List<double[]>>();
             TimeList = new List<DateTime[]>();
-            //DataTypeList_SelectionChanged = new RelayCommand(SwitchBatteryData);
-            //BatteryList_SelectionChanged = new RelayCommand<SelectionChangedEventArgs>(OnBatteryListSelectionChanged);
 
         }
 
@@ -405,7 +399,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         public void SwitchBatteryData()
         {
             InitChart();
-            DisplayDataModel.Series.Clear();
+            BMSDisplayDataModel.Series.Clear();
             for (int i = 0; i < SelectedBatteryList.Count; i++)
             {
                 LineSeries lineSeries = new LineSeries();
@@ -426,13 +420,13 @@ namespace EMS.ViewModel.NewEMSViewModel
                                     Debug.WriteLine(DisplayDataList[index - 1][SelectedTypeIndex][j], "22222222");
                                     lineSeries.Points.Add(DateTimeAxis.CreateDataPoint(TimeList[index - 1][j], DisplayDataList[index - 1][SelectedTypeIndex][j]));
                                 }
-                                DisplayDataModel.Series.Add(lineSeries);
+                                BMSDisplayDataModel.Series.Add(lineSeries);
                             }
                         }
                     }
                 }
             }
-            DisplayDataModel.InvalidatePlot(true);
+            BMSDisplayDataModel.InvalidatePlot(true);
         }
 
         /// <summary>
@@ -472,7 +466,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         private void InitChart()
         {
             //! Legend
-            DisplayDataModel.Legends.Clear();
+            BMSDisplayDataModel.Legends.Clear();
             var l = new Legend
             {
                 LegendBorder = OxyColors.White,
@@ -482,18 +476,18 @@ namespace EMS.ViewModel.NewEMSViewModel
                 LegendPlacement = LegendPlacement.Inside,
                 LegendOrientation = LegendOrientation.Vertical,
             };
-            DisplayDataModel.Legends.Add(l);
+            BMSDisplayDataModel.Legends.Add(l);
 
             //! Axes
-            DisplayDataModel.Axes.Clear();
+            BMSDisplayDataModel.Axes.Clear();
 
-            DisplayDataModel.Axes.Add(new LinearAxis()
+            BMSDisplayDataModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Left,
                 Title = SelectedType.Content.ToString(),
 
             });
-            DisplayDataModel.Axes.Add(new DateTimeAxis()
+            BMSDisplayDataModel.Axes.Add(new DateTimeAxis()
             {
                 Position = AxisPosition.Bottom,
                 Title = "时间",
