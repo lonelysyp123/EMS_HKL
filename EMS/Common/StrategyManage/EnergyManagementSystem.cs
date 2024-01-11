@@ -43,7 +43,13 @@ namespace EMS.Model
             }
         }
     }
-  
+
+    public class SEMManager
+    {
+        private SmartElectricityMeterDataService _semDataService;
+        public SmartElectricityMeterDataService SEMDataService { get { return _semDataService; } }
+    }
+
     public class PCSManager
     {
         private PCSDataService _pcsDataService;
@@ -62,6 +68,7 @@ namespace EMS.Model
         private EmsController _controller;
         private SmartMeterManager _smart_meter_manager;
         private PCSManager _pcs_manager;
+        private SEMManager _sem_manager;
         private BMSManager _bms_manager;
         private object _database_manager;
         private object _cloud_manager;
@@ -97,6 +104,7 @@ namespace EMS.Model
         public BMSManager BMSManager { get { return _bms_manager; } }
         public PCSManager PcsManager { get { return _pcs_manager; } }
         public SmartMeterManager SmartMeterManager { get { return _smart_meter_manager; } }
+        public SEMManager SemManager { get { return _sem_manager; } }
         public MqttClientManager MqttClientManager { get { return mqttClientManager; } }
         public EnergyManagementSystem()
         {
@@ -105,10 +113,11 @@ namespace EMS.Model
             _controller = new EmsController();
             _pcs_manager =new PCSManager();
             _smart_meter_manager = new SmartMeterManager();
+            _sem_manager = new SEMManager();
             mqttClientManager = new MqttClientManager();
         }
 
-        public void Initialization(object _pcs_manager, object _smart_meter_manager, object _database_manager, object _cloud_manager)
+        public void Initialization(object _pcs_manager, object _smart_meter_manager, object _sem_manager, object _database_manager, object _cloud_manager)
         {
 
             //return;

@@ -22,6 +22,7 @@ using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 using OxyPlot;
 using System.Windows.Markup;
+using EMS.Storage.DB.Models;
 
 namespace EMS.Service
      
@@ -98,33 +99,19 @@ namespace EMS.Service
             }
         }
 
-        // CS校验不计算0xFE, 0xFE, 0xFE, 0xFE
-        byte[] Request_GetVoltage_A = new byte[] { 0x68, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x68, 0x11, 0x04, 0x02, 0x01, 0x01, 0x00, 0xA4, 0x16 };
-        byte[] Response_GetVoltage_A = new byte[] { 0xFE, 0xFE, 0xFE, 0xFE, 0x68, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x68, 0x91, 0x08, 0x33, 0x33, 0x33, 0x33, 0x00, 0x00, 0x00, 0x00, 0x44, 0x16 };
-        byte[] Request_GetVoltage_B = new byte[0];
-        byte[] Response_GetVoltage_B = new byte[0];
         protected override void DaqDataTh()
         {
             while (IsConnected && IsDaqData)
             {
                 try
                 {
-                    Thread.Sleep(DaqTimeSpan * 500);
-                    // 采集数据
-                    SmartElectricityMeterModel model = new SmartElectricityMeterModel();
-                    var Data_Voltage_A = ReadDataForCmd(Request_GetVoltage_A, Response_GetVoltage_A.Length);
-                    if (DataDecode(Data_Voltage_A, Response_GetVoltage_A, out int Voltage_A))
-                    {
-                        model.Voltage_A = Voltage_A;
-                    }
+                    Thread.Sleep(DaqTimeSpan * 1000 + 100);
 
-                    var Data_Voltage_B = ReadDataForCmd(Request_GetVoltage_B, Response_GetVoltage_B.Length);
-                    if (DataDecode(Data_Voltage_A, Response_GetVoltage_A, out int Voltage_B))
-                    {
-                        model.Voltage_B = Voltage_B;
-                    }
-
-                    CurrentModel = model;
+                    byte[] oneSidedata = ReadFunc(12, 2);
+                    byte[] dcBasedata = ReadFunc(50, 3);
+                    byte[] forwardEnergydata = ReadFunc(2000, 10);
+                    byte[] reverseEnergydata = ReadFunc(2140, 10);
+                    CurrentModel = DataDecode(oneSidedata, dcBasedata, forwardEnergydata, reverseEnergydata);
                     OnChangeData(this, CurrentModel.Clone());
                     Models.Add(CurrentModel.Clone() as SmartElectricityMeterModel);
                     if (IsSaveDaq)
@@ -132,8 +119,9 @@ namespace EMS.Service
                         SaveData(CurrentModel);
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    LogUtils.Error(DevType + " ID:" + ID, ex);
                     break;
                 }
             }
@@ -141,33 +129,110 @@ namespace EMS.Service
 
         private void SaveData(SmartElectricityMeterModel model)
         {
-            // 电表存储相关操作
+            //计量电表存储相关操作
+            SmartElectricityMeterInfoModel smartelectricitymeterInfoModel = new SmartElectricityMeterInfoModel();
+            smartelectricitymeterInfoModel.ID = int.Parse(ID);
+            smartelectricitymeterInfoModel.TotalForwardPrimaryEnergy = model.TotalForwardPrimaryEnergy;
+            smartelectricitymeterInfoModel.TotalReversePrimaryEnergy = model.TotalReversePrimaryEnergy;
+            smartelectricitymeterInfoModel.Voltage = model.Voltage;
+            smartelectricitymeterInfoModel.Current = model.Current;
+            smartelectricitymeterInfoModel.Power = model.Power;
+            smartelectricitymeterInfoModel.TotalActiveEnergy = model.TotalActiveEnergy;
+            smartelectricitymeterInfoModel.TotalSpikesActiveEnergy = model.TotalSpikesActiveEnergy;
+            smartelectricitymeterInfoModel.TotalPeakActiveEnergy = model.TotalPeakActiveEnergy;
+            smartelectricitymeterInfoModel.TotalFlatActiveEnergy = model.TotalFlatActiveEnergy;
+            smartelectricitymeterInfoModel.TotalValleyActiveEnergy = model.TotalValleyActiveEnergy;
+            smartelectricitymeterInfoModel.CurrMonthTotalActiveEnergy = model.CurrMonthTotalActiveEnergy;
+            smartelectricitymeterInfoModel.CurrMonthSpikesActiveEnergy = model.CurrMonthSpikesActiveEnergy;
+            smartelectricitymeterInfoModel.CurrMonthPeakActiveEnergy = model.CurrMonthPeakActiveEnergy;
+            smartelectricitymeterInfoModel.CurrMonthFlatRateActiveEnergy = model.CurrMonthFlatRateActiveEnergy;
+            smartelectricitymeterInfoModel.CurrMonthValleyActiveEnergy = model.CurrMonthValleyActiveEnergy;
+            smartelectricitymeterInfoModel.TotalReverseActiveEnergy = model.TotalReverseActiveEnergy;
+            smartelectricitymeterInfoModel.TotalSpikesReverseActiveEnergy = model.TotalSpikesReverseActiveEnergy;
+            smartelectricitymeterInfoModel.TotalPeakReverseActiveEnergy = model.TotalPeakReverseActiveEnergy;
+            smartelectricitymeterInfoModel.TotalFlatReverseActiveEnergy = model.TotalFlatReverseActiveEnergy;
+            smartelectricitymeterInfoModel.TotalValleyReverseActiveEnergy = model.TotalValleyReverseActiveEnergy;
+            smartelectricitymeterInfoModel.CurrMonthTotalReverseActiveEnergy = model.CurrMonthTotalReverseActiveEnergy;
+            smartelectricitymeterInfoModel.CurrMonthSpikesReverseActiveEnergy = model.CurrMonthSpikesReverseActiveEnergy;
+            smartelectricitymeterInfoModel.CurrMonthPeakReverseActiveEnergy = model.CurrMonthPeakReverseActiveEnergy;
+            smartelectricitymeterInfoModel.CurrMonthFlatReverseActiveEnergy = model.CurrMonthFlatReverseActiveEnergy;
+            smartelectricitymeterInfoModel.CurrMonthValleyReverseActiveEnergy = model.CurrMonthValleyReverseActiveEnergy;
         }
 
-        private byte[] ReadDataForCmd(byte[] Request, int num)
+        private SmartElectricityMeterModel DataDecode(byte[] oneSidedata, byte[] dcBasedata, byte[] forwardEnergydata, byte[] reverseEnergydata)
+        {
+            SmartElectricityMeterModel item = new SmartElectricityMeterModel();
+            if (oneSidedata != null)
+            {
+                item.TotalForwardPrimaryEnergy = BitConverter.ToInt16(oneSidedata, 0);
+                item.TotalReversePrimaryEnergy = BitConverter.ToInt16(oneSidedata, 2);
+            }
+            if (dcBasedata != null)
+            {
+                item.Voltage = BitConverter.ToInt16(dcBasedata, 0);
+                item.Current = BitConverter.ToInt16(dcBasedata, 2);
+                item.Power = BitConverter.ToInt16(dcBasedata, 4);
+            }
+            if (forwardEnergydata != null)
+            {
+                item.TotalActiveEnergy = BitConverter.ToInt16(forwardEnergydata, 0);
+                item.TotalSpikesActiveEnergy = BitConverter.ToInt16(forwardEnergydata, 2);
+                item.TotalPeakActiveEnergy = BitConverter.ToInt16(forwardEnergydata, 4);
+                item.TotalFlatActiveEnergy = BitConverter.ToInt16(forwardEnergydata, 6);
+                item.TotalValleyActiveEnergy = BitConverter.ToInt16(forwardEnergydata, 8);
+                item.CurrMonthTotalActiveEnergy = BitConverter.ToInt16(forwardEnergydata, 10);
+                item.CurrMonthSpikesActiveEnergy = BitConverter.ToInt16(forwardEnergydata, 12);
+                item.CurrMonthPeakActiveEnergy = BitConverter.ToInt16(forwardEnergydata, 14);
+                item.CurrMonthFlatRateActiveEnergy = BitConverter.ToInt16(forwardEnergydata, 16);
+                item.CurrMonthValleyActiveEnergy = BitConverter.ToInt16(forwardEnergydata, 18);
+            }
+            if (reverseEnergydata != null)
+            {
+                item.TotalReverseActiveEnergy = BitConverter.ToInt16(reverseEnergydata, 0);
+                item.TotalSpikesReverseActiveEnergy = BitConverter.ToInt16(reverseEnergydata, 2);
+                item.TotalPeakReverseActiveEnergy = BitConverter.ToInt16(reverseEnergydata, 4);
+                item.TotalFlatReverseActiveEnergy = BitConverter.ToInt16(reverseEnergydata, 6);
+                item.TotalValleyReverseActiveEnergy = BitConverter.ToInt16(reverseEnergydata, 8);
+                item.CurrMonthTotalReverseActiveEnergy = BitConverter.ToInt16(reverseEnergydata, 10);
+                item.CurrMonthSpikesReverseActiveEnergy = BitConverter.ToInt16(reverseEnergydata, 12);
+                item.CurrMonthPeakReverseActiveEnergy = BitConverter.ToInt16(reverseEnergydata, 14);
+                item.CurrMonthFlatReverseActiveEnergy = BitConverter.ToInt16(reverseEnergydata, 16);
+                item.CurrMonthValleyReverseActiveEnergy = BitConverter.ToInt16(reverseEnergydata, 18);
+            }
+            return item;
+        }
+        /// <summary>
+        /// 通用读取函数
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        private byte[] ReadFunc(ushort address, ushort num)
         {
             try
             {
-                var readBytes = new byte[num];
-                SerialPortInstance.Write(Request, 0, Request.Length);
-                SerialPortInstance.Read(readBytes, 0, num);
-                return readBytes;
+                ushort[] holding_register = _master.ReadHoldingRegisters(1, address, num);
+                byte[] ret = new byte[holding_register.Length * 2];
+                for (int i = 0; i < holding_register.Length; i++)
+                {
+                    var objs = BitConverter.GetBytes(holding_register[i]);
+                    ret[i * 2] = objs[0];
+                    ret[i * 2 + 1] = objs[1];
+                }
+                return ret;
             }
-            catch (InvalidOperationException)
+            catch (Exception ex)
             {
-                //串口断开，尝试重连
-                if (!SerialPortInstance.IsOpen && !IsCommunicationProtectState)
+                LogUtils.Warn(DevType + " ID:" + ID + "读取数据失败", ex);
+                if (IsConnected && !IsCommunicationProtectState)
                 {
                     if (CommunicationCheck())
                     {
-                        var readBytes = new byte[num];
-                        SerialPortInstance.Write(Request, 0, Request.Length);
-                        SerialPortInstance.Read(readBytes, 0, num);
-                        return readBytes;
+                        return ReadFunc(address, num);
                     }
                 }
+                return new byte[num * 2];
             }
-            return new byte[num];
         }
 
         private bool CommunicationCheck()
@@ -214,79 +279,30 @@ namespace EMS.Service
             }
         }
 
-        private bool DataDecod(byte[] data, byte[] model, out int value)
-        {
-            if (CheckData(model, data))
-            {
-                byte[] bf = new byte[] { data[data.Length - 6], data[data.Length - 5], data[data.Length - 4], data[data.Length - 3] };
-                value = BitConverter.ToInt32(bf, 0);
-                return true;
-            }
-            value = 0;
-            return false;
-        }
-
-        private SmartElectricityMeterModel DataDecode(byte[] semdata)
-        {
-            SmartElectricityMeterModel item = new SmartElectricityMeterModel();
-            if(semdata != null)
-            {
-                item.Voltage = BitConverter.ToInt32(semdata, 0);
-                item.Current = BitConverter.ToInt32(semdata, 4);
-                item.Power = BitConverter.ToInt32(semdata, 8);
-
-            }
-        }
-
-        private byte[] ReadFunc(ushort address, ushort num)
-        {
-            try
-            {
-                ushort[] holding_register = _master.ReadHoldingRegisters(1, address, num);
-                byte[] ret = new byte[holding_register.Length * 2];
-                for (int i = 0; i < holding_register.Length; i++)
-                {
-                    var objs = BitConverter.GetBytes(holding_register[i]);
-                    ret[i * 2] = objs[0];
-                    ret[i * 2 + 1] = objs[1];
-                }
-                return ret;
-            }
-            catch (Exception ex)
-            {
-                LogUtils.Warn(DevType + " ID:" + ID + "读取数据失败", ex);
-                if (IsConnected && !IsCommunicationProtectState)
-                {
-                    if (CommunicationCheck())
-                    {
-                        return ReadFunc(address, num);
-                    }
-                }
-                return new byte[num * 2];
-            }
-        }
-
+        //读取总的一次侧电量
         public byte[] ReadTotalPrimaryEnergyInfo()
         {
             return ReadFunc(12, 2);
         }
-
+        //读取电压电流功率
         public byte[] ReadDCBaseInfo()
         {
             return ReadFunc(50, 3);
         }
-
+        //读取所有正向电量信息
         public byte[] ReadActiveEnergyInfo()
         {
             return ReadFunc(2000, 10);
         }
-
+        //读取所有反向电量信息
         public byte[] ReadReverseActiveEnergyInfo()
         {
             return ReadFunc(2140, 10);
         }
 
-
+        /// <summary>
+        /// 方便查看无实际作用
+        /// </summary>
         public enum SmartEleMeterCommandAddressEnum
         {
             [Description("总正向一次侧电能")]

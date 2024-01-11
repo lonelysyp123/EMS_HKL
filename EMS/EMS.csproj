@@ -233,6 +233,7 @@
     <Compile Include="Api\ElectricityMeterApi.cs" />
     <Compile Include="Api\MqttClientApi.cs" />
     <Compile Include="Api\PcsApi.cs" />
+    <Compile Include="Api\SmartElectricityMeterApi.cs" />
     <Compile Include="Api\StrategyApi.cs" />
     <Compile Include="Common\EMSColors.cs" />
     <Compile Include="Common\LogUtils.cs" />
@@ -322,6 +323,7 @@
     <Compile Include="Storage\DB\Models\PcsModel.cs" />
     <Compile Include="Storage\DB\Models\PCSStrategyDailyPatternInfoModel.cs" />
     <Compile Include="Storage\DB\Models\SmartElectricityMeterDBModel.cs" />
+    <Compile Include="Storage\DB\Models\SmartElectricityMeterInfoModel.cs" />
     <Compile Include="Storage\DB\Models\SmartMeterDBModel.cs" />
     <Compile Include="ViewModel\BatterySeriesViewModel.cs" />
     <Compile Include="ViewModel\BatteryTotalViewModel.cs" />
