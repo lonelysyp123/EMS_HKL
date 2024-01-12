@@ -19,6 +19,8 @@ using System.Windows.Media.Animation;
 using System.Windows;
 using System.Diagnostics;
 using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
+using Microsoft.Win32;
+using System.IO;
 
 
 namespace EMS.ViewModel.NewEMSViewModel
@@ -244,6 +246,60 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// 导出
         /// </summary>
         private void Export() {
+            string BCMUID = $"BCMU({SelectedTotal})"; // 假设SelectedTotal是BCMUID
+            string BMUID = SelectedSeries; // 获取或设置对应的BMUID值，这里假设已获取
+            string sort = "1"; // 或者获取用户选择的电池序号
+            DateTime startTime, endTime;
+            if (TryCombinTime(StartTime1, StartTime2, out startTime) && TryCombinTime(EndTime1, EndTime2, out endTime))
+            {
+                List<double[]> BMSData = QueryBatteryInfo(BCMUID, BMUID, sort, startTime, endTime);
+                List<DateTime> timeList = TimeList[0].ToList();// 假设时间列表在查询后只有一组数据
+
+                // 使用SaveFileDialog获取用户选择的保存路径
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "CSV文件 (*.csv)|*.csv";
+                saveFileDialog.Title = "选择保存位置";
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    string filePath = saveFileDialog.FileName;
+                    ExportBMSInfoToCsv(BMSData, timeList, filePath);
+                }
+            }
+            else
+            {
+                MessageBox.Show("请选择正确时间");
+            }
+        }
+
+        /// <summary>
+        /// 导出电表数据到CSV文件的方法
+        /// </summary>
+        /// <param name="bmsData"></param>
+        /// <param name="timeList"></param>
+        /// <param name="filePath"></param>
+        private void ExportBMSInfoToCsv(List<double[]> bmsData, List<DateTime> timeList, string filePath)
+        {
+            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
+            {
+                // 写入表头
+                sw.WriteLine("时间,BCMUID,BMUID,sort,Voltage,Capacity,SOC,Resistance,Temperature1,Temperature2");
+
+                for (int i = 0; i < timeList.Count; i++)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(timeList[i].ToString("yyyy-MM-dd HH:mm:ss")); // 格式化日期时间
+
+                    for (int j = 0; j < bmsData.Count; j++)
+                    {
+                        sb.Append(",");
+                        sb.Append(bmsData[j][i]);
+                    }
+
+                    sw.WriteLine(sb.ToString());
+                }
+            }
+
+            MessageBox.Show("电表数据已成功导出至 " + filePath);
         }
 
         /// <summary>
@@ -269,10 +325,11 @@ namespace EMS.ViewModel.NewEMSViewModel
                 List<double> temperature1List = new List<double>();
                 List<double> temperature2List = new List<double>();
                 List<DateTime> times = new List<DateTime>();
-                Debug.WriteLine(SeriesList, "0000000000");
+                
 
                 if (SeriesList!=null)
                 {
+                    Debug.WriteLine(SeriesList.Count, "0000000000");
                     for (int i = 1; i < SeriesList.Count; i++)
                     {
                         var item0 = typeof(SeriesBatteryInfoModel).GetProperty("Voltage" + (Sort - 1)).GetValue(SeriesList[i]);

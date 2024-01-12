@@ -22,7 +22,8 @@ namespace EMS.View.NewEMSView
         public Analysis_BMSPage(Analysis_BMSPageModel viewmodel)
         {
             InitializeComponent();
-            DataContext = viewmodel;
+            viewmodel = new Analysis_BMSPageModel();
+            this.DataContext = viewmodel;
         }
     }
 }

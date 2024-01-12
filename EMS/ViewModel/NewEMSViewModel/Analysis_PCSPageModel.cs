@@ -18,6 +18,9 @@ using System.Windows.Markup;
 using System.Windows.Media.Animation;
 using System.Windows;
 using System.Diagnostics;
+using Microsoft.Win32;
+using System.IO;
+using System.Xml.Linq;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
@@ -186,7 +189,57 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// </summary>
         private void Export()
         {
+            DateTime startTime, endTime;
+            if (TryCombinTime(StartTime1, StartTime2, out startTime) && TryCombinTime(EndTime1, EndTime2, out endTime))
+            {
+                List<double[]> PCSData = PCSInfo(startTime, endTime);
+                List<DateTime> timeList = TimeList[0].ToList();// 假设时间列表在查询后只有一组数据
 
+                // 使用SaveFileDialog获取用户选择的保存路径
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "CSV文件 (*.csv)|*.csv";
+                saveFileDialog.Title = "选择保存位置";
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    string filePath = saveFileDialog.FileName;
+                    ExportPCSInfoToCsv(PCSData, timeList, filePath);
+                }
+            }
+            else
+            {
+                MessageBox.Show("请选择正确时间");
+            }
+        }
+
+        /// <summary>
+        /// 导出PCS数据到CSV文件的方法
+        /// </summary>
+        /// <param name="pcsData"></param>
+        /// <param name="timeList"></param>
+        /// <param name="filePath"></param>
+        private void ExportPCSInfoToCsv(List<double[]> pcsData, List<DateTime> timeList, string filePath)
+        {
+            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
+            {
+                // 写入表头
+                sw.WriteLine("时间,DCPower,DCVol,DCCurrent,TotalCharCap,BusVol,ModuleTemp,EnvTemp");
+
+                for (int i = 0; i < timeList.Count; i++)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(timeList[i].ToString("yyyy-MM-dd HH:mm:ss")); // 格式化日期时间
+
+                    for (int j = 0; j < pcsData.Count; j++)
+                    {
+                        sb.Append(",");
+                        sb.Append(pcsData[j][i]);
+                    }
+
+                    sw.WriteLine(sb.ToString());
+                }
+            }
+
+            MessageBox.Show("PCS数据已成功导出至 " + filePath);
         }
 
         /// <summary>

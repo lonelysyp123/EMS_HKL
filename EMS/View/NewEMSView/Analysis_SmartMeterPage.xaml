@@ -140,15 +140,13 @@
                                    Margin="20,0,0,0"
                                    Foreground="#1E1E1E"></Label>
                             <DatePicker x:Name="Test1"
-                                       
                                         Height="30"
                                         Background="White"
                                         VerticalContentAlignment="Center"
                                         HorizontalAlignment="Center"
                                         Text="{Binding StartTime1, Mode=TwoWay}"
                                         BorderThickness="1,1,1,1"></DatePicker>
-                            <trl:DateInput Width="90"
-                                           Height="30"
+                            <trl:DateInput Height="30"
                                            Margin="5"
                                            DateText="{Binding StartTime2, Mode=TwoWay}"
                                            x:Name="Input1"></trl:DateInput>
@@ -162,10 +160,8 @@
                                         VerticalContentAlignment="Center"
                                         Text="{Binding EndTime1, Mode=TwoWay}"
                                         Foreground="Black"
-                                        
                                         Background="White"></DatePicker>
-                            <trl:DateInput Width="90"
-                                           Height="30"
+                            <trl:DateInput Height="30"
                                            Margin="5"
                                            DateText="{Binding EndTime2, Mode=TwoWay}" />
                             <Button Content="查    询"
@@ -193,7 +189,6 @@
                         <oxy:PlotView Model="{Binding SMDisplayDataModel}"
                                       Background="AliceBlue"
                                       x:Name="SMPlotView">
-
                         </oxy:PlotView>
                     </Grid>
                 </Grid>
