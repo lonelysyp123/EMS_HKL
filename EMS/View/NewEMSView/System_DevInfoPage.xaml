@@ -283,7 +283,7 @@
                 </Grid>
             </Border>
         </Grid>
-        <!--电表-->
+        <!--负荷跟踪电表-->
         <Grid Grid.Row="2"
               Grid.Column="0">
             <Border Background="white"
@@ -299,7 +299,7 @@
                         <ColumnDefinition Width="50" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <localControl:TitleBorder Text="电表"
+                    <localControl:TitleBorder Text="负荷跟踪电表"
                                               Grid.ColumnSpan="2" />
                     <StackPanel Grid.Row="1"
                                 Grid.Column="1"
@@ -308,6 +308,36 @@
                                 HorizontalAlignment="Left">
                         <TextBlock Text="电表编号:" />
                         <TextBlock Text="{Binding MeterNumber}"
+                                   Margin="20,0,0,0" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+        <!--电量计量电表-->
+        <Grid Grid.Row="2"
+              Grid.Column="1">
+            <Border Background="white"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <localControl:TitleBorder Text="电量计量电表"
+                                              Grid.ColumnSpan="2" />
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="1"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left">
+                        <TextBlock Text="电表编号:" />
+                        <TextBlock Text="{Binding ElectricityMeterNumber}"
                                    Margin="20,0,0,0" />
                     </StackPanel>
                 </Grid>
