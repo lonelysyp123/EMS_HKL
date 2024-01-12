@@ -81,6 +81,9 @@ namespace EMS.Storage.DB
         public DbSet<PCSControlSettingModel> PCSControlSettingInfos { get; set; }
         public DbSet<PCSInfoModel> PCSInfos { get; set; }
         public DbSet<PCSStrategyDailyPatternInfoModel> pCSStrategyDailyPatternInfos { get; set; }
+        /// <summary>
+        /// 计量电表数据信息
+        /// </summary>
         public DbSet<SmartElectricityMeterInfoModel> SmartElectricityMeterInfos { get; set; }
 
     }
