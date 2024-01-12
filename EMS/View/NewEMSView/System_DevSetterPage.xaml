@@ -41,6 +41,7 @@
             <RowDefinition Height="3*" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="1.5*" />
+            <RowDefinition Height="1.5*" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
@@ -350,7 +351,7 @@
                 </Grid>
             </Border>
         </Grid>
-        <!--电表-->
+        <!--负荷跟踪电表-->
         <Grid Grid.Row="2">
             <Border Background="white"
                     Margin="20,15,0,0"
@@ -369,7 +370,7 @@
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <localControl:TitleBorder Text="电表"
+                    <localControl:TitleBorder Text="负荷跟踪电表"
                                               Grid.ColumnSpan="5" />
                     <StackPanel Grid.Row="1"
                                 Grid.Column="1"
@@ -486,8 +487,144 @@
                 </Grid>
             </Border>
         </Grid>
-        <!--时间校对-->
+        <!--电量计量电表-->
         <Grid Grid.Row="3">
+            <Border Background="white"
+                    Margin="20,15,0,0"
+                    Padding="20,15"
+                    CornerRadius="15">
+                <Grid x:Name="ElectricitySmartMeterGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <localControl:TitleBorder Text="电量计量电表"
+                                              Grid.ColumnSpan="5" />
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="端口号:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <ComboBox  Height="30"
+                                   Width="100"
+                                   Margin="10,0,10,0"
+                                   Background="White"
+                                   Foreground="Black"
+                                   ItemsSource="{Binding ElectricityCommPorts}"
+                                   SelectedValue="{Binding SelectedElectricityCommPort}"
+                                   DisplayMemberPath="DeviceID"
+                                   SelectedValuePath="Description"
+                                   BorderThickness="1,1,1,1">
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="2"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="波特率:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <ComboBox  Height="30"
+                                   Width="100"
+                                   Margin="10,0,10,0"
+                                   Background="White"
+                                   Foreground="Black"
+                                   ItemsSource="{Binding ElectricityBaudRates}"
+                                   SelectedValue="{Binding SelectedElectricityBaudRate}"
+                                   DisplayMemberPath="BaudRateName"
+                                   SelectedValuePath="BaudRateValue"
+                                   BorderThickness="1,1,1,1">
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="3"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="数据位:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <ComboBox  Height="30"
+                                   Width="100"
+                                   Margin="10,0,10,0"
+                                   Background="White"
+                                   Foreground="Black"
+                                   ItemsSource="{Binding ElectricityDataBits}"
+                                   SelectedItem="{Binding SelectedElectricityDataBits}"
+                                   BorderThickness="1,1,1,1">
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="停止位:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <ComboBox  Height="30"
+                                   Width="100"
+                                   Margin="10,0,10,0"
+                                   Background="White"
+                                   Foreground="Black"
+                                   ItemsSource="{Binding ElectricityStopBitsList}"
+                                   SelectedValue="{Binding SelectedElectricityStopBits}"
+                                   DisplayMemberPath="StopBitsName"
+                                   SelectedValuePath="StopBitsValue"
+                                   BorderThickness="1,1,1,1">
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="2"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="校验位:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <ComboBox  Height="30"
+                                   Width="100"
+                                   Margin="10,0,10,0"
+                                   Background="White"
+                                   Foreground="Black"
+                                   ItemsSource="{Binding ElectricityParities}"
+                                   SelectedValue="{Binding SelectedElectricityParity}"
+                                   DisplayMemberPath="ParityName"
+                                   SelectedValuePath="ParityValue"
+                                   BorderThickness="1,1,1,1">
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="3"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="采集周期:"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <TextBox Text="{Binding AcquisitionCycle_ElectricityAmmeter}"
+                                 Style="{StaticResource Input}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="4"
+                                Style="{StaticResource ContentPanel}"
+                                x:Name="ElectricitySmartMeterBtn">
+                        <Button Content="应    用"
+                                Width="80"
+                                Height="30"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Background="#1890FF"
+                                BorderThickness="0,0,0,0"
+                                IsEnabled="{Binding IsEnabled_ElectricityAmmeter}"
+                                Command="{Binding ElectricitySmartMeterConfigCommand}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+        <!--时间校对-->
+        <Grid Grid.Row="4">
             <Border Background="white"
                     Margin="20,15,0,0"
                     Padding="20,15"
@@ -528,7 +665,7 @@
             </Border>
         </Grid>
         <!--设备数据点配置-->
-        <Grid Grid.Row="4">
+        <Grid Grid.Row="5">
             <Border Background="white"
                     Margin="20,15,0,0"
                     Padding="20,15"

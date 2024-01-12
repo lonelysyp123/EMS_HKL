@@ -172,6 +172,17 @@
                                      Style="{StaticResource LightEllipse}"
                                      Fill="{Binding StateFill_Offline}" />
                         </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="2"
+                                    Orientation="Horizontal"
+                                    Margin="0,0,0,10">
+                            <TextBlock Text="云端通信"
+                                       Style="{StaticResource NormalTextblockstyle}"></TextBlock>
+                            <Ellipse Height="20"
+                                     Width="20"
+                                     Style="{StaticResource LightEllipse}"
+                                     Fill="{Binding StateFill_CloudTelecom}" />
+                        </StackPanel>
                         <StackPanel Grid.Row="2"
                                     Grid.Column="0"
                                     Orientation="Horizontal"
@@ -221,17 +232,6 @@
                                     Grid.Column="0"
                                     Orientation="Horizontal"
                                     Margin="0,0,0,10">
-                            <TextBlock Text="云端通信"
-                                       Style="{StaticResource NormalTextblockstyle}"></TextBlock>
-                            <Ellipse Height="20"
-                                     Width="20"
-                                     Style="{StaticResource LightEllipse}"
-                                     Fill="{Binding StateFill_CloudTelecom}" />
-                        </StackPanel>
-                        <StackPanel Grid.Row="3"
-                                    Grid.Column="1"
-                                    Orientation="Horizontal"
-                                    Margin="0,0,0,10">
                             <TextBlock Text="BMS运行"
                                        Style="{StaticResource NormalTextblockstyle}"></TextBlock>
                             <Ellipse Height="20"
@@ -240,7 +240,7 @@
                                      Fill="{Binding StateFill_BMSRun}" />
                         </StackPanel>
                         <StackPanel Grid.Row="3"
-                                    Grid.Column="2"
+                                    Grid.Column="1"
                                     Orientation="Horizontal"
                                     Margin="0,0,0,10">
                             <TextBlock Text="PCS运行"
@@ -251,15 +251,26 @@
                                      Fill="{Binding StateFill_PCSRun}" />
                         </StackPanel>
                         <StackPanel Grid.Row="3"
-                                    Grid.Column="3"
+                                    Grid.Column="2"
                                     Orientation="Horizontal"
                                     Margin="0,0,0,10">
-                            <TextBlock Text="电表运行"
+                            <TextBlock Text="负荷跟踪电表运行"
                                        Style="{StaticResource NormalTextblockstyle}"></TextBlock>
                             <Ellipse Height="20"
                                      Width="20"
                                      Style="{StaticResource LightEllipse}"
                                      Fill="{Binding StateFill_AmmeterRun}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="3"
+                                    Grid.Column="3"
+                                    Orientation="Horizontal"
+                                    Margin="0,0,0,10">
+                            <TextBlock Text="电量计量电表运行"
+                                       Style="{StaticResource NormalTextblockstyle}"></TextBlock>
+                            <Ellipse Height="20"
+                                     Width="20"
+                                     Style="{StaticResource LightEllipse}"
+                                     Fill="{Binding StateFill_ElectricityAmmeterRun}" />
                         </StackPanel>
                     </Grid>
                 </Border>

@@ -25,7 +25,7 @@
             <RowDefinition Height="4*"/>
             <RowDefinition Height="6*"/>
         </Grid.RowDefinitions>
-        <!--1、负荷跟随电表-->
+        <!--1、负荷跟踪电表-->
         <Grid Grid.Row="0">
             <Border Background="white"
                     Margin="20,15,0,0"
@@ -47,12 +47,12 @@
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <localControl:TitleBorder Grid.ColumnSpan="3" Text="负荷跟随电表" />
+                    <localControl:TitleBorder Grid.ColumnSpan="3" Text="负荷跟踪电表" />
                     <!--电压-->
                     <StackPanel Grid.Row="1"
                                 Grid.Column="1"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="A相：" />
+                        <TextBlock Text="A相电压：" />
                         <TextBlock Text="{Binding Voltage_A}"
                                    Margin="10,0,10,0" />
                         <TextBlock Text="V" />
@@ -60,7 +60,7 @@
                     <StackPanel Grid.Row="1"
                                 Grid.Column="2"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="B相：" />
+                        <TextBlock Text="B相电压：" />
                         <TextBlock Text="{Binding Voltage_B}"
                                    Margin="10,0,10,0" />
                         <TextBlock Text="V" />
@@ -68,7 +68,7 @@
                     <StackPanel Grid.Row="1"
                                 Grid.Column="3"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="C相：" />
+                        <TextBlock Text="C相电压：" />
                         <TextBlock Text="{Binding Voltage_C}"
                                    Margin="10,0,10,0" />
                         <TextBlock Text="V" />
@@ -77,7 +77,7 @@
                     <StackPanel Grid.Row="2"
                                 Grid.Column="1"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="A相：" />
+                        <TextBlock Text="A相电流：" />
                         <TextBlock Text="{Binding Current_A}"
                                    Margin="10,0,10,0" />
                         <TextBlock Text="A" />
@@ -85,7 +85,7 @@
                     <StackPanel Grid.Row="2"
                                 Grid.Column="2"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="B相：" />
+                        <TextBlock Text="B相电流：" />
                         <TextBlock Text="{Binding Current_B}"
                                    Margin="10,0,10,0" />
                         <TextBlock Text="A" />
@@ -93,7 +93,7 @@
                     <StackPanel Grid.Row="2"
                                 Grid.Column="3"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="C相：" />
+                        <TextBlock Text="C相电流：" />
                         <TextBlock Text="{Binding Current_C}"
                                    Margin="10,0,10,0" />
                         <TextBlock Text="A" />
@@ -126,7 +126,7 @@
                     <StackPanel Grid.Row="3"
                                 Grid.Column="4"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="有功总功率：" />
+                        <TextBlock Text="总有功功率：" />
                         <TextBlock Text="{Binding ActivePower_Total}"
                                    Margin="10,0,10,0" />
                         <TextBlock Text="kW" />
@@ -159,7 +159,7 @@
                     <StackPanel Grid.Row="4"
                                 Grid.Column="4"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="无功总功率：" />
+                        <TextBlock Text="总无功功率：" />
                         <TextBlock Text="{Binding WattlessPower_Total}"
                                    Margin="10,0,10,0" />
                         <TextBlock Text="kW" />

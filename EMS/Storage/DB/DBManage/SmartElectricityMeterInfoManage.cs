@@ -5,13 +5,12 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace EMS.Storage.DB.DBManage
 {
-    public  class PCSInfoManage:IManage<PCSInfoModel>
-    { 
-       public bool Delete(PCSInfoModel entity)
+    public class SmartElectricityMeterInfoManage : IManage<SmartElectricityMeterInfoModel>
+    {
+        public bool Delete(SmartElectricityMeterInfoModel entity)
         {
             return false;
         }
@@ -21,13 +20,13 @@ namespace EMS.Storage.DB.DBManage
             return false;
         }
 
-        public List<PCSInfoModel> Get()
+        public List<SmartElectricityMeterInfoModel> Get()
         {
             try
             {
                 using (var db = new ORMContext())
                 {
-                    var result = db.PCSInfos.ToList();
+                    var result = db.SmartElectricityMeterInfos.ToList();
                     return result;
                 }
             }
@@ -37,15 +36,15 @@ namespace EMS.Storage.DB.DBManage
             }
         }
 
-    
 
-        public bool Insert(PCSInfoModel entity)
+
+        public bool Insert(SmartElectricityMeterInfoModel entity)
         {
             try
             {
                 using (var db = new ORMContext())
                 {
-                    var result = db.PCSInfos.Add(entity);
+                    var result = db.SmartElectricityMeterInfos.Add(entity);
                     db.SaveChanges();
                 }
             }
@@ -56,13 +55,13 @@ namespace EMS.Storage.DB.DBManage
             return true;
         }
 
-        public bool Update(PCSInfoModel entity)
+        public bool Update(SmartElectricityMeterInfoModel entity)
         {
             try
             {
                 using (var db = new ORMContext())
                 {
-                    var result = db.PCSInfos.Attach(entity);
+                    var result = db.SmartElectricityMeterInfos.Attach(entity);
                     db.Entry(entity).State = EntityState.Modified;
                     db.SaveChanges();
                 }
@@ -75,4 +74,3 @@ namespace EMS.Storage.DB.DBManage
         }
     }
 }
-
