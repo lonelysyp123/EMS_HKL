@@ -312,6 +312,7 @@
     <Compile Include="Storage\DB\DBManage\PCSInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\PcsManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSStrategyDailyPatternInfoManage.cs" />
+    <Compile Include="Storage\DB\DBManage\SmartElectricityMeterInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\SmartElectricityMeterManage.cs" />
     <Compile Include="Storage\DB\DBManage\SmartMeterManage.cs" />
     <Compile Include="Storage\DB\Models\AlarmandFaultInfoModel.cs" />
