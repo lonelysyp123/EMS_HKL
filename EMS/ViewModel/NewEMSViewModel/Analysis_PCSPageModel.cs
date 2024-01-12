@@ -222,18 +222,18 @@ namespace EMS.ViewModel.NewEMSViewModel
             using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
             {
                 // 写入表头
-                sw.WriteLine("时间,DCPower,DCVol,DCCurrent,TotalCharCap,BusVol,ModuleTemp,EnvTemp");
+                sw.WriteLine("DCPower,DCVol,DCCurrent,TotalCharCap,BusVol,ModuleTemp,EnvTemp,时间");
 
                 for (int i = 0; i < timeList.Count; i++)
                 {
                     StringBuilder sb = new StringBuilder();
-                    sb.Append(timeList[i].ToString("yyyy-MM-dd HH:mm:ss")); // 格式化日期时间
 
                     for (int j = 0; j < pcsData.Count; j++)
                     {
-                        sb.Append(",");
                         sb.Append(pcsData[j][i]);
                     }
+                    sb.Append(",");
+                    sb.Append(timeList[i].ToString("yyyy-MM-dd HH:mm:ss")); // 格式化日期时间
 
                     sw.WriteLine(sb.ToString());
                 }

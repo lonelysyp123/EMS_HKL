@@ -21,6 +21,7 @@ using System.Diagnostics;
 using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 using Microsoft.Win32;
 using System.IO;
+using System.Text.RegularExpressions;
 
 
 namespace EMS.ViewModel.NewEMSViewModel
@@ -164,7 +165,10 @@ namespace EMS.ViewModel.NewEMSViewModel
             get => _selectedNumber;
             set
             {
-                SetProperty(ref _selectedNumber, value);
+                if (SetProperty(ref _selectedNumber, value))
+                {
+                    SwitchBatteryData();
+                }
             }
         }
 
@@ -248,11 +252,16 @@ namespace EMS.ViewModel.NewEMSViewModel
         private void Export() {
             string BCMUID = $"BCMU({SelectedTotal})"; // 假设SelectedTotal是BCMUID
             string BMUID = SelectedSeries; // 获取或设置对应的BMUID值，这里假设已获取
-            string sort = "1"; // 或者获取用户选择的电池序号
             DateTime startTime, endTime;
             if (TryCombinTime(StartTime1, StartTime2, out startTime) && TryCombinTime(EndTime1, EndTime2, out endTime))
             {
-                List<double[]> BMSData = QueryBatteryInfo(BCMUID, BMUID, sort, startTime, endTime);
+                List<List<double[]>> allBMSData = new List<List<double[]>>();
+                for (int i = 0; i < 14; i++)
+                {
+                    string sort = (i + 1).ToString();
+                    allBMSData.Add(QueryBatteryInfo(BCMUID, BMUID, sort, startTime, endTime));
+                }
+
                 List<DateTime> timeList = TimeList[0].ToList();// 假设时间列表在查询后只有一组数据
 
                 // 使用SaveFileDialog获取用户选择的保存路径
@@ -262,7 +271,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                 if (saveFileDialog.ShowDialog() == true)
                 {
                     string filePath = saveFileDialog.FileName;
-                    ExportBMSInfoToCsv(BMSData, timeList, filePath);
+                    ExportBMSInfoToCsv(allBMSData, timeList, filePath);
                 }
             }
             else
@@ -277,29 +286,47 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <param name="bmsData"></param>
         /// <param name="timeList"></param>
         /// <param name="filePath"></param>
-        private void ExportBMSInfoToCsv(List<double[]> bmsData, List<DateTime> timeList, string filePath)
+        //private void ExportBMSInfoToCsv(List<double[]> bmsData, List<DateTime> timeList, string filePath)
+        private void ExportBMSInfoToCsv(List<List<double[]>> allBMSData, List<DateTime> timeList, string filePath)
         {
             using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
             {
                 // 写入表头
-                sw.WriteLine("时间,BCMUID,BMUID,sort,Voltage,Capacity,SOC,Resistance,Temperature1,Temperature2");
+                sw.WriteLine("BCMUID,BMUID,sort,Voltage,Capacity,SOC,Resistance,Temperature1,Temperature2,时间");
 
                 for (int i = 0; i < timeList.Count; i++)
                 {
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append(timeList[i].ToString("yyyy-MM-dd HH:mm:ss")); // 格式化日期时间
-
-                    for (int j = 0; j < bmsData.Count; j++)
+                    for (int j = 0; j < allBMSData.Count; j++)
                     {
-                        sb.Append(",");
-                        sb.Append(bmsData[j][i]);
-                    }
+                        StringBuilder sb = new StringBuilder();
 
-                    sw.WriteLine(sb.ToString());
+                        // 添加固定信息（BCMUID和BMUID不需要每次循环都写入）
+                        sb.Append($"BCMU({SelectedTotal})");
+                        sb.Append(",");
+                        sb.Append(SelectedSeries);
+                        // 按照sort顺序写入数据
+                        sb.Append(",");
+                        sb.Append((j + 1).ToString()); // 序号
+
+                        for (int k = 0; k < allBMSData[j][i].Length; k++) // 遍历单个序号的所有数据项
+                        {
+                            sb.Append(",");
+                            sb.Append(allBMSData[j][i][k]);
+                        }
+
+                        sb.Append(",");
+                        sb.Append(timeList[i].ToString("yyyy-MM-dd HH:mm:ss")); // 格式化日期时间
+
+                        // 每完成一个sort的数据就换行写入
+                        sw.WriteLine(sb.ToString());
+
+                        // 重置StringBuilder，准备写入下一个sort的数据
+                        sb.Clear();
+                    }
                 }
             }
 
-            MessageBox.Show("电表数据已成功导出至 " + filePath);
+            MessageBox.Show("BMS数据已成功导出至 " + filePath);
         }
 
         /// <summary>
@@ -467,16 +494,53 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// 选择数据类型
         /// </summary>
         /// <param name="type">数据类型</param>
+        //public void SwitchBatteryData()
+        //{
+        //    InitChart();
+        //    BMSDisplayDataModel.Series.Clear();
+        //    LineSeries lineSeries = new LineSeries();
+        //    lineSeries.Title = SelectedNumber;
+        //    lineSeries.MarkerSize = 3;
+        //    lineSeries.MarkerType = MarkerType.Circle;
+        //    if (int.TryParse(SelectedNumber, out int index))
+        //    {
+        //        if (DisplayDataList.Count > 0 && DisplayDataList.Count > index - 1)
+        //        {
+        //            if (DisplayDataList[index - 1].Count > 0)
+        //            {
+        //                if (DisplayDataList[index - 1][SelectedTypeIndex].Length > 0)
+        //                {
+        //                    for (int j = 0; j < DisplayDataList[index - 1][SelectedTypeIndex].Length; j++)
+        //                    {
+        //                        Debug.WriteLine(TimeList[index - 1][j], "11111111111");
+        //                        Debug.WriteLine(DisplayDataList[index - 1][SelectedTypeIndex][j], "22222222");
+        //                        lineSeries.Points.Add(DateTimeAxis.CreateDataPoint(TimeList[index - 1][j], DisplayDataList[index - 1][SelectedTypeIndex][j]));
+        //                    }
+        //                    BMSDisplayDataModel.Series.Add(lineSeries);
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    BMSDisplayDataModel.InvalidatePlot(true);
+        //}
+
         public void SwitchBatteryData()
         {
             InitChart();
             BMSDisplayDataModel.Series.Clear();
             LineSeries lineSeries = new LineSeries();
-            lineSeries.Title = SelectedNumber;
             lineSeries.MarkerSize = 3;
             lineSeries.MarkerType = MarkerType.Circle;
-            if (int.TryParse(SelectedNumber, out int index))
+            int index = 0;
+            if (SelectedNumber != null)
             {
+                MatchCollection matches = Regex.Matches(SelectedNumber, @"\d+(\.\d+)?");
+                foreach (Match match in matches)
+                {
+                    lineSeries.Title = match.Value;
+                    index = int.Parse(match.Value);
+                }
                 if (DisplayDataList.Count > 0 && DisplayDataList.Count > index - 1)
                 {
                     if (DisplayDataList[index - 1].Count > 0)

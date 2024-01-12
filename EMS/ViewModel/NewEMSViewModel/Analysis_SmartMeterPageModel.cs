@@ -220,18 +220,18 @@ namespace EMS.ViewModel.NewEMSViewModel
             using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
             {
                 // 写入表头
-                sw.WriteLine("时间,Voltage_A,Voltage_B,Voltage_C,Current_A,Current_B,Current_C,ActivePower_A,ActivePower_B,ActivePower_C,ActivePower_Total,ReactivePower_A,ReactivePower_B,ReactivePower_C,ReactivePower_Total");
+                sw.WriteLine("Voltage_A,Voltage_B,Voltage_C,Current_A,Current_B,Current_C,ActivePower_A,ActivePower_B,ActivePower_C,ActivePower_Total,ReactivePower_A,ReactivePower_B,ReactivePower_C,ReactivePower_Total,时间");
 
                 for (int i = 0; i < timeList.Count; i++)
                 {
                     StringBuilder sb = new StringBuilder();
-                    sb.Append(timeList[i].ToString("yyyy-MM-dd HH:mm:ss")); // 格式化日期时间
 
                     for (int j = 0; j < smartMeterData.Count; j++)
                     {
-                        sb.Append(",");
                         sb.Append(smartMeterData[j][i]);
                     }
+                    sb.Append(",");
+                    sb.Append(timeList[i].ToString("yyyy-MM-dd HH:mm:ss")); // 格式化日期时间
 
                     sw.WriteLine(sb.ToString());
                 }
@@ -266,9 +266,10 @@ namespace EMS.ViewModel.NewEMSViewModel
             List<double> reactivePower_CList = new List<double>();
             List<double> reactivePower_TotalList = new List<double>();
             List<DateTime> times = new List<DateTime>();
-            Debug.WriteLine(SeriesList.Count,"55555555");
             if (SeriesList != null)
             {
+                Debug.WriteLine(SeriesList.Count, "55555555");
+
                 for (int i = 1; i < SeriesList.Count; i++)
                 {
                     var item0 = typeof(ElectricMeterInfoModel).GetProperty("Voltage_A").GetValue(SeriesList[i]);
