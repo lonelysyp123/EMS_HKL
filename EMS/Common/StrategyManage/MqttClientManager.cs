@@ -47,7 +47,6 @@ namespace TNCN.EMS.Common.StrategyManage
                         mqttClientService.PublishAsync(batteryPostTopic, data);
                     }
                 }
-                Thread.Sleep(30000);
             }
             else
             {
@@ -55,10 +54,34 @@ namespace TNCN.EMS.Common.StrategyManage
             }
         }
 
-        private void PublishPcsData() { 
+        private void PublishPcsData() {
+            PCSModel pcsModel = PcsApi.GetNextPCSData();
+            string pcsPostTopic = "hkl2/ems/pcs/post";
+            if (pcsModel != null)
+            {
+                Pcs pcs = new Pcs(pcsModel);
+                byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(pcs));
+                mqttClientService.PublishAsync(pcsPostTopic, data);
+            }
+            else
+            {
+                Thread.Sleep(10);
+            }
         }
 
-        private void PublishSmartMeterData() { 
+        private void PublishSmartMeterData() {
+            SmartMeterModel smartMeterModel = ElectricityMeterApi.GetNextElectricityMeterData();
+            string smartMeterPostTopic = "hkl2/ems/ammeter/post";
+            if (smartMeterModel != null)
+            {
+                SmartMeter smartMeter = new SmartMeter(smartMeterModel);
+                byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(smartMeter));
+                mqttClientService.PublishAsync(smartMeterPostTopic, data);
+            }
+            else
+            {
+                Thread.Sleep(10);
+            }
         }
 
         private void PublishAsync() {

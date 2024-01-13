@@ -1,6 +1,7 @@
 ﻿using EMS.Model;
 using EMS.Service;
 using EMS.ViewModel;
+using MQTTnet.Diagnostics;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,18 @@ namespace EMS.Api
     {
         public static BatteryTotalModel GetNextBMSData(string bcmuid)
         {
-            var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == bcmuid);
-            return item.GetCurrentData();
+            if (EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.Count > 0)
+            {
+                var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == bcmuid);
+                if (item != null)
+                {
+                    return item.GetCurrentData();
+                }
+            }
+            return null;
         }
+
+        
 
         /// <summary>
         /// 获取BMS保护参数接口

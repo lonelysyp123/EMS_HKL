@@ -37,13 +37,24 @@ namespace EMS.Api
         /// <returns></returns>
         public static PCSModel GetNextPCSData()
         {
+            DateTime dateTime = DateTime.Now;
+            if (EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService != null)
+            {
+                var item = EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.GetCurrentData();
+                if (item != null)
+                {
+                    item.CurrentTime = dateTime;
+                }
+                return item;
+            }
             return null;
         }
-            /// <summary>
-            ///  对PCS发送控制指令，需要包含一定的验证，检查下发指令是否合理，否则报错，该API不能是阻塞函数，需要立刻返回。如遇到异常，需要抛出异常。
-            ///  如果下发指令和当前PCS正在执行的指令一致，可以避免重复下发。
-            /// </summary>
-            /// <returns>指令下发是否成功</returns>
+
+        /// <summary>
+        ///  对PCS发送控制指令，需要包含一定的验证，检查下发指令是否合理，否则报错，该API不能是阻塞函数，需要立刻返回。如遇到异常，需要抛出异常。
+        ///  如果下发指令和当前PCS正在执行的指令一致，可以避免重复下发。
+        /// </summary>
+        /// <returns>指令下发是否成功</returns>
         public static void SendPcsCommand(BessCommand command)
         {
              EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.SendPcsCommand(command);
@@ -78,8 +89,23 @@ namespace EMS.Api
         ///  返回PCS当前是否处于正常运行状态，如果PCS处于故障状态，返回false，如果PCS没有故障但是有告警返回true
         /// </summary>
         /// <returns>指令下发是否成功</returns>
-        public static bool IsPcsNormal() { return true; }
-        public static List<string> GetPCSFaultInfo() { return null; }
+        public static bool IsPcsNormal() 
+        {
+            PCSModel pcsmodel = EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.GetCurrentData();
+            if (GetPCSFault(pcsmodel).Count==0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public static List<string> GetPCSFaultInfo() 
+        {
+            PCSModel pcsmodel = EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.GetCurrentData();
+            return GetPCSAllFault(pcsmodel);
+        }
 
         /// <summary>
         /// 读取保护参数界面BUSVol参数
@@ -201,9 +227,9 @@ namespace EMS.Api
         /// <returns></returns>
         public static double PcsGetDcSidePower()
         {
-            double at=0;
-            return at;
-            //return EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.MonitorModel.DcBranch1DCPower;
+            var item = EnergyManagementSystem.GlobalInstance.PcsManager.PCSDataService.GetCurrentData();
+            return item.DcBranch1DCPower;
+            
         }
 
         public static bool SetPCSSystemClearFault()
@@ -322,22 +348,176 @@ namespace EMS.Api
         /// 获取模组温度
         /// </summary>
         /// <returns></returns>
-        public static double PCSGetModuleTemperature()
-        {
-            double at = 0;
-            return at;
-            //return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.ModuleTemperature;       
-        }
+        //public static double PCSGetModuleTemperature()
+        //{
+        //    double at = 0;
+        //    return at;
+        //    //return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.ModuleTemperature;       
+        //}
 
         /// <summary>
         /// 获取环境温度
         /// </summary>
         /// <returns></returns>
-        public static double PCSGetAmbientTemperature()
+        //public static double PCSGetAmbientTemperature()
+        //{
+        //    double at=0;
+        //    return at;
+        //    //return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.AmbientTemperature;
+        //}
+
+        private static List<string> GetPCSFault(PCSModel model)
         {
-            double at=0;
-            return at;
-            //return EnergyManagementSystem.GlobalInstance.PcsManager.PCSModel.MonitorModel.AmbientTemperature;
+            int value1;
+            int value2;
+            int value3;
+            int value4;
+            List<string> INFO = new List<string>();
+            value1 = model.AlarmStateFlagDC1;
+            value2 = model.AlarmStateFlagDC2;
+            value3 = model.AlarmStateFlagDC3;
+            value4 = model.AlarmStateFlagPDS;
+            //DC故障
+            if ((value1 & 0x0001) != 0) { INFO.Add("直流高压侧过压"); } //53005 bit0
+            if ((value1 & 0x0002) != 0) { INFO.Add("直流高压侧欠压"); }  //bit1`
+            if ((value1 & 0x0004) != 0) { INFO.Add("直流低压侧过压"); }  //bit2
+            if ((value1 & 0x0008) != 0) { INFO.Add("直流低压侧欠压"); }  //bit3
+            if ((value1 & 0x0010) != 0) { INFO.Add("直流低压侧过流"); }  //bit4
+            //if ((value1 & 0x0020) != 0) { INFO.Add("重启过多"); colorflag = true; } //bit5
+            if ((value1 & 0x0040) != 0) { INFO.Add("重启过多"); } //bit6
+            if ((value1 & 0x0080) != 0) { INFO.Add("直流低压侧继电器短路"); } //bit7
+            //if ((value1 & 0x0100) != 0) { INFO.Add("光伏能量不足"); colorflag = true; } //bit8
+            if ((value1 & 0x0200) != 0) { INFO.Add("电池电量不足"); } //bit9
+            if ((value1 & 0x0800) != 0) { INFO.Add("直流高压侧开关断开"); } //bit11
+            if ((value1 & 0x2000) != 0) { INFO.Add("机柜温度过高");} //bit13
+
+            if ((value2 & 0x0001) != 0) { INFO.Add("模块电流不平衡"); } //53007 bit0
+            if ((value2 & 0x0002) != 0) { INFO.Add("直流低压侧开关断开"); } //bit1
+            if ((value2 & 0x0004) != 0) { INFO.Add("24V辅助电源故障"); } //bit2
+            if ((value2 & 0x0008) != 0) { INFO.Add("紧急停机"); } //bit3
+            //if ((value2 & 0x0010) != 0) { INFO.Add("环温探头故障"); colorflag = true; } //bit4
+            //if ((value2 & 0x0020) != 0) { INFO.Add("环温探头故障"); colorflag = true; } //bit5
+            if ((value2 & 0x0040) != 0) { INFO.Add("模块温度过温"); } //bit6
+            if ((value2 & 0x0080) != 0) { INFO.Add("风扇故障"); } //bit7
+            if ((value2 & 0x0100) != 0) { INFO.Add("直流低压侧继电器开路"); } //bit8
+            if ((value2 & 0x0400) != 0) { INFO.Add("保险故障"); } //bit10
+            if ((value2 & 0x0800) != 0) { INFO.Add("DSP初始化故障"); } //bit11
+            if ((value2 & 0x1000) != 0) { INFO.Add("直流低压侧软启动失败"); } //bit12
+            if ((value2 & 0x2000) != 0) { INFO.Add("CANA通讯故障"); } //bit13
+            if ((value2 & 0x4000) != 0) { INFO.Add("直流高压侧继电器开路"); } //bit14
+            if ((value2 & 0x8000) != 0) { INFO.Add("直流高压侧软启动失败"); } //bit15
+
+            if ((value3 & 0x0001) != 0) { INFO.Add("DSP版本故障"); } //53008 bit0
+            if ((value3 & 0x0002) != 0) { INFO.Add("CPLD版本故障"); } //bit1
+            if ((value3 & 0x0004) != 0) { INFO.Add("参数不匹配"); } //bit2
+            if ((value3 & 0x0008) != 0) { INFO.Add("硬件版本故障"); } //bit3
+            if ((value3 & 0x0010) != 0) { INFO.Add("485通讯故障"); } //bit4
+            if ((value3 & 0x0020) != 0) { INFO.Add("CANB通讯故障"); } //bit5
+            if ((value3 & 0x0040) != 0) { INFO.Add("模块重号故障"); } //bit6
+            //if ((value3 & 0x0080) != 0) { INFO.Add("风扇故障"); colorflag = true; } //bit7
+            if ((value3 & 0x0100) != 0) { INFO.Add("15V辅助电源故障"); } //bit8
+            if ((value3 & 0x0200) != 0) { INFO.Add("直流高压侧继电器短路"); } //bit9
+            if ((value3 & 0x0400) != 0) { INFO.Add("BMS电压异常"); } //bit10
+            if ((value3 & 0x0800) != 0) { INFO.Add("BMS电流异常"); } //bit11
+            if ((value3 & 0x1000) != 0) { INFO.Add("BMS温度异常"); } //bit12
+            if ((value3 & 0x2000) != 0) { INFO.Add("BMS关机异常"); } //bit13
+            if ((value3 & 0x4000) != 0) { INFO.Add("绝缘检测异常"); } //bit14
+            //if ((value3 & 0x8000) != 0) { INFO.Add("直流高压侧软启动失败"); colorflag = true; } //bit15
+            
+            //PDS故障
+            if ((value4 & 0x0001) != 0) { INFO.Add("软件版本故障"); } //53009 bit0
+            if ((value4 & 0x0002) != 0) { INFO.Add("DSP初始化故障"); } //bit1
+            if ((value4 & 0x0004) != 0) { INFO.Add("BMS故障"); } //bit2
+            if ((value4 & 0x0008) != 0) { INFO.Add("紧急停机"); } //bit3
+
+            ////DC告警
+            //if ((value1 & 0x0400) != 0) { INFO.Add("环境温度过高"); } //bit10  AAAA
+            //if ((value1 & 0x1000) != 0) { INFO.Add("U2通信异常1"); } //bit12  AAAAA
+            //if ((value1 & 0x4000) != 0) { INFO.Add("柜温探头故障"); } //bit14  AAAAAA
+            //if ((value1 & 0x8000) != 0) { INFO.Add("环温探头故障"); } //bit15  AAAAAA
+
+            //if ((value2 & 0x0200) != 0) { INFO.Add("校准参数异常"); } //bit9   AAAAAA
+
+            ////PDS告警
+            //if ((value4 & 0x0010) != 0) { INFO.Add("防雷器告警"); } //bit4   AAAAAAAAA
+            return INFO;
+        }
+
+        private static List<string> GetPCSAllFault(PCSModel model)
+        {
+            int value1;
+            int value2;
+            int value3;
+            int value4;
+            List<string> INFO = new List<string>();
+            value1 = model.AlarmStateFlagDC1;
+            value2 = model.AlarmStateFlagDC2;
+            value3 = model.AlarmStateFlagDC3;
+            value4 = model.AlarmStateFlagPDS;
+            //DC故障
+            if ((value1 & 0x0001) != 0) { INFO.Add("直流高压侧过压"); } //53005 bit0
+            if ((value1 & 0x0002) != 0) { INFO.Add("直流高压侧欠压"); }  //bit1`
+            if ((value1 & 0x0004) != 0) { INFO.Add("直流低压侧过压"); }  //bit2
+            if ((value1 & 0x0008) != 0) { INFO.Add("直流低压侧欠压"); }  //bit3
+            if ((value1 & 0x0010) != 0) { INFO.Add("直流低压侧过流"); }  //bit4
+            //if ((value1 & 0x0020) != 0) { INFO.Add("重启过多"); colorflag = true; } //bit5
+            if ((value1 & 0x0040) != 0) { INFO.Add("重启过多"); } //bit6
+            if ((value1 & 0x0080) != 0) { INFO.Add("直流低压侧继电器短路"); } //bit7
+            //if ((value1 & 0x0100) != 0) { INFO.Add("光伏能量不足"); colorflag = true; } //bit8
+            if ((value1 & 0x0200) != 0) { INFO.Add("电池电量不足"); } //bit9
+            if ((value1 & 0x0800) != 0) { INFO.Add("直流高压侧开关断开"); } //bit11
+            if ((value1 & 0x2000) != 0) { INFO.Add("机柜温度过高"); } //bit13
+
+            if ((value2 & 0x0001) != 0) { INFO.Add("模块电流不平衡"); } //53007 bit0
+            if ((value2 & 0x0002) != 0) { INFO.Add("直流低压侧开关断开"); } //bit1
+            if ((value2 & 0x0004) != 0) { INFO.Add("24V辅助电源故障"); } //bit2
+            if ((value2 & 0x0008) != 0) { INFO.Add("紧急停机"); } //bit3
+            //if ((value2 & 0x0010) != 0) { INFO.Add("环温探头故障"); colorflag = true; } //bit4
+            //if ((value2 & 0x0020) != 0) { INFO.Add("环温探头故障"); colorflag = true; } //bit5
+            if ((value2 & 0x0040) != 0) { INFO.Add("模块温度过温"); } //bit6
+            if ((value2 & 0x0080) != 0) { INFO.Add("风扇故障"); } //bit7
+            if ((value2 & 0x0100) != 0) { INFO.Add("直流低压侧继电器开路"); } //bit8
+            if ((value2 & 0x0400) != 0) { INFO.Add("保险故障"); } //bit10
+            if ((value2 & 0x0800) != 0) { INFO.Add("DSP初始化故障"); } //bit11
+            if ((value2 & 0x1000) != 0) { INFO.Add("直流低压侧软启动失败"); } //bit12
+            if ((value2 & 0x2000) != 0) { INFO.Add("CANA通讯故障"); } //bit13
+            if ((value2 & 0x4000) != 0) { INFO.Add("直流高压侧继电器开路"); } //bit14
+            if ((value2 & 0x8000) != 0) { INFO.Add("直流高压侧软启动失败"); } //bit15
+
+            if ((value3 & 0x0001) != 0) { INFO.Add("DSP版本故障"); } //53008 bit0
+            if ((value3 & 0x0002) != 0) { INFO.Add("CPLD版本故障"); } //bit1
+            if ((value3 & 0x0004) != 0) { INFO.Add("参数不匹配"); } //bit2
+            if ((value3 & 0x0008) != 0) { INFO.Add("硬件版本故障"); } //bit3
+            if ((value3 & 0x0010) != 0) { INFO.Add("485通讯故障"); } //bit4
+            if ((value3 & 0x0020) != 0) { INFO.Add("CANB通讯故障"); } //bit5
+            if ((value3 & 0x0040) != 0) { INFO.Add("模块重号故障"); } //bit6
+            //if ((value3 & 0x0080) != 0) { INFO.Add("风扇故障"); colorflag = true; } //bit7
+            if ((value3 & 0x0100) != 0) { INFO.Add("15V辅助电源故障"); } //bit8
+            if ((value3 & 0x0200) != 0) { INFO.Add("直流高压侧继电器短路"); } //bit9
+            if ((value3 & 0x0400) != 0) { INFO.Add("BMS电压异常"); } //bit10
+            if ((value3 & 0x0800) != 0) { INFO.Add("BMS电流异常"); } //bit11
+            if ((value3 & 0x1000) != 0) { INFO.Add("BMS温度异常"); } //bit12
+            if ((value3 & 0x2000) != 0) { INFO.Add("BMS关机异常"); } //bit13
+            if ((value3 & 0x4000) != 0) { INFO.Add("绝缘检测异常"); } //bit14
+                                                                //if ((value3 & 0x8000) != 0) { INFO.Add("直流高压侧软启动失败"); colorflag = true; } //bit15
+
+            //PDS故障
+            if ((value4 & 0x0001) != 0) { INFO.Add("软件版本故障"); } //53009 bit0
+            if ((value4 & 0x0002) != 0) { INFO.Add("DSP初始化故障"); } //bit1
+            if ((value4 & 0x0004) != 0) { INFO.Add("BMS故障"); } //bit2
+            if ((value4 & 0x0008) != 0) { INFO.Add("紧急停机"); } //bit3
+
+            //DC告警
+            if ((value1 & 0x0400) != 0) { INFO.Add("环境温度过高"); } //bit10  AAAA
+            if ((value1 & 0x1000) != 0) { INFO.Add("U2通信异常1"); } //bit12  AAAAA
+            if ((value1 & 0x4000) != 0) { INFO.Add("柜温探头故障"); } //bit14  AAAAAA
+            if ((value1 & 0x8000) != 0) { INFO.Add("环温探头故障"); } //bit15  AAAAAA
+
+            if ((value2 & 0x0200) != 0) { INFO.Add("校准参数异常"); } //bit9   AAAAAA
+
+            //PDS告警
+            if ((value4 & 0x0010) != 0) { INFO.Add("防雷器告警"); } //bit4   AAAAAAAAA
+            return INFO;
         }
 
         //public static async Task<bool> PCSConnect()
@@ -368,5 +548,7 @@ namespace EMS.Api
         //        throw (ex);
         //    }
         //}
+
+
     }
 }
