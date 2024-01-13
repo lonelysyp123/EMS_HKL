@@ -101,13 +101,18 @@ namespace EMS.Model
         public EnergyManagementSystem()
         {
             _operationThread = null;
+            _configuration = new IniFileHelper("./Config/SystemConfig.ini");
+            IniFileHelper.Read(IniSectionEnum.EMS, "ChargingEfficiency", out _chargingEfficiency);
+            IniFileHelper.Read(IniSectionEnum.EMS, "DischargingEfficiency", out _dischargingEfficiency);
+            IniFileHelper.Read(IniSectionEnum.EMS, "InitialEnergy", out _initialEnergy);
+            IniFileHelper.Read(IniSectionEnum.EMS, "EnergyCapacity", out _energyCapacity);
             _bms_manager = new BMSManager();
             _controller = new EmsController();
 
             _pcs_manager =new PCSManager();
             _smart_meter_manager = new SmartMeterManager();
             mqttClientManager = new MqttClientManager();
-            _configuration = new IniFileHelper("./Config/SystemConfig.ini");
+
         }
 
         public void Initialization(object _pcs_manager, object _smart_meter_manager, object _database_manager, object _cloud_manager)
