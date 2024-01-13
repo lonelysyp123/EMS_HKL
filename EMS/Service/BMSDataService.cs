@@ -64,7 +64,7 @@ namespace EMS.Service
                 }
                 catch(Exception ex)
                 {
-                    LogUtils.Warn(DevType + " ID:" + ID + " 连接失败", ex);
+                    //LogUtils.Warn(DevType + " ID:" + ID + " 连接失败", ex);
                 }
                 finally
                 {
@@ -208,7 +208,7 @@ namespace EMS.Service
             }
             catch (Exception ex)
             {
-                LogUtils.Warn(DevType + " ID:" + ID + "读取数据失败", ex);
+                //LogUtils.Warn(DevType + " ID:" + ID + "读取数据失败", ex);
                 if (!_client.Connected && !IsCommunicationProtectState)
                 {
                     if (CommunicationCheck())
@@ -380,6 +380,7 @@ namespace EMS.Service
             total.BatteryCount = BitConverter.ToInt16(obj, 44);
             total.BatteryCycles = BitConverter.ToInt16(obj, 46);
             total.BalanceChannel = BitConverter.ToInt16(obj, 48);
+            total.HeartBeat = BitConverter.ToInt16(obj, 50);
             //心跳帧未解析
             total.FaultStateBCMUTotalFlag = BitConverter.ToInt16(obj2, 0);
             total.FaultStateBCMUFlag1 = BitConverter.ToInt16(obj2, 2);

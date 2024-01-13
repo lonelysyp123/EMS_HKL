@@ -17,7 +17,7 @@ namespace EMS.ViewModel.NewEMSViewModel
     {
         
         //BCMU簇选择
-        private List<string> bcmuIdInfo = new List<string> { "1", "2", "3", "4", "5", "6" };
+        private List<string> bcmuIdInfo ;
         public List<string> BCMUIDInfo
         {
             get => bcmuIdInfo;
@@ -27,7 +27,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string selectedBCMUID = "1";
+        private string selectedBCMUID ;
         public string SelectedBCMUID
         {
             get => selectedBCMUID;
@@ -622,6 +622,14 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public Strategy_ProtectSetterPageModel()
         {
+            BCMUIDInfo=BmsApi.GetConnectedBMSID();
+            if(BCMUIDInfo!=null )
+            {
+                SelectedBCMUID = BCMUIDInfo.First();
+                ReadBCMUInfo();
+            }
+
+           
             ReadDBInfoCommand = new RelayCommand(ReadDBInfo);
             ReadBCMUInfoCommand = new RelayCommand(ReadBCMUInfo);
             SyncInfo1Command = new RelayCommand(SyncInfo1);
@@ -677,8 +685,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             TempDischarUpLimitLv1 = (BitConverter.ToUInt16(data, 36) - 2731) * 0.1;
             TempDischarUpLimitLv2 = (BitConverter.ToUInt16(data, 38) - 2731) * 0.1;
             TempDischarUpLimitLv3 = (BitConverter.ToUInt16(data, 40) - 2731) * 0.1;
-
-
             TempDischarLowLimitLv1 = (BitConverter.ToUInt16(data, 42) - 2731) * 0.1;
             TempDischarLowLimitLv2 = (BitConverter.ToUInt16(data, 44) - 2731) * 0.1;
             TempDischarLowLimitLv3 = (BitConverter.ToUInt16(data, 46) - 2731) * 0.1;
@@ -700,108 +706,108 @@ namespace EMS.ViewModel.NewEMSViewModel
         private void SyncInfo1()
         {
             ushort[] values = new ushort[3];
-            values[0] = (ushort)ClusterVolUpLimitLv1;
-            values[1] = (ushort)ClusterVolUpLimitLv2;
-            values[2] = (ushort)ClusterVolUpLimitLv3;
+            values[0] = (ushort)(ClusterVolUpLimitLv1*10);
+            values[1] = (ushort)(ClusterVolUpLimitLv2*10);
+            values[2] = (ushort)(ClusterVolUpLimitLv3 * 10);
             int bcmuid = int.Parse(SelectedBCMUID);
             BmsApi.SyncBCMUInfo1(bcmuid - 1, values);
         }
         private void SyncInfo2()
         {
             ushort[] values = new ushort[3];
-            values[0] = (ushort)ClusterVolLowLimitLv1;
-            values[1] = (ushort)ClusterVolLowLimitLv2;
-            values[2] = (ushort)ClusterVolLowLimitLv3;
+            values[0] = (ushort)(ClusterVolLowLimitLv1 * 10);
+            values[1] = (ushort)(ClusterVolLowLimitLv2 * 10);
+            values[2] = (ushort)(ClusterVolLowLimitLv3 * 10);
             int bcmuid = int.Parse(SelectedBCMUID);
             BmsApi.SyncBCMUInfo2(bcmuid - 1, values);
         }
         private void SyncInfo3()
         {
             ushort[] values = new ushort[3];
-            values[0] = (ushort)SingleVolUpLimitLv1;
-            values[1] = (ushort)SingleVolUpLimitLv2;
-            values[2] = (ushort)SingleVolUpLimitLv3;
+            values[0] = (ushort)(SingleVolUpLimitLv1 * 1000);
+            values[1] = (ushort)(SingleVolUpLimitLv2 * 1000);
+            values[2] = (ushort)(SingleVolUpLimitLv3 * 1000);
             int bcmuid = int.Parse(SelectedBCMUID);
             BmsApi.SyncBCMUInfo3(bcmuid - 1, values);
         }
         private void SyncInfo4()
         {
             ushort[] values = new ushort[3];
-            values[0] = (ushort)SingleVolLowLimitLv1;
-            values[1] = (ushort)SingleVolLowLimitLv2;
-            values[2] = (ushort)SingleVolLowLimitLv3;
+            values[0] = (ushort)(SingleVolLowLimitLv1*1000);
+            values[1] = (ushort)(SingleVolLowLimitLv2 * 1000);
+            values[2] = (ushort)(SingleVolLowLimitLv3 * 1000);
             int bcmuid = int.Parse(SelectedBCMUID);
             BmsApi.SyncBCMUInfo4(bcmuid - 1, values);
         }
         private void SyncInfo5()
         {
             ushort[] values = new ushort[3];
-            values[0] = (ushort)TempCharUpLimitLv1;
-            values[1] = (ushort)TempCharUpLimitLv2;
-            values[2] = (ushort)TempCharUpLimitLv3;
+            values[0] = (ushort)((TempCharUpLimitLv1*10)+2731);
+            values[1] = (ushort)((TempCharUpLimitLv2*10)+2731);
+            values[2] = (ushort)((TempCharUpLimitLv3 * 10) + 2731);
             int bcmuid = int.Parse(SelectedBCMUID);
             BmsApi.SyncBCMUInfo5(bcmuid - 1, values);
         }
         private void SyncInfo6()
         {
             ushort[] values = new ushort[3];
-            values[0] = (ushort)TempCharLowLimitLv1;
-            values[1] = (ushort)TempCharLowLimitLv2;
-            values[2] = (ushort)TempCharLowLimitLv3;
+            values[0] = (ushort)((TempCharLowLimitLv1 * 10) + 2731);
+            values[1] = (ushort)((TempCharLowLimitLv2 * 10) + 2731);
+            values[2] = (ushort)((TempCharLowLimitLv3 * 10) + 2731);
             int bcmuid = int.Parse(SelectedBCMUID);
             BmsApi.SyncBCMUInfo6(bcmuid - 1, values);
         }
         private void SyncInfo7()
         {
             ushort[] values = new ushort[3];
-            values[0] = (ushort)TempDischarUpLimitLv1;
-            values[1] = (ushort)TempDischarUpLimitLv2;
-            values[2] = (ushort)TempDischarUpLimitLv3;
+            values[0] = (ushort)((TempDischarUpLimitLv1 * 10) + 2731);
+            values[1] = (ushort)((TempDischarUpLimitLv2 * 10) + 2731);
+            values[2] = (ushort)((TempDischarUpLimitLv3 * 10) + 2731);
             int bcmuid = int.Parse(SelectedBCMUID);
             BmsApi.SyncBCMUInfo7(bcmuid - 1, values);
         }
         private void SyncInfo8()
         {
             ushort[] values = new ushort[3];
-            values[0] = (ushort)TempDischarLowLimitLv1;
-            values[1] = (ushort)TempDischarLowLimitLv2;
-            values[2] = (ushort)TempDischarLowLimitLv3;
+            values[0] = (ushort)((TempDischarLowLimitLv1 * 10) + 2731);
+            values[1] = (ushort)((TempDischarLowLimitLv2 * 10) + 2731);
+            values[2] = (ushort)((TempDischarLowLimitLv3 * 10) + 2731);
             int bcmuid = int.Parse(SelectedBCMUID);
             BmsApi.SyncBCMUInfo8(bcmuid - 1, values);
         }
         private void SyncInfo9()
         {
             ushort[] values = new ushort[3];
-            values[0] = (ushort)CurCharLv1;
-            values[1] = (ushort)CurCharLv2;
-            values[2] = (ushort)CurCharLv3;
+            values[0] = (ushort)(CurCharLv1*10);
+            values[1] = (ushort)(CurCharLv2*10);
+            values[2] = (ushort)(CurCharLv3 * 10);
             int bcmuid = int.Parse(SelectedBCMUID);
             BmsApi.SyncBCMUInfo9(bcmuid - 1, values);
         }
         private void SyncInfo10()
         {
             ushort[] values = new ushort[3];
-            values[0] = (ushort)CurDischarLv1;
-            values[1] = (ushort)CurDischarLv2;
-            values[2] = (ushort)CurDischarLv3;
+            values[0] = (ushort)(CurDischarLv1 * 10);
+            values[1] = (ushort)(CurDischarLv2 * 10);
+            values[2] = (ushort)(CurDischarLv3 * 10);
             int bcmuid = int.Parse(SelectedBCMUID);
             BmsApi.SyncBCMUInfo10(bcmuid - 1, values);
         }
         private void SyncInfo11()
         {
             ushort[] values = new ushort[3];
-            values[0] = (ushort)SingleVolDiffLv1;
-            values[1] = (ushort)SingleVolDiffLv2;
-            values[2] = (ushort)SingleVolDiffLv3;
+            values[0] = (ushort)(SingleVolDiffLv1 * 1000);
+            values[1] = (ushort)(SingleVolDiffLv2 * 1000);
+            values[2] = (ushort)(SingleVolDiffLv3 * 1000);
             int bcmuid = int.Parse(SelectedBCMUID);
             BmsApi.SyncBCMUInfo11(bcmuid - 1, values);
         }
         private void SyncInfo12()
         {
             ushort[] values = new ushort[3];
-            values[0] = (ushort)SOCLowLimitLv1;
-            values[1] = (ushort)SOCLowLimitLv2;
-            values[2] = (ushort)SOCLowLimitLv3;
+            values[0] = (ushort)(SOCLowLimitLv1 * 10);
+            values[1] = (ushort)(SOCLowLimitLv2 * 10);
+            values[2] = (ushort)(SOCLowLimitLv3 * 10);
             int bcmuid = int.Parse(SelectedBCMUID);
             BmsApi.SyncBCMUInfo12(bcmuid - 1, values);
         }
@@ -812,6 +818,7 @@ namespace EMS.ViewModel.NewEMSViewModel
 
             int bcmuid = int.Parse(SelectedBCMUID);
             BmsApi.SyncBCMUInfo13(bcmuid - 1, values);
+
         }
 
 
@@ -826,6 +833,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             BUSLowerLimitVolThresh = Math.Round(BitConverter.ToInt16(busvoldata, 2) * 0.1, 2);
             BUSHVolSetting = Math.Round(BitConverter.ToInt16(busvoldata, 4) * 0.1, 2);
             BUSLVolSetting = Math.Round(BitConverter.ToInt16(busvoldata, 6) * 0.1, 2);
+
         }
 
         private void SyncBUSVolInfo()

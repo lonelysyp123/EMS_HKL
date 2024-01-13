@@ -21,15 +21,18 @@ namespace EMS.View.NewEMSView
     /// </summary>
     public partial class Strategy_ProtectSetterPage : Page
     {
+        private Strategy_ProtectSetterPageModel viewmodel;
         public Strategy_ProtectSetterPage()
         {
             InitializeComponent();
-        }
-
-        public Strategy_ProtectSetterPage(Strategy_ProtectSetterPageModel viewmodel)
-        {
-            InitializeComponent();
+            viewmodel = new Strategy_ProtectSetterPageModel();
             this.DataContext = viewmodel;
         }
+
+        //public Strategy_ProtectSetterPage(Strategy_ProtectSetterPageModel viewmodel)
+        //{
+        //    InitializeComponent();
+        //    this.DataContext = viewmodel;
+        //}
     }
 }

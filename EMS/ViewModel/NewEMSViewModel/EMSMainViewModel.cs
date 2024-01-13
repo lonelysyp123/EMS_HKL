@@ -61,7 +61,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             Analysis_PCSPageModel = new Analysis_PCSPageModel();
             Analysis_SmartMeterPageModel = new Analysis_SmartMeterPageModel();
             Strategy_AnalysisPageModel = new Strategy_AnalysisPageModel();
-            Strategy_ProtectSetterPageModel = new Strategy_ProtectSetterPageModel();
+           // Strategy_ProtectSetterPageModel = new Strategy_ProtectSetterPageModel();
             Strategy_SetterPageModel = new Strategy_SetterPageModel();
             System_DevInfoPageModel = new System_DevInfoPageModel();
             System_DevSetterPageModel = new System_DevSetterPageModel();

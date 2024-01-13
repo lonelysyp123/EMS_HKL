@@ -105,6 +105,11 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
+        
+
+
+
+
         #region BCMUINFO
         private string avgClusterVol;
 
@@ -1231,9 +1236,29 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
+        private int heartBeat;
+
+        public int HeartBeat
+        {
+            get => heartBeat;
+            set
+            {
+                SetProperty(ref heartBeat, value);
+            }
+        }
 
 
 
+
+        int ForeStateBCMU;
+        int ForeFaultStateBCMU1;
+        int ForeFaultStateBCMU2 = 0xFFFF;
+        int ForeFaultStateBCMU3;
+        int ForeAlarmStateBCMU1;
+        int ForeAlarmStateBCMU2= 0xFFFF;
+        int ForeAlarmStateBCMU3;
+        int ForeHeartBeat = 0;
+        int disconnectCount = 0;
         public BatteryViewModel[] BatteryViewModelList;
 
         #endregion
@@ -1253,14 +1278,12 @@ namespace EMS.ViewModel.NewEMSViewModel
             Command_OffGrid = new RelayCommand(OffGridCommand);
             Command_OnGrid = new RelayCommand(OnGridCommand);
             Command_ResetFault = new RelayCommand(ResetFault);
-
             BatteryViewModelList = new BatteryViewModel[14];
             for (int i = 0; i < BatteryViewModelList.Length; i++)
             {
                 BatteryViewModelList[i] = new BatteryViewModel();
             }
         }
-
        
         private void ResetFault()
         {
@@ -1280,7 +1303,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         public void DataDistribution(BatteryTotalModel model)
         {
             try
-            {
+            {               
                 RemainingSOC = model.TotalSOC.ToString();
                 ClusterVoltage = model.TotalVoltage.ToString();
                 PresentCurrent = model.TotalCurrent.ToString();
@@ -1303,7 +1326,90 @@ namespace EMS.ViewModel.NewEMSViewModel
                 BCMUAlarmStateFlag1 = model.AlarmStateBCMUFlag1;
                 BCMUAlarmStateFlag2 = model.AlarmStateBCMUFlag2;
                 BCMUAlarmStateFlag3 = model.AlarmStateBCMUFlag3;
+                if (ForeAlarmStateBCMU2 != 0xFFFF )
+                {
+                    if (ForeAlarmStateBCMU1 != BCMUAlarmStateFlag1)
+                    {
+                        LogUtils.Debug("BCMU" + id + "新告警Flag1:" + BCMUAlarmStateFlag1);
+                    }
+                    if(ForeAlarmStateBCMU2!=BCMUAlarmStateFlag2)
+                    {
+                        LogUtils.Debug("BCMU" + id + "新告警Flag2:" + BCMUAlarmStateFlag2);
+                    }
+                    if(ForeAlarmStateBCMU3!=BCMUAlarmStateFlag3)
+                    {
+                        LogUtils.Debug("BCMU" + id + "新告警Flag3:" + BCMUAlarmStateFlag3);
+                    }
+                
+                
+                
+                    if (ForeFaultStateBCMU1 != BCMUFaultStateFlag1)
+                    {
+                        LogUtils.Debug("BCMU" + id + "新故障Flag1:" + BCMUFaultStateFlag1);
+                    }
+                    if (ForeFaultStateBCMU2 != BCMUFaultStateFlag2)
+                    {
+                        LogUtils.Debug("BCMU" + id + "新故障Flag2:" + BCMUFaultStateFlag2);
+                    }
+                    if (ForeFaultStateBCMU3 != BCMUFaultStateFlag3)
+                    {
+                        LogUtils.Debug("BCMU" + id + "新故障Flag3:" + BCMUFaultStateFlag3);
+                    }
+                }
+
+
+                ForeFaultStateBCMU1 = BCMUFaultStateFlag1;
+                ForeFaultStateBCMU2 = BCMUFaultStateFlag2;
+                ForeFaultStateBCMU3 = BCMUFaultStateFlag3;
+                ForeAlarmStateBCMU1 = BCMUAlarmStateFlag1;
+                ForeAlarmStateBCMU2 = BCMUAlarmStateFlag2;
+                ForeAlarmStateBCMU3 = BCMUAlarmStateFlag3;
+
                 StateBCMUFlag = model.StateBCMU;
+                
+                if (StateBCMUFlag != ForeStateBCMU&&ForeStateBCMU!=0)
+                {
+                    switch (StateBCMUFlag)
+                    {
+                        case 1:
+                            {
+                                LogUtils.Debug("BCMU"+id+":充电"+"，电流为："+ PresentCurrent);
+
+                            }break;
+                        case 2:
+                            {
+                                LogUtils.Debug("BCMU" + id + ":放电" + "，电流为：" + PresentCurrent);
+                            }break;
+                        case 3:
+                            {
+                                LogUtils.Debug("BCMU" + id + ":静置");
+                            }break;
+                        case 4:
+                            {
+                                LogUtils.Debug("BCMU" + id + ":离网");
+                            }break;
+
+                    }
+                }
+                    ForeStateBCMU = StateBCMUFlag;
+
+                HeartBeat = model.HeartBeat;
+              
+                if (HeartBeat == ForeHeartBeat)
+                {
+                    disconnectCount++;
+                }
+                else
+                {
+                    disconnectCount = 0;
+                }
+                if (disconnectCount > 3)
+                {
+                    LogUtils.Debug("BCMU" + id + "失去连接");
+                    disconnectCount = 0;
+                }
+               
+                ForeHeartBeat = HeartBeat;
                 HighCotainerTemperature1 = model.VolContainerTemperature1.ToString();
                 HighCotainerTemperature2 = model.VolContainerTemperature2.ToString();
                 HighCotainerTemperature3 = model.VolContainerTemperature3.ToString();
@@ -1496,15 +1602,14 @@ namespace EMS.ViewModel.NewEMSViewModel
             {
                 faultresult = false;
             }
-            if (flag1bitposition.Count == 0)
-            {
+            
                 BMU1TotalFault = false;
                 BMU2TotalFault = false;
                 BMU3TotalFault = false;
                 BMU1ConnectLostFault = false;
                 BMU2ConnectLostFault = false;
                 BMU3ConnectLostFault = false;
-            }
+            
             foreach (var item in flag1bitposition)
             {
                 switch (item)
@@ -1553,8 +1658,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                         break;
                 }
             }
-            if (flag2bitposition.Count == 0)
-            {
+          
                 MainLoopRelayFault = false;
                 PrecharRelayFault = false;
                 BreakerFault = false;
@@ -1564,7 +1668,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                 HighVolDCDetectFault = false;
                 IsoRADCI2CComFault = false;
                 IsoRDetectFault = false;
-            }
+            
             foreach (var item in flag2bitposition)
             {
                 switch (item)
@@ -1713,14 +1817,13 @@ namespace EMS.ViewModel.NewEMSViewModel
 
             List<int> result21 = new List<int>();
             result21 = GetBitPosition(value2);
-            if(result21.Count==0)
-            {
+           
                 HighConTemp1Alarm = AlarmtLevels.NoAlarm;
                 HighConTemp2Alarm = AlarmtLevels.NoAlarm;
                 HighConTemp3Alarm = AlarmtLevels.NoAlarm;
                 HighConTemp4Alarm = AlarmtLevels.NoAlarm;
                 HighConTempTotalAlarm = AlarmtLevels.NoAlarm;
-            }
+            
             foreach (var item in result21)
             {
                 switch (item)
@@ -1818,13 +1921,12 @@ namespace EMS.ViewModel.NewEMSViewModel
             int colorflagresult = Math.Max(colorflag1,colorflag2);
             colorflagresult = Math.Max(colorflagresult,colorflag3);
             colorflagresult = Math.Max(colorflagresult,colorflag4);
-            if (result2.Count == 0)
-            {
+          
                 ClusterVolUpAlarm = AlarmtLevels.NoAlarm;
                 ClusterVolLowAlarm = AlarmtLevels.NoAlarm;
                 SingleVolUpAlarm = AlarmtLevels.NoAlarm;
                 SingleVolLowAlarm = AlarmtLevels.NoAlarm;
-            }
+            
             foreach (var item in result2)
             {
 
@@ -1870,8 +1972,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                         break;
                 }
             }
-            if(result3.Count == 0)
-            {
+           
                 SOCLowAlarm = AlarmtLevels.NoAlarm;
                 SingleVolDiffAlarm = AlarmtLevels.NoAlarm;
                 DischarClusterOverCurAlarm = AlarmtLevels.NoAlarm;
@@ -1880,7 +1981,7 @@ namespace EMS.ViewModel.NewEMSViewModel
                 DischarTempLowAlarm = AlarmtLevels.NoAlarm;
                 CharTempUpAlarm = AlarmtLevels.NoAlarm;
                 CharTempLowAlarm = AlarmtLevels.NoAlarm;
-            }
+            
             foreach (var item in result3)
             {
                 switch (item.Key)

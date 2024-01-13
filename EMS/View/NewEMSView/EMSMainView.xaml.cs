@@ -198,7 +198,7 @@ namespace EMS.View.NewEMSView
 
         private void StrategyViewMenu_ProtectSetter_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Strategy_ProtectSetterPage(viewmodel.Strategy_ProtectSetterPageModel), sender as ToggleButton, StrategyViewMenu);
+            Navigation(new Strategy_ProtectSetterPage(), sender as ToggleButton, StrategyViewMenu);
         }
 
         private void SystemViewMenu_DevInfo_Checked(object sender, RoutedEventArgs e)

@@ -195,6 +195,7 @@ namespace EMS.Model
         
         public int BatteryCount { set; get; }
         public int BalanceChannel {  get; set; }
+        public int HeartBeat {  get; set; }
         public ushort SeriesCount = 3;
         public ushort BatteriesCountInSeries = 14;
         public DateTime CurrentTime;

@@ -29,6 +29,19 @@ namespace EMS.Api
             return null;
         }
 
+        public static List<string> GetConnectedBMSID()
+        {
+            List<string> ids = new List<string>();
+            foreach (var bmsdataservice in EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices)
+            {
+                if(bmsdataservice.IsConnected==true)
+                {
+                  
+                    ids.Add(bmsdataservice.ID);
+                }
+            }
+            return ids;
+        }
         
 
         /// <summary>
@@ -203,6 +216,7 @@ namespace EMS.Api
         }
         public static void SyncBCMUInfo1(int index, ushort[] values)
         {
+            
             EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices[index].SyncBCMUInfo1(values);
         }
         public static void SyncBCMUInfo2(int index, ushort[] values)

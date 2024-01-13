@@ -62,7 +62,7 @@ namespace EMS.Service
                 }
                 catch (Exception ex)
                 {
-                    LogUtils.Warn(DevType + " ID:" + ID + " 连接失败", ex);
+                    //LogUtils.Warn(DevType + " ID:" + ID + " 连接失败", ex);
                 }
                 finally
                 {
@@ -98,7 +98,7 @@ namespace EMS.Service
                 }
                 catch (Exception ex)
                 {
-                    LogUtils.Error(DevType + " ID:" + ID, ex);
+                    //LogUtils.Error(DevType + " ID:" + ID, ex);
                     break;
                 }
             }
@@ -189,7 +189,7 @@ namespace EMS.Service
             }
             catch (Exception ex)
             {
-                LogUtils.Warn(DevType + " ID:" + ID + "读取数据失败", ex);
+                //LogUtils.Warn(DevType + " ID:" + ID + "读取数据失败", ex);
                 if (!_client.Connected && !IsCommunicationProtectState)
                 {
                     if (CommunicationCheck())
@@ -236,11 +236,11 @@ namespace EMS.Service
                 {
                     _master = ModbusIpMaster.CreateIp(_client);
                     IsConnected = true;
-                    LogUtils.Debug("保护机制重连成功，PCS ID:" + ID + "上线");
+                    //LogUtils.Debug("保护机制重连成功，PCS ID:" + ID + "上线");
                 }
                 else
                 {
-                    LogUtils.Debug("保护机制重连失败, PCS ID:" + ID + "下线");
+                    //LogUtils.Debug("保护机制重连失败, PCS ID:" + ID + "下线");
                 }
             }
         }
@@ -258,7 +258,7 @@ namespace EMS.Service
             }
             catch (Exception ex)
             {
-                LogUtils.Warn("PCS ID:" + ID + "写入数据失败", ex);
+                //LogUtils.Warn("PCS ID:" + ID + "写入数据失败", ex);
                 if (!_client.Connected && !IsCommunicationProtectState)
                 {
                     if (CommunicationCheck())
