@@ -20,6 +20,7 @@ using EMS.Storage.DB.Models;
 using System.Diagnostics;
 using System.IO;
 using Microsoft.Win32;
+using System.Xml.Linq;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
@@ -35,7 +36,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             get => _smDisplayDataModel;
             set
             {
-                //SetProperty(ref _smDisplayData, value);
                 if (_smDisplayDataModel != value)
                 {
                     _smDisplayDataModel = value;
@@ -105,7 +105,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             get => _selectedType;
             set
             {
-                if(SetProperty(ref _selectedType, value))
+                if(SetProperty(ref _selectedType, value) && _hasValidData)
                 {
                     SwitchSmartMeterData();
                 }
@@ -150,7 +150,6 @@ namespace EMS.ViewModel.NewEMSViewModel
         #endregion
         public Analysis_SmartMeterPageModel()
         {
-
             QueryCommand = new RelayCommand(Query);
             ExportCommand = new RelayCommand(Export);
             SMDisplayDataModel = new PlotModel();
@@ -162,6 +161,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             EndTime2 = "00:00:00";
         }
 
+
+        private bool _hasValidData = false;
         /// <summary>
         /// 查询
         /// </summary>
@@ -173,11 +174,23 @@ namespace EMS.ViewModel.NewEMSViewModel
 
             if (TryCombinTime(StartTime1, StartTime2, out DateTime StartTime) && TryCombinTime(EndTime1, EndTime2, out DateTime EndTime))
             {
-                DisplayDataList.Add(SmartMeterInfo(StartTime, EndTime));
+                List<double[]> smartMeterInfoArray = SmartMeterInfo(StartTime, EndTime);
+
+                if (smartMeterInfoArray != null && smartMeterInfoArray.Any())
+                {
+                    DisplayDataList.Add(smartMeterInfoArray);
+                    _hasValidData = true;
+                }
+                else
+                {
+                    MessageBox.Show("暂无数据");
+                    _hasValidData = false;
+                }
             }
             else
             {
                 MessageBox.Show("请选择正确时间");
+                _hasValidData = false;
             }
         }
 
@@ -191,6 +204,12 @@ namespace EMS.ViewModel.NewEMSViewModel
             if (TryCombinTime(StartTime1, StartTime2, out startTime) && TryCombinTime(EndTime1, EndTime2, out endTime))
             {
                 List<double[]> smartMeterData = SmartMeterInfo(startTime, endTime);
+                // 检查是否有数据
+                if (smartMeterData == null || !smartMeterData.Any())
+                {
+                    MessageBox.Show("暂无数据可供导出");
+                    return;
+                }
                 List<DateTime> timeList = TimeList[0].ToList();// 假设时间列表在查询后只有一组数据
 
                 // 使用SaveFileDialog获取用户选择的保存路径
@@ -200,7 +219,15 @@ namespace EMS.ViewModel.NewEMSViewModel
                 if (saveFileDialog.ShowDialog() == true)
                 {
                     string filePath = saveFileDialog.FileName;
-                    ExportSmartMeterInfoToCsv(smartMeterData, timeList, filePath);
+                    try
+                    {
+                        ExportSmartMeterInfoToCsv(smartMeterData, timeList, filePath);
+                        MessageBox.Show("电表数据已成功导出至 " + filePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"导出电表数据时发生错误: {ex.Message}");
+                    }
                 }
             }
             else
@@ -229,6 +256,10 @@ namespace EMS.ViewModel.NewEMSViewModel
                     for (int j = 0; j < smartMeterData.Count; j++)
                     {
                         sb.Append(smartMeterData[j][i]);
+                        if (j < smartMeterData.Count - 1) // 在最后一个数据项前添加逗号分隔符
+                        {
+                            sb.Append(",");
+                        }
                     }
                     sb.Append(",");
                     sb.Append(timeList[i].ToString("yyyy-MM-dd HH:mm:ss")); // 格式化日期时间
@@ -236,8 +267,6 @@ namespace EMS.ViewModel.NewEMSViewModel
                     sw.WriteLine(sb.ToString());
                 }
             }
-
-            MessageBox.Show("电表数据已成功导出至 " + filePath);
         }
 
         /// <summary>
@@ -266,11 +295,13 @@ namespace EMS.ViewModel.NewEMSViewModel
             List<double> reactivePower_CList = new List<double>();
             List<double> reactivePower_TotalList = new List<double>();
             List<DateTime> times = new List<DateTime>();
-            if (SeriesList != null)
+            if (SeriesList == null || !SeriesList.Any())
             {
-                Debug.WriteLine(SeriesList.Count, "55555555");
-
-                for (int i = 1; i < SeriesList.Count; i++)
+                return null;
+            }
+            else
+            {
+                for (int i = 0; i < SeriesList.Count; i++)
                 {
                     var item0 = typeof(ElectricMeterInfoModel).GetProperty("Voltage_A").GetValue(SeriesList[i]);
                     if (double.TryParse(item0.ToString(), out double voltage_A))
@@ -374,18 +405,14 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             InitChart();
             SMDisplayDataModel.Series.Clear();
-            Debug.WriteLine(DisplayDataList.Count,"66666666666");
             for (int i = 0; i < DisplayDataList.Count; i++)
             {
                 LineSeries lineSeries = new LineSeries();
                 lineSeries.Title = SelectedType.Content.ToString();
-                Debug.WriteLine(lineSeries.Title,"000000000");
                 lineSeries.MarkerSize = 3;
                 lineSeries.MarkerType = MarkerType.Circle;
                 for (int j = 0; j < DisplayDataList[i][SelectedTypeIndex].Length; j++)
                 {
-                    Debug.WriteLine(TimeList[i][j],"2222222222");
-                    Debug.WriteLine(DisplayDataList[i][SelectedTypeIndex][j], "44444444444");
                     lineSeries.Points.Add(DateTimeAxis.CreateDataPoint(TimeList[i][j], DisplayDataList[i][SelectedTypeIndex][j]));
                 }
                 SMDisplayDataModel.Series.Add(lineSeries);
@@ -436,7 +463,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             var l = new Legend
             {
                 LegendBorder = OxyColors.White,
-
                 LegendBackground = OxyColor.FromAColor(200, OxyColors.White),
                 LegendPosition = LegendPosition.TopRight,
                 LegendPlacement = LegendPlacement.Inside,

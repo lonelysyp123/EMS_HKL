@@ -38,7 +38,9 @@
                     Padding="20,10"
                     CornerRadius="15">
                 <Grid>
-                    <ListBox HorizontalAlignment="Center"
+                    <ListBox x:Name="PCSListBox"
+                             IsEnabled="True" 
+                             HorizontalAlignment="Center"
                              BorderThickness="0,0,0,0"
                              SelectedItem="{Binding SelectedType}"
                              SelectedIndex="{Binding SelectedTypeIndex}"

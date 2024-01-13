@@ -36,7 +36,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             get => _pcsDisplayDataModel;
             set
             {
-                //SetProperty(ref _pcsDisplayData, value);
                 if (_pcsDisplayDataModel != value)
                 {
                     _pcsDisplayDataModel = value;
@@ -106,7 +105,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             get => _selectedType;
             set
             {
-                if(SetProperty(ref _selectedType, value))
+                if(SetProperty(ref _selectedType, value) && _hasValidData)
                 {
                     SwitchPCSData();
                 }
@@ -165,6 +164,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             DisplayDataList = new List<List<double[]>>();
         }
 
+
+        private bool _hasValidData = false;
         /// <summary>
         /// 查询
         /// </summary>
@@ -175,11 +176,23 @@ namespace EMS.ViewModel.NewEMSViewModel
 
             if (TryCombinTime(StartTime1, StartTime2, out DateTime StartTime) && TryCombinTime(EndTime1, EndTime2, out DateTime EndTime))
             {
-                DisplayDataList.Add(PCSInfo(StartTime, EndTime));
+                List<double[]> pcsInfoArray = PCSInfo(StartTime, EndTime);
+
+                if (pcsInfoArray != null && pcsInfoArray.Any())
+                {
+                    DisplayDataList.Add(pcsInfoArray);
+                    _hasValidData = true;
+                }
+                else
+                {
+                    MessageBox.Show("暂无数据");
+                    _hasValidData = false;
+                }
             }
             else
             {
                 MessageBox.Show("请选择正确时间");
+                _hasValidData = false;
             }
         }
 
@@ -193,6 +206,12 @@ namespace EMS.ViewModel.NewEMSViewModel
             if (TryCombinTime(StartTime1, StartTime2, out startTime) && TryCombinTime(EndTime1, EndTime2, out endTime))
             {
                 List<double[]> PCSData = PCSInfo(startTime, endTime);
+                // 检查是否有数据
+                if (PCSData == null || !PCSData.Any())
+                {
+                    MessageBox.Show("暂无数据可供导出");
+                    return;
+                }
                 List<DateTime> timeList = TimeList[0].ToList();// 假设时间列表在查询后只有一组数据
 
                 // 使用SaveFileDialog获取用户选择的保存路径
@@ -202,7 +221,15 @@ namespace EMS.ViewModel.NewEMSViewModel
                 if (saveFileDialog.ShowDialog() == true)
                 {
                     string filePath = saveFileDialog.FileName;
-                    ExportPCSInfoToCsv(PCSData, timeList, filePath);
+                    try
+                    {
+                        ExportPCSInfoToCsv(PCSData, timeList, filePath);
+                        MessageBox.Show("PCS数据已成功导出至 " + filePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"导出PCS数据时发生错误: {ex.Message}");
+                    }
                 }
             }
             else
@@ -227,10 +254,13 @@ namespace EMS.ViewModel.NewEMSViewModel
                 for (int i = 0; i < timeList.Count; i++)
                 {
                     StringBuilder sb = new StringBuilder();
-
                     for (int j = 0; j < pcsData.Count; j++)
                     {
                         sb.Append(pcsData[j][i]);
+                        if (j < pcsData.Count - 1) // 在最后一个数据项前添加逗号分隔符
+                        {
+                            sb.Append(",");
+                        }
                     }
                     sb.Append(",");
                     sb.Append(timeList[i].ToString("yyyy-MM-dd HH:mm:ss")); // 格式化日期时间
@@ -238,8 +268,6 @@ namespace EMS.ViewModel.NewEMSViewModel
                     sw.WriteLine(sb.ToString());
                 }
             }
-
-            MessageBox.Show("PCS数据已成功导出至 " + filePath);
         }
 
         /// <summary>
@@ -261,10 +289,13 @@ namespace EMS.ViewModel.NewEMSViewModel
             List<double> moduleTemp1List = new List<double>();
             List<double> envTempList = new List<double>();
             List<DateTime> times = new List<DateTime>();
-            Debug.WriteLine(SeriesList.Count,"000000000000");
-            if (SeriesList != null)
+            if (SeriesList == null || !SeriesList.Any())
             {
-                for (int i = 1; i < SeriesList.Count; i++)
+                return null;
+            }
+            else 
+            {
+                for (int i = 0; i < SeriesList.Count; i++)
                 {
                     var item0 = typeof(PCSInfoModel).GetProperty("DCPower").GetValue(SeriesList[i]);
                     if (double.TryParse(item0.ToString(), out double dcPower))
@@ -318,6 +349,15 @@ namespace EMS.ViewModel.NewEMSViewModel
             obj.Add(moduleTemp1List.ToArray());
             obj.Add(envTempList.ToArray());
             TimeList.Add(times.ToArray());
+            foreach (var data in obj)
+            {
+                Console.Write("Data: [");
+                for (int i = 0; i < data.Length; i++)
+                {
+                    Console.Write($"{data[i]}, ");
+                }
+                Console.WriteLine("]");
+            }
             return obj;
         }
 
@@ -329,19 +369,20 @@ namespace EMS.ViewModel.NewEMSViewModel
         {
             InitChart();
             PCSDisplayDataModel.Series.Clear();
-            for (int i = 0; i < DisplayDataList.Count; i++)
-            {
-                LineSeries lineSeries = new LineSeries();
-                lineSeries.Title = SelectedType.Content.ToString();
-                lineSeries.MarkerSize = 3;
-                lineSeries.MarkerType = MarkerType.Circle;
-                for (int j = 0; j < DisplayDataList[i][SelectedTypeIndex].Length; j++)
+                for (int i = 0; i < DisplayDataList.Count; i++)
                 {
-                    Debug.WriteLine(DisplayDataList[i][SelectedTypeIndex][j],"111111111111111");
-                    lineSeries.Points.Add(DateTimeAxis.CreateDataPoint(TimeList[i][j], DisplayDataList[i][SelectedTypeIndex][j]));
+                    LineSeries lineSeries = new LineSeries();
+                    lineSeries.Title = SelectedType.Content.ToString();
+                    lineSeries.MarkerSize = 3;
+                    lineSeries.MarkerType = MarkerType.Circle;
+
+                for (int j = 0; j < DisplayDataList[i][SelectedTypeIndex].Length; j++)
+                    {
+                        lineSeries.Points.Add(DateTimeAxis.CreateDataPoint(TimeList[i][j], DisplayDataList[i][SelectedTypeIndex][j]));
+                    }
+                    PCSDisplayDataModel.Series.Add(lineSeries);
                 }
-                PCSDisplayDataModel.Series.Add(lineSeries);
-            }
+
             PCSDisplayDataModel.InvalidatePlot(true);
         }
 
@@ -388,7 +429,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             var l = new Legend
             {
                 LegendBorder = OxyColors.White,
-
                 LegendBackground = OxyColor.FromAColor(200, OxyColors.White),
                 LegendPosition = LegendPosition.TopRight,
                 LegendPlacement = LegendPlacement.Inside,
