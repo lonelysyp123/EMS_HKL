@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TNCN.EMS.Common.Mqtt;
+using TNCN.EMS.Common.Util;
 
 namespace EMS.Common.StrategyManage
 {
@@ -109,14 +110,29 @@ namespace EMS.Common.StrategyManage
         public bool IsFaultMode { get { return _contingencyStatus == ContingencyStatusEnum.Level2 || _contingencyStatus == ContingencyStatusEnum.Level3; } }
         public EmsController()
         {
-            _isAutomaticMode = false;
-            _hasDailyPatternEnabled = false;
-            _hasMaxDemandControlEnabled = false;
-            _hasReversePowerflowProtectionEnabled = false;
-            _hasContigencyCheckEnabled = true;
             _currentCommand = null;
             _scheduler = new IntraDayScheduler();
             _contingencyStatus = ContingencyStatusEnum.Normal;
+            IniFileHelper.Read(IniSectionEnum.Strategy, "ChargingSecurityFactor", out _chargingSecurityFactor);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "ControlPeriod", out _controlPeriod);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "DcBusConnectionChargingPowerFactor", out _dcBusConnectionChargingPowerFactor);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "DischargingSecurityFactor", out _dischargingSecurityFactor);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "HasContigencyCheckEnabled", out _hasContigencyCheckEnabled);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "HasDailyPatternEnabled", out _hasDailyPatternEnabled);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "HasMaxDemandControlEnabled", out _hasMaxDemandControlEnabled);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "HasReversePowerflowProtectionEnabled", out _hasReversePowerflowProtectionEnabled);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "IsAutomaticMode", out _isAutomaticMode);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "MaxChargingPower", out _maxChargingPower);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "MaxDemandPower", out _maxDemandPower);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "MaxDemandPowerDescendRate", out _maxDemandPowerDescendRate);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "MaxDischargingPower", out _maxDischargingPower);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "MaxSoc", out _maxSoc);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "MinSoc", out _minSoc);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "ReversePowerActionThreshold", out _reversePowerActionThreshold);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "ReversePowerDescendRate", out _reversePowerDescendRate);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "ReversePowerStopThreshold", out _reversePowerStopThreshold);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "ThresholdTolerance", out _thresholdTolerance);
+
         }
 
         public IntraDayScheduler Scheduler { get { return _scheduler; } }
