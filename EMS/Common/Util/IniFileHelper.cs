@@ -34,6 +34,7 @@ namespace TNCN.EMS.Common.Util
         private const int DefaultIntegerValue = 0;
         private const double DefaultDoubleValue = 0;
         private const bool DefaultBoolValue = false;
+        private ILog _logger;
 
         public IniFileHelper(string path)
         {
@@ -45,6 +46,7 @@ namespace TNCN.EMS.Common.Util
             _sectionEnum2String.Add(IniSectionEnum.PCS, "PCS");
             _sectionEnum2String.Add(IniSectionEnum.SmartMeter, "SmartMeter");
             _sectionEnum2String.Add(IniSectionEnum.Strategy, "Strategy");
+            _logger = LogManager.GetLogger(typeof(IniFileHelper));
         }
         public void WriteString(IniSectionEnum section, string key, string value)
         {
@@ -101,6 +103,7 @@ namespace TNCN.EMS.Common.Util
             {
                 Console.WriteLine(e.ToString());
                 result = DefaultDoubleValue;
+                _logger.Error(e.Message, e);
             }
             return result;
         }
