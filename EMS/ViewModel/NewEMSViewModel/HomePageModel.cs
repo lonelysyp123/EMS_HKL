@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using EMS.Api;
+using EMS.Common;
 using EMS.Model;
 using EMS.Service;
 using System;
@@ -7,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using TNCN.EMS.Api;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
@@ -351,14 +354,20 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         }
 
+        public void BMSDataRefreshFromAPI()
+        {
+            DataDisPlayBMS(BmsApi.GetNextBMSData().ToList());
+            StateDisPlayBMS(BmsApi.GetDevServices().ToList());
+        }
+
         /// <summary>
         /// BMS数据展示
         /// </summary>
         /// <param name="model"></param>
         public void DataDisPlayBMS(List<BatteryTotalModel> models)
         {
-            List<double>SingleSOC = new List<double>();
-            List<double>SingleSOH = new List<double>();
+            List<double> SingleSOC = new List<double>();
+            List<double> SingleSOH = new List<double>();
             foreach (BatteryTotalModel model in models)
             {
                 SingleSOC.Add(model.TotalSOC);
@@ -368,22 +377,20 @@ namespace EMS.ViewModel.NewEMSViewModel
             TotalSOH = SingleSOH.Average().ToString();
             InstalledPower = 400.ToString();
             EnergyStorageCapacity = 4.ToString();
-   
-
         }
 
         public void StateDisPlayBMS(List<BMSDataService> bMSDataService)
         {
-            bool bmsstateflag = false;
+            bool bmsstateflag = true;
             foreach (BMSDataService service in bMSDataService)
             {
-                if(service.IsConnected==true)
+                if (service.IsConnected == false)
                 {
-                  bmsstateflag=true;
+                    bmsstateflag = false;
                 }
 
             }
-            if(!bmsstateflag)
+            if (!bmsstateflag)
             {
                 StateFill_BMSRun = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
             }
@@ -397,30 +404,66 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// PCS数据展示
         /// </summary>
         /// <param name="model"></param>
-        public void DataDisPlayPCS(PCSMonitorModel model, bool isconnected)
+        public void DataDisPlayPCS(PCSModel model)
         {
             DcBranch1DCVol = model.DcBranch1DCVol.ToString();
             DcBranch1DCCur = model.DcBranch1DCCur.ToString();
             DcBranch1DCPower = model.DcBranch1DCPower.ToString();
-            DcBranch1Char = model.DcBranch1Char.ToString();
-            DcBranch1DisChar = model.DcBranch1DisChar.ToString();
+            //DcBranch1Char = ;
+            //DcBranch1DisChar = ;
         }
+
+        /// <summary>
+        /// PCS状态展示
+        /// </summary>
+        /// <param name="bMSDataService"></param>
+        public void StateDisPlayPCS(bool isconnected)
+        {
+            if (isconnected)
+            {
+                StateFill_PCSRun = new SolidColorBrush(BCMUColors.IsConnect_T);
+            }
+            else
+            {
+                StateFill_PCSRun = new SolidColorBrush(BCMUColors.IsConnect_F);
+            }
+        }
+
+
 
         /// <summary>
         /// 电表数据展示
         /// </summary>
         /// <param name="model"></param>
-        public void DataDisPlaySM(SmartMeterModel model, SmartMeterDataService service)
+        public void DataDisPlaySM(bool isconnected)
         {
-            if(service.IsConnected==true)
+            if (isconnected)
             {
-                StateFill_AmmeterRun = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
+                StateFill_AmmeterRun = new SolidColorBrush(BCMUColors.IsConnect_T);
             }
             else
             {
-                StateFill_AmmeterRun = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                StateFill_AmmeterRun = new SolidColorBrush(BCMUColors.IsConnect_F);
             }
 
+        }
+
+        public void StateDisPlayFault()
+        {
+            // get fault state from strategy api
+        }
+
+        public void StateDisPlayCloud()
+        {
+            // get mqtt connected state from mqtt api
+            if (MqttClientApi.IsConnected())
+            {
+                StateFill_CloudTelecom = new SolidColorBrush(BCMUColors.IsConnect_T);
+            }
+            else
+            {
+                StateFill_CloudTelecom = new SolidColorBrush(BCMUColors.IsConnect_F);
+            }
         }
 
         //运行状态
@@ -432,8 +475,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         //StateFill_CrisisFaults
         //StateFill_CloudTelecom
         //StateFill_BMSRun--搞定
-        //StateFill_PCSRun
-        //StateFill_AmmeterRun
+        //StateFill_PCSRun--ok
+        //StateFill_AmmeterRun--ok
 
         //台账信息
         //InstalledPower--定值

@@ -50,8 +50,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             EnergyManagementSystem.GlobalInstance.PcsManager.SetPCS(pcsService);
 
             smService = new SmartMeterDataService("1");
-            //smServices[i].RegisterState();    // 状态回调
-            //smServices[i].RegisterState();    // 数据回调
+            smService.RegisterState(DataCallBack_SM);
+            smService.RegisterState(StateCallBack_SM);
 
             HomePageModel = new HomePageModel();
             Monitor_BMSPageModel = new Monitor_BMSPageModel();
@@ -68,11 +68,25 @@ namespace EMS.ViewModel.NewEMSViewModel
             System_MqttSetterPageModel = new System_MqttSetterPageModel();
         }
 
+        private void StateCallBack_SM(object sender, bool isConnected, bool isDaqData, bool isSaveData)
+        {
+            HomePageModel.DataDisPlaySM(isConnected);
+        }
+
+        private void DataCallBack_SM(object sender, object model)
+        {
+            Monitor_SmartMeterPageModel.DataRefresh(model as SmartMeterModel);
+        }
+
         private void DataCallBack_BMS(object sender, object model)
         {
             var service = sender as BMSDataService;
             int index = -1;
-            if (service.ID == "1") index = 1;
+            if (service.ID == "1")
+            {
+                index = 1; 
+                HomePageModel.BMSDataRefreshFromAPI();
+            }
             else if (service.ID == "2") index = 2;
             else if (service.ID == "3") index = 3;
             else if (service.ID == "4") index = 4;
@@ -98,11 +112,13 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         private void DataCallBack_PCS(object sender, object model)
         {
+            HomePageModel.DataDisPlayPCS(model as PCSModel);
             Monitor_PCSPageModel.PCSDataDistribution(model as PCSModel);
         }
 
         private void StateCallBack_PCS(object sender, bool isConnected, bool isDaqData, bool isSaveData)
         {
+            HomePageModel.StateDisPlayPCS(isConnected);
             Monitor_PCSPageModel.PCSStateDistribution(isConnected, isDaqData, isSaveData);
         }
     }

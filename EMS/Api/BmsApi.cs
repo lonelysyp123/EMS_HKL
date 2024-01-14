@@ -29,7 +29,10 @@ namespace EMS.Api
             return null;
         }
 
-        
+        public static BMSDataService[] GetDevServices()
+        {
+            return EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToArray();
+        }
 
         /// <summary>
         /// 获取BMS保护参数接口
