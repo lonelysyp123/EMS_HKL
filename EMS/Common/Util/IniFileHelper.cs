@@ -1,5 +1,6 @@
 ﻿using ControlzEx.Standard;
 using EMS.Model;
+using log4net;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,8 +8,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Windows;
 using System.Windows.Media.Animation;
 
 namespace TNCN.EMS.Common.Util
@@ -45,7 +49,7 @@ namespace TNCN.EMS.Common.Util
         public void WriteString(IniSectionEnum section, string key, string value)
         {
             string sectionName = _sectionEnum2String[section];
-            WritePrivateProfileString(sectionName, key, value, _path);
+            InternalWritePrivateProfileString(sectionName, key, value, _path);
         }
 
         public void WriteInteger(IniSectionEnum section, string key, int value)
@@ -56,7 +60,7 @@ namespace TNCN.EMS.Common.Util
         public void WriteDouble(IniSectionEnum section, string key, double value)
         {
             string sectionName = _sectionEnum2String[section];
-            WritePrivateProfileString(sectionName, key, value.ToString(), _path);
+            InternalWritePrivateProfileString(sectionName, key, value.ToString(), _path);
         }
 
         public void WriteBoolean(IniSectionEnum section, string key, bool value)
@@ -65,7 +69,8 @@ namespace TNCN.EMS.Common.Util
             WriteBoolean(sectionName, key, value, _path);
         }
 
-        public string ReadString(IniSectionEnum section, string key) {
+        public string ReadString(IniSectionEnum section, string key)
+        {
             string sectionName = _sectionEnum2String[section];
             return ReadString(sectionName, key, DefaultStringValue, _path);
         }
@@ -86,11 +91,14 @@ namespace TNCN.EMS.Common.Util
         {
             string sectionName = _sectionEnum2String[section];
             StringBuilder stringBuffer = new StringBuilder(255);
-            GetPrivateProfileString(sectionName, key, "", stringBuffer, 255, _path);
+            InternalGetPrivateProfileString(sectionName, key, "", stringBuffer, 255, _path);
             double result = DefaultDoubleValue;
-            try {
+            try
+            {
                 result = Convert.ToDouble(stringBuffer.ToString());
-            }catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Console.WriteLine(e.ToString());
                 result = DefaultDoubleValue;
             }
@@ -142,30 +150,46 @@ namespace TNCN.EMS.Common.Util
 
         private Dictionary<IniSectionEnum, string> _sectionEnum2String;
 
-
-        /// <summary>
-        /// 向INI写入数据
-        /// </summary>
-        /// <PARAM name="section">节点名</PARAM>
-        /// <PARAM name="key">键名</PARAM>
-        /// <PARAM name="value">值（字符串）</PARAM>
-        private static void Write(string section, string key, string value, string path)
+        // 将外部函数WritePrivateProfileString包裹起来，以便做异常处理和日志更新
+        private static long InternalWritePrivateProfileString(string section, string key, string val, string filePath)
         {
-            WritePrivateProfileString(section, key, value, path);
+            long result = 0;
+            try { result = WritePrivateProfileString(section, key, val, filePath); }
+            catch (Exception e)
+            {
+                var log = LogManager.GetLogger(typeof(IniFileHelper));
+                log.Error(e.Message, e);
+            }
+            return result;
         }
 
-        /// <summary>
-        /// 读取INI数据
-        /// </summary>
-        /// <PARAM name="Section">节点名</PARAM>
-        /// <PARAM name="Key">键名</PARAM>
-        /// <PARAM name="Path">值名</PARAM>
-        /// <returns>值（字符串）</returns>
-        private static string Read(string section, string key, string path)
+        // 将外部函数GetPrivateProfileString包裹起来，以便做异常处理和日志更新
+        private static int InternalGetPrivateProfileString(string section, string key, string def, StringBuilder retVal, int size, string filePath)
         {
-            StringBuilder temp = new StringBuilder(255);
-            GetPrivateProfileString(section, key, "", temp, 255, path);
-            return temp.ToString();
+            int result = 0;
+            try { result = GetPrivateProfileString(section, key, def, retVal, size, filePath); }
+            catch (Exception e)
+            {
+                var log = LogManager.GetLogger(typeof(IniFileHelper));
+                log.Error(e.Message, e);
+            }
+            return result;
+        }
+
+        // 将外部函数GetPrivateProfileInt包裹起来，以便做异常处理和日志更新
+        private static int InternalGetPrivateProfileInt(string lpApplicationName, string lpKeyName, int nDefault, string lpFileName)
+        {
+            int result = 0;
+            try
+            {
+                result = GetPrivateProfileInt(lpApplicationName, lpKeyName, nDefault, lpFileName);
+            }
+            catch (Exception e)
+            {
+                var log = LogManager.GetLogger(typeof(IniFileHelper));
+                log.Error(e.Message, e);
+            }
+            return result;
         }
 
         /// <summary>
@@ -180,7 +204,7 @@ namespace TNCN.EMS.Common.Util
         {
             const int MAXSIZE = 255;
             StringBuilder temp = new StringBuilder(MAXSIZE);
-            GetPrivateProfileString(sectionName, keyName, defaultValue, temp, 255, path);
+            InternalGetPrivateProfileString(sectionName, keyName, defaultValue, temp, 255, path);
             return temp.ToString();
         }
 
@@ -193,7 +217,7 @@ namespace TNCN.EMS.Common.Util
         /// <param name="path"></param>
         private static void WriteString(string sectionName, string keyName, string value, string path)
         {
-            WritePrivateProfileString(sectionName, keyName, value, path);
+            InternalWritePrivateProfileString(sectionName, keyName, value, path);
         }
 
         /// <summary>
@@ -206,7 +230,7 @@ namespace TNCN.EMS.Common.Util
         /// <returns></returns>
         private static int ReadInteger(string sectionName, string keyName, int defaultValue, string path)
         {
-            return GetPrivateProfileInt(sectionName, keyName, defaultValue, path);
+            return InternalGetPrivateProfileInt(sectionName, keyName, defaultValue, path);
         }
 
         /// <summary>
@@ -218,7 +242,7 @@ namespace TNCN.EMS.Common.Util
         /// <param name="path"></param>
         private static void WriteInteger(string sectionName, string keyName, int value, string path)
         {
-            WritePrivateProfileString(sectionName, keyName, value.ToString(), path);
+            InternalWritePrivateProfileString(sectionName, keyName, value.ToString(), path);
         }
 
         /// <summary>
@@ -232,7 +256,7 @@ namespace TNCN.EMS.Common.Util
         private static bool ReadBoolean(string sectionName, string keyName, bool defaultValue, string path)
         {
             int temp = defaultValue ? 1 : 0;
-            int result = GetPrivateProfileInt(sectionName, keyName, temp, path);
+            int result = InternalGetPrivateProfileInt(sectionName, keyName, temp, path);
             return (result == 0 ? false : true);
         }
 
@@ -246,7 +270,7 @@ namespace TNCN.EMS.Common.Util
         private static void WriteBoolean(string sectionName, string keyName, bool value, string path)
         {
             string temp = value ? "1 " : "0 ";
-            WritePrivateProfileString(sectionName, keyName, temp, path);
+            InternalWritePrivateProfileString(sectionName, keyName, temp, path);
         }
 
         /// <summary>
@@ -257,7 +281,7 @@ namespace TNCN.EMS.Common.Util
         /// <param name="path"></param>
         public void DeleteKey(string sectionName, string keyName)
         {
-            WritePrivateProfileString(sectionName, keyName, null, _path);
+            InternalWritePrivateProfileString(sectionName, keyName, null, _path);
         }
 
         /// <summary>
@@ -267,7 +291,7 @@ namespace TNCN.EMS.Common.Util
         /// <param name="path"></param>
         public void EraseSection(string sectionName)
         {
-            WritePrivateProfileString(sectionName, null, null, _path);
+            InternalWritePrivateProfileString(sectionName, null, null, _path);
         }
 
         /// <summary>
