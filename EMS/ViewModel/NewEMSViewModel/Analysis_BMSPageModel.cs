@@ -278,16 +278,18 @@ namespace EMS.ViewModel.NewEMSViewModel
                 for (int i = 0; i < 14; i++)
                 {
                     string sort = (i + 1).ToString();
-                    allBMSData.Add(QueryBatteryInfo(BCMUID, BMUID, sort, startTime, endTime));
+                    List<double[]> batteryInfo = QueryBatteryInfo(BCMUID, BMUID, sort, startTime, endTime);
+                    if (batteryInfo != null)
+                    {
+                        allBMSData.Add(batteryInfo);
+                    }
                 }
-                //foreach (var batteryInfo in allBMSData)
-                //{
-                //    Console.WriteLine($"Sort Data ({batteryInfo.Length} items):");
-                //    for (int i = 0; i < batteryInfo.Length; i += 6) // 假设每组电池数据包含6个double值（Voltage, Capacity, SOC, Resistance, Temperature1, Temperature2）
-                //    {
-                //        Console.WriteLine($"Voltage: {batteryInfo[i]}, Capacity: {batteryInfo[i + 1]}, SOC: {batteryInfo[i + 2]}, Resistance: {batteryInfo[i + 3]}, Temperature1: {batteryInfo[i + 4]}, Temperature2: {batteryInfo[i + 5]}");
-                //    }
-                //}
+                // 打印 allBMSData 内容
+                string objContent = string.Join(Environment.NewLine, allBMSData.Select(subArray =>
+                {
+                    return "[" + string.Join(", ", subArray.Select(innerArray => $"[{string.Join(", ", innerArray)}]")) + "]";
+                }));
+                Console.WriteLine("333333333333" + Environment.NewLine + objContent);
                 // 检查是否有数据
                 if (allBMSData == null || !allBMSData.Any())
                 {
@@ -334,8 +336,10 @@ namespace EMS.ViewModel.NewEMSViewModel
                 sw.WriteLine("BCMUID,BMUID,sort,Voltage,Capacity,SOC,Resistance,Temperature1,Temperature2,时间");
                 for (int i = 0; i < timeList.Count; i++)
                 {
+                    Console.WriteLine("1111个数:"+timeList.Count);
                     for (int j = 0; j < allBMSData.Count; j++)
                     {
+                        Console.WriteLine("2222个数:" + allBMSData.Count);
                         StringBuilder sb = new StringBuilder();
 
                         // 添加固定信息（BCMUID和BMUID不需要每次循环都写入）
@@ -344,17 +348,12 @@ namespace EMS.ViewModel.NewEMSViewModel
                         sb.Append(SelectedSeries);
                         sb.Append(",");
                         sb.Append((j + 1).ToString()); // 序号
-                        for(int k = 0; k < allBMSData[j][i].Length; k++)
+                        for(int k = 0; k < allBMSData[j].Count; k++)
                         {
+                            Console.WriteLine("333个数:" + allBMSData[j].Count);
                             sb.Append(",");
-                            sb.Append(allBMSData[j][i][k]);
-                            if (j < allBMSData.Count - 1) // 在最后一个数据项前添加逗号分隔符
-                            {
-                                sb.Append(",");
-                            }
+                            sb.Append(allBMSData[j][k][i]);
                         }
-                        
-
                         sb.Append(",");
                         sb.Append(timeList[i].ToString("yyyy-MM-dd HH:mm:ss")); // 格式化日期时间
 
@@ -365,17 +364,6 @@ namespace EMS.ViewModel.NewEMSViewModel
                         sb.Clear();
                     }
                 }
-
-                //for (int i = 0; i < timeList.Count && i < allBMSData[0].Count; i++) // 确保时间戳列表和数据列表长度匹配
-                //{
-                //    for (int j = 0; j < allBMSData.Count && i < allBMSData[j].Count; j++) // 遍历sort，并检查当前索引是否有效
-                //    {
-                //        Console.WriteLine($"time: {timeList[i]}, sort: {(j + 1)}, Voltage: {allBMSData[j][i][0]}, Capacity: {allBMSData[j][i][1]}, SOC: {allBMSData[j][i][2]}, Resistance: {allBMSData[j][i][3]}, Temperature1: {allBMSData[j][i][4]}, Temperature2: {allBMSData[j][i][5]}");
-
-                //        // 写入CSV文件
-                //        sw.WriteLine($"{$"BCMU({SelectedTotal})"},{SelectedSeries},{(j + 1)},{allBMSData[j][i][0]},{allBMSData[j][i][1]},{allBMSData[j][i][2]},{allBMSData[j][i][3]},{allBMSData[j][i][4]},{allBMSData[j][i][5]},{timeList[i].ToString("yyyy-MM-dd HH:mm:ss")}");
-                //    }
-                //}
             }
         }
 
@@ -408,8 +396,9 @@ namespace EMS.ViewModel.NewEMSViewModel
                 }
                 else
                 {
-                    for (int i = 1; i < SeriesList.Count; i++)
+                    for (int i = 0; i < SeriesList.Count; i++)
                     {
+                        Console.WriteLine("SeriesList.Count:"+SeriesList.Count);
                         var item0 = typeof(SeriesBatteryInfoModel).GetProperty("Voltage" + (Sort - 1)).GetValue(SeriesList[i]);
                         if (double.TryParse(item0.ToString(), out double vol))
                         {
@@ -457,6 +446,8 @@ namespace EMS.ViewModel.NewEMSViewModel
                 obj.Add(temperature2List.ToArray());
                 TimeList.Add(times.ToArray());
             }
+            string objContent = string.Join(Environment.NewLine, obj.Select(array => $"[{string.Join(", ", array)}]"));
+            Console.WriteLine("wwwwwww" + objContent);
             return obj;
         }
 
