@@ -351,7 +351,8 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public HomePageModel()
         {
-
+            InstalledPower = 400.ToString();
+            EnergyStorageCapacity = 4.ToString();
         }
 
         public void BMSDataRefreshFromAPI()
@@ -375,8 +376,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
             TotalSOC = SingleSOC.Average().ToString();
             TotalSOH = SingleSOH.Average().ToString();
-            InstalledPower = 400.ToString();
-            EnergyStorageCapacity = 4.ToString();
         }
 
         public void StateDisPlayBMS(List<BMSDataService> bMSDataService)
@@ -409,8 +408,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             DcBranch1DCVol = model.DcBranch1DCVol.ToString();
             DcBranch1DCCur = model.DcBranch1DCCur.ToString();
             DcBranch1DCPower = model.DcBranch1DCPower.ToString();
-            //DcBranch1Char = ;
-            //DcBranch1DisChar = ;
+            //FaultState = model.
         }
 
         /// <summary>
@@ -422,14 +420,14 @@ namespace EMS.ViewModel.NewEMSViewModel
             if (isconnected)
             {
                 StateFill_PCSRun = new SolidColorBrush(BCMUColors.IsConnect_T);
+                StartStopState = new SolidColorBrush(BCMUColors.IsConnect_T);
             }
             else
             {
                 StateFill_PCSRun = new SolidColorBrush(BCMUColors.IsConnect_F);
+                StartStopState = new SolidColorBrush(BCMUColors.IsConnect_F);
             }
         }
-
-
 
         /// <summary>
         /// 电表数据展示
@@ -451,6 +449,34 @@ namespace EMS.ViewModel.NewEMSViewModel
         public void StateDisPlayFault()
         {
             // get fault state from strategy api
+            StrategyApi.GetFaultState();
+            switch (StrategyApi.GetFaultState())
+            {
+                case Common.StrategyManage.ContingencyStatusEnum.Normal:
+                    StateFill_Warn = new SolidColorBrush(LightColors.Close);
+                    StateFill_MinorFaults = new SolidColorBrush(LightColors.Close);
+                    StateFill_HeavyFaults = new SolidColorBrush(LightColors.Close);
+                    StateFill_CrisisFaults = new SolidColorBrush(LightColors.Close);
+                    break;
+                case Common.StrategyManage.ContingencyStatusEnum.Level1:
+                    StateFill_Warn = new SolidColorBrush(LightColors.Close);
+                    StateFill_MinorFaults = new SolidColorBrush(LightColors.Open_Red);
+                    StateFill_HeavyFaults = new SolidColorBrush(LightColors.Close);
+                    StateFill_CrisisFaults = new SolidColorBrush(LightColors.Close);
+                    break;
+                case Common.StrategyManage.ContingencyStatusEnum.Level2:
+                    StateFill_Warn = new SolidColorBrush(LightColors.Close);
+                    StateFill_MinorFaults = new SolidColorBrush(LightColors.Close);
+                    StateFill_HeavyFaults = new SolidColorBrush(LightColors.Open_Red);
+                    StateFill_CrisisFaults = new SolidColorBrush(LightColors.Close);
+                    break;
+                case Common.StrategyManage.ContingencyStatusEnum.Level3:
+                    StateFill_Warn = new SolidColorBrush(LightColors.Close);
+                    StateFill_MinorFaults = new SolidColorBrush(LightColors.Close);
+                    StateFill_HeavyFaults = new SolidColorBrush(LightColors.Close);
+                    StateFill_CrisisFaults = new SolidColorBrush(LightColors.Open_Red);
+                    break;
+            }
         }
 
         public void StateDisPlayCloud()
@@ -466,34 +492,22 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
+        public void DataRefresh_SEM(SmartElectricityMeterModel model)
+        {
+            ChargingCapacity = model.CurrMonthTotalActiveEnergy.ToString();
+            DischargeCapacity = model.CurrMonthTotalReverseActiveEnergy.ToString();
+            DcBranch1Char = model.TotalActiveEnergy.ToString();
+            DcBranch1DisChar = model.TotalReverseActiveEnergy.ToString();
+            CurrentPower = model.PowerValue.ToString();
+            StationPower = model.PowerValue.ToString();
+        }
+
         //运行状态
         //StateFill_Normal
         //StateFill_Offline
-        //StateFill_Warn
-        //StateFill_MinorFaults
-        //StateFill_HeavyFaults
-        //StateFill_CrisisFaults
-        //StateFill_CloudTelecom
-        //StateFill_BMSRun--搞定
-        //StateFill_PCSRun--ok
-        //StateFill_AmmeterRun--ok
-
-        //台账信息
-        //InstalledPower--定值
-        //EnergyStorageCapacity--定值
-        //TotalSOC--搞定
-        //TotalSOH--搞定
-
-        //系统概况
-        //ChargingCapacity--搞定
-        //DischargeCapacity--搞定
-        //CurrentPower--搞定
-        //StationPower
 
         //状态
         //StartStopState
         //FaultState
-
-
     }
 }

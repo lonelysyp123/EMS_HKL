@@ -28,6 +28,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         public BMSDataService[] bmsServices { get; private set; }
         public SmartMeterDataService smService { get; private set; }
         public PCSDataService pcsService { get; private set; }
+        public SmartElectricityMeterDataService semService { get; private set; }
 
         private static int BCMUCount = 6;
         public EMSMainViewModel()
@@ -52,6 +53,10 @@ namespace EMS.ViewModel.NewEMSViewModel
             smService = new SmartMeterDataService("1");
             smService.RegisterState(DataCallBack_SM);
             smService.RegisterState(StateCallBack_SM);
+
+            //semService = new SmartElectricityMeterDataService();
+            //semService.RegisterState(DataCallBack_SEM);
+            //semService.RegisterState(StateCallBack_SEM);
 
             HomePageModel = new HomePageModel();
             Monitor_BMSPageModel = new Monitor_BMSPageModel();
@@ -106,7 +111,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             else if (service.ID == "4") index = 4;
             else if (service.ID == "5") index = 5;
             else if (service.ID == "6") index = 6;
-
+            HomePageModel.StateDisPlayCloud();
+            HomePageModel.StateDisPlayFault();
             Monitor_BMSPageModel.bmuViewModels[index - 1].StateDistribution(isConnected, isDaqData, isSaveData);
         }
 
@@ -117,6 +123,17 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         private void StateCallBack_PCS(object sender, bool isConnected, bool isDaqData, bool isSaveData)
+        {
+            HomePageModel.StateDisPlayPCS(isConnected);
+            Monitor_PCSPageModel.PCSStateDistribution(isConnected, isDaqData, isSaveData);
+        }
+
+        private void DataCallBack_SEM(object sender, object model)
+        {
+            HomePageModel.DataRefresh_SEM(model as SmartElectricityMeterModel);
+        }
+
+        private void StateCallBack_SEM(object sender, bool isConnected, bool isDaqData, bool isSaveData)
         {
             HomePageModel.StateDisPlayPCS(isConnected);
             Monitor_PCSPageModel.PCSStateDistribution(isConnected, isDaqData, isSaveData);

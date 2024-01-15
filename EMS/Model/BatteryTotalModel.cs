@@ -192,12 +192,15 @@ namespace EMS.Model
         /// <summary>
         /// 电池数量
         /// </summary>
-        
         public int BatteryCount { set; get; }
+        /// <summary>
+        /// 均衡通道
+        /// </summary>
         public int BalanceChannel {  get; set; }
+        public DateTime CurrentTime { get; set; }
+
         public ushort SeriesCount = 3;
         public ushort BatteriesCountInSeries = 14;
-        public DateTime CurrentTime;
         public string BCMUID;
 
         public List<BatterySeriesModel> Series { get; set; }
