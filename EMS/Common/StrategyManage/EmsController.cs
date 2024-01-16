@@ -141,7 +141,6 @@ namespace EMS.Common.StrategyManage
         public void ContinueOperation()
         {
             ContingencyCheck();
-            UpdateMode();
             NormalOperation();
             _lastActiveTimestamp = DateTime.Now;
             Thread.Sleep(_controlPeriod);
@@ -332,16 +331,6 @@ namespace EMS.Common.StrategyManage
                     break;
             }
 
-        }
-
-        private void UpdateMode()
-        {
-            List<bool> modeArray = new List<bool>();
-            modeArray = StrategyApi.GetMode();
-            _isAutomaticMode = modeArray[0];
-            _hasDailyPatternEnabled = modeArray[1];
-            _hasMaxDemandControlEnabled = modeArray[2];
-            _hasReversePowerflowProtectionEnabled = modeArray[3];
         }
     }
     public enum ContingencyStatusEnum

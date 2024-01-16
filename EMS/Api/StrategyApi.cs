@@ -113,13 +113,8 @@ namespace EMS.Api
         /// <param name="dailyPatternMode"></param>
         public static void SetMode(bool automationMode, bool maxDemandpowermode, bool reversePowermode, bool dailyPatternMode)
         {
-
+            // TODO {温经毅} 咱们把这个API拆成四个分别配置参数吧，和它相关的上层调用和下层传达都拆成四个。
             EnergyManagementSystem.GlobalInstance.Controller.SetMode(automationMode, maxDemandpowermode, reversePowermode, dailyPatternMode);
-        }
-
-        public static List<bool> GetMode()
-        {
-            return EnergyManagementSystem.GlobalInstance.Controller.GetMode();
         }
 
         public static void SetMaxDemandThreshold(double maxdemandpower, double descendrate)
