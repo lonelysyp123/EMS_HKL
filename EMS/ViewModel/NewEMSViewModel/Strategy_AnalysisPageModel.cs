@@ -186,7 +186,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         public RelayCommand BatteryStrategyRemoveRowCommand { get; set; }
         public Strategy_AnalysisPageModel()
         {                
-            IsAutoStrategyBtnEnabled = false;
+            IsAutoStrategyBtnEnabled = true;
             StrategyStartTimeSet = "00:00:00";
             BatteryStrategyAddRowCommand = new RelayCommand(BatteryStrategyAddRow);//添加
             BatteryStrategySendCommand = new RelayCommand(SendDailyPatern);//应用
@@ -216,32 +216,75 @@ namespace EMS.ViewModel.NewEMSViewModel
             newStrategy.StrategyValue = StrategyValueSet;
             bool sameTimeCheck = TotalStrategies.ToList().Any(Item => Item.StrategyStartTime == StrategyStartTimeSet);
             bool stringValidityCheck = CheckTimeStringValidity(newStrategy.StrategyStartTime);
-            bool otherCheck = true;
-            if (SelectedStrategyMode == "恒电流放电" || SelectedStrategyMode == "恒功率放电")
+            switch (SelectedStrategyMode)
             {
-                newStrategy.StrategyValue = -StrategyValueSet;
+                case "恒电流放电":
+                    if (StrategyValueSet>1500)
+                    {
+                        MessageBox.Show("设置电流值不能超过1500");
+                        return;
+                    }
+                    if (StrategyValueSet == 0 )
+                    {
+                        MessageBox.Show("设置电流值不能等于0");
+                        return;
+                    }
+                    newStrategy.StrategyValue = -StrategyValueSet;
+                    break;
+                case "恒电流充电":
+                    if (StrategyValueSet > 1500)
+                    {
+                        MessageBox.Show("设置电流值不能超过1500");
+                        return;
+                    }
+                    if (StrategyValueSet == 0 )
+                    {
+                        MessageBox.Show("设置电流值不能等于0");
+                        return;
+                    }
+                    break;
+                case "恒功率放电":
+                    if (StrategyValueSet > 1000)
+                    {
+                        MessageBox.Show("设置功率值不能超过1000");
+                        return;
+                    }
+                    if (StrategyValueSet == 0 )
+                    {
+                        MessageBox.Show("设置功率值不能等于0");
+                        return;
+                    }
+                    newStrategy.StrategyValue = -StrategyValueSet;
+                    break;
+                case "恒功率充电":
+                    if (StrategyValueSet > 1000)
+                    {
+                        MessageBox.Show("设置功率值不能超过1000");
+                        return;
+                    }
+                    if (StrategyValueSet == 0 )
+                    {
+                        MessageBox.Show("设置功率值不能等于0");
+                        return;
+                    }
+                    break;
+                case "待机":
+                    newStrategy.StrategyValue = 0;
+                    StrategyValueSet = 0;
+                    break;
+                default:
+                    MessageBox.Show("请选择控制类型");
+                    return;
             }
-            if (SelectedStrategyMode == "恒电流充电" || SelectedStrategyMode == "恒功率充电")
-            {
-                newStrategy.StrategyValue = StrategyValueSet;
-            }
-            if (SelectedStrategyMode == "待机")
-            {
-                newStrategy.StrategyValue = 0;
-                StrategyValueSet = 0;
-            }
-            else if (SelectedStrategyMode != "待机" && StrategyValueSet == 0)
-            {
-                otherCheck = false;
-            }
-            if ((!sameTimeCheck) && stringValidityCheck & otherCheck)
+            if ((!sameTimeCheck) && stringValidityCheck )
             {                 
                 TotalStrategies.Add(newStrategy);                
                 SortStrategy();
             }
             else
             {
-                MessageBox.Show("请重新输入");
+                MessageBox.Show("设置时间冲突");
+                return;
             }
         }
         /// <summary>
