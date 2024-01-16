@@ -349,15 +349,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             obj.Add(moduleTemp1List.ToArray());
             obj.Add(envTempList.ToArray());
             TimeList.Add(times.ToArray());
-            foreach (var data in obj)
-            {
-                Console.Write("Data: [");
-                for (int i = 0; i < data.Length; i++)
-                {
-                    Console.Write($"{data[i]}, ");
-                }
-                Console.WriteLine("]");
-            }
             return obj;
         }
 

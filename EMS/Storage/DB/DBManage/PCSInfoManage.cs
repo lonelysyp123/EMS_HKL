@@ -94,7 +94,6 @@ namespace EMS.Storage.DB.DBManage
             }
             return true;
         }
-    }
 
         /// <summary>
         /// 查询数据
@@ -102,13 +101,13 @@ namespace EMS.Storage.DB.DBManage
         /// <param name="StartTime"></param>
         /// <param name="EndTime"></param>
         /// <returns></returns>
-    public List<PCSInfoModel>Find(DateTime StartTime, DateTime EndTime)
+        public List<PCSInfoModel> Find(DateTime StartTime, DateTime EndTime)
         {
             try
             {
-                using (var db=new ORMContext())
+                using (var db = new ORMContext())
                 {
-                    var result=db.PCSInfos.Where(p =>  p.HappenTime >= StartTime && p.HappenTime <= EndTime).ToList();
+                    var result = db.PCSInfos.Where(p => p.HappenTime >= StartTime && p.HappenTime <= EndTime).ToList();
                     return result;
                 }
             }
@@ -117,5 +116,6 @@ namespace EMS.Storage.DB.DBManage
                 return null;
             }
         }
+    }
 }
 
