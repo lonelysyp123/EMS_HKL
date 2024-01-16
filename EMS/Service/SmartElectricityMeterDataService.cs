@@ -159,6 +159,7 @@ namespace EMS.Service
             smartelectricitymeterInfoModel.CurrMonthValleyReverseActiveEnergy = model.CurrMonthValleyReverseActiveEnergy;
         }
 
+        //数据解析
         private SmartElectricityMeterModel DataDecode(byte[] oneSidedata, byte[] dcBasedata, byte[] forwardEnergydata, byte[] reverseEnergydata)
         {
             SmartElectricityMeterModel item = new SmartElectricityMeterModel();
