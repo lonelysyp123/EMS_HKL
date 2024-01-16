@@ -36,6 +36,15 @@ namespace TNCN.EMS.Common.Util
         private const bool DefaultBoolValue = false;
         private ILog _logger;
 
+        private const string _default_ini_path = "./Config/SystemConfig.ini";
+        static public IniFileHelper GlobalIni {  get; private set; }
+
+        static public void InitializeGlobalIniConfiguration(string path = _default_ini_path)
+        {
+            GlobalIni = new IniFileHelper(path);
+        }
+
+
         public IniFileHelper(string path)
         {
             _path = path;
@@ -109,36 +118,36 @@ namespace TNCN.EMS.Common.Util
         }
         public static void Read(IniSectionEnum section, string key, out string result)
         {
-            result = EnergyManagementSystem.GlobalInstance.Configuration.ReadString(section, key);
+            result = GlobalIni.ReadString(section, key);
         }
         public static void Read(IniSectionEnum section, string key, out int result)
         {
-            result = EnergyManagementSystem.GlobalInstance.Configuration.ReadInteger(section, key);
+            result = GlobalIni.ReadInteger(section, key);
         }
         public static void Read(IniSectionEnum section, string key, out bool result)
         {
-            result = EnergyManagementSystem.GlobalInstance.Configuration.ReadBoolean(section, key);
+            result = GlobalIni.ReadBoolean(section, key);
         }
         public static void Read(IniSectionEnum section, string key, out double result)
         {
-            result = EnergyManagementSystem.GlobalInstance.Configuration.ReadDouble(section, key);
+            result = GlobalIni.ReadDouble(section, key);
         }
 
         public static void Write(IniSectionEnum section, string key, string value)
         {
-            EnergyManagementSystem.GlobalInstance.Configuration.WriteString(section, key, value);
+            GlobalIni.WriteString(section, key, value);
         }
         public static void Write(IniSectionEnum section, string key, int value)
         {
-            EnergyManagementSystem.GlobalInstance.Configuration.WriteInteger(section, key, value);
+            GlobalIni.WriteInteger(section, key, value);
         }
         public static void Write(IniSectionEnum section, string key, bool value)
         {
-            EnergyManagementSystem.GlobalInstance.Configuration.WriteBoolean(section, key, value);
+            GlobalIni.WriteBoolean(section, key, value);
         }
         public static void Write(IniSectionEnum section, string key, double value)
         {
-            EnergyManagementSystem.GlobalInstance.Configuration.WriteDouble(section, key, value);
+            GlobalIni.WriteDouble(section, key, value);
         }
 
         private const int MAX_BUFFER = 32767;
