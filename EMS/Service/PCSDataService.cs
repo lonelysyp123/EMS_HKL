@@ -93,7 +93,7 @@ namespace EMS.Service
                     Models.TryAdd(CurrentModel.Clone() as PCSModel);
                     if (IsSaveDaq)
                     {
-                        SaveData(CurrentModel);
+                        SaveModels.TryAdd(CurrentModel.Clone() as PCSModel);
                     }
                 }
                 catch (Exception ex)
@@ -104,22 +104,29 @@ namespace EMS.Service
             }
         }
 
-        private void SaveData(PCSModel model)
+        protected override void SaveData(PCSModel[] models)
         {
-            PCSInfoModel pcsInfoModel = new PCSInfoModel();
-            pcsInfoModel.ID = int.Parse(ID);
-            pcsInfoModel.DCPower = model.DcBranch1DCPower;
-            pcsInfoModel.DCVol = model.DcBranch1DCVol;
-            pcsInfoModel.DCCurrent = model.DcBranch1DCCur;
-            //pcsInfoModel.TotalCharCap = model.;
-            pcsInfoModel.BusVol = model.DcBranch1BUSVol;
-            pcsInfoModel.ModuleTemp = model.ModuleTemperature;
-            pcsInfoModel.EnvTemp = model.AmbientTemperature;
-            //pcsInfoModel.PCSState = ;
-            //pcsInfoModel.SideState = ;
-            pcsInfoModel.HappenTime = DateTime.Now;
+            List<PCSInfoModel> pcsInfoModels = new List<PCSInfoModel>();
+            for (int l = 0; l < models.Length; l++)
+            {
+                var model = models[l];
+                PCSInfoModel pcsInfoModel = new PCSInfoModel();
+                pcsInfoModel.ID = int.Parse(ID);
+                pcsInfoModel.DCPower = model.DcBranch1DCPower;
+                pcsInfoModel.DCVol = model.DcBranch1DCVol;
+                pcsInfoModel.DCCurrent = model.DcBranch1DCCur;
+                //pcsInfoModel.TotalCharCap = model.;
+                pcsInfoModel.BusVol = model.DcBranch1BUSVol;
+                pcsInfoModel.ModuleTemp = model.ModuleTemperature;
+                pcsInfoModel.EnvTemp = model.AmbientTemperature;
+                //pcsInfoModel.PCSState = ;
+                //pcsInfoModel.SideState = ;
+                pcsInfoModel.HappenTime = DateTime.Now;
+                pcsInfoModels.Add(pcsInfoModel);
+            }
+
             PCSInfoManage pcsInfoManage = new PCSInfoManage();
-            pcsInfoManage.Insert(pcsInfoModel);
+            pcsInfoManage.Insert(pcsInfoModels.ToArray());
         }
 
         private PCSModel DataDecode(byte[] dcstate, byte[] pcsdata, byte[] temp, byte[] dcbranch1info, byte[] serialnumber)

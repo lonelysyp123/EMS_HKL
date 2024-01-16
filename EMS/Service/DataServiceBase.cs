@@ -85,13 +85,13 @@ namespace EMS.Service
 
         protected virtual void InitSystemConfig()
         {
-            IniFileHelper.Read(IniSectionEnum.EMS, "ReconnectInterval", out int ReconnectInterval);
-            IniFileHelper.Read(IniSectionEnum.EMS, "MaxReconnectTimes", out int MaxReconnectTimes);
-            IniFileHelper.Read(IniSectionEnum.EMS, "DaqTimeSpan", out int DaqTimeSpan);
-            IniFileHelper.Read(IniSectionEnum.EMS, "ReconnectIntervalLong", out int ReconnectIntervalLong);
-            IniFileHelper.Read(IniSectionEnum.EMS, "SaveSamplingInterval", out int SaveSamplingInterval);
-            IniFileHelper.Read(IniSectionEnum.EMS, "ModelsLength", out int ModelsLength);
-            IniFileHelper.Read(IniSectionEnum.EMS, "SaveModelsLength", out int SaveModelsLength);
+            IniFileHelper.Read(IniSectionEnum.EMS, "ReconnectInterval", out ReconnectInterval);
+            IniFileHelper.Read(IniSectionEnum.EMS, "MaxReconnectTimes", out MaxReconnectTimes);
+            IniFileHelper.Read(IniSectionEnum.EMS, "DaqTimeSpan", out DaqTimeSpan);
+            IniFileHelper.Read(IniSectionEnum.EMS, "ReconnectIntervalLong", out ReconnectIntervalLong);
+            IniFileHelper.Read(IniSectionEnum.EMS, "SaveSamplingInterval", out SaveSamplingInterval);
+            IniFileHelper.Read(IniSectionEnum.EMS, "ModelsLength", out ModelsLength);
+            IniFileHelper.Read(IniSectionEnum.EMS, "SaveModelsLength", out SaveModelsLength);
         }
 
         public void StartDaqData()
