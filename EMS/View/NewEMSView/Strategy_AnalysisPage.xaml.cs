@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Windows;
@@ -31,8 +32,22 @@ namespace EMS.View.NewEMSView
             c1Chart1.View.AxisY.Min = -1600;
             c1Chart1.View.AxisY.Max = 1600;
             c1Chart1.View.AxisX.Scale += 1;
-            c1Chart1.View.AxisY.Scale += 1;
+            c1Chart1.View.AxisY.Scale += 1;            
+            textBox.PreviewTextInput += TextBox_PreviewTextInput;
             this.DataContext = new Strategy_AnalysisPageModel();
+        }
+        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            string numberPattern = @"^[0-9]*\.?[0-9]*$";
+
+            if (!Regex.IsMatch(e.Text, @"^\d+$") && !Regex.IsMatch(textBox.Text + e.Text, numberPattern))
+            {
+                e.Handled = true; 
+            }
+            else if (textBox.Text.EndsWith(".") && e.Text == ".")
+            {
+                e.Handled = true;
+            }
         }
         private void chart_MouseWheel(object sender, MouseWheelEventArgs e)
         {

@@ -217,7 +217,14 @@ namespace EMS.ViewModel.NewEMSViewModel
             bool sameTimeCheck = TotalStrategies.ToList().Any(Item => Item.StrategyStartTime == StrategyStartTimeSet);
             bool stringValidityCheck = CheckTimeStringValidity(newStrategy.StrategyStartTime);
             bool otherCheck = true;
-           
+            if (SelectedStrategyMode == "恒电流放电" || SelectedStrategyMode == "恒功率放电")
+            {
+                newStrategy.StrategyValue = -StrategyValueSet;
+            }
+            if (SelectedStrategyMode == "恒电流充电" || SelectedStrategyMode == "恒功率充电")
+            {
+                newStrategy.StrategyValue = StrategyValueSet;
+            }
             if (SelectedStrategyMode == "待机")
             {
                 newStrategy.StrategyValue = 0;

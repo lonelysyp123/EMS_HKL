@@ -140,6 +140,8 @@
                             <TextBox  Text="{Binding StrategyValueSet}"
                                       Width="60"
                                       Height="25"
+                                      Name="textBox"
+                                      InputMethod.IsInputMethodEnabled="False"
                                       Style="{StaticResource MaterialDesignTextBox}"
                                       Foreground="Black"
                                       Background="White"
