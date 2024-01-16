@@ -63,6 +63,7 @@ namespace EMS.Service
 
                 if (Open())
                 {
+                    _master = ModbusIpMaster.CreateIp(SerialPortInstance);
                     IsConnected = true;
                 }
                 else
@@ -249,7 +250,7 @@ namespace EMS.Service
                 catch (Exception)
                 {
                     count++;
-                    if (count > maxReconnectTimes)
+                    if (count > MaxReconnectTimes)
                     {
                         IsCommunicationProtectState = true;
                         IsConnected = false;
@@ -266,7 +267,7 @@ namespace EMS.Service
         {
             while (!IsConnected)
             {
-                Thread.Sleep(reconnectIntervalLong);
+                Thread.Sleep(ReconnectIntervalLong);
                 try
                 {
                     SerialPortInstance.Open();
