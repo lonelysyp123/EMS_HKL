@@ -36,7 +36,27 @@ namespace EMS.Storage.DB.DBManage
             }
         }
 
-
+        /// <summary>
+        /// 查询数据
+        /// </summary>
+        /// <param name="StartTime">开始时间</param>
+        /// <param name="EndTime">结束时间</param>
+        /// <returns>数据列表</returns>
+        public List<SmartElectricityMeterInfoModel> Find(DateTime StartTime, DateTime EndTime)
+        {
+            try
+            {
+                using (var db = new ORMContext())
+                {
+                    var result = db.SmartElectricityMeterInfos.Where(p => p.HappenTime >= StartTime && p.HappenTime <= EndTime).ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         public bool Insert(SmartElectricityMeterInfoModel entity)
         {

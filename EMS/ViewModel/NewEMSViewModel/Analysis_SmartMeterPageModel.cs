@@ -222,11 +222,11 @@ namespace EMS.ViewModel.NewEMSViewModel
                     try
                     {
                         ExportSmartMeterInfoToCsv(smartMeterData, timeList, filePath);
-                        MessageBox.Show("电表数据已成功导出至 " + filePath);
+                        MessageBox.Show("负荷跟踪电表数据已成功导出至 " + filePath);
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"导出电表数据时发生错误: {ex.Message}");
+                        MessageBox.Show($"导出负荷跟踪电表数据时发生错误: {ex.Message}");
                     }
                 }
             }
@@ -362,17 +362,17 @@ namespace EMS.ViewModel.NewEMSViewModel
                         reactivePower_AList.Add(reactivePowerA);
                     }
                     var item11 = typeof(ElectricMeterInfoModel).GetProperty("ReactivePowerB").GetValue(SeriesList[i]);
-                    if (double.TryParse(item3.ToString(), out double reactivePowerB))
+                    if (double.TryParse(item11.ToString(), out double reactivePowerB))
                     {
                         reactivePower_BList.Add(reactivePowerB);
                     }
                     var item12 = typeof(ElectricMeterInfoModel).GetProperty("ReactivePowerC").GetValue(SeriesList[i]);
-                    if (double.TryParse(item3.ToString(), out double reactivePowerC))
+                    if (double.TryParse(item12.ToString(), out double reactivePowerC))
                     {
                         reactivePower_CList.Add(reactivePowerC);
                     }
                     var item13 = typeof(ElectricMeterInfoModel).GetProperty("ReactivePower_Total").GetValue(SeriesList[i]);
-                    if (double.TryParse(item3.ToString(), out double reactivePower_Total))
+                    if (double.TryParse(item13.ToString(), out double reactivePower_Total))
                     {
                         reactivePower_TotalList.Add(reactivePower_Total);
                     }

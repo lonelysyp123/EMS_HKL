@@ -131,7 +131,7 @@
                         <RowDefinition Height="8*" />
                     </Grid.RowDefinitions>
 
-                    <localControl:TitleBorder Text="电表曲线" />
+                    <localControl:TitleBorder Text="负荷跟踪电表曲线" />
                     <Grid Grid.Row="1">
                         <StackPanel Orientation="Horizontal">
                             <Label Content="开始时间:"

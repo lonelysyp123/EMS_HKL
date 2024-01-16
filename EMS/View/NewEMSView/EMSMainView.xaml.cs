@@ -125,12 +125,14 @@ namespace EMS.View.NewEMSView
                 AnalysisViewMenu_BMS.Visibility = Visibility.Visible;
                 AnalysisViewMenu_PCS.Visibility = Visibility.Visible;
                 AnalysisViewMenu_SmartMeter.Visibility = Visibility.Visible;
+                AnalysisViewMenu_SmartElectricityMeter.Visibility = Visibility.Visible;
             }
             else
             {
                 AnalysisViewMenu_BMS.Visibility = Visibility.Collapsed;
                 AnalysisViewMenu_PCS.Visibility = Visibility.Collapsed;
                 AnalysisViewMenu_SmartMeter.Visibility = Visibility.Collapsed;
+                AnalysisViewMenu_SmartElectricityMeter.Visibility = Visibility.Collapsed;
             }
             Navigation(new Analysis_BMSPage(viewmodel.Analysis_BMSPageModel), sender as ToggleButton);
         }
@@ -189,6 +191,11 @@ namespace EMS.View.NewEMSView
             Navigation(new Analysis_SmartMeterPage(viewmodel.Analysis_SmartMeterPageModel), sender as ToggleButton, AnalysisViewMenu);
         }
 
+        private void AnalysisViewMenu_SmartElectricityMeter_Checked(object sender, RoutedEventArgs e)
+        {
+            Navigation(new Analysis_SmartElectricityMeterPage(viewmodel.Analysis_SmartElectricityMeterPageModel), sender as ToggleButton, AnalysisViewMenu);
+        }
+
         private void StrategyViewMenu_Setter_Checked(object sender, RoutedEventArgs e)
         {
             Navigation(new Strategy_SetterPage(viewmodel.Strategy_SetterPageModel), sender as ToggleButton, StrategyViewMenu);
@@ -240,6 +247,7 @@ namespace EMS.View.NewEMSView
             AnalysisViewMenu_BMS.Visibility = Visibility.Collapsed;
             AnalysisViewMenu_PCS.Visibility = Visibility.Collapsed;
             AnalysisViewMenu_SmartMeter.Visibility = Visibility.Collapsed;
+            AnalysisViewMenu_SmartElectricityMeter.Visibility = Visibility.Collapsed;
             StrategyViewMenu_Setter.Visibility = Visibility.Collapsed;
             StrategyViewMenu_Analysis.Visibility = Visibility.Collapsed;
             StrategyViewMenu_ProtectSetter.Visibility = Visibility.Collapsed;

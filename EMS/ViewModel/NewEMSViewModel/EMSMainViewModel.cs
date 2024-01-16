@@ -20,6 +20,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         public Analysis_BMSPageModel Analysis_BMSPageModel { get; private set;}
         public Analysis_PCSPageModel Analysis_PCSPageModel { get; private set;}
         public Analysis_SmartMeterPageModel Analysis_SmartMeterPageModel { get; private set; }
+        public Analysis_SmartElectricityMeterPageModel Analysis_SmartElectricityMeterPageModel { get; private set; }
         public Strategy_AnalysisPageModel Strategy_AnalysisPageModel {  get; private set; }
         public Strategy_ProtectSetterPageModel Strategy_ProtectSetterPageModel {  get; private set; }
         public Strategy_SetterPageModel Strategy_SetterPageModel { get; private set; }

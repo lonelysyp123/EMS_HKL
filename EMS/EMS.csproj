@@ -373,6 +373,7 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\Analysis_BMSPageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\Analysis_PCSPageModel.cs" />
+    <Compile Include="ViewModel\NewEMSViewModel\Analysis_SmartElectricityMeterPageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\Analysis_SmartMeterPageModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\EMSMainViewModel.cs" />
     <Compile Include="ViewModel\NewEMSViewModel\FaultLogPageModel.cs" />
@@ -421,6 +422,9 @@
     </Compile>
     <Compile Include="View\NewEMSView\Analysis_PCSPage.xaml.cs">
       <DependentUpon>Analysis_PCSPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewEMSView\Analysis_SmartElectricityMeterPage.xaml.cs">
+      <DependentUpon>Analysis_SmartElectricityMeterPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\NewEMSView\Analysis_SmartMeterPage.xaml.cs">
       <DependentUpon>Analysis_SmartMeterPage.xaml</DependentUpon>
@@ -589,6 +593,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\NewEMSView\Analysis_PCSPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewEMSView\Analysis_SmartElectricityMeterPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -382,10 +382,16 @@
                               Visibility="Collapsed" />
                 <ToggleButton x:Name="AnalysisViewMenu_SmartMeter"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="电表"
+                              Content="负荷跟踪电表"
                               Uid="&#xe694;"
                               Click="AnalysisViewMenu_SmartMeter_Checked"
                                
+                              Visibility="Collapsed" />
+                <ToggleButton x:Name="AnalysisViewMenu_SmartElectricityMeter"
+                              Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
+                              Content="电量计量电表"
+                              Uid="&#xe694;"
+                              Click="AnalysisViewMenu_SmartElectricityMeter_Checked"
                               Visibility="Collapsed" />
                 <!--故障日志-->
                 <ToggleButton Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
