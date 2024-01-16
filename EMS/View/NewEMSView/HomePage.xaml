@@ -377,7 +377,7 @@
                                     </StackPanel>
                                     <TextBlock Grid.Row="0"
                                                Grid.Column="1"
-                                               Text="今日充电量（kWh）"
+                                               Text="今月充电量（kWh）"
                                                Style="{StaticResource SystemTextblockstyle}" />
                                     <TextBlock Grid.Row="2"
                                                Grid.Column="1"
@@ -414,7 +414,7 @@
                                     </StackPanel>
                                     <TextBlock Grid.Row="0"
                                                Grid.Column="1"
-                                               Text="今日放电量（kWh）"
+                                               Text="今月放电量（kWh）"
                                                Style="{StaticResource SystemTextblockstyle}" />
                                     <TextBlock Grid.Row="2"
                                                Grid.Column="1"

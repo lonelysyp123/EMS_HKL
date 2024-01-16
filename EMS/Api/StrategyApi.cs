@@ -1,4 +1,5 @@
-﻿using EMS.Model;
+﻿using EMS.Common.StrategyManage;
+using EMS.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,6 +12,14 @@ namespace EMS.Api
 {
     public class StrategyApi
     {
+        /// <summary>
+        /// 获取当前最高故障状态
+        /// </summary>
+        public static ContingencyStatusEnum GetFaultState()
+        {
+            return EnergyManagementSystem.GlobalInstance.Controller.ContingencyStatus;
+        }
+
         /// <summary>
         /// 设定最大SOC，当输入值为1.0时对应SOC为100%
         /// </summary>

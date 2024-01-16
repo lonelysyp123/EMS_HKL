@@ -29,7 +29,10 @@ namespace EMS.Api
             return null;
         }
 
-        
+        public static BMSDataService[] GetDevServices()
+        {
+            return EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToArray();
+        }
 
         /// <summary>
         /// 获取BMS保护参数接口
@@ -86,7 +89,6 @@ namespace EMS.Api
 
         public static BatteryTotalModel[] GetNextBMSData()
         {
-            DateTime dateTime = DateTime.Now;
             List<BMSDataService> services = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices;
             List<BatteryTotalModel> models = new List<BatteryTotalModel>();
             for (int i = 0; i < services.Count; i++)
@@ -94,7 +96,6 @@ namespace EMS.Api
                 var item = services[i].GetCurrentData();
                 if (item != null)
                 {
-                    item.CurrentTime = dateTime;
                     models.Add(item);
                 }
             }

@@ -52,6 +52,7 @@ namespace EMS.Common.StrategyManage
         public void SetMaxChargingPower(double maxChargingPower) { _maxChargingPower = maxChargingPower; }
         public double MaxDischargingPower { get { return _maxDischargingPower; } }
         public void SetMaxDischargingPower(double maxDischargingPower) { _maxChargingPower = maxDischargingPower; }
+        public ContingencyStatusEnum ContingencyStatus { get; private set; }
 
         private BessCommand _currentCommand;
         private BessCommand _manualCommand;
