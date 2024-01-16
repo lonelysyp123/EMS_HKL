@@ -98,6 +98,26 @@ namespace EMS.Storage.DB.DBManage
             return true;
         }
 
+        public bool Insert(TotalBatteryInfoModel[] entities)
+        {
+            try
+            {
+                using (var db = new ORMContext())
+                {
+                    for (int i = 0; i < entities.Length; i++)
+                    {
+                        var result = db.TotalBatteryInfos.Add(entities[i]);
+                    }
+                    db.SaveChanges();
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
         public bool Update(TotalBatteryInfoModel entity)
         {
             try

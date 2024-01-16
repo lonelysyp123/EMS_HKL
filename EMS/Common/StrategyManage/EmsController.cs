@@ -38,6 +38,10 @@ namespace EMS.Common.StrategyManage
         private double _minSoc;
         private double _maxChargingPower;
         private double _maxDischargingPower;
+        private double _thresholdTolerance;
+        private double _chargingSecurityFactor;
+        private double _dischargingSecurityFactor;
+        private int _controlPeriod; // 系统控制周期 unit: ms
 
         public double MaxSoc {  get { return _maxSoc; } }
         public void SetMaxSoc(double maxSoc) { _maxSoc = maxSoc; }
@@ -47,6 +51,7 @@ namespace EMS.Common.StrategyManage
         public void SetMaxChargingPower(double maxChargingPower) { _maxChargingPower = maxChargingPower; }
         public double MaxDischargingPower { get { return _maxDischargingPower; } }
         public void SetMaxDischargingPower(double maxDischargingPower) { _maxChargingPower = maxDischargingPower; }
+        public ContingencyStatusEnum ContingencyStatus { get; private set; }
 
         private BessCommand _currentCommand;
         private BessCommand _manualCommand;
@@ -123,7 +128,7 @@ namespace EMS.Common.StrategyManage
             UpdateMode();
             NormalOperation();
             _lastActiveTimestamp = DateTime.Now;
-            Thread.Sleep(StrategyManager.Instance.GetSystemSamplePeriod());
+            Thread.Sleep(_controlPeriod);
         }
         private void NormalOperation()
         {
@@ -148,7 +153,7 @@ namespace EMS.Common.StrategyManage
 
                         double pcsPower = PcsApi.PcsGetDcSidePower();
                         double load = netPowerInjection + pcsPower;
-                        double tolerance = StrategyManager.Instance.GetAutomaticControlTolerance();
+                        double tolerance = _thresholdTolerance;
 
                         //获取需量控制参数
                         StrategyApi.GetMaxDemandThreshhold(out double capacity, out double demanddescendrate);
@@ -191,11 +196,10 @@ namespace EMS.Common.StrategyManage
             }
             else
             {
-                BessCommand manualCommand = StrategyManager.Instance.GetManualCommand();
-                if (manualCommand != _currentCommand)
+                if (_manualCommand != _currentCommand)
                 {
-                    _currentCommand = manualCommand;
-                    PcsApi.SendPcsCommand(manualCommand);
+                    _currentCommand = _manualCommand;
+                    PcsApi.SendPcsCommand(_manualCommand);
                 }
             }
         }
@@ -226,7 +230,7 @@ namespace EMS.Common.StrategyManage
                 PcsApi.SendPcsCommand(new BessCommand(chargingPower, strategy)); // 对PCS下发指令进行并网充电
                 while (BmsApi.GetNextBMSData(currentBcmuId).TotalVoltage < BmsApi.GetNextBMSData(nextBcmuId).TotalVoltage) // 对其充电将DC母线电压增加到第二簇的水平
                 {
-                    Thread.Sleep(StrategyManager.Instance.GetSystemSamplePeriod());
+                    Thread.Sleep(_controlPeriod);
                 }
 
             }
@@ -242,8 +246,8 @@ namespace EMS.Common.StrategyManage
             {
                 case ContingencyStatusEnum.Level1:
                     double discount = 1;
-                    if (command.BatteryStrategy == BatteryStrategyEnum.ConstantCurrentCharge || command.BatteryStrategy == BatteryStrategyEnum.ConstantPowerCharge) discount = StrategyManager.Instance.GetChargingDiscount();
-                    else discount = StrategyManager.Instance.GetDischargingDiscount();
+                    if (command.BatteryStrategy == BatteryStrategyEnum.ConstantCurrentCharge || command.BatteryStrategy == BatteryStrategyEnum.ConstantPowerCharge) discount = _chargingSecurityFactor;
+                    else discount = _dischargingSecurityFactor;
                     return new BessCommand(command.Value * discount, command.BatteryStrategy);
                 case ContingencyStatusEnum.Level2:
                     return new BessCommand(0, BatteryStrategyEnum.Standby);

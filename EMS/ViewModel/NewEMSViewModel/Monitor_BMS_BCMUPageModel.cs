@@ -1496,6 +1496,15 @@ namespace EMS.ViewModel.NewEMSViewModel
             {
                 faultresult = false;
             }
+            if (flag1bitposition.Count == 0)
+            {
+                BMU1TotalFault = false;
+                BMU2TotalFault = false;
+                BMU3TotalFault = false;
+                BMU1ConnectLostFault = false;
+                BMU2ConnectLostFault = false;
+                BMU3ConnectLostFault = false;
+            }
             foreach (var item in flag1bitposition)
             {
                 switch (item)
@@ -1544,7 +1553,18 @@ namespace EMS.ViewModel.NewEMSViewModel
                         break;
                 }
             }
-
+            if (flag2bitposition.Count == 0)
+            {
+                MainLoopRelayFault = false;
+                PrecharRelayFault = false;
+                BreakerFault = false;
+                HallADCI2CComFault = false;
+                HallCurDetectFault = false;
+                HighVolDCADCI2CComFault = false;
+                HighVolDCDetectFault = false;
+                IsoRADCI2CComFault = false;
+                IsoRDetectFault = false;
+            }
             foreach (var item in flag2bitposition)
             {
                 switch (item)
@@ -1610,6 +1630,14 @@ namespace EMS.ViewModel.NewEMSViewModel
                         }
                         break;
                 }
+            }
+            if (flag3bitposition.Count == 0)
+            {
+                HighConNTCTotalFault = false;
+                HighConNTC1Fault = false;
+                HighConNTC2Fault = false;
+                HighConNTC3Fault = false;
+                HighConNTC4Fault = false;
             }
             foreach (var item in flag3bitposition)
             {
@@ -1685,7 +1713,14 @@ namespace EMS.ViewModel.NewEMSViewModel
 
             List<int> result21 = new List<int>();
             result21 = GetBitPosition(value2);
-            
+            if(result21.Count==0)
+            {
+                HighConTemp1Alarm = AlarmtLevels.NoAlarm;
+                HighConTemp2Alarm = AlarmtLevels.NoAlarm;
+                HighConTemp3Alarm = AlarmtLevels.NoAlarm;
+                HighConTemp4Alarm = AlarmtLevels.NoAlarm;
+                HighConTempTotalAlarm = AlarmtLevels.NoAlarm;
+            }
             foreach (var item in result21)
             {
                 switch (item)
@@ -1742,6 +1777,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             Dictionary<int, int> result2 = new Dictionary<int, int>();
 
             Dictionary<int, int> result3 = new Dictionary<int, int>();
+
             for (int i = 8; i < 16; i += 2)
             {
                 int twoBitValue = (value2 >> i) & 0x3;
@@ -1782,7 +1818,13 @@ namespace EMS.ViewModel.NewEMSViewModel
             int colorflagresult = Math.Max(colorflag1,colorflag2);
             colorflagresult = Math.Max(colorflagresult,colorflag3);
             colorflagresult = Math.Max(colorflagresult,colorflag4);
-            
+            if (result2.Count == 0)
+            {
+                ClusterVolUpAlarm = AlarmtLevels.NoAlarm;
+                ClusterVolLowAlarm = AlarmtLevels.NoAlarm;
+                SingleVolUpAlarm = AlarmtLevels.NoAlarm;
+                SingleVolLowAlarm = AlarmtLevels.NoAlarm;
+            }
             foreach (var item in result2)
             {
 
@@ -1828,7 +1870,17 @@ namespace EMS.ViewModel.NewEMSViewModel
                         break;
                 }
             }
-
+            if(result3.Count == 0)
+            {
+                SOCLowAlarm = AlarmtLevels.NoAlarm;
+                SingleVolDiffAlarm = AlarmtLevels.NoAlarm;
+                DischarClusterOverCurAlarm = AlarmtLevels.NoAlarm;
+                CharClusterOverCurAlarm = AlarmtLevels.NoAlarm;
+                DischarTempUpAlarm = AlarmtLevels.NoAlarm;
+                DischarTempLowAlarm = AlarmtLevels.NoAlarm;
+                CharTempUpAlarm = AlarmtLevels.NoAlarm;
+                CharTempLowAlarm = AlarmtLevels.NoAlarm;
+            }
             foreach (var item in result3)
             {
                 switch (item.Key)

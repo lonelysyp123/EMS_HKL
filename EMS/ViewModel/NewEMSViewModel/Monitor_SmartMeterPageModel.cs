@@ -11,8 +11,8 @@ namespace EMS.ViewModel.NewEMSViewModel
     {
         #region SmartMeterParameters
         /*ABC三相电压*/
-        private string voltage_A;
-        public string Voltage_A
+        private double voltage_A;
+        public double Voltage_A
         {
             get { return voltage_A; }
             set
@@ -21,8 +21,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string voltage_B;
-        public string Voltage_B
+        private double voltage_B;
+        public double Voltage_B
         {
             get { return voltage_B; }
             set
@@ -31,8 +31,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string voltage_C;
-        public string Voltage_C
+        private double voltage_C;
+        public double Voltage_C
         {
             get { return voltage_C; }
             set
@@ -42,8 +42,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /*ABC三相电流*/
-        private string current_A;
-        public string Current_A
+        private double current_A;
+        public double Current_A
         {
             get { return current_A; }
             set
@@ -52,8 +52,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string current_B;
-        public string Current_B
+        private double current_B;
+        public double Current_B
         {
             get { return current_B; }
             set
@@ -62,8 +62,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string current_C;
-        public string Current_C
+        private double current_C;
+        public double Current_C
         {
             get { return current_C; }
             set
@@ -73,8 +73,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /*ABC三相有功功率和总功率*/
-        private string activePower_A;
-        public string ActivePower_A
+        private double activePower_A;
+        public double ActivePower_A
         {
             get { return activePower_A; }
             set
@@ -83,8 +83,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string activePower_B;
-        public string ActivePower_B
+        private double activePower_B;
+        public double ActivePower_B
         {
             get { return activePower_B; }
             set
@@ -93,8 +93,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string activePower_C;
-        public string ActivePower_C
+        private double activePower_C;
+        public double ActivePower_C
         {
             get { return activePower_C; }
             set
@@ -103,8 +103,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string activePower_Total;
-        public string ActivePower_Total
+        private double activePower_Total;
+        public double ActivePower_Total
         {
             get { return activePower_Total; }
             set
@@ -114,8 +114,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /*ABC三相无功功率和总功率*/
-        private string wattlessPower_A;
-        public string WattlessPower_A
+        private double wattlessPower_A;
+        public double WattlessPower_A
         {
             get { return wattlessPower_A; }
             set
@@ -124,8 +124,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string wattlessPower_B;
-        public string WattlessPower_B
+        private double wattlessPower_B;
+        public double WattlessPower_B
         {
             get { return wattlessPower_B; }
             set
@@ -134,8 +134,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string wattlessPower_C;
-        public string WattlessPower_C
+        private double wattlessPower_C;
+        public double WattlessPower_C
         {
             get { return wattlessPower_C; }
             set
@@ -144,8 +144,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-        private string wattlessPower_Total;
-        public string WattlessPower_Total
+        private double wattlessPower_Total;
+        public double WattlessPower_Total
         {
             get { return wattlessPower_Total; }
             set
@@ -162,20 +162,20 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public void DataRefresh(SmartMeterModel model)
         {
-            Voltage_A = model.Voltage_A.ToString();
-            Voltage_B = model.Voltage_B.ToString();
-            Voltage_C = model.Voltage_C.ToString();
-            Current_A = model.Electric_A.ToString();
-            Current_B = model.Electric_B.ToString();
-            Current_C = model.Electric_C.ToString();
-            ActivePower_A = model.ActivePower_A.ToString();
-            ActivePower_B = model.ActivePower_B.ToString();
-            ActivePower_C = model.ActivePower_C.ToString();
-            ActivePower_Total = model.ActivePower_Total.ToString();
-            WattlessPower_A = model.ReactivePower_A.ToString();
-            WattlessPower_B = model.ReactivePower_B.ToString();
-            WattlessPower_C = model.ReactivePower_C.ToString();
-            WattlessPower_Total = model.ReactivePower_Total.ToString();
+            this.Voltage_A = model.Voltage_A;
+            this.Voltage_B = model.Voltage_B;
+            this.Voltage_C = model.Voltage_C;
+            this.Current_A = model.Electric_A;
+            this.Current_B = model.Electric_B;
+            this.Current_C = model.Electric_C;
+            this.ActivePower_A = model.ActivePower_A;
+            this.ActivePower_B = model.ActivePower_B;
+            this.ActivePower_C = model.ActivePower_C;
+            this.ActivePower_Total = model.ActivePower_Total;
+            this.WattlessPower_A = model.ReactivePower_A;
+            this.WattlessPower_B = model.ReactivePower_B;
+            this.WattlessPower_C = model.ReactivePower_C;
+            this.WattlessPower_Total = model.ReactivePower_Total;
         }
     }
 }

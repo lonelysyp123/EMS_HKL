@@ -10,7 +10,7 @@ namespace TNCN.EMS.Common.Mqtt
 {
     public class BMU
     {
-        public string id { get; set; }
+        public int id { get; set; }
         public int alarm_state { get; set; }
         public int faulty_state { get; set; }
 
@@ -18,7 +18,7 @@ namespace TNCN.EMS.Common.Mqtt
         public BMU()
         {
             this.battery_cells = new List<BatteryCell>();
-            this.id = "1";
+            this.id = 1;
             this.alarm_state = 1;
             this.faulty_state = 1;
 
@@ -28,7 +28,14 @@ namespace TNCN.EMS.Common.Mqtt
 
         public BMU(BatterySeriesModel batterySeriesModel) {
             this.battery_cells = new List<BatteryCell>();
-            this.id = batterySeriesModel.BMUID;
+            if (batterySeriesModel.BMUID == null)
+            {
+                this.id = 0;
+            }
+            else {
+                this.id = int.Parse(batterySeriesModel.BMUID);
+            }
+            
             this.alarm_state = batterySeriesModel.AlarmStateFlagBMU;
             this.faulty_state = batterySeriesModel.FaultyStateFlagBMU;
 

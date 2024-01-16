@@ -137,7 +137,7 @@ namespace EMS.View.NewEMSView
 
         private void FaultViewMenu_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new FaultLogPage(viewmodel.FaultLogPageModel), sender as ToggleButton);
+            Navigation(new FaultLogPage(), sender as ToggleButton);
         }
 
         private void StrategyViewMenu_Checked(object sender, RoutedEventArgs e)

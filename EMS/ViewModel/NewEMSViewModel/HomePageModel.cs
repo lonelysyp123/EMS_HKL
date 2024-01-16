@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using EMS.Model;
+using EMS.Api;
 using EMS.Common;
+using EMS.Model;
+using EMS.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using TNCN.EMS.Api;
-using System.Diagnostics;
-using EMS.Service;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
@@ -147,6 +147,19 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /// <summary>
+        /// 启停状态
+        /// </summary>
+        private SolidColorBrush startStopState;
+        public SolidColorBrush StartStopState
+        {
+            get { return startStopState; }
+            set
+            {
+                SetProperty(ref startStopState, value);
+            }
+        }
+
+        /// <summary>
         /// 故障状态
         /// </summary>
         private SolidColorBrush faultState;
@@ -160,23 +173,10 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /// <summary>
-        /// 启停状态
-        /// </summary>
-        private string startStopState;
-        public string StartStopState
-        {
-            get { return startStopState; }
-            set
-            {
-                SetProperty(ref startStopState, value);
-            }
-        }
-
-        /// <summary>
         /// 储存装机功率
         /// </summary>
-        private double installedPower;
-        public double InstalledPower
+        private string installedPower;
+        public string InstalledPower
         {
             get { return installedPower; }
             set
@@ -188,8 +188,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 储能容量
         /// </summary>
-        private double energyStorageCapacity;
-        public double EnergyStorageCapacity
+        private string energyStorageCapacity;
+        public string EnergyStorageCapacity
         {
             get { return energyStorageCapacity; }
             set
@@ -201,8 +201,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 总SOC
         /// </summary>
-        private double totalSOC;
-        public double TotalSOC
+        private string totalSOC;
+        public string TotalSOC
         {
             get { return totalSOC; }
             set
@@ -214,8 +214,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 总SOH
         /// </summary>
-        private double totalSOH;
-        public double TotalSOH
+        private string totalSOH;
+        public string TotalSOH
         {
             get { return totalSOH; }
             set
@@ -227,8 +227,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 今日充电量
         /// </summary>
-        private double chargingCapacity;
-        public double ChargingCapacity
+        private string chargingCapacity;
+        public string ChargingCapacity
         {
             get { return chargingCapacity; }
             set
@@ -240,8 +240,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 今日放电量
         /// </summary>
-        private double dischargeCapacity;
-        public double DischargeCapacity
+        private string dischargeCapacity;
+        public string DischargeCapacity
         {
             get { return dischargeCapacity; }
             set
@@ -253,8 +253,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 累计充电量
         /// </summary>
-        private double dcBranch1Char;
-        public double DcBranch1Char
+        private string dcBranch1Char;
+        public string DcBranch1Char
         {
             get { return dcBranch1Char; }
             set
@@ -266,8 +266,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 累计放电量
         /// </summary>
-        private double dcBranch1DisChar;
-        public double DcBranch1DisChar
+        private string dcBranch1DisChar;
+        public string DcBranch1DisChar
         {
             get { return dcBranch1DisChar; }
             set
@@ -279,8 +279,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 当前功率
         /// </summary>
-        private double currentPower;
-        public double CurrentPower
+        private string currentPower;
+        public string CurrentPower
         {
             get { return currentPower; }
             set
@@ -292,8 +292,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 电站功率
         /// </summary>
-        private double stationPower;
-        public double StationPower
+        private string stationPower;
+        public string StationPower
         {
             get { return stationPower; }
             set
@@ -305,8 +305,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 直流电压
         /// </summary>
-        private double dcBranch1DCVol;
-        public double DcBranch1DCVol
+        private string dcBranch1DCVol;
+        public string DcBranch1DCVol
         {
             get { return dcBranch1DCVol; }
             set
@@ -318,8 +318,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 直流电流
         /// </summary>
-        private double dcBranch1DCCur;
-        public double DcBranch1DCCur
+        private string dcBranch1DCCur;
+        public string DcBranch1DCCur
         {
             get { return dcBranch1DCCur; }
             set
@@ -331,8 +331,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <summary>
         /// 直流功率
         /// </summary>
-        private double dcBranch1DCPower;
-        public double DcBranch1DCPower
+        private string dcBranch1DCPower;
+        public string DcBranch1DCPower
         {
             get { return dcBranch1DCPower; }
             set
@@ -343,88 +343,171 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         #endregion
 
+        #region Command
 
-        private SmartMeterDataService smartMeterDataService;
+
+
+        #endregion
+
         public HomePageModel()
         {
+            InstalledPower = 400.ToString();
+            EnergyStorageCapacity = 4.ToString();
+        }
 
+        public void BMSDataRefreshFromAPI()
+        {
+            DataDisPlayBMS(BmsApi.GetNextBMSData().ToList());
+            StateDisPlayBMS(BmsApi.GetDevServices().ToList());
         }
 
         /// <summary>
         /// BMS数据展示
         /// </summary>
         /// <param name="model"></param>
-        public void DataDisPlayBMS(BatteryTotalModel bmsmodel)
+        public void DataDisPlayBMS(List<BatteryTotalModel> models)
         {
-            //StateFill_Normal：正常
-            //StateFill_Offline：离线
-            //StateFill_Warn：预警
-            //StateFill_MinorFaults：轻故障
-            //StateFill_HeavyFaults：重故障
-            //StateFill_CrisisFaults：危机故障
-            //StateFill_BMSRun：BMS运行
-            //EnergyStorageCapacity：储能容量
-            //TotalSOC：总SOC
-            //TotalSOH：总SOH
-            //StartStopState：启停状态
-            //FaultState：故障状态
+            List<double> SingleSOC = new List<double>();
+            List<double> SingleSOH = new List<double>();
+            foreach (BatteryTotalModel model in models)
+            {
+                SingleSOC.Add(model.TotalSOC);
+                SingleSOH.Add(model.TotalSOH);
+            }
+            TotalSOC = SingleSOC.Average().ToString();
+            TotalSOH = SingleSOH.Average().ToString();
+        }
+
+        public void StateDisPlayBMS(List<BMSDataService> bMSDataService)
+        {
+            bool bmsstateflag = true;
+            foreach (BMSDataService service in bMSDataService)
+            {
+                if (service.IsConnected == false)
+                {
+                    bmsstateflag = false;
+                }
+
+            }
+            if (!bmsstateflag)
+            {
+                StateFill_BMSRun = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+            }
+            else
+            {
+                StateFill_BMSRun = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
+            }
         }
 
         /// <summary>
         /// PCS数据展示
         /// </summary>
-        /// <param name="bmsmodel"></param>
-        /// <param name="pcsmodel"></param>
-        /// <param name="smartmetermodel"></param>
-        public void DataDisPlayPCS(PCSMonitorModel pcsmodel)
+        /// <param name="model"></param>
+        public void DataDisPlayPCS(PCSModel model)
         {
-            DcBranch1DCVol = pcsmodel.DcBranch1DCVol;
-            DcBranch1DCVol = pcsmodel.DcBranch1DCVol;
-            DcBranch1DCCur = pcsmodel.DcBranch1DCCur;
-            DcBranch1DCPower = pcsmodel.DcBranch1DCPower;
-            DcBranch1Char = pcsmodel.DcBranch1Char;
-            DcBranch1DisChar = pcsmodel.DcBranch1DisChar;
-            //StateFill_PCSRun：PCS运行
-            //InstalledPower：储存装机功率
-            //ChargingCapacity：今日充电量
-            //DischargeCapacity：今日放电量
-            //CurrentPower：当前功率
-            //StationPower：电站功率
+            DcBranch1DCVol = model.DcBranch1DCVol.ToString();
+            DcBranch1DCCur = model.DcBranch1DCCur.ToString();
+            DcBranch1DCPower = model.DcBranch1DCPower.ToString();
+            //FaultState = model.
+        }
+
+        /// <summary>
+        /// PCS状态展示
+        /// </summary>
+        /// <param name="bMSDataService"></param>
+        public void StateDisPlayPCS(bool isconnected)
+        {
+            if (isconnected)
+            {
+                StateFill_PCSRun = new SolidColorBrush(BCMUColors.IsConnect_T);
+                StartStopState = new SolidColorBrush(BCMUColors.IsConnect_T);
+            }
+            else
+            {
+                StateFill_PCSRun = new SolidColorBrush(BCMUColors.IsConnect_F);
+                StartStopState = new SolidColorBrush(BCMUColors.IsConnect_F);
+            }
         }
 
         /// <summary>
         /// 电表数据展示
         /// </summary>
-        /// <param name="smartmetermodel"></param>
-        public void DataDisPlaySmartMeter(SmartMeterDataService smartMeterDataService)
+        /// <param name="model"></param>
+        public void DataDisPlaySM(bool isconnected)
         {
-            if (smartMeterDataService.IsConnected)
+            if (isconnected)
             {
-                StateFill_AmmeterRun = new SolidColorBrush(LightColors.Open_Green);
+                StateFill_AmmeterRun = new SolidColorBrush(BCMUColors.IsConnect_T);
             }
             else
             {
-                StateFill_AmmeterRun = new SolidColorBrush(LightColors.Close);
+                StateFill_AmmeterRun = new SolidColorBrush(BCMUColors.IsConnect_F);
+            }
+
+        }
+
+        public void StateDisPlayFault()
+        {
+            // get fault state from strategy api
+            StrategyApi.GetFaultState();
+            switch (StrategyApi.GetFaultState())
+            {
+                case Common.StrategyManage.ContingencyStatusEnum.Normal:
+                    StateFill_Warn = new SolidColorBrush(LightColors.Close);
+                    StateFill_MinorFaults = new SolidColorBrush(LightColors.Close);
+                    StateFill_HeavyFaults = new SolidColorBrush(LightColors.Close);
+                    StateFill_CrisisFaults = new SolidColorBrush(LightColors.Close);
+                    break;
+                case Common.StrategyManage.ContingencyStatusEnum.Level1:
+                    StateFill_Warn = new SolidColorBrush(LightColors.Close);
+                    StateFill_MinorFaults = new SolidColorBrush(LightColors.Open_Red);
+                    StateFill_HeavyFaults = new SolidColorBrush(LightColors.Close);
+                    StateFill_CrisisFaults = new SolidColorBrush(LightColors.Close);
+                    break;
+                case Common.StrategyManage.ContingencyStatusEnum.Level2:
+                    StateFill_Warn = new SolidColorBrush(LightColors.Close);
+                    StateFill_MinorFaults = new SolidColorBrush(LightColors.Close);
+                    StateFill_HeavyFaults = new SolidColorBrush(LightColors.Open_Red);
+                    StateFill_CrisisFaults = new SolidColorBrush(LightColors.Close);
+                    break;
+                case Common.StrategyManage.ContingencyStatusEnum.Level3:
+                    StateFill_Warn = new SolidColorBrush(LightColors.Close);
+                    StateFill_MinorFaults = new SolidColorBrush(LightColors.Close);
+                    StateFill_HeavyFaults = new SolidColorBrush(LightColors.Close);
+                    StateFill_CrisisFaults = new SolidColorBrush(LightColors.Open_Red);
+                    break;
             }
         }
 
-        /// <summary>
-        /// 云端数据展示
-        /// </summary>
-        public void DataDisPlayCloud()
+        public void StateDisPlayCloud()
         {
-
+            // get mqtt connected state from mqtt api
             if (MqttClientApi.IsConnected())
-               
             {
-                StateFill_CloudTelecom = new SolidColorBrush(LightColors.Open_Green);
-            } 
+                StateFill_CloudTelecom = new SolidColorBrush(BCMUColors.IsConnect_T);
+            }
             else
             {
-                StateFill_CloudTelecom = new SolidColorBrush(LightColors.Close);
-
+                StateFill_CloudTelecom = new SolidColorBrush(BCMUColors.IsConnect_F);
             }
         }
+
+        public void DataRefresh_SEM(SmartElectricityMeterModel model)
+        {
+            ChargingCapacity = model.CurrMonthTotalActiveEnergy.ToString();
+            DischargeCapacity = model.CurrMonthTotalReverseActiveEnergy.ToString();
+            DcBranch1Char = model.TotalActiveEnergy.ToString();
+            DcBranch1DisChar = model.TotalReverseActiveEnergy.ToString();
+            CurrentPower = model.PowerValue.ToString();
+            StationPower = model.PowerValue.ToString();
+        }
+
+        //运行状态
+        //StateFill_Normal
+        //StateFill_Offline
+
+        //状态
+        //StartStopState
+        //FaultState
     }
 }
-

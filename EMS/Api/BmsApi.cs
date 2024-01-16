@@ -1,6 +1,7 @@
 ﻿using EMS.Model;
 using EMS.Service;
 using EMS.ViewModel;
+using MQTTnet.Diagnostics;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,38 @@ namespace EMS.Api
     {
         public static BatteryTotalModel GetNextBMSData(string bcmuid)
         {
-            var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == bcmuid);
-            return item.GetCurrentData();
+            if (EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.Count > 0)
+            {
+                var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == bcmuid);
+                if (item != null)
+                {
+                    return item.GetCurrentData();
+                }
+            }
+            return null;
+        }
+
+        public static BMSDataService[] GetDevServices()
+        {
+            return EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToArray();
+        }
+
+        /// <summary>
+        /// 获取BMS保护参数接口
+        /// </summary>
+        /// <returns></returns>
+        public static BMSParameterSettingModel GetBMSParam(string bcmuid)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// 设置BMS保护参数接口
+        /// </summary>
+        /// <returns></returns>
+        public static BMSParameterSettingModel SetBMSParam(string bcmuid)
+        {
+            return null;
         }
 
         /// <summary>
@@ -56,15 +87,8 @@ namespace EMS.Api
             return data;
         }
 
-
-
-
-
-
-
         public static BatteryTotalModel[] GetNextBMSData()
         {
-            DateTime dateTime = DateTime.Now;
             List<BMSDataService> services = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices;
             List<BatteryTotalModel> models = new List<BatteryTotalModel>();
             for (int i = 0; i < services.Count; i++)
@@ -72,7 +96,6 @@ namespace EMS.Api
                 var item = services[i].GetCurrentData();
                 if (item != null)
                 {
-                    item.CurrentTime = dateTime;
                     models.Add(item);
                 }
             }
@@ -110,7 +133,7 @@ namespace EMS.Api
             {
                 List<string>bcmualarm = new List<string>();
                 List<string>bcmufault = new List<string>();
-               
+
                 bcmualarm = service.GetCurrentData().AlarmStateBCMU.ToList();
                 bcmufault = service.GetCurrentData().FaultyStateBCMU.ToList();
                 totalalarminfo.AddRange(bcmualarm);
@@ -123,7 +146,6 @@ namespace EMS.Api
                 }
                 
             }
-            List<string>newlist = new List<string>();
             
             totalalarminfo=totalalarminfo.Distinct().ToList();
             return totalalarminfo;
