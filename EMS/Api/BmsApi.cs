@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using TNCN.EMS.Common.Mqtt;
 
 namespace EMS.Api
 {
@@ -113,7 +114,7 @@ namespace EMS.Api
         /// <summary>
         /// 得到BMS所有告警故障信息
         /// </summary>
-        /// <returns></returns> <comment>这里描述一下返回的这个Tuple的两个变量的意义
+        /// <returns></returns> <comment>返回的（int,bool）为告警等级以及是否含有故障
         public static (int,bool) GetTotalAlarmInfo()
         {
             List<BMSDataService> services = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices;//获取所有电池数据
@@ -286,6 +287,20 @@ namespace EMS.Api
         public static void SyncBCMUInfo13(int index, ushort[] values)
         {
             EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices[index].SyncBCMUInfo13(values);
+        }
+
+        public static void SendBCMUBalanceMode(string index, ushort values)
+        {
+            var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == index);
+           item.SendBalanceMode(values);
+        }
+
+        public static void SendBalanceChannel(string index, ushort values)
+        {
+            var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == index);
+
+            item.SendBalanceChannel(values);
+
         }
     }
 }

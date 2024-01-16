@@ -491,22 +491,15 @@ namespace EMS.Service
             MessageBox.Show("失败");
         }
 
-        public void SelectBalancedMode(string SelectedBalanceMode)
+        public void SendBalanceMode(ushort value)
         {
-            if (SelectedBalanceMode == "自动模式")
-            {
-                WriteFunc(40102, 0xBC11);
-            }
-            else if (SelectedBalanceMode == "远程模式")
-            {
-                WriteFunc(40102, 0xBC22);
-            }
-            else
-            {
-                MessageBox.Show("请选择模式");
-            }
+            WriteFunc(548,value);
         }
 
+        public void SendBalanceChannel(ushort value)
+        {
+            WriteFunc(549, value);
+        }
         public void FWUpdate()
         {
             WriteFunc(40104, 0xBBAA);

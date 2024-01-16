@@ -105,6 +105,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
+
         #region BCMUINFO
         private string avgClusterVol;
 
@@ -1095,6 +1096,96 @@ namespace EMS.ViewModel.NewEMSViewModel
         #endregion
 
 
+        /// <summary>
+        /// 均衡模式选择
+        /// </summary>
+        private string[] balanceMode =new string[] { "自动均衡模式", "手动均衡模式" };
+
+        public string[] BalanceMode
+        {
+            get => balanceMode;
+            set
+            {
+                SetProperty(ref balanceMode, value);
+            }
+        }
+
+        /// <summary>
+        ///均衡bmu选择
+        /// </summary>
+        private string[] balanceBMU = new string[] { "A","B","C"};
+        public string[] BalanceBMU
+        {
+            get { return balanceBMU; }
+            set { SetProperty(ref balanceBMU, value); }
+        }
+
+        /// <summary>
+        /// 均衡通道选择
+        /// </summary>
+        private string[] balanceChannels = new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14" };
+       
+        public string[] BalanceChannels
+        {
+            get
+            {
+                return balanceChannels;
+            }
+            set
+            {
+                SetProperty(ref balanceChannels, value);
+            }
+        }
+        /// <summary>
+        /// 被选择均衡的BMU通道
+        /// </summary>
+        private string selectedBalanceChannel;
+       
+        public string SelectedBalanceChannel
+        {
+            get
+            {
+                return selectedBalanceChannel;
+            }
+            set
+            {
+                SetProperty(ref selectedBalanceChannel, value);
+            }
+        }
+
+        /// <summary>
+        /// 被选择的BMU
+        /// </summary>
+        private string selectedBalanceBMU;
+        public string SelectedBalanceBMU
+        {
+            get
+            {
+                return selectedBalanceBMU;
+            }
+            set
+            {
+                SetProperty(ref selectedBalanceBMU, value);
+            }
+        }
+
+        /// <summary>
+        /// 被选择的均衡模式
+        /// </summary>
+        private string selectedBalanceMode;
+
+        public string SelectedBalanceMode
+        {
+            get => selectedBalanceMode;
+            set
+            {
+                SetProperty(ref selectedBalanceMode, value);
+            }
+        }
+
+
+
+
         private string[] cluster = new string[] {"A", "B", "C"};
         public string[] Cluster
         {
@@ -1238,12 +1329,16 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         #endregion
 
+
         #region Command
 
         public RelayCommand ToMonitor_BMS_BCMUPageCommand { get;private set;}
         public RelayCommand Command_OffGrid { get; private set; }
         public RelayCommand Command_OnGrid { get; private set; }
         public RelayCommand Command_ResetFault { get; private set; }
+        public RelayCommand Command_ChooseBalanceMode { get;private set; }
+        public RelayCommand Command_OpenBalanceChannel {  get;private set; }
+        public RelayCommand Command_CloseBalanceChannel { get;private set; }
         #endregion
         private string id { get; set; }
         public Monitor_BMS_BCMUPageModel(string id)
@@ -1253,7 +1348,9 @@ namespace EMS.ViewModel.NewEMSViewModel
             Command_OffGrid = new RelayCommand(OffGridCommand);
             Command_OnGrid = new RelayCommand(OnGridCommand);
             Command_ResetFault = new RelayCommand(ResetFault);
-
+            Command_ChooseBalanceMode = new RelayCommand(ChooseBalanceMode);
+            Command_OpenBalanceChannel = new RelayCommand(OpenBalanceChannel);
+            Command_CloseBalanceChannel = new RelayCommand(CloseBalanceChannel);
             BatteryViewModelList = new BatteryViewModel[14];
             for (int i = 0; i < BatteryViewModelList.Length; i++)
             {
@@ -1261,7 +1358,53 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
-       
+        private void CloseBalanceChannel()
+        {
+            BmsApi.SendBalanceChannel(id, 0);
+        }
+
+        private void OpenBalanceChannel()
+        {
+            int value=0;
+            int.TryParse(SelectedBalanceChannel, out int channels);
+            switch (SelectedBalanceBMU)
+            {
+                case "A":
+                    {
+                        value = channels; 
+                    }
+                     break;
+                    case "B":
+                    {
+                        value = channels + 16;
+                    }
+                    break;
+                case "C":
+                    {
+                        value = channels + 32;
+                    }
+                    break;
+
+            }
+            BmsApi.SendBalanceChannel(id,(ushort)value);
+        }
+
+        private void ChooseBalanceMode()
+        {
+            switch (SelectedBalanceMode)
+            {
+                case "自动均衡模式": 
+                    {
+                        BmsApi.SendBCMUBalanceMode(id, 0x005A);
+                    }break;
+                case "手动均衡模式":
+                    {
+                        BmsApi.SendBCMUBalanceMode(id, 0x00A5);
+                    }break;
+
+            }
+        }
+
         private void ResetFault()
         {
             BmsApi.ResetBMSFault(id);

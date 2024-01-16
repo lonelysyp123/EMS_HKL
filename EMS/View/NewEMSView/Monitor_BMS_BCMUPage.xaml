@@ -134,22 +134,22 @@
                                    Height="30"
                                    Background="White"
                                    Foreground="Black"
-                                   ItemsSource="{Binding BMUID}"
-                                   SelectedItem="{Binding SelectedBMU}" />
+                                   ItemsSource="{Binding BalanceBMU}"
+                                   SelectedItem="{Binding SelectedBalanceBMU}" />
                         <TextBlock Text="通道编号："
                                    VerticalAlignment="Center"
                                    Margin="20,0,10,0" />
                         <ComboBox Width="80"
                                   Height="20"
                                   Margin="0,0,50,0"
-                                  ItemsSource="{Binding Channels}"
-                                  SelectedItem="{Binding SelectedChannel}"
+                                  ItemsSource="{Binding BalanceChannels}"
+                                  SelectedItem="{Binding SelectedBalanceChannel}"
                                   Background="White"
                                   VerticalAlignment="Center"
                                   Foreground="Black"
                                   HorizontalAlignment="Center" />
                         <Button Content="打开"
-                                Command="{Binding OpenChargeChannelCommand}"
+                                Command="{Binding Command_OpenBalanceChannel}"
                                 Width="80"
                                 FontSize="12"
                                 Height="30"
@@ -160,7 +160,7 @@
                                 Cursor="Hand"/>
                         
                         <Button Content="关闭"
-                                Command="{Binding CloseChargeChannelCommand}"
+                                Command="{Binding Command_CloseBalanceChannel}"
                                 Width="80"
                                 FontSize="12"
                                 Height="30"
@@ -193,7 +193,7 @@
                                   ItemsSource="{Binding BalanceMode}"
                                   SelectedItem="{Binding SelectedBalanceMode}" />
                         <Button Content="执行"
-                                Command="{Binding SelectBalancedModeCommand}"
+                                Command="{Binding Command_ChooseBalanceMode}"
                                 Width="80"
                                 FontSize="12"
                                 Height="30"
