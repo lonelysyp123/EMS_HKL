@@ -1631,6 +1631,12 @@ namespace EMS.ViewModel.NewEMSViewModel
             flag1bitposition = GetBitPosition(flag1);
             flag2bitposition = GetBitPosition(flag2);
             flag3bitposition = GetBitPosition(flag3);
+            BMU1TotalFault = false;
+            BMU2TotalFault = false;
+            BMU3TotalFault = false;
+            BMU1ConnectLostFault = false;
+            BMU2ConnectLostFault = false;
+            BMU3ConnectLostFault = false;
             if (flag1bitposition.Count != 0 || flag2bitposition.Count != 0 || flag3bitposition.Count != 0)
             {
                 faultresult = true;
@@ -1683,11 +1689,20 @@ namespace EMS.ViewModel.NewEMSViewModel
                             BMU2ConnectLostFault = false;
                             BMU3ConnectLostFault = false;
 
+
                         }
                         break;
                 }
             }
-
+            MainLoopRelayFault = false;
+            PrecharRelayFault = false;
+            BreakerFault = false;
+            HallADCI2CComFault = false;
+            HallCurDetectFault = false;
+            HighVolDCADCI2CComFault = false;
+            HighVolDCDetectFault = false;
+            IsoRADCI2CComFault = false;
+            IsoRDetectFault = false;
             foreach (var item in flag2bitposition)
             {
                 switch (item)
@@ -1754,6 +1769,11 @@ namespace EMS.ViewModel.NewEMSViewModel
                         break;
                 }
             }
+            HighConNTCTotalFault = false;
+            HighConNTC1Fault = false;
+            HighConNTC2Fault = false;
+            HighConNTC3Fault = false;
+            HighConNTC4Fault = false;
             foreach (var item in flag3bitposition)
             {
                 switch (item)
@@ -1825,7 +1845,11 @@ namespace EMS.ViewModel.NewEMSViewModel
                 IsoRTotalAlarm = AlarmtLevels.NoAlarm;
                 colorflag1 = 0;
             }
-
+            HighConTemp1Alarm = AlarmtLevels.NoAlarm;
+            HighConTemp2Alarm = AlarmtLevels.NoAlarm;
+            HighConTemp3Alarm = AlarmtLevels.NoAlarm;
+            HighConTemp4Alarm = AlarmtLevels.NoAlarm;
+            HighConTempTotalAlarm = AlarmtLevels.NoAlarm;
             List<int> result21 = new List<int>();
             result21 = GetBitPosition(value2);
             
@@ -1925,7 +1949,10 @@ namespace EMS.ViewModel.NewEMSViewModel
             int colorflagresult = Math.Max(colorflag1,colorflag2);
             colorflagresult = Math.Max(colorflagresult,colorflag3);
             colorflagresult = Math.Max(colorflagresult,colorflag4);
-            
+            ClusterVolUpAlarm = AlarmtLevels.NoAlarm;
+            ClusterVolLowAlarm = AlarmtLevels.NoAlarm;
+            SingleVolUpAlarm = AlarmtLevels.NoAlarm;
+            SingleVolLowAlarm = AlarmtLevels.NoAlarm;
             foreach (var item in result2)
             {
 
@@ -1971,6 +1998,14 @@ namespace EMS.ViewModel.NewEMSViewModel
                         break;
                 }
             }
+            SOCLowAlarm = AlarmtLevels.NoAlarm;
+            SingleVolDiffAlarm = AlarmtLevels.NoAlarm;
+            DischarClusterOverCurAlarm = AlarmtLevels.NoAlarm;
+            CharClusterOverCurAlarm = AlarmtLevels.NoAlarm;
+            DischarTempUpAlarm = AlarmtLevels.NoAlarm;
+            DischarTempLowAlarm = AlarmtLevels.NoAlarm;
+            CharTempUpAlarm = AlarmtLevels.NoAlarm;
+            CharTempLowAlarm = AlarmtLevels.NoAlarm;
 
             foreach (var item in result3)
             {
