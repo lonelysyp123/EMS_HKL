@@ -1,4 +1,5 @@
-﻿using EMS.Storage.DB.Models;
+﻿using EMS.Model;
+using EMS.Storage.DB.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -8,25 +9,25 @@ using System.Threading.Tasks;
 
 namespace EMS.Storage.DB.DBManage
 {
-    public class TotalBatteryInfoManage : IManage<TotalBatteryInfoModel>
+    public class ElectricMeterInfoManage : IManage<ElectricMeterInfoModel>
     {
-        public bool Delete(TotalBatteryInfoModel entity)
+        public bool Delete(ElectricMeterInfoModel entity)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public bool DeleteAll()
         {
-            throw new NotImplementedException();
+            return false;
         }
 
-        public List<TotalBatteryInfoModel> Get()
+        public List<ElectricMeterInfoModel> Get()
         {
             try
             {
                 using (var db = new ORMContext())
                 {
-                    var result = db.TotalBatteryInfos.ToList();
+                    var result = db.ElectricMeterInfos.ToList();
                     return result;
                 }
             }
@@ -42,13 +43,13 @@ namespace EMS.Storage.DB.DBManage
         /// <param name="StartTime">开始时间</param>
         /// <param name="EndTime">结束时间</param>
         /// <returns>数据列表</returns>
-        public List<TotalBatteryInfoModel> Find(DateTime StartTime, DateTime EndTime)
+        public List<ElectricMeterInfoModel> Find(DateTime StartTime, DateTime EndTime)
         {
             try
             {
                 using (var db = new ORMContext())
                 {
-                    var result = db.TotalBatteryInfos.Where(p => p.HappenTime >= StartTime && p.HappenTime <= EndTime).ToList();
+                    var result = db.ElectricMeterInfos.Where(p => p.HappenTime >= StartTime && p.HappenTime <= EndTime).ToList();
                     return result;
                 }
             }
@@ -62,32 +63,33 @@ namespace EMS.Storage.DB.DBManage
         /// 查询数据
         /// </summary>
         /// <param name="BCMUID">BCMUID</param>
+        /// <param name="BMUID">BMUID</param>
         /// <param name="StartTime">开始时间</param>
         /// <param name="EndTime">结束时间</param>
         /// <returns>数据列表</returns>
-        public List<TotalBatteryInfoModel> Find(string BCMUID, DateTime StartTime, DateTime EndTime)
-        {
-            try
-            {
-                using (var db = new ORMContext())
-                {
-                    var result = db.TotalBatteryInfos.Where(p => p.BCMUID == BCMUID&&p.HappenTime >= StartTime && p.HappenTime <= EndTime).ToList();
-                    return result;
-                }
-            }
-            catch
-            {
-                return null;
-            }
-        }
+        //public List<ElectricMeterInfoModel> Find(string BCMUID, string BMUID, DateTime StartTime, DateTime EndTime)
+        //{
+        //    try
+        //    {
+        //        using (var db = new ORMContext())
+        //        {
+        //            var result = db.ElectricMeterInfos.Where(p => p.HappenTime >= StartTime && p.HappenTime <= EndTime).ToList();
+        //            return result;
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        return null;
+        //    }
+        //}
 
-        public bool Insert(TotalBatteryInfoModel entity)
+        public bool Insert(ElectricMeterInfoModel entity)
         {
             try
             {
                 using (var db = new ORMContext())
                 {
-                    var result = db.TotalBatteryInfos.Add(entity);
+                    var result = db.ElectricMeterInfos.Add(entity);
                     db.SaveChanges();
                 }
             }
@@ -98,33 +100,13 @@ namespace EMS.Storage.DB.DBManage
             return true;
         }
 
-        public bool Insert(TotalBatteryInfoModel[] entities)
+        public bool Update(ElectricMeterInfoModel entity)
         {
             try
             {
                 using (var db = new ORMContext())
                 {
-                    for (int i = 0; i < entities.Length; i++)
-                    {
-                        var result = db.TotalBatteryInfos.Add(entities[i]);
-                    }
-                    db.SaveChanges();
-                }
-            }
-            catch
-            {
-                return false;
-            }
-            return true;
-        }
-
-        public bool Update(TotalBatteryInfoModel entity)
-        {
-            try
-            {
-                using (var db = new ORMContext())
-                {
-                    var result = db.TotalBatteryInfos.Attach(entity);
+                    var result = db.ElectricMeterInfos.Attach(entity);
                     db.Entry(entity).State = EntityState.Modified;
                     db.SaveChanges();
                 }
@@ -137,3 +119,4 @@ namespace EMS.Storage.DB.DBManage
         }
     }
 }
+

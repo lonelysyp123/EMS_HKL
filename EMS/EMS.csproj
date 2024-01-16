@@ -95,6 +95,9 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>EMS ICO.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommunityToolkit.Mvvm, Version=8.0.0.0, Culture=neutral, PublicKeyToken=4aff67a105548ee2, processorArchitecture=MSIL">
       <HintPath>..\packages\CommunityToolkit.Mvvm.8.0.0\lib\netstandard2.0\CommunityToolkit.Mvvm.dll</HintPath>
@@ -307,6 +310,7 @@
     <Compile Include="Storage\DB\DBManage\AlarmandFaultInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\AlarmParameterSettingInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\BcmuManage.cs" />
+    <Compile Include="Storage\DB\DBManage\ElectricMeterInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\MqttManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSControlInfoManage.cs" />
     <Compile Include="Storage\DB\DBManage\PCSInfoManage.cs" />
@@ -318,6 +322,7 @@
     <Compile Include="Storage\DB\Models\AlarmandFaultInfoModel.cs" />
     <Compile Include="Storage\DB\Models\AlarmParameterSettingModel.cs" />
     <Compile Include="Storage\DB\Models\BcmuModel.cs" />
+    <Compile Include="Storage\DB\Models\ElectricMeterInfoModel.cs" />
     <Compile Include="Storage\DB\Models\MqttModel.cs" />
     <Compile Include="Storage\DB\Models\PCSControlSettingModel.cs" />
     <Compile Include="Storage\DB\Models\PCSInfoModel.cs" />
@@ -682,6 +687,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="EMS ICO.ico" />
     <Content Include="Resource\Image\Balanced.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -722,11 +728,17 @@
     <Content Include="Resource\Image\Discharge.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resource\Image\EMS ICO.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resource\Image\Error.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resource\Image\ListBorder.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource\Image\Logo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resource\Image\PCSMachine.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

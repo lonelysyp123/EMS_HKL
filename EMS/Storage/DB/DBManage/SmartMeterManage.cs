@@ -100,5 +100,27 @@ namespace EMS.Storage.DB.DBManage
                 return null;
             }
         }
+
+        /// <summary>
+        /// 查询数据
+        /// </summary>
+        /// <param name="StartTime"></param>
+        /// <param name="EndTime"></param>
+        /// <returns></returns>
+        //public List<SmartMeterDBModel> Find(DateTime StartTime, DateTime EndTime)
+        //{
+        //    try
+        //    {
+        //        using (var db = new ORMContext())
+        //        {
+        //            var result = db.SmartMeterModels.Where(p => p.HappenTime >= StartTime && p.HappenTime <= EndTime).ToList();
+        //            return result;
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        return null;
+        //    }
+        //}
     }
 }

@@ -25,6 +25,9 @@ namespace EMS.View.NewEMSView
     /// </summary>
     public partial class EMSMainView : System.Windows.Window
     {
+
+
+
         private EMSMainViewModel viewmodel;
         public EMSMainView()
         {
@@ -129,7 +132,7 @@ namespace EMS.View.NewEMSView
                 AnalysisViewMenu_PCS.Visibility = Visibility.Collapsed;
                 AnalysisViewMenu_SmartMeter.Visibility = Visibility.Collapsed;
             }
-            Navigation(new Analysis_BMSPage(), sender as ToggleButton);
+            Navigation(new Analysis_BMSPage(viewmodel.Analysis_BMSPageModel), sender as ToggleButton);
         }
 
         private void FaultViewMenu_Checked(object sender, RoutedEventArgs e)
@@ -173,17 +176,17 @@ namespace EMS.View.NewEMSView
 
         private void AnalysisViewMenu_BMS_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Analysis_BMSPage(), sender as ToggleButton, AnalysisViewMenu);
+            Navigation(new Analysis_BMSPage(viewmodel.Analysis_BMSPageModel), sender as ToggleButton, AnalysisViewMenu);
         }
 
         private void AnalysisViewMenu_PCS_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Analysis_PCSPage(), sender as ToggleButton, AnalysisViewMenu);
+            Navigation(new Analysis_PCSPage(viewmodel.Analysis_PCSPageModel), sender as ToggleButton, AnalysisViewMenu);
         }
 
         private void AnalysisViewMenu_SmartMeter_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Analysis_SmartMeterPage(), sender as ToggleButton, AnalysisViewMenu);
+            Navigation(new Analysis_SmartMeterPage(viewmodel.Analysis_SmartMeterPageModel), sender as ToggleButton, AnalysisViewMenu);
         }
 
         private void StrategyViewMenu_Setter_Checked(object sender, RoutedEventArgs e)

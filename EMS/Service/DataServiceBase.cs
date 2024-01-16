@@ -58,11 +58,15 @@ namespace EMS.Service
         protected int MaxReconnectTimes;
         protected int DaqTimeSpan;
         protected int ReconnectIntervalLong;
+        protected int SaveSamplingInterval;
+        protected int ModelsLength;
+        protected int SaveModelsLength;
         protected string DevType;
 
         protected Action<object, bool, bool, bool> OnChangeState;
         protected Action<object, object> OnChangeData;
         protected BlockingCollection<TModel> Models;
+        protected BlockingCollection<TModel> SaveModels;
         protected bool IsCommunicationProtectState = false;
 
         public TModel CurrentModel { get; protected set; }
@@ -72,17 +76,22 @@ namespace EMS.Service
         public DataServiceBase(string id)
         {
             ID = id;
-            Models = new BlockingCollection<TModel>(new ConcurrentQueue<TModel>(), 300);
-            StartDataService();
             InitSystemConfig();
+            Models = new BlockingCollection<TModel>(new ConcurrentQueue<TModel>(), ModelsLength);
+            SaveModels = new BlockingCollection<TModel>(new ConcurrentQueue<TModel>(), SaveModelsLength);
+            StartDataService();
+
         }
 
         protected virtual void InitSystemConfig()
         {
-            IniFileHelper.Read(IniSectionEnum.EMS, "ReconnectInterval", out int ReconnectInterval);
-            IniFileHelper.Read(IniSectionEnum.EMS, "MaxReconnectTimes", out int MaxReconnectTimes);
-            IniFileHelper.Read(IniSectionEnum.EMS, "DaqTimeSpan", out int DaqTimeSpan);
-            IniFileHelper.Read(IniSectionEnum.EMS, "ReconnectIntervalLong", out int ReconnectIntervalLong);
+            IniFileHelper.Read(IniSectionEnum.EMS, "ReconnectInterval", out ReconnectInterval);
+            IniFileHelper.Read(IniSectionEnum.EMS, "MaxReconnectTimes", out MaxReconnectTimes);
+            IniFileHelper.Read(IniSectionEnum.EMS, "DaqTimeSpan", out DaqTimeSpan);
+            IniFileHelper.Read(IniSectionEnum.EMS, "ReconnectIntervalLong", out ReconnectIntervalLong);
+            IniFileHelper.Read(IniSectionEnum.EMS, "SaveSamplingInterval", out SaveSamplingInterval);
+            IniFileHelper.Read(IniSectionEnum.EMS, "ModelsLength", out ModelsLength);
+            IniFileHelper.Read(IniSectionEnum.EMS, "SaveModelsLength", out SaveModelsLength);
         }
 
         public void StartDaqData()
@@ -111,7 +120,43 @@ namespace EMS.Service
         public void StartSaveData()
         {
             IsSaveDaq = true;
+            Thread th = new Thread(SaveDataThread);
+            th.IsBackground = true;
+            th.Start();
             LogUtils.Debug(DevType + " ID:" + ID + " 开始保存数据");
+        }
+
+        protected void SaveDataThread()
+        {
+            while (IsConnected && IsDaqData && IsSaveDaq)
+            {
+                if (SaveModels.Count > 200)
+                {
+                    List<TModel> items = new List<TModel>();
+                    for (int i = 0; i < 200; i++)
+                    {
+                        if (SaveModels.TryTake(out TModel model))
+                        {
+                            items.Add(model);
+                        }
+                    }
+                    SaveData(items.ToArray());
+                }
+
+                Thread.Sleep(500);
+            }
+
+            List<TModel> models = new List<TModel>();
+            while (SaveModels.TryTake(out TModel model))
+            {
+                models.Add(model);
+            }
+            SaveData(models.ToArray());
+        }
+
+        protected virtual void SaveData(TModel[] models)
+        {
+
         }
 
         public void StopSaveData()

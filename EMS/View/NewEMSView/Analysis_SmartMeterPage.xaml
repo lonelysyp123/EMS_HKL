@@ -28,7 +28,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="8*" />
+            <ColumnDefinition Width="5*" />
         </Grid.ColumnDefinitions>
         <!--1、选择电压、电流-->
         <Grid Grid.Row="0"
@@ -40,39 +40,79 @@
                 <Grid>
                     <ListBox HorizontalAlignment="Center"
                              BorderThickness="0,0,0,0"
-                            
                              SelectedItem="{Binding SelectedType}"
                              SelectedIndex="{Binding SelectedTypeIndex}"
                              Foreground="Black">
-                        <ListBoxItem Content="Voltage"
+                        <ListBoxItem Content="Voltage_A"
                                      BorderThickness="1,1,1,1"
-                                     Margin="0,10,0,0"
+                                     Margin="0,5,0,0"
                                      HorizontalContentAlignment="Center"
-                                     BorderBrush="#1890FF"></ListBoxItem>
-                        <ListBoxItem Content="SOC"
+                                     BorderBrush="#1890FF" />
+                        <ListBoxItem Content="Voltage_B"
                                      BorderThickness="1,1,1,1"
-                                     Margin="0,10,0,0"
+                                     Margin="0,5,0,0"
                                      HorizontalContentAlignment="Center"
-                                     BorderBrush="#1890FF"></ListBoxItem>
-                        <ListBoxItem Content="Resistance"
+                                     BorderBrush="#1890FF" />
+                        <ListBoxItem Content="Voltage_C"
                                      BorderThickness="1,1,1,1"
-                                     Margin="0,10,0,0"
+                                     Margin="0,5,0,0"
                                      HorizontalContentAlignment="Center"
-                                     BorderBrush="#1890FF"></ListBoxItem>
-                        <ListBoxItem Content="Temperature1"
+                                     BorderBrush="#1890FF" />
+                        <ListBoxItem Content="Current_A"
                                      BorderThickness="1,1,1,1"
-                                     Margin="0,10,0,0"
+                                     Margin="0,5,0,0"
                                      HorizontalContentAlignment="Center"
-                                     BorderBrush="#1890FF"></ListBoxItem>
-                        <ListBoxItem Content="Temperature2"
+                                     BorderBrush="#1890FF" />
+                        <ListBoxItem Content="Current_B"
                                      BorderThickness="1,1,1,1"
-                                     Margin="0,10,0,0"
-                                     BorderBrush="#1890FF"></ListBoxItem>
-                        <ListBoxItem Content="Capacity"
-                                     BorderThickness="1,1,1,1"
-                                     Margin="0,10,0,0"
+                                     Margin="0,5,0,0"
                                      HorizontalContentAlignment="Center"
-                                     BorderBrush="#1890FF"></ListBoxItem>
+                                     BorderBrush="#1890FF" />
+                        <ListBoxItem Content="Current_C"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,5,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF" />
+                        <ListBoxItem Content="ActivePowerA"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,5,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF" />
+                        <ListBoxItem Content="ActivePowerB"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,5,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF" />
+                        <ListBoxItem Content="ActivePowerC"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,5,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF" />
+                        <ListBoxItem Content="ActivePower_Total"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,5,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF" />
+                        <ListBoxItem Content="ReactivePowerA"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,5,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF" />
+                        <ListBoxItem Content="ReactivePowerB"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,5,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF" />
+                        <ListBoxItem Content="ReactivePowerC"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,5,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF" />
+                        <ListBoxItem Content="ReactivePower_Total"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,5,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF" />
                     </ListBox>
                 </Grid>
             </Border>
@@ -100,15 +140,13 @@
                                    Margin="20,0,0,0"
                                    Foreground="#1E1E1E"></Label>
                             <DatePicker x:Name="Test1"
-                                        Width="100"
                                         Height="30"
                                         Background="White"
                                         VerticalContentAlignment="Center"
                                         HorizontalAlignment="Center"
                                         Text="{Binding StartTime1, Mode=TwoWay}"
                                         BorderThickness="1,1,1,1"></DatePicker>
-                            <trl:DateInput Width="90"
-                                           Height="30"
+                            <trl:DateInput Height="30"
                                            Margin="5"
                                            DateText="{Binding StartTime2, Mode=TwoWay}"
                                            x:Name="Input1"></trl:DateInput>
@@ -122,10 +160,8 @@
                                         VerticalContentAlignment="Center"
                                         Text="{Binding EndTime1, Mode=TwoWay}"
                                         Foreground="Black"
-                                        Width="100"
                                         Background="White"></DatePicker>
-                            <trl:DateInput Width="90"
-                                           Height="30"
+                            <trl:DateInput Height="30"
                                            Margin="5"
                                            DateText="{Binding EndTime2, Mode=TwoWay}" />
                             <Button Content="查    询"
@@ -150,9 +186,9 @@
                     </Grid>
 
                     <Grid Grid.Row="2">
-                        <oxy:PlotView Model="{Binding DisplayDataModel}"
-                                      Background="AliceBlue">
-
+                        <oxy:PlotView Model="{Binding SMDisplayDataModel}"
+                                      Background="AliceBlue"
+                                      x:Name="SMPlotView">
                         </oxy:PlotView>
                     </Grid>
                 </Grid>

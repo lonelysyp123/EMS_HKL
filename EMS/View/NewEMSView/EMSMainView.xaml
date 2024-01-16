@@ -450,7 +450,7 @@
                                
                               Visibility="Collapsed" />
 
-            </StackPanel>
+                </StackPanel>
 
             <!--END-->
         </Grid>
@@ -459,5 +459,9 @@
               Grid.Column="1">
             <Frame x:Name="PageContent" NavigationUIVisibility="Hidden"></Frame>
         </Grid>
+        <Grid.RenderTransform>
+            <ScaleTransform x:Name="contentScaleTransform"
+                           />
+        </Grid.RenderTransform>
     </Grid>
 </Window>

@@ -338,6 +338,7 @@
                                        Style="{StaticResource NormalTextblockstyle}"></TextBlock>
                             <TextBlock Text="%"
                                        Style="{StaticResource NormalTextblockstyle}"></TextBlock>
+                          
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -388,7 +389,7 @@
                                     </StackPanel>
                                     <TextBlock Grid.Row="0"
                                                Grid.Column="1"
-                                               Text="今日充电量（kWh）"
+                                               Text="今月充电量（kWh）"
                                                Style="{StaticResource SystemTextblockstyle}" />
                                     <TextBlock Grid.Row="2"
                                                Grid.Column="1"
@@ -425,7 +426,7 @@
                                     </StackPanel>
                                     <TextBlock Grid.Row="0"
                                                Grid.Column="1"
-                                               Text="今日放电量（kWh）"
+                                               Text="今月放电量（kWh）"
                                                Style="{StaticResource SystemTextblockstyle}" />
                                     <TextBlock Grid.Row="2"
                                                Grid.Column="1"
@@ -605,15 +606,14 @@
                                Foreground="Black"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Top" />
-                    <Ellipse Height="20"
-                             Width="20"
-                             Style="{StaticResource LightEllipse}"
-                             Fill="{Binding StartStopState}"
-                             RenderTransformOrigin="2.975,0.5"
-                             HorizontalAlignment="Left"
-                             Canvas.Left="175"
-                             VerticalAlignment="Top"
-                             Canvas.Top="503" />
+                    <TextBlock Text="{Binding StartStopState}"
+                               VerticalAlignment="Top"
+                               HorizontalAlignment="Left"
+                               FontSize="14"
+                               FontWeight="Bold"
+                               Foreground="#337CF0"
+                               Canvas.Left="175"
+                               Canvas.Top="503" />
                     <TextBlock Canvas.Left="101"
                                Canvas.Top="541"
                                Text="故障状态："

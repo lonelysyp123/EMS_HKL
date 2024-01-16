@@ -20,16 +20,12 @@ namespace EMS.View.NewEMSView
     public partial class Analysis_PCSPage : Page
     {
 
-        public Analysis_PCSPage()
-        {
-            InitializeComponent();
-        }
-
         public Analysis_PCSPage(Analysis_PCSPageModel viewmodel)
         {
             InitializeComponent();
+            viewmodel = new Analysis_PCSPageModel();
             this.DataContext = viewmodel;
         }
-        
+
     }
 }

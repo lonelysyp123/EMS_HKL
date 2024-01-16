@@ -16,7 +16,6 @@ namespace EMS.Storage.DB.Models
         public int SelectedStopBits { get; set; }
         public int SelectedDataBits { get; set; }
         public int AcquisitionCycle { get; set; }
-
         public SmartMeterDBModel() { }
     }
 }

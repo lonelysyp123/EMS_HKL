@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TNCN.EMS.Common.Mqtt;
+using TNCN.EMS.Common.Util;
 
 namespace EMS.Common.StrategyManage
 {
@@ -51,6 +52,7 @@ namespace EMS.Common.StrategyManage
         public void SetMaxChargingPower(double maxChargingPower) { _maxChargingPower = maxChargingPower; }
         public double MaxDischargingPower { get { return _maxDischargingPower; } }
         public void SetMaxDischargingPower(double maxDischargingPower) { _maxChargingPower = maxDischargingPower; }
+        public ContingencyStatusEnum ContingencyStatus { get; private set; }
 
         private BessCommand _currentCommand;
         private BessCommand _manualCommand;
@@ -109,14 +111,29 @@ namespace EMS.Common.StrategyManage
         public bool IsFaultMode { get { return _contingencyStatus == ContingencyStatusEnum.Level2 || _contingencyStatus == ContingencyStatusEnum.Level3; } }
         public EmsController()
         {
-            _isAutomaticMode = false;
-            _hasDailyPatternEnabled = false;
-            _hasMaxDemandControlEnabled = false;
-            _hasReversePowerflowProtectionEnabled = false;
-            _hasContigencyCheckEnabled = true;
             _currentCommand = null;
             _scheduler = new IntraDayScheduler();
             _contingencyStatus = ContingencyStatusEnum.Normal;
+            IniFileHelper.Read(IniSectionEnum.Strategy, "ChargingSecurityFactor", out _chargingSecurityFactor);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "ControlPeriod", out _controlPeriod);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "DcBusConnectionChargingPowerFactor", out _dcBusConnectionChargingPowerFactor);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "DischargingSecurityFactor", out _dischargingSecurityFactor);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "HasContigencyCheckEnabled", out _hasContigencyCheckEnabled);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "HasDailyPatternEnabled", out _hasDailyPatternEnabled);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "HasMaxDemandControlEnabled", out _hasMaxDemandControlEnabled);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "HasReversePowerflowProtectionEnabled", out _hasReversePowerflowProtectionEnabled);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "IsAutomaticMode", out _isAutomaticMode);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "MaxChargingPower", out _maxChargingPower);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "MaxDemandPower", out _maxDemandPower);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "MaxDemandPowerDescendRate", out _maxDemandPowerDescendRate);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "MaxDischargingPower", out _maxDischargingPower);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "MaxSoc", out _maxSoc);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "MinSoc", out _minSoc);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "ReversePowerActionThreshold", out _reversePowerActionThreshold);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "ReversePowerDescendRate", out _reversePowerDescendRate);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "ReversePowerStopThreshold", out _reversePowerStopThreshold);
+            IniFileHelper.Read(IniSectionEnum.Strategy, "ThresholdTolerance", out _thresholdTolerance);
+
         }
 
         public IntraDayScheduler Scheduler { get { return _scheduler; } }
@@ -260,41 +277,49 @@ namespace EMS.Common.StrategyManage
         {
             if (!_hasContigencyCheckEnabled) return; //未启用则直接return
             ///获取全部故障告警
-            List<string> bmsErrors = StrategyManager.Instance.GetBMSAlarmandFaultInfo();
+            bool bmsFault = false;
+            int bmsAlarm = 0;
+            var bmsResult = BmsApi.GetTotalAlarmInfo();
+            bmsFault = bmsResult.Item2;
+            bmsAlarm = bmsResult.Item1;
+
             List<string> pcsErrors = PcsApi.GetPCSFaultInfo();
             List<string> systemErrors = StrategyManager.Instance.GetSystemErrors();
 
-            List<int> levels = new List<int>();//等级数组
-            ///如果PCS没故障
-            if (pcsErrors.Count == 0 && systemErrors.Count == 0)
+            
+            
+            if (pcsErrors.Count == 0 && systemErrors.Count == 0&&(!bmsFault))
             {
-                if (bmsErrors.Count > 0)
+               if(bmsAlarm==0)
                 {
-                    foreach (var error in bmsErrors)
+                    _contingencyStatus = ContingencyStatusEnum.Normal; //全没故障
+                }else 
+                 {
+                    switch (bmsAlarm) //bmsAlarm有告警
                     {
-                        if (error.Contains("异常") && (error.Contains("三级保护")))
-                        {
-                            levels.Add(3);
-                            PcsApi.SetPCSHalt();
-                        }
-                        else if (error.Contains("二级保护"))
-                        {
-                            BessCommand bessCommand = new BessCommand(0, BatteryStrategyEnum.Standby);
-                            PcsApi.SendPcsCommand(bessCommand);
-                            levels.Add(2);
-                        }
-                        else if (error.Contains("一级保护"))
-                        {
-                            levels.Add(1);
-                        }
+                        case 1:
+                            {
+                                _contingencyStatus = ContingencyStatusEnum.Level1;
+                            }
+                            break;
+                        case 2:
+                            {
+                                _contingencyStatus = ContingencyStatusEnum.Level2;
+                            }
+                            break;
+                        case 3:
+                            {
+                                _contingencyStatus = ContingencyStatusEnum.Level3;
+                            }
+                            break;
+
                     }
-                }
+                  }
             }
-            else //如果pcs有故障
+            else   //有故障
             {
-                levels.Add(3);
-            }
-            _contingencyStatus = (ContingencyStatusEnum)(levels.Max());
+                _contingencyStatus = ContingencyStatusEnum.Level3;
+            }                   
             BessCommand command = new BessCommand(0, BatteryStrategyEnum.Standby);
             switch (_contingencyStatus)
             {

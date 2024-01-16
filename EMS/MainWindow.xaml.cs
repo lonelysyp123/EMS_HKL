@@ -15,6 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using TNCN.EMS.Common.Util;
 using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace EMS
@@ -39,6 +40,7 @@ namespace EMS
             InitializeComponent();
             //初始化log配置文件
             XmlConfigurator.Configure();
+            IniFileHelper.InitializeGlobalIniConfiguration();
 
             EnergyManagementSystem.Initialization(new EnergyManagementSystem());
 

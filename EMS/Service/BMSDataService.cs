@@ -111,7 +111,7 @@ namespace EMS.Service
                     Models.TryAdd(CurrentModel.Clone() as BatteryTotalModel);
                     if (IsSaveDaq)
                     {
-                        SaveData(CurrentModel);
+                        SaveModels.TryAdd(CurrentModel.Clone() as BatteryTotalModel);
                     }
                 }
                 catch (Exception ex)
@@ -122,68 +122,78 @@ namespace EMS.Service
             }
         }
 
-        private void SaveData(BatteryTotalModel total)
+        protected override void SaveData(BatteryTotalModel[] totallist)
         {
-            DateTime date = DateTime.Now;
-            TotalBatteryInfoModel TotalModel = new TotalBatteryInfoModel();
-            TotalModel.HappenTime = date;
-            TotalModel.BCMUID = ID;
-            TotalModel.Voltage = total.TotalVoltage;
-            TotalModel.Current = total.TotalCurrent;
-            TotalModel.SOC = total.TotalSOC;
-            TotalModel.SOH = total.TotalSOH;
-            TotalModel.AverageTemperature = total.AverageTemperature;
-            TotalModel.MinVoltage = total.MinVoltage;
-            TotalModel.MinVoltageIndex = total.MinVoltageIndex;
-            TotalModel.MaxVoltage = total.MaxVoltage;
-            TotalModel.MaxVoltageIndex = total.MaxVoltageIndex;
-            TotalModel.MinTemperature = total.MinTemperature;
-            TotalModel.MinTemperatureIndex = total.MinTemperatureIndex;
-            TotalModel.MaxTemperature = total.MaxTemperature;
-            TotalModel.MaxTemperatureIndex = total.MaxTemperatureIndex;
-            TotalModel.BCMUState = total.StateBCMU;
-            TotalModel.FaultState1 = total.FaultStateBCMUTotalFlag;
-            TotalModel.FaultState2 = total.FaultStateBCMUFlag1;
-            TotalModel.FaultState3 = total.FaultStateBCMUFlag2;
-            TotalModel.AlarmState1 = total.AlarmStateBCMUFlag1;
-            TotalModel.AlarmState2 = total.AlarmStateBCMUFlag2;
-            TotalModel.AlarmState3 = total.AlarmStateBCMUFlag3;
-            TotalModel.BalanceChannel = total.BalanceChannel;
-            TotalBatteryInfoManage TotalManage = new TotalBatteryInfoManage();
-            TotalManage.Insert(TotalModel);
-
-            for (int i = 0; i < total.Series.Count; i++)
+            List<TotalBatteryInfoModel> TotalDBModels = new List<TotalBatteryInfoModel>();
+            List<SeriesBatteryInfoModel> SeriesDBModels = new List<SeriesBatteryInfoModel>();
+            for (int l = 0; l < totallist.Length; l++)
             {
-                SeriesBatteryInfoModel SeriesModel = new SeriesBatteryInfoModel();
-                SeriesModel.BCMUID = ID;
-                SeriesModel.BMUID = total.Series[i].BMUID;
-                SeriesModel.MinVoltage = total.Series[i].MinVoltage;
-                SeriesModel.MinVoltageIndex = total.Series[i].MinVoltageIndex;
-                SeriesModel.MaxVoltage = total.Series[i].MaxVoltage;
-                SeriesModel.MaxVoltageIndex = total.Series[i].MaxVoltageIndex;
-                SeriesModel.MinTemperature = total.Series[i].MinTemperature;
-                SeriesModel.MinTemperatureIndex = total.Series[i].MinTemperatureIndex;
-                SeriesModel.MaxTemperature = total.Series[i].MaxTemperature;
-                SeriesModel.MaxTemperatureIndex = total.Series[i].MaxTemperatureIndex;
-                SeriesModel.VolFaultState = total.Series[i].VolFaultInfo;
-                SeriesModel.Temp1FaultState = total.Series[i].TempFaultInfo1;
-                SeriesModel.Temp2FaultState = total.Series[i].TempFaultInfo2;
-                SeriesModel.BalanceFaultState = total.Series[i].BalanceFaultFaultInfo;
-                
-                SeriesModel.ChargeCapacitySum = total.Series[i].ChargeCapacitySum;
-                SeriesModel.HappenTime = date;
-                for (int j = 0; j < total.Series[i].Batteries.Count; j++)
+                var total = totallist[l];
+                TotalBatteryInfoModel TotalModel = new TotalBatteryInfoModel();
+                TotalModel.HappenTime = total.CurrentTime;
+                TotalModel.BCMUID = ID;
+                TotalModel.Voltage = total.TotalVoltage;
+                TotalModel.Current = total.TotalCurrent;
+                TotalModel.SOC = total.TotalSOC;
+                TotalModel.SOH = total.TotalSOH;
+                TotalModel.AverageTemperature = total.AverageTemperature;
+                TotalModel.MinVoltage = total.MinVoltage;
+                TotalModel.MinVoltageIndex = total.MinVoltageIndex;
+                TotalModel.MaxVoltage = total.MaxVoltage;
+                TotalModel.MaxVoltageIndex = total.MaxVoltageIndex;
+                TotalModel.MinTemperature = total.MinTemperature;
+                TotalModel.MinTemperatureIndex = total.MinTemperatureIndex;
+                TotalModel.MaxTemperature = total.MaxTemperature;
+                TotalModel.MaxTemperatureIndex = total.MaxTemperatureIndex;
+                TotalModel.BCMUState = total.StateBCMU;
+                TotalModel.FaultState1 = total.FaultStateBCMUTotalFlag;
+                TotalModel.FaultState2 = total.FaultStateBCMUFlag1;
+                TotalModel.FaultState3 = total.FaultStateBCMUFlag2;
+                TotalModel.AlarmState1 = total.AlarmStateBCMUFlag1;
+                TotalModel.AlarmState2 = total.AlarmStateBCMUFlag2;
+                TotalModel.AlarmState3 = total.AlarmStateBCMUFlag3;
+                TotalModel.BalanceChannel = total.BalanceChannel;
+
+                for (int i = 0; i < total.Series.Count; i++)
                 {
-                    typeof(SeriesBatteryInfoModel).GetProperty("Voltage" + j).SetValue(SeriesModel, total.Series[i].Batteries[j].Voltage);
-                    typeof(SeriesBatteryInfoModel).GetProperty("Capacity" + j).SetValue(SeriesModel, total.Series[i].Batteries[j].Capacity);
-                    typeof(SeriesBatteryInfoModel).GetProperty("SOC" + j).SetValue(SeriesModel, total.Series[i].Batteries[j].SOC);
-                    typeof(SeriesBatteryInfoModel).GetProperty("Resistance" + j).SetValue(SeriesModel, total.Series[i].Batteries[j].Resistance);
-                    typeof(SeriesBatteryInfoModel).GetProperty("Temperature" + (j * 2)).SetValue(SeriesModel, total.Series[i].Batteries[j].Temperature1);
-                    typeof(SeriesBatteryInfoModel).GetProperty("Temperature" + (j * 2 + 1)).SetValue(SeriesModel, total.Series[i].Batteries[j].Temperature2);
+                    SeriesBatteryInfoModel SeriesModel = new SeriesBatteryInfoModel();
+                    SeriesModel.BCMUID = ID;
+                    SeriesModel.BMUID = total.Series[i].BMUID;
+                    SeriesModel.MinVoltage = total.Series[i].MinVoltage;
+                    SeriesModel.MinVoltageIndex = total.Series[i].MinVoltageIndex;
+                    SeriesModel.MaxVoltage = total.Series[i].MaxVoltage;
+                    SeriesModel.MaxVoltageIndex = total.Series[i].MaxVoltageIndex;
+                    SeriesModel.MinTemperature = total.Series[i].MinTemperature;
+                    SeriesModel.MinTemperatureIndex = total.Series[i].MinTemperatureIndex;
+                    SeriesModel.MaxTemperature = total.Series[i].MaxTemperature;
+                    SeriesModel.MaxTemperatureIndex = total.Series[i].MaxTemperatureIndex;
+                    SeriesModel.VolFaultState = total.Series[i].VolFaultInfo;
+                    SeriesModel.Temp1FaultState = total.Series[i].TempFaultInfo1;
+                    SeriesModel.Temp2FaultState = total.Series[i].TempFaultInfo2;
+                    SeriesModel.BalanceFaultState = total.Series[i].BalanceFaultFaultInfo;
+
+                    SeriesModel.ChargeCapacitySum = total.Series[i].ChargeCapacitySum;
+                    SeriesModel.HappenTime = total.CurrentTime;
+                    for (int j = 0; j < total.Series[i].Batteries.Count; j++)
+                    {
+                        typeof(SeriesBatteryInfoModel).GetProperty("Voltage" + j).SetValue(SeriesModel, total.Series[i].Batteries[j].Voltage);
+                        typeof(SeriesBatteryInfoModel).GetProperty("Capacity" + j).SetValue(SeriesModel, total.Series[i].Batteries[j].Capacity);
+                        typeof(SeriesBatteryInfoModel).GetProperty("SOC" + j).SetValue(SeriesModel, total.Series[i].Batteries[j].SOC);
+                        typeof(SeriesBatteryInfoModel).GetProperty("Resistance" + j).SetValue(SeriesModel, total.Series[i].Batteries[j].Resistance);
+                        typeof(SeriesBatteryInfoModel).GetProperty("Temperature" + (j * 2)).SetValue(SeriesModel, total.Series[i].Batteries[j].Temperature1);
+                        typeof(SeriesBatteryInfoModel).GetProperty("Temperature" + (j * 2 + 1)).SetValue(SeriesModel, total.Series[i].Batteries[j].Temperature2);
+                    }
+                    SeriesDBModels.Add(SeriesModel);
                 }
-                SeriesBatteryInfoManage SeriesManage = new SeriesBatteryInfoManage();
-                SeriesManage.Insert(SeriesModel);
+
+                TotalDBModels.Add(TotalModel);
             }
+
+            TotalBatteryInfoManage TotalManage = new TotalBatteryInfoManage();
+            TotalManage.Insert(TotalDBModels.ToArray());
+
+            SeriesBatteryInfoManage SeriesManage = new SeriesBatteryInfoManage();
+            SeriesManage.Insert(SeriesDBModels.ToArray());
         }
 
         /// <summary>
@@ -349,6 +359,7 @@ namespace EMS.Service
         private void DataDecode_BCMU(byte[] obj, byte[] obj2, ref BatteryTotalModel total)
         {
             total.BCMUID = ID;
+            total.CurrentTime = DateTime.Now;
             total.TotalVoltage = BitConverter.ToInt16(obj, 0) * 0.1;
             total.TotalCurrent = BitConverter.ToInt16(obj, 2) * 0.1;
             total.TotalSOC = BitConverter.ToInt16(obj, 4) * 0.1;
@@ -494,22 +505,15 @@ namespace EMS.Service
             MessageBox.Show("失败");
         }
 
-        public void SelectBalancedMode(string SelectedBalanceMode)
+        public void SendBalanceMode(ushort value)
         {
-            if (SelectedBalanceMode == "自动模式")
-            {
-                WriteFunc(40102, 0xBC11);
-            }
-            else if (SelectedBalanceMode == "远程模式")
-            {
-                WriteFunc(40102, 0xBC22);
-            }
-            else
-            {
-                MessageBox.Show("请选择模式");
-            }
+            WriteFunc(548,value);
         }
 
+        public void SendBalanceChannel(ushort value)
+        {
+            WriteFunc(549, value);
+        }
         public void FWUpdate()
         {
             WriteFunc(40104, 0xBBAA);

@@ -1,7 +1,6 @@
 ﻿using EMS.ViewModel.NewEMSViewModel;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +16,18 @@ using System.Windows.Shapes;
 
 namespace EMS.View.NewEMSView
 {
+    public class Person
+    {
+        public string faultNumber { get; set; }
+        public string faultDevice { get; set; }
+
+        public string faultId { get; set; }
+        public string faultModule { get; set; }
+        public string faultName { get; set; }
+        public string faultGrade { get; set; }
+        public string faultTime { get; set; }
+    }
+
     /// <summary>
     /// Page1.xaml 的交互逻辑
     /// </summary>

@@ -86,5 +86,7 @@ namespace EMS.Storage.DB
         /// </summary>
         public DbSet<SmartElectricityMeterInfoModel> SmartElectricityMeterInfos { get; set; }
 
+        public DbSet<ElectricMeterInfoModel> ElectricMeterInfos { get; set;}
+
     }
 }
