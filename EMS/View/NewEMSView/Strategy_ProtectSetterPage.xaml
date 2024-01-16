@@ -151,7 +151,8 @@
                                     Background="#1890FF"
                                     BorderThickness="0,0,0,0"
                                     Margin="10 0 0 0"
-                                    Command="{Binding SyncInfo1Command}" />
+                                    Command="{Binding SyncInfo1Command}"/>
+                            
                         </StackPanel>
                         <StackPanel Grid.Row="2"
                                     Grid.Column="1"
@@ -777,9 +778,20 @@
                                     Grid.Column="4"
                                     Style="{StaticResource ContentPanel}"
                                     HorizontalAlignment="Right">
-                            <Button Content="读取数据库信息"
-                                    Width="120"
-                                    Height="35"
+                            <Button Content="同步数据库"
+                                    FontSize="11"
+                                    Width="80"
+                                    Height="25"
+                                    Foreground="white"
+                                    FontWeight="Bold"
+                                    Background="#1890FF"
+                                    BorderThickness="0,0,0,0"
+                                    Margin="10 0 10 0"
+                                    Command="{Binding SyncInfoDBCommand}"/>
+                            <Button Content="读取数据库"
+                                    FontSize="11"
+                                    Width="80"
+                                    Height="25"
                                     Foreground="white"
                                     FontWeight="Bold"
                                     Background="#1890FF"

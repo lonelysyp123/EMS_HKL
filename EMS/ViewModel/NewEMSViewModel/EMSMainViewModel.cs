@@ -19,7 +19,6 @@ namespace EMS.ViewModel.NewEMSViewModel
         public Analysis_BMSPageModel Analysis_BMSPageModel { get; private set;}
         public Analysis_PCSPageModel Analysis_PCSPageModel { get; private set;}
         public Analysis_SmartMeterPageModel Analysis_SmartMeterPageModel { get; private set; }
-        public FaultLogPageModel FaultLogPageModel {  get; private set; }
         public Strategy_AnalysisPageModel Strategy_AnalysisPageModel {  get; private set; }
         public Strategy_ProtectSetterPageModel Strategy_ProtectSetterPageModel {  get; private set; }
         public Strategy_SetterPageModel Strategy_SetterPageModel { get; private set; }
@@ -29,6 +28,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         public BMSDataService[] bmsServices { get; private set; }
         public SmartMeterDataService smService { get; private set; }
         public PCSDataService pcsService { get; private set; }
+        public SmartElectricityMeterDataService semService { get; private set; }
 
         private static int BCMUCount = 6;
         public EMSMainViewModel()
@@ -51,8 +51,12 @@ namespace EMS.ViewModel.NewEMSViewModel
             EnergyManagementSystem.GlobalInstance.PcsManager.SetPCS(pcsService);
 
             smService = new SmartMeterDataService("1");
-            //smServices[i].RegisterState();    // 状态回调
-            //smServices[i].RegisterState();    // 数据回调
+            smService.RegisterState(DataCallBack_SM);
+            smService.RegisterState(StateCallBack_SM);
+
+            //semService = new SmartElectricityMeterDataService();
+            //semService.RegisterState(DataCallBack_SEM);
+            //semService.RegisterState(StateCallBack_SEM);
 
             HomePageModel = new HomePageModel();
             Monitor_BMSPageModel = new Monitor_BMSPageModel();
@@ -61,7 +65,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             Analysis_BMSPageModel = new Analysis_BMSPageModel();
             Analysis_PCSPageModel = new Analysis_PCSPageModel();
             Analysis_SmartMeterPageModel = new Analysis_SmartMeterPageModel();
-            FaultLogPageModel = new FaultLogPageModel();
             Strategy_AnalysisPageModel = new Strategy_AnalysisPageModel();
             Strategy_ProtectSetterPageModel = new Strategy_ProtectSetterPageModel();
             Strategy_SetterPageModel = new Strategy_SetterPageModel();
@@ -70,11 +73,25 @@ namespace EMS.ViewModel.NewEMSViewModel
             System_MqttSetterPageModel = new System_MqttSetterPageModel();
         }
 
+        private void StateCallBack_SM(object sender, bool isConnected, bool isDaqData, bool isSaveData)
+        {
+            HomePageModel.DataDisPlaySM(isConnected);
+        }
+
+        private void DataCallBack_SM(object sender, object model)
+        {
+            Monitor_SmartMeterPageModel.DataRefresh(model as SmartMeterModel);
+        }
+
         private void DataCallBack_BMS(object sender, object model)
         {
             var service = sender as BMSDataService;
             int index = -1;
-            if (service.ID == "1") index = 1;
+            if (service.ID == "1")
+            {
+                index = 1; 
+                HomePageModel.BMSDataRefreshFromAPI();
+            }
             else if (service.ID == "2") index = 2;
             else if (service.ID == "3") index = 3;
             else if (service.ID == "4") index = 4;
@@ -94,17 +111,31 @@ namespace EMS.ViewModel.NewEMSViewModel
             else if (service.ID == "4") index = 4;
             else if (service.ID == "5") index = 5;
             else if (service.ID == "6") index = 6;
-
+            HomePageModel.StateDisPlayCloud();
+            HomePageModel.StateDisPlayFault();
             Monitor_BMSPageModel.bmuViewModels[index - 1].StateDistribution(isConnected, isDaqData, isSaveData);
         }
 
         private void DataCallBack_PCS(object sender, object model)
         {
+            HomePageModel.DataDisPlayPCS(model as PCSModel);
             Monitor_PCSPageModel.PCSDataDistribution(model as PCSModel);
         }
 
         private void StateCallBack_PCS(object sender, bool isConnected, bool isDaqData, bool isSaveData)
         {
+            HomePageModel.StateDisPlayPCS(isConnected);
+            Monitor_PCSPageModel.PCSStateDistribution(isConnected, isDaqData, isSaveData);
+        }
+
+        private void DataCallBack_SEM(object sender, object model)
+        {
+            HomePageModel.DataRefresh_SEM(model as SmartElectricityMeterModel);
+        }
+
+        private void StateCallBack_SEM(object sender, bool isConnected, bool isDaqData, bool isSaveData)
+        {
+            HomePageModel.StateDisPlayPCS(isConnected);
             Monitor_PCSPageModel.PCSStateDistribution(isConnected, isDaqData, isSaveData);
         }
     }

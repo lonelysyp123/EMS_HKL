@@ -90,10 +90,10 @@ namespace EMS.Service
                     byte[] SerialNumber = ReadFunc(53579, 15);
                     CurrentModel = DataDecode(dcState, pcsData, Temp, DCBranch1INFO, SerialNumber);
                     OnChangeData(this, CurrentModel.Clone());
-                    Models.Add(CurrentModel.Clone() as PCSModel);
+                    Models.TryAdd(CurrentModel.Clone() as PCSModel);
                     if (IsSaveDaq)
                     {
-                        SaveData(CurrentModel);
+                        SaveModels.TryAdd(CurrentModel.Clone() as PCSModel);
                     }
                 }
                 catch (Exception ex)
@@ -104,22 +104,29 @@ namespace EMS.Service
             }
         }
 
-        private void SaveData(PCSModel model)
+        protected override void SaveData(PCSModel[] models)
         {
-            PCSInfoModel pcsInfoModel = new PCSInfoModel();
-            pcsInfoModel.ID = int.Parse(ID);
-            pcsInfoModel.DCPower = model.DcBranch1DCPower;
-            pcsInfoModel.DCVol = model.DcBranch1DCVol;
-            pcsInfoModel.DCCurrent = model.DcBranch1DCCur;
-            //pcsInfoModel.TotalCharCap = model.;
-            pcsInfoModel.BusVol = model.DcBranch1BUSVol;
-            pcsInfoModel.ModuleTemp = model.ModuleTemperature;
-            pcsInfoModel.EnvTemp = model.AmbientTemperature;
-            //pcsInfoModel.PCSState = ;
-            //pcsInfoModel.SideState = ;
-            pcsInfoModel.HappenTime = DateTime.Now;
+            List<PCSInfoModel> pcsInfoModels = new List<PCSInfoModel>();
+            for (int l = 0; l < models.Length; l++)
+            {
+                var model = models[l];
+                PCSInfoModel pcsInfoModel = new PCSInfoModel();
+                pcsInfoModel.ID = int.Parse(ID);
+                pcsInfoModel.DCPower = model.DcBranch1DCPower;
+                pcsInfoModel.DCVol = model.DcBranch1DCVol;
+                pcsInfoModel.DCCurrent = model.DcBranch1DCCur;
+                //pcsInfoModel.TotalCharCap = model.;
+                pcsInfoModel.BusVol = model.DcBranch1BUSVol;
+                pcsInfoModel.ModuleTemp = model.ModuleTemperature;
+                pcsInfoModel.EnvTemp = model.AmbientTemperature;
+                //pcsInfoModel.PCSState = ;
+                //pcsInfoModel.SideState = ;
+                pcsInfoModel.HappenTime = DateTime.Now;
+                pcsInfoModels.Add(pcsInfoModel);
+            }
+
             PCSInfoManage pcsInfoManage = new PCSInfoManage();
-            pcsInfoManage.Insert(pcsInfoModel);
+            pcsInfoManage.Insert(pcsInfoModels.ToArray());
         }
 
         private PCSModel DataDecode(byte[] dcstate, byte[] pcsdata, byte[] temp, byte[] dcbranch1info, byte[] serialnumber)
@@ -206,7 +213,7 @@ namespace EMS.Service
             int count = 0;
             while (true)
             {
-                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(reconnectInterval))
+                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(ReconnectInterval))
                 {
                     _master = ModbusIpMaster.CreateIp(_client);
                     return true;
@@ -214,7 +221,7 @@ namespace EMS.Service
                 else
                 {
                     count++;
-                    if (count > maxReconnectTimes)
+                    if (count > MaxReconnectTimes)
                     {
                         IsCommunicationProtectState = true;
                         IsConnected = false;
@@ -231,8 +238,8 @@ namespace EMS.Service
         {
             while (!IsConnected)
             {
-                Thread.Sleep(reconnectIntervalLong);
-                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(reconnectInterval))
+                Thread.Sleep(ReconnectIntervalLong);
+                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(ReconnectInterval))
                 {
                     _master = ModbusIpMaster.CreateIp(_client);
                     IsConnected = true;
@@ -420,8 +427,8 @@ namespace EMS.Service
                     valueAddress = PcsCommandAdressEnum.PowerValueSet;
                     break;
             }
-            //WriteFunc(PcsId, modeAddress, modeValue);
-            //WriteFunc(PcsId, valueAddress, controlValue);
+            WriteFunc(PCSId, (ushort)modeAddress, (ushort)modeValue);
+            WriteFunc(PCSId, (ushort)valueAddress, (ushort)controlValue);
         }
     }
     public enum PcsCommandAdressEnum

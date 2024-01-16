@@ -1,6 +1,7 @@
 ﻿using EMS.Model;
 using EMS.Service;
 using EMS.ViewModel;
+using MQTTnet.Diagnostics;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -18,8 +19,20 @@ namespace EMS.Api
     {
         public static BatteryTotalModel GetNextBMSData(string bcmuid)
         {
-            var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == bcmuid);
-            return item.GetCurrentData();
+            if (EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.Count > 0)
+            {
+                var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == bcmuid);
+                if (item != null)
+                {
+                    return item.GetCurrentData();
+                }
+            }
+            return null;
+        }
+
+        public static BMSDataService[] GetDevServices()
+        {
+            return EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToArray();
         }
 
         /// <summary>
@@ -77,7 +90,6 @@ namespace EMS.Api
 
         public static BatteryTotalModel[] GetNextBMSData()
         {
-            DateTime dateTime = DateTime.Now;
             List<BMSDataService> services = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices;
             List<BatteryTotalModel> models = new List<BatteryTotalModel>();
             for (int i = 0; i < services.Count; i++)
@@ -85,7 +97,6 @@ namespace EMS.Api
                 var item = services[i].GetCurrentData();
                 if (item != null)
                 {
-                    item.CurrentTime = dateTime;
                     models.Add(item);
                 }
             }

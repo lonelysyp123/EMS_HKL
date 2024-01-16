@@ -100,6 +100,26 @@ namespace EMS.Storage.DB.DBManage
             return true;
         }
 
+        public bool Insert(SeriesBatteryInfoModel[] entities)
+        {
+            try
+            {
+                using (var db = new ORMContext())
+                {
+                    for (int i = 0; i < entities.Length; i++)
+                    {
+                        var result = db.SeriesBatteryModelInfos.Add(entities[i]);
+                    }
+                    db.SaveChanges();
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
         public bool Update(SeriesBatteryInfoModel entity)
         {
             try

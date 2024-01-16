@@ -120,10 +120,10 @@ namespace EMS.Service
 
                     CurrentModel = model;
                     OnChangeData(this, CurrentModel.Clone());
-                    Models.Add(CurrentModel.Clone() as SmartMeterModel);
+                    Models.TryAdd(CurrentModel.Clone() as SmartMeterModel);
                     if (IsSaveDaq)
                     {
-                        SaveData(CurrentModel);
+                        SaveModels.TryAdd(CurrentModel.Clone() as SmartMeterModel);
                     }
                 }
                 catch (Exception)
@@ -133,9 +133,19 @@ namespace EMS.Service
             }
         }
 
-        private void SaveData(SmartMeterModel model)
+        protected override void SaveData(SmartMeterModel[] models)
         {
-            // 电表存储相关操作
+            //List<SMInfoModel> InfoModels = new List<SMInfoModel>();
+            //for (int l = 0; l < models.Length; l++)
+            //{
+            //    var model = models[l];
+            //    SMInfoModel InfoModel = new SMInfoModel();
+
+            //    InfoModels.Add(InfoModel);
+            //}
+
+            //SMInfoManage InfoManage = new SMInfoManage();
+            //InfoManage.Insert(InfoModels.ToArray());
         }
 
         private byte[] ReadDataForCmd(byte[] Request, int num)
@@ -177,7 +187,7 @@ namespace EMS.Service
                 catch (Exception)
                 {
                     count++;
-                    if (count > maxReconnectTimes)
+                    if (count > MaxReconnectTimes)
                     {
                         IsCommunicationProtectState = true;
                         IsConnected = false;
@@ -194,7 +204,7 @@ namespace EMS.Service
         {
             while (!IsConnected)
             {
-                Thread.Sleep(reconnectIntervalLong);
+                Thread.Sleep(ReconnectIntervalLong);
                 try
                 {
                     SerialPortInstance.Open();

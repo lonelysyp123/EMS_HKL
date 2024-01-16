@@ -35,6 +35,9 @@ namespace EMS.Storage.DB.Models
         public double TempDischarUp1 { get; set; }
         public double TempDischarUp2 { get; set; }
         public double TempDischarUp3 { get; set; }
+        public double TempDischarLow1 {  get; set; }
+        public double TempDischarLow2 {  get; set; }
+        public double TempDischarLow3 { get; set; }
         public double CurChar1 {  get; set; }
         public double CurChar2 {  get; set; }
         public double CurChar3 {  get; set; }

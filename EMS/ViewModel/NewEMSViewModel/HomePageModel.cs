@@ -1,13 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using EMS.Api;
+using EMS.Common;
 using EMS.Model;
+using EMS.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using TNCN.EMS.Api;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
@@ -349,7 +351,14 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public HomePageModel()
         {
-            
+            InstalledPower = 400.ToString();
+            EnergyStorageCapacity = 4.ToString();
+        }
+
+        public void BMSDataRefreshFromAPI()
+        {
+            DataDisPlayBMS(BmsApi.GetNextBMSData().ToList());
+            StateDisPlayBMS(BmsApi.GetDevServices().ToList());
         }
 
      
@@ -358,69 +367,149 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// BMS数据展示
         /// </summary>
         /// <param name="model"></param>
-        public void DataDisPlayBMS(BatteryTotalModel model)
+        public void DataDisPlayBMS(List<BatteryTotalModel> models)
         {
-            InstalledPower = 0.ToString();
-            EnergyStorageCapacity = 0.ToString();
-            TotalSOC = 0.ToString();
-            TotalSOH = 0.ToString();
+            List<double> SingleSOC = new List<double>();
+            List<double> SingleSOH = new List<double>();
+            foreach (BatteryTotalModel model in models)
+            {
+                SingleSOC.Add(model.TotalSOC);
+                SingleSOH.Add(model.TotalSOH);
+            }
+            TotalSOC = SingleSOC.Average().ToString();
+            TotalSOH = SingleSOH.Average().ToString();
         }
 
-        public void StateDisPlayBMS(bool isconnected)
+        public void StateDisPlayBMS(List<BMSDataService> bMSDataService)
         {
-            
+            bool bmsstateflag = true;
+            foreach (BMSDataService service in bMSDataService)
+            {
+                if (service.IsConnected == false)
+                {
+                    bmsstateflag = false;
+                }
+
+            }
+            if (!bmsstateflag)
+            {
+                StateFill_BMSRun = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+            }
+            else
+            {
+                StateFill_BMSRun = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
+            }
         }
 
         /// <summary>
         /// PCS数据展示
         /// </summary>
         /// <param name="model"></param>
-        public void DataDisPlayPCS(PCSMonitorModel model, bool isconnected)
+        public void DataDisPlayPCS(PCSModel model)
         {
             DcBranch1DCVol = model.DcBranch1DCVol.ToString();
             DcBranch1DCCur = model.DcBranch1DCCur.ToString();
             DcBranch1DCPower = model.DcBranch1DCPower.ToString();
-            DcBranch1Char = model.DcBranch1Char.ToString();
-            DcBranch1DisChar = model.DcBranch1DisChar.ToString();
+            //FaultState = model.
+        }
+
+        /// <summary>
+        /// PCS状态展示
+        /// </summary>
+        /// <param name="bMSDataService"></param>
+        public void StateDisPlayPCS(bool isconnected)
+        {
+            if (isconnected)
+            {
+                StateFill_PCSRun = new SolidColorBrush(BCMUColors.IsConnect_T);
+                StartStopState = new SolidColorBrush(BCMUColors.IsConnect_T);
+            }
+            else
+            {
+                StateFill_PCSRun = new SolidColorBrush(BCMUColors.IsConnect_F);
+                StartStopState = new SolidColorBrush(BCMUColors.IsConnect_F);
+            }
         }
 
         /// <summary>
         /// 电表数据展示
         /// </summary>
         /// <param name="model"></param>
-        public void DataDisPlaySM(SmartMeterModel model, bool isconnected)
+        public void DataDisPlaySM(bool isconnected)
         {
+            if (isconnected)
+            {
+                StateFill_AmmeterRun = new SolidColorBrush(BCMUColors.IsConnect_T);
+            }
+            else
+            {
+                StateFill_AmmeterRun = new SolidColorBrush(BCMUColors.IsConnect_F);
+            }
 
+        }
+
+        public void StateDisPlayFault()
+        {
+            // get fault state from strategy api
+            StrategyApi.GetFaultState();
+            switch (StrategyApi.GetFaultState())
+            {
+                case Common.StrategyManage.ContingencyStatusEnum.Normal:
+                    StateFill_Warn = new SolidColorBrush(LightColors.Close);
+                    StateFill_MinorFaults = new SolidColorBrush(LightColors.Close);
+                    StateFill_HeavyFaults = new SolidColorBrush(LightColors.Close);
+                    StateFill_CrisisFaults = new SolidColorBrush(LightColors.Close);
+                    break;
+                case Common.StrategyManage.ContingencyStatusEnum.Level1:
+                    StateFill_Warn = new SolidColorBrush(LightColors.Close);
+                    StateFill_MinorFaults = new SolidColorBrush(LightColors.Open_Red);
+                    StateFill_HeavyFaults = new SolidColorBrush(LightColors.Close);
+                    StateFill_CrisisFaults = new SolidColorBrush(LightColors.Close);
+                    break;
+                case Common.StrategyManage.ContingencyStatusEnum.Level2:
+                    StateFill_Warn = new SolidColorBrush(LightColors.Close);
+                    StateFill_MinorFaults = new SolidColorBrush(LightColors.Close);
+                    StateFill_HeavyFaults = new SolidColorBrush(LightColors.Open_Red);
+                    StateFill_CrisisFaults = new SolidColorBrush(LightColors.Close);
+                    break;
+                case Common.StrategyManage.ContingencyStatusEnum.Level3:
+                    StateFill_Warn = new SolidColorBrush(LightColors.Close);
+                    StateFill_MinorFaults = new SolidColorBrush(LightColors.Close);
+                    StateFill_HeavyFaults = new SolidColorBrush(LightColors.Close);
+                    StateFill_CrisisFaults = new SolidColorBrush(LightColors.Open_Red);
+                    break;
+            }
+        }
+
+        public void StateDisPlayCloud()
+        {
+            // get mqtt connected state from mqtt api
+            if (MqttClientApi.IsConnected())
+            {
+                StateFill_CloudTelecom = new SolidColorBrush(BCMUColors.IsConnect_T);
+            }
+            else
+            {
+                StateFill_CloudTelecom = new SolidColorBrush(BCMUColors.IsConnect_F);
+            }
+        }
+
+        public void DataRefresh_SEM(SmartElectricityMeterModel model)
+        {
+            ChargingCapacity = model.CurrMonthTotalActiveEnergy.ToString();
+            DischargeCapacity = model.CurrMonthTotalReverseActiveEnergy.ToString();
+            DcBranch1Char = model.TotalActiveEnergy.ToString();
+            DcBranch1DisChar = model.TotalReverseActiveEnergy.ToString();
+            CurrentPower = model.PowerValue.ToString();
+            StationPower = model.PowerValue.ToString();
         }
 
         //运行状态
         //StateFill_Normal
         //StateFill_Offline
-        //StateFill_Warn
-        //StateFill_MinorFaults
-        //StateFill_HeavyFaults
-        //StateFill_CrisisFaults
-        //StateFill_CloudTelecom
-        //StateFill_BMSRun
-        //StateFill_PCSRun
-        //StateFill_AmmeterRun
-
-        //台账信息
-        //InstalledPower
-        //EnergyStorageCapacity
-        //TotalSOC
-        //TotalSOH
-
-        //系统概况
-        //ChargingCapacity
-        //DischargeCapacity
-        //CurrentPower
-        //StationPower
 
         //状态
         //StartStopState
         //FaultState
-
-
     }
 }

@@ -22,14 +22,11 @@ namespace EMS.View.NewEMSView
     /// </summary>
     public partial class FaultLogPage : Page
     {
+        FaultLogPageModel viewmodel;
         public FaultLogPage()
         {
             InitializeComponent();
-        }
-
-        public FaultLogPage(FaultLogPageModel viewmodel)
-        {
-            InitializeComponent();
+            viewmodel = new FaultLogPageModel();
             this.DataContext = viewmodel;
         }
     }

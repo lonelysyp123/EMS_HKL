@@ -1645,6 +1645,15 @@ namespace EMS.ViewModel.NewEMSViewModel
             {
                 faultresult = false;
             }
+            if (flag1bitposition.Count == 0)
+            {
+                BMU1TotalFault = false;
+                BMU2TotalFault = false;
+                BMU3TotalFault = false;
+                BMU1ConnectLostFault = false;
+                BMU2ConnectLostFault = false;
+                BMU3ConnectLostFault = false;
+            }
             foreach (var item in flag1bitposition)
             {
                 switch (item)
@@ -1852,7 +1861,14 @@ namespace EMS.ViewModel.NewEMSViewModel
             HighConTempTotalAlarm = AlarmtLevels.NoAlarm;
             List<int> result21 = new List<int>();
             result21 = GetBitPosition(value2);
-            
+            if(result21.Count==0)
+            {
+                HighConTemp1Alarm = AlarmtLevels.NoAlarm;
+                HighConTemp2Alarm = AlarmtLevels.NoAlarm;
+                HighConTemp3Alarm = AlarmtLevels.NoAlarm;
+                HighConTemp4Alarm = AlarmtLevels.NoAlarm;
+                HighConTempTotalAlarm = AlarmtLevels.NoAlarm;
+            }
             foreach (var item in result21)
             {
                 switch (item)
@@ -1909,6 +1925,7 @@ namespace EMS.ViewModel.NewEMSViewModel
             Dictionary<int, int> result2 = new Dictionary<int, int>();
 
             Dictionary<int, int> result3 = new Dictionary<int, int>();
+
             for (int i = 8; i < 16; i += 2)
             {
                 int twoBitValue = (value2 >> i) & 0x3;
@@ -1997,6 +2014,17 @@ namespace EMS.ViewModel.NewEMSViewModel
                         }
                         break;
                 }
+            }
+            if(result3.Count == 0)
+            {
+                SOCLowAlarm = AlarmtLevels.NoAlarm;
+                SingleVolDiffAlarm = AlarmtLevels.NoAlarm;
+                DischarClusterOverCurAlarm = AlarmtLevels.NoAlarm;
+                CharClusterOverCurAlarm = AlarmtLevels.NoAlarm;
+                DischarTempUpAlarm = AlarmtLevels.NoAlarm;
+                DischarTempLowAlarm = AlarmtLevels.NoAlarm;
+                CharTempUpAlarm = AlarmtLevels.NoAlarm;
+                CharTempLowAlarm = AlarmtLevels.NoAlarm;
             }
             SOCLowAlarm = AlarmtLevels.NoAlarm;
             SingleVolDiffAlarm = AlarmtLevels.NoAlarm;
