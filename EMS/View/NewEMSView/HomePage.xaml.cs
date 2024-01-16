@@ -21,9 +21,12 @@ namespace EMS.View.NewEMSView
     /// </summary>
     public partial class HomePage : Page
     {
+        private HomePageModel vm;
         public HomePage()
         {
             InitializeComponent();
+            vm = new HomePageModel();
+            this.DataContext = vm;
         }
 
         public HomePage(HomePageModel viewmodel)

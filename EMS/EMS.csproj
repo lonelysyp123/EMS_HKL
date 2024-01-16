@@ -95,6 +95,9 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>EMS ICO.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommunityToolkit.Mvvm, Version=8.0.0.0, Culture=neutral, PublicKeyToken=4aff67a105548ee2, processorArchitecture=MSIL">
       <HintPath>..\packages\CommunityToolkit.Mvvm.8.0.0\lib\netstandard2.0\CommunityToolkit.Mvvm.dll</HintPath>
@@ -679,6 +682,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="EMS ICO.ico" />
     <Content Include="Resource\Image\Balanced.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -718,6 +722,9 @@
     <Resource Include="Resource\Image\DataControlBorder.png" />
     <Content Include="Resource\Image\Discharge.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource\Image\EMS ICO.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resource\Image\Error.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

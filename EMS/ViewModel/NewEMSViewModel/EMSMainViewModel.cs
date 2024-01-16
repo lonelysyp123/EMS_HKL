@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Management;
+using TNCN.EMS.Common.Util;
 
 namespace EMS.ViewModel.NewEMSViewModel
 {
@@ -33,7 +34,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         private static int BCMUCount = 6;
         public EMSMainViewModel()
         {
-
+            IniFileHelper.InitializeGlobalIniConfiguration();
             EnergyManagementSystem.Initialization(new EnergyManagementSystem());
             bmsServices = new BMSDataService[BCMUCount];
             for (int i = 0; i < BCMUCount; i++)

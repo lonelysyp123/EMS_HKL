@@ -66,7 +66,6 @@ namespace EMS.Model
         private object _database_manager;
         private object _cloud_manager;
         private MqttClientManager mqttClientManager;
-        private IniFileHelper _configuration;
 
         private double _chargingEfficiency;
         private double _dischargingEfficiency;
@@ -81,8 +80,6 @@ namespace EMS.Model
         public void SetDischargingEfficiency(double efficiency) { _dischargingEfficiency = efficiency; }
         public void SetInitialEnergy(double  energy) { _initialEnergy = energy; }
         public void SetEnergyCapacity(double capacity) { _energyCapacity = capacity; }
-
-        public IniFileHelper Configuration { get { return _configuration; } }
 
         private static EnergyManagementSystem _globalInstance;
 
@@ -101,13 +98,17 @@ namespace EMS.Model
         public EnergyManagementSystem()
         {
             _operationThread = null;
+            IniFileHelper.Read(IniSectionEnum.EMS, "ChargingEfficiency", out _chargingEfficiency);
+            IniFileHelper.Read(IniSectionEnum.EMS, "DischargingEfficiency", out _dischargingEfficiency);
+            IniFileHelper.Read(IniSectionEnum.EMS, "InitialEnergy", out _initialEnergy);
+            IniFileHelper.Read(IniSectionEnum.EMS, "EnergyCapacity", out _energyCapacity);
             _bms_manager = new BMSManager();
             _controller = new EmsController();
 
             _pcs_manager =new PCSManager();
             _smart_meter_manager = new SmartMeterManager();
             mqttClientManager = new MqttClientManager();
-            _configuration = new IniFileHelper("./Config/SystemConfig.ini");
+
         }
 
         public void Initialization(object _pcs_manager, object _smart_meter_manager, object _database_manager, object _cloud_manager)

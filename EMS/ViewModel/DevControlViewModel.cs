@@ -397,7 +397,7 @@ namespace EMS.Model
 
         private void SelectBalancedMode()
         {
-            DevService.SelectBalancedMode(SelectedBalanceMode);
+            
         }
 
         private void CloseChargeChannel()

@@ -344,7 +344,7 @@ namespace EMS.ViewModel.NewEMSViewModel
         #endregion
 
         #region Command
-
+     
 
 
         #endregion
@@ -360,6 +360,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             DataDisPlayBMS(BmsApi.GetNextBMSData().ToList());
             StateDisPlayBMS(BmsApi.GetDevServices().ToList());
         }
+
+     
 
         /// <summary>
         /// BMS数据展示
