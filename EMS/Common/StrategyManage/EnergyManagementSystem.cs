@@ -100,7 +100,7 @@ namespace EMS.Model
         public MqttClientManager MqttClientManager { get { return mqttClientManager; } }
         public EnergyManagementSystem()
         {
-            _operationThread = null;
+            _operationThread = null;   
             _configuration = new IniFileHelper("./Config/SystemConfig.ini");
             IniFileHelper.Read(IniSectionEnum.EMS, "ChargingEfficiency", out _chargingEfficiency);
             IniFileHelper.Read(IniSectionEnum.EMS, "DischargingEfficiency", out _dischargingEfficiency);
