@@ -500,8 +500,8 @@ namespace EMS.ViewModel.NewEMSViewModel
             DischargeCapacity = model.CurrMonthTotalReverseActiveEnergy.ToString();
             DcBranch1Char = model.TotalActiveEnergy.ToString();
             DcBranch1DisChar = model.TotalReverseActiveEnergy.ToString();
-            CurrentPower = model.PowerValue.ToString();
-            StationPower = model.PowerValue.ToString();
+            CurrentPower = model.Power.ToString();
+            StationPower = model.Power.ToString();
         }
 
         //运行状态

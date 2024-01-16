@@ -407,29 +407,8 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         #region 电表数据刷新方法
-        public void DataRefresh(SmartMeterModel model, SmartElectricityMeterModel semodel)
+        public void DataRefresh(SmartElectricityMeterModel semodel)
         {
-            /// <summary>
-            ///负荷跟踪表解析
-            /// <summary>
-            //A,B,C三相电压
-            this.Voltage_A = model.Voltage_A;
-            this.Voltage_B = model.Voltage_B;
-            this.Voltage_C = model.Voltage_C;
-            //A,B,C三相电流
-            this.Current_A = model.Electric_A;
-            this.Current_B = model.Electric_B;
-            this.Current_C = model.Electric_C;
-            //A,B,C三相和总有功功率
-            this.ActivePower_A = model.ActivePower_A;
-            this.ActivePower_B = model.ActivePower_B;
-            this.ActivePower_C = model.ActivePower_C;
-            this.ActivePower_Total = model.ActivePower_Total;
-            //A,B,C三相和总无功功率
-            this.WattlessPower_A = model.ReactivePower_A;
-            this.WattlessPower_B = model.ReactivePower_B;
-            this.WattlessPower_C = model.ReactivePower_C;
-            this.WattlessPower_Total = model.ReactivePower_Total;
             /// <summary>
             /// 电量计量表解析
             /// <summary>
@@ -464,6 +443,31 @@ namespace EMS.ViewModel.NewEMSViewModel
             this.CurrMonthPeakReverseActiveEnergy = semodel.CurrMonthPeakReverseActiveEnergy;
             this.CurrMonthFlatReverseActiveEnergy = semodel.CurrMonthFlatReverseActiveEnergy;
             this.CurrMonthValleyReverseActiveEnergy = semodel.CurrMonthValleyReverseActiveEnergy;
+        }
+
+        public void DataRefresh(SmartMeterModel model)
+        {
+            /// <summary>
+            ///负荷跟踪表解析
+            /// <summary>
+            //A,B,C三相电压
+            this.Voltage_A = model.Voltage_A;
+            this.Voltage_B = model.Voltage_B;
+            this.Voltage_C = model.Voltage_C;
+            //A,B,C三相电流
+            this.Current_A = model.Electric_A;
+            this.Current_B = model.Electric_B;
+            this.Current_C = model.Electric_C;
+            //A,B,C三相和总有功功率
+            this.ActivePower_A = model.ActivePower_A;
+            this.ActivePower_B = model.ActivePower_B;
+            this.ActivePower_C = model.ActivePower_C;
+            this.ActivePower_Total = model.ActivePower_Total;
+            //A,B,C三相和总无功功率
+            this.WattlessPower_A = model.ReactivePower_A;
+            this.WattlessPower_B = model.ReactivePower_B;
+            this.WattlessPower_C = model.ReactivePower_C;
+            this.WattlessPower_Total = model.ReactivePower_Total;
         }
         #endregion
     }
