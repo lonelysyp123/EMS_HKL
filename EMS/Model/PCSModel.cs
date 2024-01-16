@@ -128,6 +128,8 @@ namespace EMS.Model
         /// </summary>
         public ushort U2SoftCode {  get; set; }
 
+        public DateTime CurrentTime;
+
         public object Clone()
         {
             return this.MemberwiseClone();

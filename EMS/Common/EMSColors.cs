@@ -7,7 +7,6 @@ using System.Windows.Media;
 
 namespace EMS.Common
 {
-
     /// <summary>
     /// BCMU接线图
     /// </summary>

@@ -5,6 +5,7 @@ using EMS.Model;
 using EMS.Storage.DB.DBManage;
 using EMS.Storage.DB.Models;
 using Modbus.Device;
+using Newtonsoft.Json.Linq;
 using OxyPlot.Series;
 using System;
 using System.Collections.Concurrent;
@@ -19,6 +20,7 @@ using System.Web.UI.WebControls.WebParts;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Media.Animation;
+using TNCN.EMS.Common.Util;
 
 namespace EMS.Service
 {
@@ -83,8 +85,8 @@ namespace EMS.Service
                 {
                     Thread.Sleep(DaqTimeSpan * 1000 + 100);
 
-                    byte[] BCMUData = new byte[48];
-                    Array.Copy(ReadFunc(361, 24), 0, BCMUData, 0, 48);
+                    byte[] BCMUData = new byte[52];
+                    Array.Copy(ReadFunc(361, 26), 0, BCMUData, 0, 52);
                     //Array.Copy(ReadFunc(405, 1), 0, BCMUData, 48, 2);
                     byte[] BMUIDData = { 0 };
                     byte[] BMUData = new byte[720];
@@ -106,7 +108,7 @@ namespace EMS.Service
 
                     CurrentModel = DataDecode(BCMUData, BCMUStateData, BMUIDData, BMUData, BMUStateData);
                     OnChangeData(this, CurrentModel.Clone());
-                    Models.Add(CurrentModel.Clone() as BatteryTotalModel);
+                    Models.TryAdd(CurrentModel.Clone() as BatteryTotalModel);
                     if (IsSaveDaq)
                     {
                         SaveData(CurrentModel);
@@ -224,7 +226,7 @@ namespace EMS.Service
             int count = 0;
             while (true)
             {
-                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(reconnectInterval))
+                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(ReconnectInterval))
                 {
                     _master = ModbusIpMaster.CreateIp(_client);
                     return true;
@@ -232,7 +234,7 @@ namespace EMS.Service
                 else
                 {
                     count++;
-                    if (count > maxReconnectTimes)
+                    if (count > MaxReconnectTimes)
                     {
                         IsCommunicationProtectState = true;
                         IsConnected = false;
@@ -249,8 +251,8 @@ namespace EMS.Service
         {
             while (!IsConnected)
             {
-                Thread.Sleep(reconnectIntervalLong);
-                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(reconnectInterval))
+                Thread.Sleep(ReconnectIntervalLong);
+                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(ReconnectInterval))
                 {
                     _master = ModbusIpMaster.CreateIp(_client);
                     IsConnected = true;
@@ -377,7 +379,8 @@ namespace EMS.Service
             total.NomVoltage = BitConverter.ToInt16(obj, 42);
             total.BatteryCount = BitConverter.ToInt16(obj, 44);
             total.BatteryCycles = BitConverter.ToInt16(obj, 46);
-            total.BalanceChannel = 0;
+            total.BalanceChannel = BitConverter.ToInt16(obj, 48);
+            //心跳帧未解析
             total.FaultStateBCMUTotalFlag = BitConverter.ToInt16(obj2, 0);
             total.FaultStateBCMUFlag1 = BitConverter.ToInt16(obj2, 2);
             total.FaultStateBCMUFlag2 = BitConverter.ToInt16(obj2, 4);
@@ -579,8 +582,14 @@ namespace EMS.Service
             }
             catch (Exception ex)
             {
-                LogUtils.Error(ex.ToString());
-                throw ex;
+                LogUtils.Warn(DevType + " ID:" + ID + "写入数据失败", ex);
+                if (!_client.Connected && !IsCommunicationProtectState)
+                {
+                    if (CommunicationCheck())
+                    {
+                        WriteFunc(address, values);
+                    }
+                }
             }
         }
 

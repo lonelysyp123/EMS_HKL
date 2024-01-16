@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TNCN.EMS.Common.Util;
 
 namespace EMS.Service
 {
@@ -53,10 +54,10 @@ namespace EMS.Service
             }
         }
 
-        protected int reconnectInterval = 150; // ms
-        protected int maxReconnectTimes = 3;
-        protected int DaqTimeSpan = 1;
-        protected int reconnectIntervalLong = 60 * 1000 * 5; // ms
+        protected int ReconnectInterval;
+        protected int MaxReconnectTimes;
+        protected int DaqTimeSpan;
+        protected int ReconnectIntervalLong;
         protected string DevType;
 
         protected Action<object, bool, bool, bool> OnChangeState;
@@ -73,6 +74,15 @@ namespace EMS.Service
             ID = id;
             Models = new BlockingCollection<TModel>(new ConcurrentQueue<TModel>(), 300);
             StartDataService();
+            InitSystemConfig();
+        }
+
+        protected virtual void InitSystemConfig()
+        {
+            IniFileHelper.Read(IniSectionEnum.EMS, "ReconnectInterval", out int ReconnectInterval);
+            IniFileHelper.Read(IniSectionEnum.EMS, "MaxReconnectTimes", out int MaxReconnectTimes);
+            IniFileHelper.Read(IniSectionEnum.EMS, "DaqTimeSpan", out int DaqTimeSpan);
+            IniFileHelper.Read(IniSectionEnum.EMS, "ReconnectIntervalLong", out int ReconnectIntervalLong);
         }
 
         public void StartDaqData()
