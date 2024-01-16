@@ -12,9 +12,9 @@ namespace EMS.Model
         public int Voltage_A { get; set; }
         public int Voltage_B { get; set; }
         public int Voltage_C { get; set; }
-        public int Electric_A {  get; set; }
-        public int Electric_B {  get; set; }
-        public int Electric_C {  get; set; }
+        public int Current_A {  get; set; }
+        public int Current_B {  get; set; }
+        public int Current_C {  get; set; }
         public int ActivePower_A {  get; set; }
         public int ActivePower_B {  get; set; }
         public int ActivePower_C {  get; set; }
