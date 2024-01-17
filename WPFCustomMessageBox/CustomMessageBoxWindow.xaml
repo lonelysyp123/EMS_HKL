@@ -5,54 +5,185 @@
         WindowStartupLocation="CenterScreen"
         WindowStyle="SingleBorderWindow"
         Icon="blankicon.ico"
-        ShowInTaskbar="False" Topmost="True"
-        ResizeMode="NoResize" SizeToContent="WidthAndHeight"
-        TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="ClearType" UseLayoutRounding="True"
-        Title="" MinHeight="155" MaxWidth="470" MinWidth="154">
+        ShowInTaskbar="False"
+        Topmost="True"
+        ResizeMode="NoResize"
+        SizeToContent="WidthAndHeight"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="ClearType"
+        UseLayoutRounding="True"
+        Title=""
+        MinHeight="155"
+        MaxWidth="470"
+        MinWidth="154">
     <!-- todo: The TextOptions properties above fix a minor blurry image issue, but are only compatible with >= .NET 4.0 -->
+    <Window.Resources>
+        <!--button公共样式-->
+        <Style x:Key="CommonButtonStyle"
+               TargetType="Button">
+            <Setter Property="MinWidth"
+                    Value="88" />
+            <Setter Property="MaxWidth"
+                    Value="160" />
+            <Setter Property="Height"
+                    Value="26" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Right" />
+            <Setter Property="BorderBrush"
+                    Value="Transparent" />
+        </Style>
+        <!--yes/ok样式-->
+        <Style x:Key="YesStyle"
+               BasedOn="{StaticResource CommonButtonStyle}"
+               TargetType="Button">
+            <Setter Property="Background"
+                    Value="#1890FF" />
+            <Setter Property="Margin"
+                    Value="35,0,5,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="#62B4FF" />
+                                <Setter Property="Foreground"
+                                        Value="White" />
+                                <Setter Property="FontWeight"
+                                        Value="Bold" />
+                                <Setter Property="BorderBrush"
+                                        Value="Transparent" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--no/cancel样式-->
+        <Style x:Key="NoStyle"
+               BasedOn="{StaticResource CommonButtonStyle}"
+               TargetType="Button">
+            <Setter Property="Background"
+                    Value="#DCDFE6" />
+            <Setter Property="Margin"
+                    Value="5,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="#E5E8EA" />
+                                <Setter Property="Foreground"
+                                        Value="Black" />
+                                <Setter Property="FontWeight"
+                                        Value="Bold" />
+                                <Setter Property="BorderBrush"
+                                        Value="Transparent" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Background="White" MinHeight="69">
+        <Grid Grid.Row="0"
+              Background="White"
+              MinHeight="69">
             <DockPanel>
-                <Image Name="Image_MessageBox" Width="32" Height="32" HorizontalAlignment="Left" DockPanel.Dock="Left" Margin="30,20,0,0" Visibility="Collapsed" VerticalAlignment="Top"/>
-                <TextBlock Name="TextBlock_Message" TextWrapping="Wrap" MaxWidth="500" Width="Auto"
-                       VerticalAlignment="Center" Margin="12,11,41,15" />
+                <Image Name="Image_MessageBox"
+                       Width="32"
+                       Height="32"
+                       HorizontalAlignment="Left"
+                       DockPanel.Dock="Left"
+                       Margin="30,20,0,0"
+                       Visibility="Visible"
+                       VerticalAlignment="Top" />
+                <TextBlock Name="TextBlock_Message"
+                           TextWrapping="Wrap"
+                           MaxWidth="500"
+                           Width="Auto"
+                           VerticalAlignment="Center"
+                           Margin="12,11,41,15" />
             </DockPanel>
         </Grid>
-        <Grid Grid.Row="1" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" MinHeight="49">
+        <Grid Grid.Row="1"
+              Background="Transparent"
+              MinHeight="49">
             <DockPanel Margin="5,0">
-                
+
                 <!-- Cancel Button -->
-                <Button Name="Button_Cancel" MinWidth="88" MaxWidth="160" Height="26" Margin="5,0" HorizontalAlignment="Right" Visibility="Collapsed" IsCancel="True"
-                        DockPanel.Dock="Right" Click="Button_Cancel_Click">
-                    <Label Name="Label_Cancel" Padding="0" Margin="10,0">_Cancel</Label>
+                <Button Name="Button_Cancel"
+                        Visibility="Visible"
+                        IsCancel="True"
+                        Style="{StaticResource NoStyle}"
+                        DockPanel.Dock="Right"
+                        Click="Button_Cancel_Click">
+                    <Label Name="Label_Cancel"
+                           Padding="0"
+                           FontWeight="Bold"
+                           Margin="10,0">_Cancel</Label>
                 </Button>
                 <!-- End Cancel Button -->
-                
+
                 <!-- No Button -->
-                <Button Name="Button_No" MinWidth="88" MaxWidth="160" Height="26" Margin="5,0" HorizontalAlignment="Right" Visibility="Collapsed"
-                        DockPanel.Dock="Right" Click="Button_No_Click">
-                    <Label Name="Label_No" Padding="0" Margin="10,0">_No</Label>
+                <Button Name="Button_No"
+                        Visibility="Visible"
+                        Style="{StaticResource NoStyle}"
+                        DockPanel.Dock="Right"
+                        Click="Button_No_Click">
+                    <Label Name="Label_No"
+                           Padding="0"
+                           FontWeight="Bold"
+                           Margin="10,0">_No</Label>
                 </Button>
                 <!-- End No Button -->
-                
+
                 <!-- Yes Button -->
-                <Button Name="Button_Yes" MinWidth="88" MaxWidth="160" Height="26" Margin="35,0,5,0" HorizontalAlignment="Right" Visibility="Collapsed"
-                        DockPanel.Dock="Right" Click="Button_Yes_Click">
-                    <Label Name="Label_Yes" Padding="0" Margin="10,0">_Yes</Label>
+                <Button Name="Button_Yes"
+                        Style="{StaticResource YesStyle}"
+                        Visibility="Visible"
+                        DockPanel.Dock="Right"
+                        Click="Button_Yes_Click">
+                    <Label Name="Label_Yes"
+                           Padding="0"
+                           Foreground="White"
+                           FontWeight="Bold"
+                           Margin="10,0">_Yes</Label>
                 </Button>
                 <!-- End Yes Button -->
-                
+
                 <!-- OK Button -->
-                <Button Name="Button_OK" MinWidth="88" MaxWidth="160" Margin="35,0,5,0" HorizontalAlignment="Right" Height="26"
+                <Button Name="Button_OK"
+                        Style="{StaticResource YesStyle}"
                         Click="Button_OK_Click">
-                    <Label Name="Label_Ok" Padding="0" Margin="10,0">_OK</Label>
+                    <Label Name="Label_Ok"
+                           Padding="0"
+                           Foreground="White"
+                           FontWeight="Bold"
+                           Margin="10,0">_OK</Label>
                 </Button>
                 <!-- End OK Button -->
-                
+
             </DockPanel>
         </Grid>
     </Grid>
