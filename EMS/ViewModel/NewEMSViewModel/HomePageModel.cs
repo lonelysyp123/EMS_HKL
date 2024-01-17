@@ -419,16 +419,19 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <param name="bMSDataService"></param>
         public void StateDisPlayPCS(bool isconnected)
         {
-            if (isconnected)
+            App.Current.Dispatcher.Invoke(() =>
             {
-                StateFill_PCSRun = new SolidColorBrush(BCMUColors.IsConnect_T);
-                StartStopState = new SolidColorBrush(BCMUColors.IsConnect_T);
-            }
-            else
-            {
-                StateFill_PCSRun = new SolidColorBrush(BCMUColors.IsConnect_F);
-                StartStopState = new SolidColorBrush(BCMUColors.IsConnect_F);
-            }
+                if (isconnected)
+                {
+                    StateFill_PCSRun = new SolidColorBrush(BCMUColors.IsConnect_T);
+                    StartStopState = new SolidColorBrush(BCMUColors.IsConnect_T);
+                }
+                else
+                {
+                    StateFill_PCSRun = new SolidColorBrush(BCMUColors.IsConnect_F);
+                    StartStopState = new SolidColorBrush(BCMUColors.IsConnect_F);
+                }
+            });
         }
 
         /// <summary>
