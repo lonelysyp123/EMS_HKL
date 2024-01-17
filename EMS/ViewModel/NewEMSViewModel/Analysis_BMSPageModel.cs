@@ -138,7 +138,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             {
 
                 if (SetProperty(ref _selectedType, value) && _hasValidBatteryData)
-                    //if (SetProperty(ref _selectedType, value) )
                 {
                     SwitchBatteryData();
                 }
@@ -168,10 +167,23 @@ namespace EMS.ViewModel.NewEMSViewModel
             get => _selectedNumber;
             set
             {
-                if (SetProperty(ref _selectedNumber, value))
+                if (SetProperty(ref _selectedNumber, value) && _hasValidBatteryData)
                 {
                     SwitchBatteryData();
                 }
+            }
+        }
+
+        private int _selectedNumberIndex;
+        /// <summary>
+        /// 选中的电池序号
+        /// </summary>
+        public int SelectedNumberIndex
+        {
+            get => _selectedNumberIndex;
+            set
+            {
+                SetProperty(ref _selectedNumberIndex, value);
             }
         }
 
@@ -242,6 +254,10 @@ namespace EMS.ViewModel.NewEMSViewModel
                         if (batteryInfo != null && batteryInfo.Any())
                         {
                             DisplayDataList.Add(batteryInfo);
+                            SelectedNumber = "1";
+                            SelectedTypeIndex = 0;
+                            SelectedNumberIndex=0;
+                            SwitchBatteryData();
                         }
                     }
                     // 如果至少有一组有效数据，则设置为true
@@ -285,11 +301,11 @@ namespace EMS.ViewModel.NewEMSViewModel
                     }
                 }
                 // 打印 allBMSData 内容
-                string objContent = string.Join(Environment.NewLine, allBMSData.Select(subArray =>
-                {
-                    return "[" + string.Join(", ", subArray.Select(innerArray => $"[{string.Join(", ", innerArray)}]")) + "]";
-                }));
-                Console.WriteLine("333333333333" + Environment.NewLine + objContent);
+                //string objContent = string.Join(Environment.NewLine, allBMSData.Select(subArray =>
+                //{
+                //    return "[" + string.Join(", ", subArray.Select(innerArray => $"[{string.Join(", ", innerArray)}]")) + "]";
+                //}));
+                //Console.WriteLine("333333333333" + Environment.NewLine + objContent);
                 // 检查是否有数据
                 if (allBMSData == null || !allBMSData.Any())
                 {
@@ -336,10 +352,8 @@ namespace EMS.ViewModel.NewEMSViewModel
                 sw.WriteLine("BCMUID,BMUID,sort,Voltage,Capacity,SOC,Resistance,Temperature1,Temperature2,时间");
                 for (int i = 0; i < timeList.Count; i++)
                 {
-                    Console.WriteLine("1111个数:"+timeList.Count);
                     for (int j = 0; j < allBMSData.Count; j++)
                     {
-                        Console.WriteLine("2222个数:" + allBMSData.Count);
                         StringBuilder sb = new StringBuilder();
 
                         // 添加固定信息（BCMUID和BMUID不需要每次循环都写入）
@@ -350,7 +364,6 @@ namespace EMS.ViewModel.NewEMSViewModel
                         sb.Append((j + 1).ToString()); // 序号
                         for(int k = 0; k < allBMSData[j].Count; k++)
                         {
-                            Console.WriteLine("333个数:" + allBMSData[j].Count);
                             sb.Append(",");
                             sb.Append(allBMSData[j][k][i]);
                         }
@@ -446,8 +459,8 @@ namespace EMS.ViewModel.NewEMSViewModel
                 obj.Add(temperature2List.ToArray());
                 TimeList.Add(times.ToArray());
             }
-            string objContent = string.Join(Environment.NewLine, obj.Select(array => $"[{string.Join(", ", array)}]"));
-            Console.WriteLine("wwwwwww" + objContent);
+            //string objContent = string.Join(Environment.NewLine, obj.Select(array => $"[{string.Join(", ", array)}]"));
+            //Console.WriteLine("wwwwwww" + objContent);
             return obj;
         }
 
@@ -475,8 +488,6 @@ namespace EMS.ViewModel.NewEMSViewModel
                         {
                             for (int j = 0; j < DisplayDataList[index - 1][SelectedTypeIndex].Length; j++)
                             {
-                                Debug.WriteLine(TimeList[index - 1][j], "11111111111");
-                                Debug.WriteLine(DisplayDataList[index - 1][SelectedTypeIndex][j], "22222222");
                                 lineSeries.Points.Add(DateTimeAxis.CreateDataPoint(TimeList[index - 1][j], DisplayDataList[index - 1][SelectedTypeIndex][j]));
                             }
                             BMSDisplayDataModel.Series.Add(lineSeries);

@@ -181,6 +181,8 @@ namespace EMS.ViewModel.NewEMSViewModel
                 {
                     DisplayDataList.Add(smartElectricityMeterInfoArray);
                     _hasValidData = true;
+                    SelectedTypeIndex = 0;
+                    SwitchSmartElectricityMeterData();
                 }
                 else
                 {
@@ -392,67 +394,56 @@ namespace EMS.ViewModel.NewEMSViewModel
                     {
                         currMonthFlatRateActiveEnergyList.Add(currMonthFlatRateActiveEnergy);
                     }
-                    times.Add(SeriesList[i].HappenTime);
                     var item14 = typeof(SmartElectricityMeterInfoModel).GetProperty("CurrMonthValleyActiveEnergy").GetValue(SeriesList[i]);
                     if (double.TryParse(item14.ToString(), out double currMonthValleyActiveEnergy))
                     {
                         currMonthValleyActiveEnergyList.Add(currMonthValleyActiveEnergy);
                     }
-                    times.Add(SeriesList[i].HappenTime);
                     var item15 = typeof(SmartElectricityMeterInfoModel).GetProperty("TotalReverseActiveEnergy").GetValue(SeriesList[i]);
                     if (double.TryParse(item15.ToString(), out double totalReverseActiveEnergy))
                     {
                         totalReverseActiveEnergyList.Add(totalReverseActiveEnergy);
                     }
-                    times.Add(SeriesList[i].HappenTime);
                     var item16 = typeof(SmartElectricityMeterInfoModel).GetProperty("TotalSpikesReverseActiveEnergy").GetValue(SeriesList[i]);
                     if (double.TryParse(item16.ToString(), out double totalSpikesReverseActiveEnergy))
                     {
                         totalSpikesReverseActiveEnergyList.Add(totalSpikesReverseActiveEnergy);
                     }
-                    times.Add(SeriesList[i].HappenTime);
                     var item17 = typeof(SmartElectricityMeterInfoModel).GetProperty("TotalPeakReverseActiveEnergy").GetValue(SeriesList[i]);
                     if (double.TryParse(item17.ToString(), out double totalPeakReverseActiveEnergy))
                     {
                         totalPeakReverseActiveEnergyList.Add(totalPeakReverseActiveEnergy);
                     }
-                    times.Add(SeriesList[i].HappenTime);
                     var item18 = typeof(SmartElectricityMeterInfoModel).GetProperty("TotalFlatReverseActiveEnergy").GetValue(SeriesList[i]);
                     if (double.TryParse(item18.ToString(), out double totalFlatReverseActiveEnergy))
                     {
                         totalFlatReverseActiveEnergyList.Add(totalFlatReverseActiveEnergy);
                     }
-                    times.Add(SeriesList[i].HappenTime);
                     var item19 = typeof(SmartElectricityMeterInfoModel).GetProperty("TotalValleyReverseActiveEnergy").GetValue(SeriesList[i]);
                     if (double.TryParse(item19.ToString(), out double totalValleyReverseActiveEnergy))
                     {
                         totalValleyReverseActiveEnergyList.Add(totalValleyReverseActiveEnergy);
                     }
-                    times.Add(SeriesList[i].HappenTime);
                     var item20 = typeof(SmartElectricityMeterInfoModel).GetProperty("CurrMonthTotalReverseActiveEnergy").GetValue(SeriesList[i]);
                     if (double.TryParse(item20.ToString(), out double currMonthTotalReverseActiveEnergy))
                     {
                         currMonthTotalReverseActiveEnergyList.Add(currMonthTotalReverseActiveEnergy);
                     }
-                    times.Add(SeriesList[i].HappenTime);
                     var item21 = typeof(SmartElectricityMeterInfoModel).GetProperty("CurrMonthSpikesReverseActiveEnergy").GetValue(SeriesList[i]);
                     if (double.TryParse(item21.ToString(), out double currMonthSpikesReverseActiveEnergy))
                     {
                         currMonthSpikesReverseActiveEnergyList.Add(currMonthSpikesReverseActiveEnergy);
                     }
-                    times.Add(SeriesList[i].HappenTime);
                     var item22 = typeof(SmartElectricityMeterInfoModel).GetProperty("CurrMonthPeakReverseActiveEnergy").GetValue(SeriesList[i]);
                     if (double.TryParse(item22.ToString(), out double currMonthPeakReverseActiveEnergy))
                     {
                         currMonthPeakReverseActiveEnergyList.Add(currMonthPeakReverseActiveEnergy);
                     }
-                    times.Add(SeriesList[i].HappenTime);
                     var item23 = typeof(SmartElectricityMeterInfoModel).GetProperty("CurrMonthFlatReverseActiveEnergy").GetValue(SeriesList[i]);
                     if (double.TryParse(item23.ToString(), out double currMonthFlatReverseActiveEnergy))
                     {
                         currMonthFlatReverseActiveEnergyList.Add(currMonthFlatReverseActiveEnergy);
                     }
-                    times.Add(SeriesList[i].HappenTime);
                     var item24 = typeof(SmartElectricityMeterInfoModel).GetProperty("CurrMonthValleyReverseActiveEnergy").GetValue(SeriesList[i]);
                     if (double.TryParse(item24.ToString(), out double currMonthValleyReverseActiveEnergy))
                     {

@@ -180,6 +180,8 @@ namespace EMS.ViewModel.NewEMSViewModel
                 {
                     DisplayDataList.Add(smartMeterInfoArray);
                     _hasValidData = true;
+                    SelectedTypeIndex = 0; 
+                    SwitchSmartMeterData();
                 }
                 else
                 {

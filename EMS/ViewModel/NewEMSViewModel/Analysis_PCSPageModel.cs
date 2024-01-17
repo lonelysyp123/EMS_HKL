@@ -182,6 +182,8 @@ namespace EMS.ViewModel.NewEMSViewModel
                 {
                     DisplayDataList.Add(pcsInfoArray);
                     _hasValidData = true;
+                    SelectedTypeIndex = 0;
+                    SwitchPCSData();
                 }
                 else
                 {
