@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMS.ViewModel.NewEMSViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,157 +33,12 @@ namespace EMS.View.NewEMSView
     /// </summary>
     public partial class FaultLogPage : Page
     {
+        FaultLogPageModel viewmodel;
         public FaultLogPage()
         {
             InitializeComponent();
-
-            List<Person> list = new List<Person>();
-
-            list.Add(
-                new Person
-                {
-                    faultNumber = "1",
-                    faultDevice = "BCMU",
-                    faultId = "1",
-                    faultModule = "故障",
-                    faultName = "直流高压侧过压",
-                    faultGrade = "1",
-                    faultTime = "2023/12/19 13:00:00"
-                }
-            );
-            list.Add(
-                new Person
-                {
-                    faultNumber = "2",
-                    faultDevice = "PCS",
-                    faultId = "2",
-                    faultModule = "故障",
-                    faultName = "环境温度过高",
-                    faultGrade = "2",
-                    faultTime = "2023/12/19 12:00:00"
-                }
-            );
-            list.Add(
-                new Person
-                {
-                    faultNumber = "3",
-                    faultDevice = "BCMU",
-                    faultId = "5",
-                    faultModule = "故障",
-                    faultName = "紧急停机",
-                    faultGrade = "3",
-                    faultTime = "2023/12/19 10:00:00"
-                }
-            );
-            list.Add(
-                new Person
-                {
-                    faultNumber = "4",
-                    faultDevice = "BCMU",
-                    faultId = "5",
-                    faultModule = "故障",
-                    faultName = "紧急停机",
-                    faultGrade = "3",
-                    faultTime = "2023/12/19 10:00:00"
-                }
-            );
-            list.Add(
-                new Person
-                {
-                    faultNumber = "5",
-                    faultDevice = "BCMU",
-                    faultId = "5",
-                    faultModule = "故障",
-                    faultName = "紧急停机",
-                    faultGrade = "3",
-                    faultTime = "2023/12/19 10:00:00"
-                }
-            );
-            list.Add(
-                new Person
-                {
-                    faultNumber = "6",
-                    faultDevice = "BCMU",
-                    faultId = "5",
-                    faultModule = "故障",
-                    faultName = "紧急停机",
-                    faultGrade = "3",
-                    faultTime = "2023/12/19 10:00:00"
-                }
-            );
-            list.Add(
-                new Person
-                {
-                    faultNumber = "7",
-                    faultDevice = "BCMU",
-                    faultId = "5",
-                    faultModule = "故障",
-                    faultName = "紧急停机",
-                    faultGrade = "3",
-                    faultTime = "2023/12/19 10:00:00"
-                }
-            );
-            list.Add(
-                new Person
-                {
-                    faultNumber = "8",
-                    faultDevice = "BCMU",
-                    faultId = "5",
-                    faultModule = "故障",
-                    faultName = "紧急停机",
-                    faultGrade = "3",
-                    faultTime = "2023/12/19 10:00:00"
-                }
-            );
-            list.Add(
-                new Person
-                {
-                    faultNumber = "9",
-                    faultDevice = "BCMU",
-                    faultId = "5",
-                    faultModule = "故障",
-                    faultName = "紧急停机",
-                    faultGrade = "3",
-                    faultTime = "2023/12/19 10:00:00"
-                }
-            );
-            list.Add(
-                new Person
-                {
-                    faultNumber = "10",
-                    faultDevice = "BCMU",
-                    faultId = "5",
-                    faultModule = "故障",
-                    faultName = "紧急停机",
-                    faultGrade = "3",
-                    faultTime = "2023/12/19 10:00:00"
-                }
-            );
-            list.Add(
-                new Person
-                {
-                    faultNumber = "11",
-                    faultDevice = "BCMU",
-                    faultId = "5",
-                    faultModule = "故障",
-                    faultName = "紧急停机",
-                    faultGrade = "3",
-                    faultTime = "2023/12/19 10:00:00"
-                }
-            );
-            list.Add(
-                new Person
-                {
-                    faultNumber = "12",
-                    faultDevice = "BCMU",
-                    faultId = "5",
-                    faultModule = "故障",
-                    faultName = "紧急停机",
-                    faultGrade = "3",
-                    faultTime = "2023/12/19 10:00:00"
-                }
-            );
-            Datagrid.ItemsSource = list;
+            viewmodel = new FaultLogPageModel();
+            this.DataContext = viewmodel;
         }
     }
 }

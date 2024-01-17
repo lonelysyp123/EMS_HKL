@@ -32,7 +32,7 @@ namespace EMS.MyControl
             set { SetValue(AlertLevelProperty, value); }
         }
         public static readonly DependencyProperty AlertLevelProperty =
-            DependencyProperty.Register("AlertLevel", typeof(AlarmtLevels), typeof(WarnControl), new PropertyMetadata(AlarmtLevels.Info, OnAlertLevelChanged));
+            DependencyProperty.Register("AlertLevel", typeof(AlarmtLevels), typeof(WarnControl), new PropertyMetadata(AlarmtLevels.NoAlarm, OnAlertLevelChanged));
 
         private static void OnAlertLevelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -84,11 +84,20 @@ namespace EMS.MyControl
         {
             switch (alertLevel)
             {
+                case AlarmtLevels.NoAlarm:
+                    BorderColor = Brushes.Transparent;
+                    BorderBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F4F4F4"));
+                    TextColor = Brushes.Black;
+                    break;
                 case AlarmtLevels.Info:
                     BorderBackground = Brushes.Transparent;
                     TextColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EEE94F"));
                     BorderColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EEE94F"));
                     break;
+                    //BorderBackground = Brushes.Transparent;
+                    //TextColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFA12F"));
+                    //BorderColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFA12F"));
+                    //break;
                 case AlarmtLevels.Warning:
                     BorderBackground = Brushes.Transparent;
                     TextColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFA12F"));
@@ -111,6 +120,7 @@ namespace EMS.MyControl
     //public enum AlertLevels
     public enum AlarmtLevels
     {
+        NoAlarm,
         Info,
         Warning,
         Error

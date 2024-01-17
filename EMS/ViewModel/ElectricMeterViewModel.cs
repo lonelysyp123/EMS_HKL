@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using EMS.Common;
 using EMS.Model;
 using EMS.Service;
+using EMS.ViewModel.NewEMSViewModel;
 using log4net;
 using System;
 using System.Collections.Concurrent;
@@ -23,8 +24,8 @@ namespace EMS.ViewModel
     {
         #region ObservableObject
 
-        private int _voltage_A;
-        public int Voltage_A
+        private double _voltage_A;
+        public double Voltage_A
         {
             get => _voltage_A;
             set
@@ -33,8 +34,8 @@ namespace EMS.ViewModel
             }
         }
 
-        private int _voltage_B;
-        public int Voltage_B
+        private double _voltage_B;
+        public double Voltage_B
         {
             get => _voltage_B;
             set
@@ -43,8 +44,8 @@ namespace EMS.ViewModel
             }
         }
 
-        private int _voltage_C;
-        public int Voltage_C
+        private double _voltage_C;
+        public double Voltage_C
         {
             get => _voltage_C;
             set
@@ -53,8 +54,8 @@ namespace EMS.ViewModel
             }
         }
 
-        private int _electric_A;
-        public int Electric_A
+        private double _electric_A;
+        public double Electric_A
         {
             get => _electric_A;
             set
@@ -63,8 +64,8 @@ namespace EMS.ViewModel
             }
         }
 
-        private int _electric_B;
-        public int Electric_B
+        private double _electric_B;
+        public double Electric_B
         {
             get => _electric_B;
             set
@@ -73,8 +74,8 @@ namespace EMS.ViewModel
             }
         }
 
-        private int _electric_C;
-        public int Electric_C
+        private double _electric_C;
+        public double Electric_C
         {
             get => _electric_C;
             set
@@ -83,8 +84,8 @@ namespace EMS.ViewModel
             }
         }
 
-        private int _activePower_A;
-        public int ActivePower_A
+        private double _activePower_A;
+        public double ActivePower_A
         {
             get => _activePower_A;
             set
@@ -93,8 +94,8 @@ namespace EMS.ViewModel
             }
         }
 
-        private int _activePower_B;
-        public int ActivePower_B
+        private double _activePower_B;
+        public double ActivePower_B
         {
             get => _activePower_B;
             set
@@ -103,8 +104,8 @@ namespace EMS.ViewModel
             }
         }
 
-        private int _activePower_C;
-        public int ActivePower_C
+        private double _activePower_C;
+        public double ActivePower_C
         {
             get => _activePower_C;
             set
@@ -113,8 +114,8 @@ namespace EMS.ViewModel
             }
         }
 
-        private int _activePower_Total;
-        public int ActivePower_Total
+        private double _activePower_Total;
+        public double ActivePower_Total
         {
             get => _activePower_Total;
             set
@@ -123,8 +124,8 @@ namespace EMS.ViewModel
             }
         }
 
-        private int _reactivePower_A;
-        public int ReactivePower_A
+        private double _reactivePower_A;
+        public double ReactivePower_A
         {
             get => _reactivePower_A;
             set
@@ -133,8 +134,8 @@ namespace EMS.ViewModel
             }
         }
 
-        private int _reactivePower_B;
-        public int ReactivePower_B
+        private double _reactivePower_B;
+        public double ReactivePower_B
         {
             get => _reactivePower_B;
             set
@@ -143,8 +144,8 @@ namespace EMS.ViewModel
             }
         }
 
-        private int _reactivePower_C;
-        public int ReactivePower_C
+        private double _reactivePower_C;
+        public double ReactivePower_C
         {
             get => _reactivePower_C;
             set
@@ -153,8 +154,8 @@ namespace EMS.ViewModel
             }
         }
 
-        private int _reactivePower_Total;
-        public int ReactivePower_Total
+        private double _reactivePower_Total;
+        public double ReactivePower_Total
         {
             get => _reactivePower_Total;
             set
@@ -212,8 +213,8 @@ namespace EMS.ViewModel
 
         public ElectricMeterViewModel()
         {
-            service = new SmartMeterDataService();
-            service.RegisterState(ServiceStateCallBack);
+            //service = new SmartMeterDataService();
+            //service.RegisterState(ServiceStateCallBack);
         }
 
         private void ServiceStateCallBack(bool isConnected, bool isDaqData)
@@ -243,25 +244,25 @@ namespace EMS.ViewModel
         {
             while (IsDaqData)
             {
-                if (service.smartMeterModels.TryTake(out SmartMeterModel CurrentSmartMeterModel))
-                {
-                    var model = (SmartMeterModel)CurrentSmartMeterModel.Clone();
-                    SmartMeterModelList.Add(model);
-                    // 把数据分发给需要显示的内容
-                    App.Current.Dispatcher.Invoke(() =>
-                    {
-                        RefreshData(CurrentSmartMeterModel);
-                    });
+                //if (service.smartMeterModels.TryTake(out SmartMeterModel CurrentSmartMeterModel))
+                //{
+                //    var model = (SmartMeterModel)CurrentSmartMeterModel.Clone();
+                //    SmartMeterModelList.Add(model);
+                //    // 把数据分发给需要显示的内容
+                //    App.Current.Dispatcher.Invoke(() =>
+                //    {
+                //        RefreshData(CurrentSmartMeterModel);
+                //    });
 
-                    if (IsRecordData)
-                    {
-                        SaveData(CurrentSmartMeterModel);
-                    }
-                }
-                else
-                {
-                    Thread.Sleep(500);
-                }
+                //    if (IsRecordData)
+                //    {
+                //        SaveData(CurrentSmartMeterModel);
+                //    }
+                //}
+                //else
+                //{
+                //    Thread.Sleep(500);
+                //}
             }
         }
 
@@ -275,9 +276,9 @@ namespace EMS.ViewModel
             this.Voltage_A = currentSmartMeterModel.Voltage_A;
             this.Voltage_B = currentSmartMeterModel.Voltage_B;
             this.Voltage_C = currentSmartMeterModel.Voltage_A;
-            this.Electric_A = currentSmartMeterModel.Electric_A;
-            this.Electric_B = currentSmartMeterModel.Electric_B;
-            this.Electric_C = currentSmartMeterModel.Electric_C;
+            this.Electric_A = currentSmartMeterModel.Current_A;
+            this.Electric_B = currentSmartMeterModel.Current_B;
+            this.Electric_C = currentSmartMeterModel.Current_C;
             this.ActivePower_A = currentSmartMeterModel.ActivePower_A;
             this.ActivePower_B = currentSmartMeterModel.ActivePower_B;
             this.ActivePower_C = currentSmartMeterModel.ActivePower_C;
@@ -291,14 +292,14 @@ namespace EMS.ViewModel
         [RelayCommand]
         public void CloseSerialPort()
         {
-            service.Disconnect();
+            //service.Disconnect();
         }
 
         [RelayCommand]
         private void OpenSerialPort()
         {
-            service.SetCommunicationConfig(Configuaration);
-            service.Connect();
+            //service.SetCommunicationConfig(Configuaration);
+            //service.Connect();
         }
 
         public ThreePhaseValue GetThreePhaseVoltage()
@@ -313,9 +314,9 @@ namespace EMS.ViewModel
         public ThreePhaseValue GetThreePhaseElectric()
         {
             var item = new ThreePhaseValue();
-            item.PhaseA = CurrentSmartMeterModel.Electric_A;
-            item.PhaseB = CurrentSmartMeterModel.Electric_B;
-            item.PhaseC = CurrentSmartMeterModel.Electric_C;
+            item.PhaseA = CurrentSmartMeterModel.Current_A;
+            item.PhaseB = CurrentSmartMeterModel.Current_B;
+            item.PhaseC = CurrentSmartMeterModel.Current_C;
             return item;
         }
 
@@ -353,28 +354,5 @@ namespace EMS.ViewModel
         public double PhaseA;
         public double PhaseB;
         public double PhaseC;
-    }
-
-    public class Configuaration
-    {
-        public List<SerialPortSettingsModel> CommPorts { get; private set; }
-        public string SelectedCommPort { get; set; }
-        public List<SerialPortSettingsModel> BaudRates { get; private set; }
-        public int SelectedBaudRate { get; set; }
-        public List<SerialPortSettingsModel> Parities { get; private set; }
-        public Parity SelectedParity { get; set; }
-        public List<SerialPortSettingsModel> StopBitsList { get; private set; }
-        public StopBits SelectedStopBits { get; set; }
-        public int[] DataBits { get; private set; }
-        public int SelectedDataBits { get; set; }
-
-        public Configuaration()
-        {
-            CommPorts = SerialPortSettingsModel.Instance.getCommPorts();
-            BaudRates = SerialPortSettingsModel.Instance.getBaudRates();
-            Parities = SerialPortSettingsModel.Instance.getParities();
-            StopBitsList = SerialPortSettingsModel.Instance.getStopBits();
-            DataBits = new int[] { 4, 5, 6, 7, 8 };
-        }
     }
 }

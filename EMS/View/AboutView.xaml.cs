@@ -23,8 +23,15 @@ namespace EMS.View
         public AboutView()
         {
             InitializeComponent();
-          
-
+            string folderPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory);
+            string filePath = System.IO.Path.Combine(folderPath, "commit.log");
+            if (File.Exists(filePath))
+            {
+                using (StreamReader sr = new StreamReader(filePath))
+                {
+                    branchinfo.Text = sr.ReadToEnd();
+                }
+            }
         }
 
         private void OKButton_Click(object sender, RoutedEventArgs e)

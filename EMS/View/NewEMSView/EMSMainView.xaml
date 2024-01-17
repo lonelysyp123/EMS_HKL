@@ -7,6 +7,7 @@
         xmlns:localControl="clr-namespace:EMS.MyControl"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:views="clr-namespace:EMS.View.NewEMSView"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
         mc:Ignorable="d"
         Title="EMSMainView"
@@ -243,7 +244,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <!--<hc:DateTimePicker IsEnabled="False" HorizontalAlignment="Right" Margin="0,0,20,0"/>-->
+            <hc:DateTimePicker IsEnabled="False" HorizontalAlignment="Right" Margin="0,0,20,0"/>
             <Menu Grid.Column="1"
                   VerticalAlignment="Center"
                   Background="Transparent">
@@ -315,33 +316,33 @@
                               Loaded="ToggleButton_LoadedForLevel2" />
                 <ToggleButton x:Name="BMS_SubBMU1"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="BMU1"
+                              Content="BCMU1"
                               Click="BMS_SubBMU1_Checked"
                               Visibility="Collapsed"
                               />
                 <ToggleButton x:Name="BMS_SubBMU2"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="BMU2"
+                              Content="BCMU2"
                               Visibility="Collapsed"
                               Click="BMS_SubBMU1_Checked"/>
                 <ToggleButton x:Name="BMS_SubBMU3"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="BMU3"
+                              Content="BCMU3"
                               Visibility="Collapsed"
                               Click="BMS_SubBMU1_Checked"/>
                 <ToggleButton x:Name="BMS_SubBMU4"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="BMU4"
+                              Content="BCMU4"
                               Visibility="Collapsed"
                               Click="BMS_SubBMU1_Checked"/>
                 <ToggleButton x:Name="BMS_SubBMU5"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="BMU5"
+                              Content="BCMU5"
                               Visibility="Collapsed"
                               Click="BMS_SubBMU1_Checked"/>
                 <ToggleButton x:Name="BMS_SubBMU6"
                               Style="{StaticResource MaterialDesignHorizontalHeaderWithOutFlagStyle}"
-                              Content="BMU6"
+                              Content="BCMU6"
                               Visibility="Collapsed"
                               Click="BMS_SubBMU1_Checked"/>
                 <ToggleButton x:Name="MonitorViewMenu_PCS"
@@ -449,15 +450,18 @@
                                
                               Visibility="Collapsed" />
 
-            </StackPanel>
+                </StackPanel>
 
             <!--END-->
         </Grid>
         <!--4、页面部分-->
         <Grid Grid.Row="1"
               Grid.Column="1">
-            <Frame x:Name="PageContent"
-                   NavigationUIVisibility="Hidden" Content="{Binding CurrentPage}"></Frame>
+            <Frame x:Name="PageContent" NavigationUIVisibility="Hidden"></Frame>
         </Grid>
+        <Grid.RenderTransform>
+            <ScaleTransform x:Name="contentScaleTransform"
+                           />
+        </Grid.RenderTransform>
     </Grid>
 </Window>

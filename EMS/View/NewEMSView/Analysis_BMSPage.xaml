@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:bh="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:localControl="clr-namespace:EMS.MyControl"
       xmlns:local="clr-namespace:EMS.View.NewEMSView"
       xmlns:trl="clr-namespace:EMS.MyControl"
@@ -28,7 +29,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="8*" />
+            <ColumnDefinition Width="5*" />
         </Grid.ColumnDefinitions>
         <!--1、选择电压、电流-->
         <Grid Grid.Row="0"
@@ -38,12 +39,98 @@
                     Padding="20,10"
                     CornerRadius="15">
                 <Grid>
-                    <ListBox SelectedItem="{Binding SelectedType}"
-                             SelectedIndex="{Binding SelectedTypeIndex}"
-                             Foreground="White"
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <ListBox Grid.Column="0"
+                             SelectionMode="Extended"
+                             Foreground="Black"
+                             BorderThickness="0,0,0,0"
+                             SelectedItem="{Binding SelectedNumber}">
+                        <ListBoxItem Content="1"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="2"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="3"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="4"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="5"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="6"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="7"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="8"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="9"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="10"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="11"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="12"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="13"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="14"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                    </ListBox>
+                    <ListBox Grid.Column="1"
                              HorizontalAlignment="Center"
-                             BorderThickness="0,0,0,0">
+                             BorderThickness="0,0,0,0"
+                             SelectedItem="{Binding SelectedType}"
+                             SelectedIndex="{Binding SelectedTypeIndex}"
+                             Foreground="Black">
                         <ListBoxItem Content="Voltage"
+                                     BorderThickness="1,1,1,1"
+                                     Margin="0,10,0,0"
+                                     HorizontalContentAlignment="Center"
+                                     BorderBrush="#1890FF"></ListBoxItem>
+                        <ListBoxItem Content="Capacity"
                                      BorderThickness="1,1,1,1"
                                      Margin="0,10,0,0"
                                      HorizontalContentAlignment="Center"
@@ -66,11 +153,6 @@
                         <ListBoxItem Content="Temperature2"
                                      BorderThickness="1,1,1,1"
                                      Margin="0,10,0,0"
-                                     BorderBrush="#1890FF"></ListBoxItem>
-                        <ListBoxItem Content="Capacity"
-                                     BorderThickness="1,1,1,1"
-                                     Margin="0,10,0,0"
-                                     HorizontalContentAlignment="Center"
                                      BorderBrush="#1890FF"></ListBoxItem>
                     </ListBox>
                 </Grid>
@@ -98,41 +180,38 @@
                                    Foreground="#1E1E1E"
                                    Margin="20,0,0,0"
                                    BorderThickness="0,0,0,0" />
-                            <ComboBox  Height="25"
-                                       Width="80"
-                                       Background="White"
-                                       Foreground="Black"
-                                       ItemsSource="{Binding SelectedBCMU}"
-                                       SelectedItem="{Binding SelectedItemBCMU}"
-                                       BorderThickness="1,1,1,1">
-                            </ComboBox>
+                            <TextBox Width="80"
+                                     Height="30"
+                                     Background="White"
+                                     Foreground="Black"
+                                     BorderThickness="1,1,1,1"
+                                     Text="{Binding SelectedTotal}"></TextBox>
                             <Label Content="BMU:"
                                    VerticalAlignment="Center"
                                    Foreground="#1E1E1E"
                                    Margin="20,0,0,0"
                                    BorderThickness="0,0,0,0"></Label>
-                            <ComboBox  Height="25"
-                                       Width="80"
-                                       Background="White"
-                                       Foreground="Black"
-                                       ItemsSource="{Binding SelectedBMU}"
-                                       SelectedItem="{Binding SelectedItemBMU}"
-                                       BorderThickness="1,1,1,1">
-                            </ComboBox>
+                            <TextBox Width="80"
+                                     Height="30"
+                                     Background="White"
+                                     Foreground="Black"
+                                     BorderThickness="1,1,1,1"
+                                     Text="{Binding SelectedSeries}"></TextBox>
                             <Label Content="开始时间:"
                                    BorderThickness="0,0,0,0"
                                    VerticalAlignment="Center"
                                    Margin="20,0,0,0"
                                    Foreground="#1E1E1E"></Label>
                             <DatePicker x:Name="Test1"
-                                        Width="100"
-                                        Height="25"
+                                        
+                                        Height="30"
                                         Background="White"
                                         VerticalContentAlignment="Center"
                                         HorizontalAlignment="Center"
-                                        Text="{Binding StartTime1, Mode=TwoWay}"></DatePicker>
-                            <trl:DateInput Width="90"
-                                           Height="25"
+                                        Text="{Binding StartTime1, Mode=TwoWay}"
+                                        BorderThickness="1,1,1,1"></DatePicker>
+                            <trl:DateInput 
+                                           Height="30"
                                            Margin="5"
                                            DateText="{Binding StartTime2, Mode=TwoWay}"
                                            x:Name="Input1"></trl:DateInput>
@@ -141,27 +220,29 @@
                                    BorderThickness="0,0,0,0"
                                    VerticalAlignment="Center"
                                    Foreground="#1E1E1E"></Label>
-                            <DatePicker Name="Test2"
-                                        Height="25"
+                            <DatePicker Name="Test3"
+                                        Height="30"
                                         VerticalContentAlignment="Center"
                                         Text="{Binding EndTime1, Mode=TwoWay}"
                                         Foreground="Black"
-                                        Width="100"
                                         Background="White"></DatePicker>
-                            <trl:DateInput Width="90"
-                                           Height="25"
+                            <trl:DateInput Height="30"
                                            Margin="5"
                                            DateText="{Binding EndTime2, Mode=TwoWay}" />
-                            <Button Content="查询"
+                            <Button Content="查    询"
                                     Command="{Binding QueryCommand}"
                                     Width="80"
+                                    Height="30"
+                                    FontSize="12"
                                     Margin="20,0,10,0"
                                     Foreground="White"
                                     Background="#1890FF"
                                     x:Name="QueryButton"></Button>
-                            <Button Content="导出"
+                            <Button Content="导    出"
                                     Command="{Binding ExportCommand}"
                                     Width="80"
+                                    Height="30"
+                                    FontSize="12"
                                     Margin="3"
                                     Foreground="White"
                                     Background="#1890FF"
@@ -170,9 +251,9 @@
                     </Grid>
 
                     <Grid Grid.Row="2">
-                        <oxy:PlotView Model="{Binding DisplayDataModel}"
-                                      Background="AliceBlue">
-
+                        <oxy:PlotView Model="{Binding BMSDisplayDataModel}"
+                                      Background="AliceBlue"
+                                      x:Name="BMSPlotView">
                         </oxy:PlotView>
                     </Grid>
                 </Grid>

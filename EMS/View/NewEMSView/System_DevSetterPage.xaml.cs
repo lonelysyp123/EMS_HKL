@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using EMS.ViewModel.NewEMSViewModel;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,13 @@ namespace EMS.View.NewEMSView
         public System_DevSetterPage()
         {
             InitializeComponent();
+        }
+
+        public System_DevSetterPage(System_DevSetterPageModel viewmodel)
+        {
+            InitializeComponent();
+            this.DataContext = viewmodel;
+            SmartMeterBtn.DataContext = viewmodel;
         }
 
         private void UploadFile(object sender, RoutedEventArgs e)

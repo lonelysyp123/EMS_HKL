@@ -33,46 +33,46 @@ namespace EMS.View
             viewModel = viewmodel;
             this.DataContext = viewModel;
 
-            PCSMonitorView.DataContext = viewModel.PCSModel.MonitorModel;
-            DCStatusView.DataContext = viewModel.PCSModel.MonitorModel;
-            PCSSettingView.DataContext = viewModel.PCSModel.ParSettingModel;
+            //PCSMonitorView.DataContext = viewModel.PCSModel.MonitorModel;
+            //DCStatusView.DataContext = viewModel.PCSModel.MonitorModel;
+            //PCSSettingView.DataContext = viewModel.PCSModel.ParSettingModel;
 
-            button1.DataContext = viewModel;
-            button2.DataContext = viewModel;
-            button3.DataContext = viewModel;
-            button4.DataContext = viewModel;
-            button5.DataContext = viewModel;
-            button6.DataContext = viewModel;
+            //button1.DataContext = viewModel;
+            //button2.DataContext = viewModel;
+            //button3.DataContext = viewModel;
+            //button4.DataContext = viewModel;
+            //button5.DataContext = viewModel;
+            //button6.DataContext = viewModel;
 
-            Image1.DataContext = viewModel.PCSModel;
+            //Image1.DataContext = viewModel.PCSModel;
             //Image2.DataContext = viewModel.PCSModel;
 
             //viewModel = new PCSMainViewModel();
             //viewModel = viewModel1;
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            //if (viewModel.IsRead)
-            //{
-            //    MessageBox.Show("请停止采集");
-            //    e.Cancel = true;
-            //}
-            if (viewModel.IsConnected)
-            {
-                MessageBox.Show("请断开连接");
-                e.Cancel = true;
-            }
-            else if(!viewModel.IsConnected && !viewModel.IsRead)
-            {
-                if (viewModel.DataAcquisitionThread != null)
-                {
-                    if (viewModel.DataAcquisitionThread.ThreadState == ThreadState.Stopped)
-                    {
-                        viewModel.DataAcquisitionThread.Abort();
-                    }
-                }
-            }
-        }
+        //private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        //{
+        //    //if (viewModel.IsRead)
+        //    //{
+        //    //    MessageBox.Show("请停止采集");
+        //    //    e.Cancel = true;
+        //    //}
+        //    if (viewModel.IsConnected)
+        //    {
+        //        MessageBox.Show("请断开连接");
+        //        e.Cancel = true;
+        //    }
+        //    else if(!viewModel.IsConnected && !viewModel.IsRead)
+        //    {
+        //        if (viewModel.DataAcquisitionThread != null)
+        //        {
+        //            if (viewModel.DataAcquisitionThread.ThreadState == ThreadState.Stopped)
+        //            {
+        //                viewModel.DataAcquisitionThread.Abort();
+        //            }
+        //        }
+        //    }
+        //}
     }
 }

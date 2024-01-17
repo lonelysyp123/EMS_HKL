@@ -1,8 +1,10 @@
-﻿using System;
+﻿using EMS.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TNCN.EMS.Common.Util;
 
 namespace TNCN.EMS.Common.Mqtt
 {
@@ -73,7 +75,6 @@ namespace TNCN.EMS.Common.Mqtt
         /// C相有功功率
         /// </summary>
         public double C_Fc;
-        public double ps_zxygt;
         /// <summary>
         /// 正向有功尖峰电量
         /// </summary>
@@ -90,14 +91,41 @@ namespace TNCN.EMS.Common.Mqtt
         /// 正向有功谷峰电量
         /// </summary>
         public double ps_zxyg4;
-        public double ps_fxygt;
+        /// <summary>
+        /// 反向有功尖峰电量
+        /// </summary>
         public double ps_fxyg1;
+        /// <summary>
+        /// 反向有功高峰电量
+        /// </summary>
         public double ps_fxyg2;
+        /// <summary>
+        /// 反向有功平峰电量
+        /// </summary>
         public double ps_fxyg3;
+        /// <summary>
+        /// 反向有功谷峰电量
+        /// </summary>
         public double ps_fxyg4;
+        /// <summary>
+        /// 变化
+        /// </summary>
         public double ratio;
-
-
+        /// <summary>
+        /// 采集时间
+        /// </summary>
         public long time;
+
+        public SmartMeter(SmartMeterModel smartMeterModel) {
+            this.id = 1;
+            this.sn = smartMeterModel.SmartMeterNumber;
+            this.time = DateTimeUtil.ConvertDateTimeToLong(DateTime.Now);
+            this.A_curr = smartMeterModel.Current_A;
+            this.B_curr = smartMeterModel.Current_B;
+            this.C_curr = smartMeterModel.Current_C;
+            this.A_volt = smartMeterModel.Voltage_A;
+            this.B_volt = smartMeterModel.Voltage_B;
+            this.C_volt = smartMeterModel.Voltage_C;
+        }
     }
 }

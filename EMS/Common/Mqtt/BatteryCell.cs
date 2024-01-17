@@ -15,9 +15,18 @@ namespace TNCN.EMS.Common.Mqtt
         public double temperature2 { get; set; }
         public double cl_batt_soc { get; set; }
         public int resistance { get; set; }
-        public int cl_batt_soh { get; set; }
+        public double cl_batt_soh { get; set; }
         public double capacity { get; set; }
-
+        public BatteryCell() {
+            this.id = 1;
+            this.cl_batt_volt = 1;
+            this.cl_batt_temp = 1;
+            this.temperature2 = 1;
+            this.cl_batt_soc = 1;
+            this.resistance = 1;
+            this.cl_batt_soh = 1;
+            this.capacity = 1;
+        }
         public BatteryCell(BatteryModel batteryModel) {
             this.id = batteryModel.BatteryNumber;
             this.cl_batt_volt = batteryModel.Voltage;
@@ -27,6 +36,7 @@ namespace TNCN.EMS.Common.Mqtt
             this.resistance = batteryModel.Resistance;
             this.cl_batt_soh = batteryModel.SOH;
             this.capacity = batteryModel.Capacity;
+
         }
     }
 }

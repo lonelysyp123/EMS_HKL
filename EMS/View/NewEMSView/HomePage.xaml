@@ -172,6 +172,17 @@
                                      Style="{StaticResource LightEllipse}"
                                      Fill="{Binding StateFill_Offline}" />
                         </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="2"
+                                    Orientation="Horizontal"
+                                    Margin="0,0,0,10">
+                            <TextBlock Text="云端通信"
+                                       Style="{StaticResource NormalTextblockstyle}"></TextBlock>
+                            <Ellipse Height="20"
+                                     Width="20"
+                                     Style="{StaticResource LightEllipse}"
+                                     Fill="{Binding StateFill_CloudTelecom}" />
+                        </StackPanel>
                         <StackPanel Grid.Row="2"
                                     Grid.Column="0"
                                     Orientation="Horizontal"
@@ -221,17 +232,6 @@
                                     Grid.Column="0"
                                     Orientation="Horizontal"
                                     Margin="0,0,0,10">
-                            <TextBlock Text="云端通信"
-                                       Style="{StaticResource NormalTextblockstyle}"></TextBlock>
-                            <Ellipse Height="20"
-                                     Width="20"
-                                     Style="{StaticResource LightEllipse}"
-                                     Fill="{Binding StateFill_CloudTelecom}" />
-                        </StackPanel>
-                        <StackPanel Grid.Row="3"
-                                    Grid.Column="1"
-                                    Orientation="Horizontal"
-                                    Margin="0,0,0,10">
                             <TextBlock Text="BMS运行"
                                        Style="{StaticResource NormalTextblockstyle}"></TextBlock>
                             <Ellipse Height="20"
@@ -240,7 +240,7 @@
                                      Fill="{Binding StateFill_BMSRun}" />
                         </StackPanel>
                         <StackPanel Grid.Row="3"
-                                    Grid.Column="2"
+                                    Grid.Column="1"
                                     Orientation="Horizontal"
                                     Margin="0,0,0,10">
                             <TextBlock Text="PCS运行"
@@ -251,15 +251,26 @@
                                      Fill="{Binding StateFill_PCSRun}" />
                         </StackPanel>
                         <StackPanel Grid.Row="3"
-                                    Grid.Column="3"
+                                    Grid.Column="2"
                                     Orientation="Horizontal"
                                     Margin="0,0,0,10">
-                            <TextBlock Text="电表运行"
+                            <TextBlock Text="负荷跟踪电表运行"
                                        Style="{StaticResource NormalTextblockstyle}"></TextBlock>
                             <Ellipse Height="20"
                                      Width="20"
                                      Style="{StaticResource LightEllipse}"
                                      Fill="{Binding StateFill_AmmeterRun}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="3"
+                                    Grid.Column="3"
+                                    Orientation="Horizontal"
+                                    Margin="0,0,0,10">
+                            <TextBlock Text="电量计量电表运行"
+                                       Style="{StaticResource NormalTextblockstyle}"></TextBlock>
+                            <Ellipse Height="20"
+                                     Width="20"
+                                     Style="{StaticResource LightEllipse}"
+                                     Fill="{Binding StateFill_ElectricityAmmeterRun}" />
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -302,7 +313,7 @@
                                        Style="{StaticResource NormalTextblockstyle}"></TextBlock>
                             <TextBlock Text="{Binding EnergyStorageCapacity}"
                                        Style="{StaticResource NormalTextblockstyle}"></TextBlock>
-                            <TextBlock Text="kWh"
+                            <TextBlock Text="MWh"
                                        Style="{StaticResource NormalTextblockstyle}"></TextBlock>
 
                         </StackPanel>
@@ -327,6 +338,7 @@
                                        Style="{StaticResource NormalTextblockstyle}"></TextBlock>
                             <TextBlock Text="%"
                                        Style="{StaticResource NormalTextblockstyle}"></TextBlock>
+                          
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -377,7 +389,7 @@
                                     </StackPanel>
                                     <TextBlock Grid.Row="0"
                                                Grid.Column="1"
-                                               Text="今日充电量（kWh）"
+                                               Text="今月充电量（kWh）"
                                                Style="{StaticResource SystemTextblockstyle}" />
                                     <TextBlock Grid.Row="2"
                                                Grid.Column="1"
@@ -414,7 +426,7 @@
                                     </StackPanel>
                                     <TextBlock Grid.Row="0"
                                                Grid.Column="1"
-                                               Text="今日放电量（kWh）"
+                                               Text="今月放电量（kWh）"
                                                Style="{StaticResource SystemTextblockstyle}" />
                                     <TextBlock Grid.Row="2"
                                                Grid.Column="1"
@@ -455,7 +467,7 @@
                                                Style="{StaticResource SystemTextblockstyle}" />
                                     <TextBlock Grid.Row="2"
                                                Grid.Column="1"
-                                               Text="{Binding CumulativeCharge}"
+                                               Text="{Binding DcBranch1Char}"
                                                Style="{StaticResource SystemTextblockstyle}"
                                                FontSize="18"
                                                FontWeight="Bold" />
@@ -492,7 +504,7 @@
                                                Style="{StaticResource SystemTextblockstyle}" />
                                     <TextBlock Grid.Row="2"
                                                Grid.Column="1"
-                                               Text="{Binding CumulativeDischarge}"
+                                               Text="{Binding DcBranch1DisChar}"
                                                Style="{StaticResource SystemTextblockstyle}"
                                                FontSize="18"
                                                FontWeight="Bold" />
@@ -594,15 +606,14 @@
                                Foreground="Black"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Top" />
-                    <Ellipse Height="20"
-                             Width="20"
-                             Style="{StaticResource LightEllipse}"
-                             Fill="{Binding StartStopState}"
-                             RenderTransformOrigin="2.975,0.5"
-                             HorizontalAlignment="Left"
-                             Canvas.Left="175"
-                             VerticalAlignment="Top"
-                             Canvas.Top="503" />
+                    <TextBlock Text="{Binding StartStopState}"
+                               VerticalAlignment="Top"
+                               HorizontalAlignment="Left"
+                               FontSize="14"
+                               FontWeight="Bold"
+                               Foreground="#337CF0"
+                               Canvas.Left="175"
+                               Canvas.Top="503" />
                     <TextBlock Canvas.Left="101"
                                Canvas.Top="541"
                                Text="故障状态："
@@ -626,7 +637,7 @@
                                Foreground="Black" />
                     <TextBlock Canvas.Left="524"
                                Canvas.Top="503"
-                               Text="{Binding DC_Voltage}"
+                               Text="{Binding DcBranch1DCVol}"
                                FontSize="14"
                                FontWeight="Bold"
                                Foreground="#337CF0"
@@ -641,7 +652,7 @@
                                VerticalAlignment="Top" />
                     <TextBlock Canvas.Left="524"
                                Canvas.Top="540"
-                               Text="{Binding DC_Current}"
+                               Text="{Binding DcBranch1DCCur}"
                                FontSize="14"
                                FontWeight="Bold"
                                Foreground="#337CF0"
@@ -656,7 +667,7 @@
                                VerticalAlignment="Top" />
                     <TextBlock Canvas.Left="536"
                                Canvas.Top="575"
-                               Text="{Binding DC_Power}"
+                               Text="{Binding DcBranch1DCPower}"
                                FontSize="14"
                                FontWeight="Bold"
                                Foreground="#337CF0"

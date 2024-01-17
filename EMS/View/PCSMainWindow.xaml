@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EMS.View"
         mc:Ignorable="d"
-        Title="PCSMainWindow" Height="1080" Width="1920" WindowState="Maximized" Closing="Window_Closing">
+        Title="PCSMainWindow" Height="1080" Width="1920" WindowState="Maximized" >
     
     
     

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
 using System.Management;
@@ -21,21 +22,15 @@ namespace EMS.Model
         public List<SerialPortSettingsModel> getCommPorts()
         {
             List<SerialPortSettingsModel> devices = new List<SerialPortSettingsModel>();
-
-            ManagementObjectCollection moc;
-            using (var searcher = new ManagementObjectSearcher(@"Select * From Win32_SerialPort"))
-                moc = searcher.Get();
-
-            foreach (var device in moc)
+            SerialPort.GetPortNames();
+            foreach(var device in SerialPort.GetPortNames())
             {
                 devices.Add(new SerialPortSettingsModel()
                 {
-                    DeviceID = (string)device.GetPropertyValue("DeviceID"),
-                    Description = (string)device.GetPropertyValue("Description"),
+                    DeviceID = (string)device,
+                    Description = (string)device,
                 });
             }
-
-            moc.Dispose();
             return devices;
         }
         #endregion

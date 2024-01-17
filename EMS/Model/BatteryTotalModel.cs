@@ -111,8 +111,11 @@ namespace EMS.Model
         /// <summary>
         /// BCMU故障
         /// </summary>
-        public int FaultyStateBCMUFlag { get; set; }
+        public int FaultStateBCMUTotalFlag { get; set; }
+        public int FaultStateBCMUFlag1 { get; set; }
+        public int FaultStateBCMUFlag2 { get; set; }
         public List<string> FaultyStateBCMU { get; set; }
+
 
         /// <summary>
         /// BCMU状态颜色 充电、静置、放电、离网
@@ -179,12 +182,25 @@ namespace EMS.Model
         public double AvgVol { get; set; }
 
         /// <summary>
+        /// 额定容量
+        /// </summary>
+        public int NomCapacity { get; set; }
+        /// <summary>
+        /// 额定电压
+        /// </summary>
+        public int NomVoltage { get; set; }
+        /// <summary>
         /// 电池数量
         /// </summary>
-        public ushort BatteryCount { set; get; }
+        public int BatteryCount { set; get; }
+        /// <summary>
+        /// 均衡通道
+        /// </summary>
+        public int BalanceChannel {  get; set; }
+        public DateTime CurrentTime { get; set; }
+
         public ushort SeriesCount = 3;
         public ushort BatteriesCountInSeries = 14;
-        public DateTime CurrentTime;
         public string BCMUID;
 
         public List<BatterySeriesModel> Series { get; set; }

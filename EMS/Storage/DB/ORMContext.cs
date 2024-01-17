@@ -1,4 +1,5 @@
-﻿using EMS.Storage.DB.Models;
+﻿using EMS.Storage.DB.DBManage;
+using EMS.Storage.DB.Models;
 using SQLite.CodeFirst;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,30 @@ namespace EMS.Storage.DB
         }
 
         /// <summary>
+        /// 负荷跟踪电表
+        /// </summary>
+        public DbSet<SmartMeterDBModel> SmartMeterModels { get; set; }
+        /// <summary>
+        /// 电量计量电表
+        /// </summary>
+        public DbSet<SmartElectricityMeterDBModel> SmartElectricityMeterModels { get; set; }
+
+        /// <summary>
+        /// MQTT
+        /// </summary>
+        public DbSet<MqttModel> MqttModels { get; set; }
+
+        /// <summary>
+        /// PCS
+        /// </summary>
+        public DbSet<PcsModel> PcsModels { get; set; }
+
+        /// <summary>
+        /// BMS
+        /// </summary>
+        public DbSet<BcmuModel> BcmuModels { get; set; }
+
+        /// <summary>
         /// 系统配置
         /// </summary>
         public DbSet<DaqConfigurationModel> SystemConfigurations { get; set; }
@@ -56,7 +81,12 @@ namespace EMS.Storage.DB
         public DbSet<PCSControlSettingModel> PCSControlSettingInfos { get; set; }
         public DbSet<PCSInfoModel> PCSInfos { get; set; }
         public DbSet<PCSStrategyDailyPatternInfoModel> pCSStrategyDailyPatternInfos { get; set; }
+        /// <summary>
+        /// 计量电表数据信息
+        /// </summary>
+        public DbSet<SmartElectricityMeterInfoModel> SmartElectricityMeterInfos { get; set; }
 
+        public DbSet<ElectricMeterInfoModel> ElectricMeterInfos { get; set;}
 
     }
 }

@@ -22,18 +22,11 @@
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="6*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <!--1、电压-->
-        <Grid Grid.Row="0"
-              Grid.Column="0">
+        <!--1、负荷跟踪电表-->
+        <Grid Grid.Row="0">
             <Border Background="white"
                     Margin="20,15,0,0"
                     Padding="20,15"
@@ -42,18 +35,24 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="50"/>
                         <ColumnDefinition />
                         <ColumnDefinition />
                         <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <localControl:TitleBorder Grid.ColumnSpan="3" Text="电压" />
+                    <localControl:TitleBorder Grid.ColumnSpan="3" Text="负荷跟踪电表" />
+                    <!--电压-->
                     <StackPanel Grid.Row="1"
                                 Grid.Column="1"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="A相：" />
+                        <TextBlock Text="A相电压：" />
                         <TextBlock Text="{Binding Voltage_A}"
                                    Margin="10,0,10,0" />
                         <TextBlock Text="V" />
@@ -61,7 +60,7 @@
                     <StackPanel Grid.Row="1"
                                 Grid.Column="2"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="B相：" />
+                        <TextBlock Text="B相电压：" />
                         <TextBlock Text="{Binding Voltage_B}"
                                    Margin="10,0,10,0" />
                         <TextBlock Text="V" />
@@ -69,120 +68,107 @@
                     <StackPanel Grid.Row="1"
                                 Grid.Column="3"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="C相：" />
+                        <TextBlock Text="C相电压：" />
                         <TextBlock Text="{Binding Voltage_C}"
                                    Margin="10,0,10,0" />
                         <TextBlock Text="V" />
                     </StackPanel>
-                </Grid>
-            </Border>
-        </Grid>
-        <!--2、电流-->
-        <Grid Grid.Row="0"
-              Grid.Column="1">
-            <Border Background="white"
-                    Margin="20,15,0,0"
-                    Padding="20,15"
-                    CornerRadius="15">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50" />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <localControl:TitleBorder Grid.ColumnSpan="3"
-                                              Text="电流" />
-                    <StackPanel Grid.Row="1"
+                    <!--电流-->
+                    <StackPanel Grid.Row="2"
                                 Grid.Column="1"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="A相：" />
+                        <TextBlock Text="A相电流：" />
                         <TextBlock Text="{Binding Current_A}"
                                    Margin="10,0,10,0" />
                         <TextBlock Text="A" />
                     </StackPanel>
-                    <StackPanel Grid.Row="1"
+                    <StackPanel Grid.Row="2"
                                 Grid.Column="2"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="B相：" />
+                        <TextBlock Text="B相电流：" />
                         <TextBlock Text="{Binding Current_B}"
                                    Margin="10,0,10,0" />
                         <TextBlock Text="A" />
                     </StackPanel>
-                    <StackPanel Grid.Row="1"
+                    <StackPanel Grid.Row="2"
                                 Grid.Column="3"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="C相：" />
+                        <TextBlock Text="C相电流：" />
                         <TextBlock Text="{Binding Current_C}"
                                    Margin="10,0,10,0" />
                         <TextBlock Text="A" />
                     </StackPanel>
-                </Grid>
-            </Border>
-        </Grid>
-        <!--3、有功功率-->
-        <Grid Grid.Row="1"
-              Grid.Column="0">
-            <Border Background="white"
-                    Margin="20,15,0,0"
-                    Padding="20,15"
-                    CornerRadius="15">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50" />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <localControl:TitleBorder Grid.ColumnSpan="3"
-                                              Text="有功功率" />
-                    <StackPanel Grid.Row="1"
+                    <!--有功功率-->
+                    <StackPanel Grid.Row="3"
                                 Grid.Column="1"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="A相：" />
+                        <TextBlock Text="A相有功功率：" />
                         <TextBlock Text="{Binding ActivePower_A}"
                                    Margin="10,0,10,0" />
                         <TextBlock Text="kW" />
                     </StackPanel>
-                    <StackPanel Grid.Row="1"
-                                Grid.Column="3"
+                    <StackPanel Grid.Row="3"
+                                Grid.Column="2"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="B相：" />
+                        <TextBlock Text="B相有功功率：" />
                         <TextBlock Text="{Binding ActivePower_B}"
                                    Margin="10,0,10,0" />
                         <TextBlock Text="kW" />
                     </StackPanel>
-                    <StackPanel Grid.Row="2"
-                                Grid.Column="1"
+                    <StackPanel Grid.Row="3"
+                                Grid.Column="3"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="C相：" />
+                        <TextBlock Text="C相有功功率：" />
                         <TextBlock Text="{Binding ActivePower_C}"
                                    Margin="10,0,10,0" />
                         <TextBlock Text="kW" />
                     </StackPanel>
-                    <StackPanel Grid.Row="2"
+                    <StackPanel Grid.Row="3"
+                                Grid.Column="4"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="总有功功率：" />
+                        <TextBlock Text="{Binding ActivePower_Total}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="kW" />
+                    </StackPanel>
+                    <!--无功功率-->
+                    <StackPanel Grid.Row="4"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="A相无功功率：" />
+                        <TextBlock Text="{Binding WattlessPower_A}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="kW" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="4"
+                                Grid.Column="2"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="B相无功功率：" />
+                        <TextBlock Text="{Binding WattlessPower_B}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="kW" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="4"
                                 Grid.Column="3"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="总功率：" />
-                        <TextBlock Text="{Binding ActivePower_Total}"
+                        <TextBlock Text="C相无功功率：" />
+                        <TextBlock Text="{Binding WattlessPower_C}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="kW" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="4"
+                                Grid.Column="4"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="总无功功率：" />
+                        <TextBlock Text="{Binding WattlessPower_Total}"
                                    Margin="10,0,10,0" />
                         <TextBlock Text="kW" />
                     </StackPanel>
                 </Grid>
             </Border>
         </Grid>
-        <!--4、无功功率-->
-        <Grid Grid.Row="1"
-              Grid.Column="1">
+       <!--2、电量计量电表-->
+        <Grid Grid.Row="1">
             <Border Background="white"
                     Margin="20,15,0,0"
                     Padding="20,15"
@@ -192,46 +178,226 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition />
                         <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="50" />
                         <ColumnDefinition />
                         <ColumnDefinition />
                         <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <localControl:TitleBorder Grid.ColumnSpan="3"
-                                              Text="无功功率" />
+                                              Text="电量计量电表" />
+                    <!--总正反向一次侧电能-->
                     <StackPanel Grid.Row="1"
                                 Grid.Column="1"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="A相：" />
-                        <TextBlock Text="{Binding WattlessPower_A}"
+                        <TextBlock Text="总正向一次侧电能：" />
+                        <TextBlock Text="{Binding TotalForwardPrimaryEnergy}"
                                    Margin="10,0,10,0" />
-                        <TextBlock Text="kW" />
+                        <TextBlock Text="WH" />
                     </StackPanel>
                     <StackPanel Grid.Row="1"
-                                Grid.Column="3"
+                                Grid.Column="2"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="B相：" />
-                        <TextBlock Text="{Binding WattlessPower_B}"
+                        <TextBlock Text="总反向一次侧电能：" />
+                        <TextBlock Text="{Binding TotalReversePrimaryEnergy}"
                                    Margin="10,0,10,0" />
-                        <TextBlock Text="kW" />
+                        <TextBlock Text="WH" />
                     </StackPanel>
+                    <!--电压、电流、功率-->
                     <StackPanel Grid.Row="2"
                                 Grid.Column="1"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="C相：" />
-                        <TextBlock Text="{Binding WattlessPower_C}"
+                        <TextBlock Text="电压：" />
+                        <TextBlock Text="{Binding Voltage}"
                                    Margin="10,0,10,0" />
-                        <TextBlock Text="kW" />
+                        <TextBlock Text="V" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="2"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="电流：" />
+                        <TextBlock Text="{Binding Current}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="A" />
                     </StackPanel>
                     <StackPanel Grid.Row="2"
                                 Grid.Column="3"
                                 Style="{StaticResource ContentPanel}">
-                        <TextBlock Text="总功率：" />
-                        <TextBlock Text="{Binding WattlessPower_Total}"
+                        <TextBlock Text="功率：" />
+                        <TextBlock Text="{Binding Power}"
                                    Margin="10,0,10,0" />
-                        <TextBlock Text="kW" />
+                        <TextBlock Text="KW" />
+                    </StackPanel>
+                    <!--总正向有功电能-->
+                    <StackPanel Grid.Row="3"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="总正向有功电能：" />
+                        <TextBlock Text="{Binding TotalActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="3"
+                                Grid.Column="2"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="总尖正向有功电能：" />
+                        <TextBlock Text="{Binding TotalSpikesActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="3"
+                                Grid.Column="3"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="总峰正向有功电能：" />
+                        <TextBlock Text="{Binding TotalPeakActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="3"
+                                Grid.Column="4"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="总平正向有功电能：" />
+                        <TextBlock Text="{Binding TotalFlatActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="3"
+                                Grid.Column="5"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="总谷正向有功电能：" />
+                        <TextBlock Text="{Binding TotalValleyActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <!--总反向有功电能-->
+                    <StackPanel Grid.Row="4"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="总反向有功电能：" />
+                        <TextBlock Text="{Binding TotalReverseActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="4"
+                                Grid.Column="2"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="总尖反向有功电能：" />
+                        <TextBlock Text="{Binding TotalSpikesReverseActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="4"
+                                Grid.Column="3"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="总峰反向有功电能：" />
+                        <TextBlock Text="{Binding TotalPeakReverseActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="4"
+                                Grid.Column="4"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="总平反向有功电能：" />
+                        <TextBlock Text="{Binding TotalFlatReverseActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="4"
+                                Grid.Column="5"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="总谷反向有功电能：" />
+                        <TextBlock Text="{Binding TotalValleyReverseActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <!--当前月总正向有功电能-->
+                    <StackPanel Grid.Row="5"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="当前月总正向有功电能：" />
+                        <TextBlock Text="{Binding CurrMonthTotalActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="5"
+                                Grid.Column="2"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="当前月尖正向有功电能：" />
+                        <TextBlock Text="{Binding CurrMonthSpikesActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="5"
+                                Grid.Column="3"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="当前月峰正向有功电能：" />
+                        <TextBlock Text="{Binding CurrMonthPeakActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="5"
+                                Grid.Column="4"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="当前月平正向有功电能：" />
+                        <TextBlock Text="{Binding CurrMonthFlatRateActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="5"
+                                Grid.Column="5"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="当前月谷正向有功电能：" />
+                        <TextBlock Text="{Binding CurrMonthValleyActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <!--当前月总反向有功电能-->
+                    <StackPanel Grid.Row="6"
+                                Grid.Column="1"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="当前月总反向有功电能：" />
+                        <TextBlock Text="{Binding CurrMonthTotalReverseActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="6"
+                                Grid.Column="2"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="当前月尖反向有功电能：" />
+                        <TextBlock Text="{Binding CurrMonthSpikesReverseActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="6"
+                                Grid.Column="3"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="当前月峰反向有功电能：" />
+                        <TextBlock Text="{Binding CurrMonthPeakReverseActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="6"
+                                Grid.Column="4"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="当前月平反向有功电能：" />
+                        <TextBlock Text="{Binding CurrMonthFlatReverseActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="6"
+                                Grid.Column="5"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="当前月谷反向有功电能：" />
+                        <TextBlock Text="{Binding CurrMonthValleyReverseActiveEnergy}"
+                                   Margin="10,0,10,0" />
+                        <TextBlock Text="WH" />
                     </StackPanel>
                 </Grid>
             </Border>

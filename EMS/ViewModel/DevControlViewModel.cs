@@ -360,9 +360,8 @@ namespace EMS.Model
             CloseChargeChannelCommand = new RelayCommand(CloseChargeChannel);
             SelectBalancedModeCommand = new RelayCommand(SelectBalancedMode);
             FwUpdateCommand = new RelayCommand(FwUpdate);
-            InNetCommand = new RelayCommand(InNet);
-            ReadBCMUIDINFOCommand = new RelayCommand(ReadBCMUIDINFO);
-            SyncBCMUIDINFOCommand = new RelayCommand(SyncBCMUIDINFO);
+            
+           
             SelectDataCollectionModeCommand = new RelayCommand(SelectDataCollectionMode);   
             DevService = service;
         }
@@ -394,14 +393,11 @@ namespace EMS.Model
             };
         }
 
-        private void InNet()
-        {
-            DevService.InNet();
-        }
+       
 
         private void SelectBalancedMode()
         {
-            DevService.SelectBalancedMode(SelectedBalanceMode);
+            
         }
 
         private void CloseChargeChannel()
@@ -445,17 +441,9 @@ namespace EMS.Model
             DevService.SelectDataCollectionMode(SelectedDataCollectionMode);
         }
 
-        private void ReadBCMUIDINFO()
-        {
-            string[] names = DevService.ReadBCMUIDINFO();
-            BCMUName = names[0];
-            BCMUSName = names[1];
-        }
+       
 
-        private void SyncBCMUIDINFO()
-        {
-            DevService.SyncBCMUIDINFO(this);
-        }
+      
 
     }
 }

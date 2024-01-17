@@ -1,7 +1,10 @@
-﻿using HandyControl.Controls;
+﻿using EMS.Model;
+using EMS.ViewModel.NewEMSViewModel;
+using HandyControl.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,34 +25,22 @@ namespace EMS.View.NewEMSView
     /// </summary>
     public partial class EMSMainView : System.Windows.Window
     {
+
+
+
+        private EMSMainViewModel viewmodel;
         public EMSMainView()
         {
             InitializeComponent();
+            viewmodel = new EMSMainViewModel();
+            Navigation(new HomePage(viewmodel.HomePageModel), null);
+
         }
 
-
-        private Page CurrentPage
-        {
-            get => PageContent.Content as Page;
-            set
-            {
-                if(PageContent.Content != null)
-                {
-                    if ((PageContent.Content as Page).GetType() != value.GetType())
-                    {
-                        PageContent.Content = value;
-                    }
-                }
-                else
-                {
-                    PageContent.Content = value;
-                }
-            }
-        }
         private void Navigation(Page page, ToggleButton button, ToggleButton parent = null, ToggleButton grandpa = null)
         {
             UnCheckedOperation(button, parent, grandpa);
-            CurrentPage = page;
+            PageContent.Content = page;
         }
 
         private void UnCheckedOperation(ToggleButton button, ToggleButton parent = null, ToggleButton grandpa = null)
@@ -66,7 +57,7 @@ namespace EMS.View.NewEMSView
         private void HomeViewMenu_Checked(object sender, RoutedEventArgs e)
         {
             //UnCheckedOperation(sender as ToggleButton);
-            Navigation(new HomePage(), sender as ToggleButton);
+            Navigation(new HomePage(viewmodel.HomePageModel), sender as ToggleButton);
         }
 
         private void MonitorViewMenu_Checked(object sender, RoutedEventArgs e)
@@ -83,7 +74,7 @@ namespace EMS.View.NewEMSView
                 MonitorViewMenu_PCS.Visibility = Visibility.Collapsed;
                 MonitorViewMenu_SM.Visibility = Visibility.Collapsed;
             }
-            Navigation(new Monitor_BMSPage(), sender as ToggleButton);
+            Navigation(new Monitor_BMSPage(viewmodel.Monitor_BMSPageModel), sender as ToggleButton);
         }
 
         private void MonitorViewMenu_BMS_Checked(object sender, RoutedEventArgs e)
@@ -106,21 +97,24 @@ namespace EMS.View.NewEMSView
                 BMS_SubBMU5.Visibility = Visibility.Collapsed;
                 BMS_SubBMU6.Visibility = Visibility.Collapsed;
             }
-            Navigation(new Monitor_BMSPage(), sender as ToggleButton, MonitorViewMenu);
+            Navigation(new Monitor_BMSPage(viewmodel.Monitor_BMSPageModel), sender as ToggleButton, MonitorViewMenu);
         }
         private void BMS_SubBMU1_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Monitor_BMS_BCMUPage(), sender as ToggleButton, MonitorViewMenu_BMS, MonitorViewMenu);
+            var menu = sender as ToggleButton;
+            string str_index = menu.Name.Replace("BMS_SubBMU", "");
+            int index = int.Parse(str_index);
+            Navigation(new Monitor_BMS_BCMUPage(viewmodel.Monitor_BMSPageModel.bmuViewModels[index-1]), sender as ToggleButton, MonitorViewMenu_BMS, MonitorViewMenu);
         }
 
         private void MonitorViewMenu_PCS_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Monitor_PCSPage(), sender as ToggleButton, MonitorViewMenu);
+            Navigation(new Monitor_PCSPage(viewmodel.Monitor_PCSPageModel), sender as ToggleButton, MonitorViewMenu);
         }
 
         private void MonitorViewMenu_SM_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Monitor_SmartMeterPage(), sender as ToggleButton, MonitorViewMenu);
+            Navigation(new Monitor_SmartMeterPage(viewmodel.Monitor_SmartMeterPageModel), sender as ToggleButton, MonitorViewMenu);
 
         }
 
@@ -138,7 +132,7 @@ namespace EMS.View.NewEMSView
                 AnalysisViewMenu_PCS.Visibility = Visibility.Collapsed;
                 AnalysisViewMenu_SmartMeter.Visibility = Visibility.Collapsed;
             }
-            Navigation(new Analysis_BMSPage(), sender as ToggleButton);
+            Navigation(new Analysis_BMSPage(viewmodel.Analysis_BMSPageModel), sender as ToggleButton);
         }
 
         private void FaultViewMenu_Checked(object sender, RoutedEventArgs e)
@@ -160,7 +154,7 @@ namespace EMS.View.NewEMSView
                 StrategyViewMenu_Analysis.Visibility = Visibility.Collapsed;
                 StrategyViewMenu_ProtectSetter.Visibility = Visibility.Collapsed;
             }
-            Navigation(new Strategy_SetterPage(), sender as ToggleButton);
+            Navigation(new Strategy_SetterPage(viewmodel.Strategy_SetterPageModel), sender as ToggleButton);
         }
 
         private void SystemViewMenu_Checked(object sender, RoutedEventArgs e)
@@ -177,52 +171,52 @@ namespace EMS.View.NewEMSView
                 SystemViewMenu_DevSetter.Visibility = Visibility.Collapsed;
                 SystemViewMenu_MqttSetter.Visibility = Visibility.Collapsed;
             }
-            Navigation(new System_DevInfoPage(), sender as ToggleButton);
+            Navigation(new System_DevInfoPage(viewmodel.System_DevInfoPageModel), sender as ToggleButton);
         }
 
         private void AnalysisViewMenu_BMS_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Analysis_BMSPage(), sender as ToggleButton, AnalysisViewMenu);
+            Navigation(new Analysis_BMSPage(viewmodel.Analysis_BMSPageModel), sender as ToggleButton, AnalysisViewMenu);
         }
 
         private void AnalysisViewMenu_PCS_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Analysis_PCSPage(), sender as ToggleButton, AnalysisViewMenu);
+            Navigation(new Analysis_PCSPage(viewmodel.Analysis_PCSPageModel), sender as ToggleButton, AnalysisViewMenu);
         }
 
         private void AnalysisViewMenu_SmartMeter_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Analysis_SmartMeterPage(), sender as ToggleButton, AnalysisViewMenu);
+            Navigation(new Analysis_SmartMeterPage(viewmodel.Analysis_SmartMeterPageModel), sender as ToggleButton, AnalysisViewMenu);
         }
 
         private void StrategyViewMenu_Setter_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Strategy_SetterPage(), sender as ToggleButton, StrategyViewMenu);
+            Navigation(new Strategy_SetterPage(viewmodel.Strategy_SetterPageModel), sender as ToggleButton, StrategyViewMenu);
         }
 
         private void StrategyViewMenu_Analysis_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Strategy_AnalysisPage(), sender as ToggleButton, StrategyViewMenu);
+            Navigation(new Strategy_AnalysisPage(viewmodel.Strategy_AnalysisPageModel), sender as ToggleButton, StrategyViewMenu);
         }
 
         private void StrategyViewMenu_ProtectSetter_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new Strategy_ProtectSetterPage(), sender as ToggleButton, StrategyViewMenu);
+            Navigation(new Strategy_ProtectSetterPage(viewmodel.Strategy_ProtectSetterPageModel), sender as ToggleButton, StrategyViewMenu);
         }
 
         private void SystemViewMenu_DevInfo_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new System_DevInfoPage(), sender as ToggleButton, SystemViewMenu);
+            Navigation(new System_DevInfoPage(viewmodel.System_DevInfoPageModel), sender as ToggleButton, SystemViewMenu);
         }
 
         private void SystemViewMenu_DevSetter_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new System_DevSetterPage(), sender as ToggleButton, SystemViewMenu);
+            Navigation(new System_DevSetterPage(viewmodel.System_DevSetterPageModel), sender as ToggleButton, SystemViewMenu);
         }
 
         private void SystemViewMenu_MqttSetter_Checked(object sender, RoutedEventArgs e)
         {
-            Navigation(new System_MqttSetterPage(), sender as ToggleButton, SystemViewMenu);
+            Navigation(new System_MqttSetterPage(viewmodel.System_MqttSetterPageModel), sender as ToggleButton, SystemViewMenu);
         }
 
         //只展开一个下拉框

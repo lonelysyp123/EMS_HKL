@@ -12,6 +12,9 @@ using TNCN.EMS.Service;
 using Newtonsoft.Json;
 using System.Threading;
 using EMS.Properties;
+using EMS.Service;
+using EMS.Service.impl;
+using EMS.Storage.DB.Models;
 
 namespace TNCN.EMS.Common.StrategyManage
 {
@@ -21,20 +24,11 @@ namespace TNCN.EMS.Common.StrategyManage
 
         public IMqttClientService MqttClientService { get { return mqttClientService; } }
 
-        private string[] subscribeTopics = new string[]
-        {
-             "hkl2/ems/bms/bcmu/setting/set",
-             "hkl2/ems/pcs/setting/dcSideRoad1/set",
-             "hkl2/ems/pcs/setting/busSide/set",
-             "hkl2/ems/strategy/set"
-        };
-        public MqttClientManager() {
-            //TODO （MQTT brocker配置从配置文件获取）
-            MqttConnectInfoModel mqttConnectInfo = new MqttConnectInfoModel("116.62.159.155", 1883, "admin", "zhny2020", "cftest", 55);
-            mqttConnectInfo.Topics = subscribeTopics.ToList();
-            mqttClientService = new MqttClientService();
-            mqttClientService.StartMqttClient(mqttConnectInfo);
+        ISystemSettingService systemSettingService;
 
+        public MqttClientManager() {
+            mqttClientService = new MqttClientService();
+            mqttClientService.ConnectMqtt();
             Task task = new Task(() => { PublishAsync(); });
             task.Start();
         }
@@ -60,10 +54,34 @@ namespace TNCN.EMS.Common.StrategyManage
             }
         }
 
-        private void PublishPcsData() { 
+        private void PublishPcsData() {
+            PCSModel pcsModel = PcsApi.GetNextPCSData();
+            string pcsPostTopic = "hkl2/ems/pcs/post";
+            if (pcsModel != null)
+            {
+                Pcs pcs = new Pcs(pcsModel);
+                byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(pcs));
+                mqttClientService.PublishAsync(pcsPostTopic, data);
+            }
+            else
+            {
+                Thread.Sleep(10);
+            }
         }
 
-        private void PublishSmartMeterData() { 
+        private void PublishSmartMeterData() {
+            SmartMeterModel smartMeterModel = ElectricityMeterApi.GetNextElectricityMeterData();
+            string smartMeterPostTopic = "hkl2/ems/ammeter/post";
+            if (smartMeterModel != null)
+            {
+                SmartMeter smartMeter = new SmartMeter(smartMeterModel);
+                byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(smartMeter));
+                mqttClientService.PublishAsync(smartMeterPostTopic, data);
+            }
+            else
+            {
+                Thread.Sleep(10);
+            }
         }
 
         private void PublishAsync() {

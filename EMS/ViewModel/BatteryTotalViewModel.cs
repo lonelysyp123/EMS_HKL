@@ -490,8 +490,8 @@ namespace EMS.ViewModel
             }
         }
 
-        private ushort _batteryCount;
-        public ushort BatteryCount
+        private int _batteryCount;
+        public int BatteryCount
         {
             get => _batteryCount;
             set
@@ -607,9 +607,8 @@ namespace EMS.ViewModel
             DaqDataImage = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OffDaq.png"));
             RecordDataImage = new BitmapImage(new Uri("pack://application:,,,/Resource/Image/OffRecord.png"));
 
-            service = new BMSDataService();
-            service.RegisterState(ServiceStateCallBack);
-            service.SetCommunicationConfig(IP, Port, TotalList);
+            //service = new BMSDataService();
+            //service.RegisterState(ServiceStateCallBack);
         }
 
         private void ServiceStateCallBack(bool isConnected, bool isDaqData)
@@ -623,29 +622,29 @@ namespace EMS.ViewModel
         [RelayCommand]
         public void DisconnectDev()
         {
-            if(!service.Disconnect())
-            {
-                MessageBox.Show("断开连接失败");
-            }
+            //if(!service.Disconnect())
+            //{
+            //    MessageBox.Show("断开连接失败");
+            //}
         }
 
         [RelayCommand]
         public async void ConnectDev()
         {
-            if(await service.ConnectAsync())
-            {
-                devControlViewModel = new DevControlViewModel(service);
-                devControlViewModel.InitBCMUInfo(3, 14);
-                parameterSettingViewModel = new ParameterSettingViewModel(service, TotalID);
-            }
+            //if(await service.ConnectAsync())
+            //{
+            //    devControlViewModel = new DevControlViewModel(service);
+            //    devControlViewModel.InitBCMUInfo(3, 14);
+            //    parameterSettingViewModel = new ParameterSettingViewModel(service, TotalID);
+            //}
         }
 
         public void StartDaqData()
         {
-            service.StartDaqData();
-            Thread thread = new Thread(RefreshDataTh);
-            thread.IsBackground = true;
-            thread.Start();
+            //service.StartDaqData();
+            //Thread thread = new Thread(RefreshDataTh);
+            //thread.IsBackground = true;
+            //thread.Start();
         }
 
         private void RefreshDataTh()
@@ -721,7 +720,7 @@ namespace EMS.ViewModel
             this.MaxVolDiff = model.MaxVolDiff;
             this.AvgVol = model.AvgVol;
             StateBCMUChange(model.StateBCMU);
-            GetActiveFaultyBCMU(model.FaultyStateBCMUFlag);
+            GetActiveFaultyBCMU(model.FaultStateBCMUFlag1);
             GetBCMUAlarm(model.AlarmStateBCMUFlag1, model.AlarmStateBCMUFlag2, model.AlarmStateBCMUFlag3);
 
             for (int i = 0; i < batterySeriesViewModelList.Count; i++)
@@ -737,7 +736,7 @@ namespace EMS.ViewModel
                 series.MaxTemperature = model.Series[i].MaxTemperature;
                 series.MinTemperatureIndex = model.Series[i].MinTemperatureIndex;
                 series.MaxTemperatureIndex = model.Series[i].MaxTemperatureIndex;
-                series.ChargeChannelStateNumber = model.Series[i].ChargeChannelStateNumber;
+            
                 series.GetActiveFaultyBMU(model.Series[i].FaultyStateFlagBMU);
                 series.GetActiveAlarmBMU(model.Series[i].AlarmStateFlagBMU);
                 series.BMUID = model.Series[i].BMUID;
@@ -1037,9 +1036,7 @@ namespace EMS.ViewModel
                 SeriesModel.MinTemperatureIndex = total.Series[i].MinTemperatureIndex;
                 SeriesModel.MaxTemperature = total.Series[i].MaxTemperature;
                 SeriesModel.MaxTemperatureIndex = total.Series[i].MaxTemperatureIndex;
-                SeriesModel.AlarmState = total.Series[i].AlarmStateFlagBMU.ToString();
-                SeriesModel.FaultState = total.Series[i].FaultyStateFlagBMU.ToString();
-                SeriesModel.ChargeChannelState = total.Series[i].ChargeChannelState.ToString();
+               
                 SeriesModel.ChargeCapacitySum = total.Series[i].ChargeCapacitySum;
                 SeriesModel.HappenTime = date;
                 for (int j = 0; j < total.Series[i].Batteries.Count; j++)
