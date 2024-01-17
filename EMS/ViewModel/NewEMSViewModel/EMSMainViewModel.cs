@@ -137,8 +137,7 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         private void StateCallBack_SEM(object sender, bool isConnected, bool isDaqData, bool isSaveData)
         {
-            HomePageModel.StateDisPlayPCS(isConnected);
-            Monitor_PCSPageModel.PCSStateDistribution(isConnected, isDaqData, isSaveData);
+
         }
     }
 }

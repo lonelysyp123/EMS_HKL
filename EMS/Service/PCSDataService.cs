@@ -17,6 +17,7 @@ using log4net.Repository.Hierarchy;
 using EMS.Storage.DB.DBManage;
 using EMS.Storage.DB.Models;
 using TNCN.EMS.Common.Mqtt;
+using log4net;
 
 namespace EMS.Service
 {
@@ -27,11 +28,14 @@ namespace EMS.Service
         private TcpClient _client;
         private ModbusMaster _master;
         private byte PCSId = 1;
+        private ILog _logger;
+        private BessCommand _currentPcsCommand;
 
         public PCSDataService(string ID)
             :base(ID)
         {
             DevType = "PCS";
+            _logger = LogManager.GetLogger(GetType());
         }
 
         protected override void TryConnect()
@@ -314,50 +318,18 @@ namespace EMS.Service
         }
 
         /// <summary>
-        /// 充放电模式设置
-        /// </summary>
-        /// <param name="pcsmancharmodelset">设置模式</param>
-        public void ModeSet(string pcsmancharmodelset)
-        {
-            if (pcsmancharmodelset == "设置电流调节")
-            {
-                WriteFunc(PCSId, (ushort)PcsCommandAdressEnum.CharModeSet, 0);
-            }
-            else if (pcsmancharmodelset == "设置功率调节")
-            {
-                WriteFunc(PCSId, (ushort)PcsCommandAdressEnum.CharModeSet, 1);
-            }
-        }
-
-        /// <summary>
-        /// PCS手动充放电
-        /// </summary>
-        /// <param name="pcsmancharset">设置值</param>
-        /// <param name="pcsmancharmodelset">设置模式</param>
-        public void ManChar(string pcsmancharmodelset, double pcsmancharset)
-        {
-            if (pcsmancharmodelset == "设置电流调节")
-            {
-                WriteFunc(PCSId, (ushort)PcsCommandAdressEnum.CurrentValueSet, (ushort)(pcsmancharset * 10));
-            }
-            else
-            {
-                WriteFunc(PCSId, (ushort)PcsCommandAdressEnum.PowerValueSet, (ushort)(pcsmancharset * 10));
-            }
-        }
-
-
-        /// <summary>
         /// PCS系统开机
         /// </summary>
         public void PCSOpen()
         {
             try
             {
+                _logger.Info("下发PCS停机指令。");
                 WriteFunc(PCSId, (ushort)PcsCommandAdressEnum.PCSSystemOpen, 1);
             }
             catch (Exception ex)
             {
+                _logger.Error("PCS开机指令下发失败。");
                 throw ex;
             }
         }
@@ -369,10 +341,12 @@ namespace EMS.Service
         {
             try
             {
+                _logger.Info("下发PCS停机指令。");
                 WriteFunc(PCSId, (ushort)PcsCommandAdressEnum.PCSSystemClose, 1);
             }
             catch (Exception ex)
             {
+                _logger.Error("PCS停机指令下发失败。");
                 throw ex;
             }
         }
@@ -429,6 +403,8 @@ namespace EMS.Service
             }
             WriteFunc(PCSId, (ushort)modeAddress, (ushort)modeValue);
             WriteFunc(PCSId, (ushort)valueAddress, (ushort)controlValue);
+            _currentPcsCommand = command;
+            _logger.Info(string.Format("向PCS下发指令:{0} 控制值:{1}。",command.BatteryStrategy.ToString(),command.Value));
         }
     }
     public enum PcsCommandAdressEnum

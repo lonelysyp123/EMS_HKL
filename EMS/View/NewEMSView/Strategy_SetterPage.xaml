@@ -253,7 +253,6 @@
                                 FontWeight="Bold"
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
-                                IsEnabled="{Binding IsEnabled_ManualReset}"
                                 Command="{Binding CommandManualReset}" />
                         <Button Content="应    用"
                                 Width="80"
@@ -264,7 +263,6 @@
                                 Background="#1890FF"
                                 BorderThickness="0,0,0,0"
                                 Margin="20,0,0,0"
-                                IsEnabled="{Binding IsEnabled_ManualApply}"
                                 Command="{Binding CommandManualApply}" />
                     </StackPanel>
                 </Grid>

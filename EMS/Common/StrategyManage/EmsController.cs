@@ -1,6 +1,7 @@
 ﻿using EMS.Api;
 using EMS.Model;
 using EMS.ViewModel;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,11 +24,11 @@ namespace EMS.Common.StrategyManage
         private bool _hasMaxDemandControlEnabled;
         private bool _hasReversePowerflowProtectionEnabled;
         private bool _hasContigencyCheckEnabled;
-
+        private ILog _logger;
         public bool IsAutomaticMode { get { return _isAutomaticMode; } }
         public bool HasDailyPatternEnabled { get { return _hasDailyPatternEnabled; } }
         public bool HasMaxDemandControlEnabled { get { return _hasMaxDemandControlEnabled; } }
-        public bool HasReversePowerflowProtectionEnabled { get { return  _hasReversePowerflowProtectionEnabled; } }
+        public bool HasReversePowerflowProtectionEnabled { get { return _hasReversePowerflowProtectionEnabled; } }
 
         private double _maxDemandPower; //负载侧最大功率极限：通常为负载侧变压器额定功率
         private double _maxDemandPowerDescendRate;
@@ -44,11 +45,11 @@ namespace EMS.Common.StrategyManage
         private double _dischargingSecurityFactor;
         private int _controlPeriod; // 系统控制周期 unit: ms
 
-        public double MaxSoc {  get { return _maxSoc; } }
+        public double MaxSoc { get { return _maxSoc; } }
         public void SetMaxSoc(double maxSoc) { _maxSoc = maxSoc; }
-        public double MinSoc {  get { return _minSoc; } }
+        public double MinSoc { get { return _minSoc; } }
         public void SetMinSoc(double minSoc) { _minSoc = minSoc; }
-        public double MaxChargingPower { get {  return _maxChargingPower; } }
+        public double MaxChargingPower { get { return _maxChargingPower; } }
         public void SetMaxChargingPower(double maxChargingPower) { _maxChargingPower = maxChargingPower; }
         public double MaxDischargingPower { get { return _maxDischargingPower; } }
         public void SetMaxDischargingPower(double maxDischargingPower) { _maxChargingPower = maxDischargingPower; }
@@ -59,8 +60,8 @@ namespace EMS.Common.StrategyManage
         private IntraDayScheduler _scheduler;
         private ContingencyStatusEnum _contingencyStatus;
         private DateTime _lastActiveTimestamp; // used to indicate the system operation thread is still alive.
-        
-        public BessCommand ManualCommand {  get { return _manualCommand; } }
+
+        public BessCommand ManualCommand { get { return _manualCommand; } }
         public void SetManualCommand(BessCommand command) { _manualCommand = command; }
         public List<BatteryStrategyModel> DailyPattern { get; set; }
 
@@ -70,18 +71,6 @@ namespace EMS.Common.StrategyManage
             _isAutomaticMode = automationMode;
             _hasReversePowerflowProtectionEnabled = reversePowermode;
             _hasDailyPatternEnabled = dailyPatternMode;
-        }
-
-        public List<bool> GetMode()
-        {
-            List<bool> result = new List<bool>()
-            {
-                _isAutomaticMode,
-                _hasDailyPatternEnabled,
-                _hasMaxDemandControlEnabled,
-                _hasReversePowerflowProtectionEnabled
-            };
-            return result;
         }
 
         public void SetMaxDemandThreshold(double maxdemandpower, double descendrate)
@@ -114,6 +103,7 @@ namespace EMS.Common.StrategyManage
             _currentCommand = null;
             _scheduler = new IntraDayScheduler();
             _contingencyStatus = ContingencyStatusEnum.Normal;
+            _logger = LogManager.GetLogger(GetType());
             IniFileHelper.Read(IniSectionEnum.Strategy, "ChargingSecurityFactor", out _chargingSecurityFactor);
             IniFileHelper.Read(IniSectionEnum.Strategy, "ControlPeriod", out _controlPeriod);
             IniFileHelper.Read(IniSectionEnum.Strategy, "DcBusConnectionChargingPowerFactor", out _dcBusConnectionChargingPowerFactor);
@@ -141,7 +131,6 @@ namespace EMS.Common.StrategyManage
         public void ContinueOperation()
         {
             ContingencyCheck();
-            UpdateMode();
             NormalOperation();
             _lastActiveTimestamp = DateTime.Now;
             Thread.Sleep(_controlPeriod);
@@ -226,7 +215,7 @@ namespace EMS.Common.StrategyManage
             BatteryStrategyEnum strategy = BatteryStrategyEnum.Standby;
             if (!PcsApi.IsPcsNormal()) throw new Exception("PCS处于故障状态无法并网"); // 检查PCS状态，确保PCS通信连接，无故障，
             int numClusters = bcmuIds.Count;// 得到目前有几簇电池
-            List<Tuple<double,string>>voltageBcmuIdPairs = new List<Tuple<double,string>>();
+            List<Tuple<double, string>> voltageBcmuIdPairs = new List<Tuple<double, string>>();
             foreach (string bcmuId in bcmuIds)
             {
                 double voltage = BmsApi.GetNextBMSData(bcmuId).TotalVoltage; // 得到每一簇的电压
@@ -234,13 +223,14 @@ namespace EMS.Common.StrategyManage
                 voltageBcmuIdPairs.Add(voltageBcmuIdPair);
             }
             voltageBcmuIdPairs.Sort((x, y) => x.Item1.CompareTo(y.Item1));// 将电压从低到高排序
-            for (int i = 0; i < numClusters-1; i++) {
+            for (int i = 0; i < numClusters - 1; i++)
+            {
                 chargingPower = 0;
                 strategy = BatteryStrategyEnum.Standby;
                 PcsApi.SendPcsCommand(new BessCommand(chargingPower, strategy)); // 将PCS设置成待机状态。
                 string currentBcmuId = voltageBcmuIdPairs[i].Item2;
                 BmsApi.Connect2DcBus(currentBcmuId);// 将当前簇并网
-                string nextBcmuId = voltageBcmuIdPairs[i+1].Item2; 
+                string nextBcmuId = voltageBcmuIdPairs[i + 1].Item2;
                 strategy = BatteryStrategyEnum.ConstantPowerCharge; //设定并网充电方式为恒功率充电
                 chargingPower = BmsApi.GetNormalPowerCapacity() * _dcBusConnectionChargingPowerFactor; //计算并网充电功率
                 PcsApi.SendPcsCommand(new BessCommand(chargingPower, strategy)); // 对PCS下发指令进行并网充电
@@ -250,7 +240,7 @@ namespace EMS.Common.StrategyManage
                 }
 
             }
-            BmsApi.Connect2DcBus(voltageBcmuIdPairs[numClusters-1].Item2);// 将最后一簇并网
+            BmsApi.Connect2DcBus(voltageBcmuIdPairs[numClusters - 1].Item2);// 将最后一簇并网
             chargingPower = 0;
             strategy = BatteryStrategyEnum.Standby;
             PcsApi.SendPcsCommand(new BessCommand(chargingPower, strategy)); // 并网完成后将PCS恢复成待机状态
@@ -275,6 +265,7 @@ namespace EMS.Common.StrategyManage
 
         private void ContingencyCheck()
         {
+            _logger.Info("故障检测开始");
             if (!_hasContigencyCheckEnabled) return; //未启用则直接return
             ///获取全部故障告警
             bool bmsFault = false;
@@ -286,40 +277,41 @@ namespace EMS.Common.StrategyManage
             List<string> pcsErrors = PcsApi.GetPCSFaultInfo();
             List<string> systemErrors = StrategyManager.Instance.GetSystemErrors();
 
-            
-            
-            if (pcsErrors.Count == 0 && systemErrors.Count == 0&&(!bmsFault))
+
+
+            if (pcsErrors.Count == 0 && systemErrors.Count == 0 && (!bmsFault))
             {
-               if(bmsAlarm==0)
+                if (bmsAlarm == 0)
                 {
                     _contingencyStatus = ContingencyStatusEnum.Normal; //全没故障
-                }else 
-                 {
+                    _logger.Info("当前轮故障检测没有发现任何异常情况，BMS,PCS,EMS均正常。");
+                }
+                else
+                {
                     switch (bmsAlarm) //bmsAlarm有告警
                     {
                         case 1:
-                            {
-                                _contingencyStatus = ContingencyStatusEnum.Level1;
-                            }
+                            _contingencyStatus = ContingencyStatusEnum.Level1;
+                            _logger.Info("BMS发生一级告警。");
                             break;
                         case 2:
-                            {
-                                _contingencyStatus = ContingencyStatusEnum.Level2;
-                            }
+                            _contingencyStatus = ContingencyStatusEnum.Level2;
+                            _logger.Info("BMS发生二级告警。");
                             break;
                         case 3:
-                            {
-                                _contingencyStatus = ContingencyStatusEnum.Level3;
-                            }
+                            _contingencyStatus = ContingencyStatusEnum.Level3;
+                            _logger.Info("BMS发生三级告警。");
                             break;
-
+                        default:
+                            throw new ArgumentOutOfRangeException("bmsAlarm数值异常。");
                     }
-                  }
+                }
             }
             else   //有故障
             {
                 _contingencyStatus = ContingencyStatusEnum.Level3;
-            }                   
+                _logger.Info("存在系统故障。");
+            }
             BessCommand command = new BessCommand(0, BatteryStrategyEnum.Standby);
             switch (_contingencyStatus)
             {
@@ -331,18 +323,9 @@ namespace EMS.Common.StrategyManage
                     PcsApi.SetPCSHalt();//停机
                     break;
             }
-
+            _logger.Info("故障检测完成");
         }
 
-        private void UpdateMode()
-        {
-            List<bool> modeArray = new List<bool>();
-            modeArray = StrategyApi.GetMode();
-            _isAutomaticMode = modeArray[0];
-            _hasDailyPatternEnabled = modeArray[1];
-            _hasMaxDemandControlEnabled = modeArray[2];
-            _hasReversePowerflowProtectionEnabled = modeArray[3];
-        }
     }
     public enum ContingencyStatusEnum
     {

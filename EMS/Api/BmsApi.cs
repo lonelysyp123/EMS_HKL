@@ -247,6 +247,12 @@ namespace EMS.Api
             List<double> sOCTotalList = GetTotalSOC();
             return sOCTotalList.Average();
         }
+
+        /// <summary>
+        /// 同步组端电压上限
+        /// </summary>
+        /// <param name="index">BCMU 序列号</param>
+        /// <param name="values">一级二级三级数值</param>
         public static void SyncBCMUInfo1(int index, ushort[] values)
         {
             EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices[index].SyncBCMUInfo1(values);
@@ -306,6 +312,11 @@ namespace EMS.Api
            item.SendBalanceMode(values);
         }
 
+        /// <summary>
+        /// 打开均衡通道
+        /// </summary>
+        /// <param name="index">BCMU 序列号</param>
+        /// <param name="values">通道号</param>
         public static void SendBalanceChannel(string index, ushort values)
         {
             var item = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices.ToList().Find(x => x.ID == index);
