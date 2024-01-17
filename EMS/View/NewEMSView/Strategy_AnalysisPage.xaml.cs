@@ -29,10 +29,10 @@ namespace EMS.View.NewEMSView
         public Strategy_AnalysisPage()
         {
             InitializeComponent();
-            c1Chart1.View.AxisY.Min = -1600;
-            c1Chart1.View.AxisY.Max = 1600;
-            c1Chart1.View.AxisX.Scale += 1;
-            c1Chart1.View.AxisY.Scale += 1;            
+            //c1Chart1.View.AxisY.Min = -1600;
+            //c1Chart1.View.AxisY.Max = 1600;
+            //c1Chart1.View.AxisX.Scale += 1;
+            //c1Chart1.View.AxisY.Scale += 1;            
             textBox.PreviewTextInput += TextBox_PreviewTextInput;
             this.DataContext = new Strategy_AnalysisPageModel();
         }
@@ -49,19 +49,19 @@ namespace EMS.View.NewEMSView
                 e.Handled = true;
             }
         }
-        private void chart_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            if (e.Delta == -120)
-            {
-                c1Chart1.View.AxisX.Scale += 0.1;
-                c1Chart1.View.AxisY.Scale += 0.1;
-            }
-            else if (e.Delta == 120)
-            {
-                c1Chart1.View.AxisX.Scale -= 0.1;
-                c1Chart1.View.AxisY.Scale -= 0.1;
-            }
-        }
+        //private void chart_MouseWheel(object sender, MouseWheelEventArgs e)
+        //{
+        //    if (e.Delta == -120)
+        //    {
+        //        c1Chart1.View.AxisX.Scale += 0.1;
+        //        c1Chart1.View.AxisY.Scale += 0.1;
+        //    }
+        //    else if (e.Delta == 120)
+        //    {
+        //        c1Chart1.View.AxisX.Scale -= 0.1;
+        //        c1Chart1.View.AxisY.Scale -= 0.1;
+        //    }
+        //}
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 

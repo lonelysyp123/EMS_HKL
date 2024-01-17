@@ -280,7 +280,7 @@
                     </Grid>
 
                     <Grid x:Name="LayoutRoot" Grid.Row="1">
-                        <c1:C1Chart  ChartType="steparea" Name="c1Chart1" Palette="Flow" MouseWheel="chart_MouseWheel" Foreground="Black">
+                        <!--<c1:C1Chart  ChartType="steparea" Name="c1Chart1" Palette="Flow" MouseWheel="chart_MouseWheel" Foreground="Black">
                             <c1:C1Chart.View>
                                 <c1:ChartView>
                                     <c1:ChartView.Layers>
@@ -316,7 +316,7 @@
                                     </c1:DataSeries>
                                 </c1:ChartData>
                             </c1:C1Chart.Data>
-                        </c1:C1Chart>
+                        </c1:C1Chart>-->
                     </Grid>
                 </Grid>
             </Border>
