@@ -421,27 +421,32 @@ namespace EMS.ViewModel.NewEMSViewModel
             if (SelectedManualStrategyMode == "待机")
             {
                 var manualCommand = new BessCommand(this.StrategyManualValueSet, (BatteryStrategyEnum)SelectedManualMode.Standby);
-                StrategyApi.SetManualCommand(manualCommand);
+                //StrategyApi.SetManualCommand(manualCommand);
+                PcsApi.SendPcsCommand(manualCommand);
             }
             if (SelectedManualStrategyMode == "恒电流充电")
             {
                 var manualCommand = new BessCommand(this.StrategyManualValueSet, (BatteryStrategyEnum)SelectedManualMode.ConstantCurrentCharge);
-                StrategyApi.SetManualCommand(manualCommand);
+                //StrategyApi.SetManualCommand(manualCommand);
+                PcsApi.SendPcsCommand(manualCommand);
             }
             if (SelectedManualStrategyMode == "恒电流放电")
             {
                 var manualCommand = new BessCommand(this.StrategyManualValueSet, (BatteryStrategyEnum)SelectedManualMode.ConstantCurrentDischarge);
-                StrategyApi.SetManualCommand(manualCommand);
+                //StrategyApi.SetManualCommand(manualCommand);
+                PcsApi.SendPcsCommand(manualCommand);
             }
             if (SelectedManualStrategyMode == "恒功率充电")
             {
                 var manualCommand = new BessCommand(this.StrategyManualValueSet, (BatteryStrategyEnum)SelectedManualMode.ConstantPowerCharge);
-                StrategyApi.SetManualCommand(manualCommand);
+                //StrategyApi.SetManualCommand(manualCommand);
+                PcsApi.SendPcsCommand(manualCommand);
             }
             if (SelectedManualStrategyMode == "恒功率放电")
             {
                 var manualCommand = new BessCommand(this.StrategyManualValueSet, (BatteryStrategyEnum)SelectedManualMode.ConstantPowerDischarge);
-                StrategyApi.SetManualCommand(manualCommand);
+                //StrategyApi.SetManualCommand(manualCommand);
+                PcsApi.SendPcsCommand(manualCommand);
             }
         }
         /// <summary>
