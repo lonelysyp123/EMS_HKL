@@ -333,20 +333,10 @@ namespace EMS.ViewModel.NewEMSViewModel
             StrategyControlStartStopCommand = new RelayCommand(StrategyControlStartStop);
             DemandControlStartStopCommand = new RelayCommand(DemandControlStartStop);
             InversePowerProtectionStartStopCommand = new RelayCommand(InversePowerProtectionStartStop);
-            if (TotalStrategyState == "手动运行")
-            {
-                CommandManualReset = new RelayCommand(ManualReset);
-                CommandManualApply = new RelayCommand(ManualApply);
-            }
-            else if (TotalStrategyState == "自动运行")
-            {
-                CommandAutoReset = new RelayCommand(AutoReset);
-                ReversePowerSendCommand = new RelayCommand(ReversePowerSend);
-            }
-            //else
-            //{
-            //    throw new NotImplementedException();
-            //}
+            CommandManualReset = new RelayCommand(ManualReset);
+            CommandManualApply = new RelayCommand(ManualApply);
+            CommandAutoReset = new RelayCommand(AutoReset);
+            ReversePowerSendCommand = new RelayCommand(ReversePowerSend);
         }
         private void SwitchAutoManual()
         {
