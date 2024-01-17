@@ -120,9 +120,9 @@ namespace TNCN.EMS.Common.Mqtt
             this.id = 1;
             this.sn = smartMeterModel.SmartMeterNumber;
             this.time = DateTimeUtil.ConvertDateTimeToLong(DateTime.Now);
-            this.A_curr = smartMeterModel.Electric_A;
-            this.B_curr = smartMeterModel.Electric_B;
-            this.C_curr = smartMeterModel.Electric_C;
+            this.A_curr = smartMeterModel.Current_A;
+            this.B_curr = smartMeterModel.Current_B;
+            this.C_curr = smartMeterModel.Current_C;
             this.A_volt = smartMeterModel.Voltage_A;
             this.B_volt = smartMeterModel.Voltage_B;
             this.C_volt = smartMeterModel.Voltage_C;

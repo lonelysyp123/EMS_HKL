@@ -437,15 +437,17 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <param name="model"></param>
         public void DataDisPlaySM(bool isconnected)
         {
-            if (isconnected)
+            App.Current.Dispatcher.Invoke(() =>
             {
-                StateFill_AmmeterRun = new SolidColorBrush(BCMUColors.IsConnect_T);
-            }
-            else
-            {
-                StateFill_AmmeterRun = new SolidColorBrush(BCMUColors.IsConnect_F);
-            }
-
+                if (isconnected)
+                {
+                    StateFill_AmmeterRun = new SolidColorBrush(BCMUColors.IsConnect_T);
+                }
+                else
+                {
+                    StateFill_AmmeterRun = new SolidColorBrush(BCMUColors.IsConnect_F);
+                }
+            });
         }
 
         public void StateDisPlayFault()

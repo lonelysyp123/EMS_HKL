@@ -276,9 +276,9 @@ namespace EMS.ViewModel
             this.Voltage_A = currentSmartMeterModel.Voltage_A;
             this.Voltage_B = currentSmartMeterModel.Voltage_B;
             this.Voltage_C = currentSmartMeterModel.Voltage_A;
-            this.Electric_A = currentSmartMeterModel.Electric_A;
-            this.Electric_B = currentSmartMeterModel.Electric_B;
-            this.Electric_C = currentSmartMeterModel.Electric_C;
+            this.Electric_A = currentSmartMeterModel.Current_A;
+            this.Electric_B = currentSmartMeterModel.Current_B;
+            this.Electric_C = currentSmartMeterModel.Current_C;
             this.ActivePower_A = currentSmartMeterModel.ActivePower_A;
             this.ActivePower_B = currentSmartMeterModel.ActivePower_B;
             this.ActivePower_C = currentSmartMeterModel.ActivePower_C;
@@ -314,9 +314,9 @@ namespace EMS.ViewModel
         public ThreePhaseValue GetThreePhaseElectric()
         {
             var item = new ThreePhaseValue();
-            item.PhaseA = CurrentSmartMeterModel.Electric_A;
-            item.PhaseB = CurrentSmartMeterModel.Electric_B;
-            item.PhaseC = CurrentSmartMeterModel.Electric_C;
+            item.PhaseA = CurrentSmartMeterModel.Current_A;
+            item.PhaseB = CurrentSmartMeterModel.Current_B;
+            item.PhaseC = CurrentSmartMeterModel.Current_C;
             return item;
         }
 

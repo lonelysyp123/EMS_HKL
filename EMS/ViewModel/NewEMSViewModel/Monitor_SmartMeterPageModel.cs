@@ -455,9 +455,9 @@ namespace EMS.ViewModel.NewEMSViewModel
             this.Voltage_B = model.Voltage_B;
             this.Voltage_C = model.Voltage_C;
             //A,B,C三相电流
-            this.Current_A = model.Electric_A;
-            this.Current_B = model.Electric_B;
-            this.Current_C = model.Electric_C;
+            this.Current_A = model.Current_A;
+            this.Current_B = model.Current_B;
+            this.Current_C = model.Current_C;
             //A,B,C三相和总有功功率
             this.ActivePower_A = model.ActivePower_A;
             this.ActivePower_B = model.ActivePower_B;
