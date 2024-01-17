@@ -192,85 +192,85 @@ namespace EMS.Service
                     var Data_Voltage_A = ReadDataForCmd(Request_GetVoltage_A, Response_GetVoltage_A.Length);
                     if(DataDecode(Data_Voltage_A, Response_GetVoltage_A, out int Voltage_A))
                     {
-                        CurrentModel.Voltage_A = Voltage_A;
+                        CurrentModel.Voltage_A = Voltage_A * 0.1;
                     }
 
                     var Data_Voltage_B = ReadDataForCmd(Request_GetVoltage_B, Response_GetVoltage_B.Length);
                     if (DataDecode(Data_Voltage_B, Response_GetVoltage_B, out int Voltage_B))
                     {
-                        CurrentModel.Voltage_B = Voltage_B;
+                        CurrentModel.Voltage_B = Voltage_B * 0.1;
                     }
 
                     var Data_Voltage_C = ReadDataForCmd(Request_GetVoltage_C, Response_GetVoltage_C.Length);
                     if (DataDecode(Data_Voltage_C, Response_GetVoltage_C, out int Voltage_C))
                     {
-                        CurrentModel.Voltage_C = Voltage_C;
+                        CurrentModel.Voltage_C = Voltage_C * 0.1;
                     }
 
                     var Data_Current_A = ReadDataForCmd(Request_GetCurrent_A, Response_GetCurrent_A.Length);
                     if (DataDecode(Data_Current_A, Response_GetCurrent_A, out int Current_A))
                     {
-                        CurrentModel.Current_A = Current_A;
+                        CurrentModel.Current_A = Current_A * 0.001;
                     }
 
                     var Data_Current_B = ReadDataForCmd(Request_GetCurrent_B, Response_GetCurrent_B.Length);
                     if (DataDecode(Data_Current_B, Response_GetCurrent_B, out int Current_B))
                     {
-                        CurrentModel.Current_B = Current_B;
+                        CurrentModel.Current_B = Current_B * 0.001;
                     }
 
                     var Data_Current_C = ReadDataForCmd(Request_GetCurrent_C, Response_GetCurrent_C.Length);
                     if (DataDecode(Data_Current_C, Response_GetCurrent_C, out int Current_C))
                     {
-                        CurrentModel.Current_C = Current_C;
+                        CurrentModel.Current_C = Current_C * 0.001;
                     }
 
                     var Data_ActivePower_A = ReadDataForCmd(Request_GetActivePower_A, Response_GetActivePower_A.Length);
                     if (DataDecode(Data_ActivePower_A, Response_GetActivePower_A, out int ActivePower_A))
                     {
-                        CurrentModel.ActivePower_A = ActivePower_A;
+                        CurrentModel.ActivePower_A = ActivePower_A * 0.0001;
                     }
 
                     var Data_ActivePower_B = ReadDataForCmd(Request_GetActivePower_B, Response_GetActivePower_B.Length);
                     if (DataDecode(Data_ActivePower_B, Response_GetActivePower_B, out int ActivePower_B))
                     {
-                        CurrentModel.ActivePower_B = ActivePower_B;
+                        CurrentModel.ActivePower_B = ActivePower_B * 0.0001;
                     }
 
                     var Data_ActivePower_C = ReadDataForCmd(Request_GetActivePower_C, Response_GetActivePower_C.Length);
                     if (DataDecode(Data_ActivePower_C, Response_GetActivePower_C, out int ActivePower_C))
                     {
-                        CurrentModel.ActivePower_C = ActivePower_C;
+                        CurrentModel.ActivePower_C = ActivePower_C * 0.0001;
                     }
 
                     var Data_ActivePower_Total = ReadDataForCmd(Request_GetActivePower_Total, Response_GetActivePower_Total.Length);
                     if (DataDecode(Data_ActivePower_Total, Response_GetActivePower_Total, out int ActivePower_Total))
                     {
-                        CurrentModel.ActivePower_Total = ActivePower_Total;
+                        CurrentModel.ActivePower_Total = ActivePower_Total * 0.0001;
                     }
 
                     var Data_ReactivePower_A = ReadDataForCmd(Request_GetReactivePower_A, Response_GetReactivePower_A.Length);
                     if (DataDecode(Data_ReactivePower_A, Response_GetReactivePower_A, out int ReactivePower_A))
                     {
-                        CurrentModel.ReactivePower_A = ReactivePower_A;
+                        CurrentModel.ReactivePower_A = ReactivePower_A * 0.0001;
                     }
 
                     var Data_ReactivePower_B = ReadDataForCmd(Request_GetReactivePower_B, Response_GetReactivePower_B.Length);
                     if (DataDecode(Data_ReactivePower_B, Response_GetReactivePower_B, out int ReactivePower_B))
                     {
-                        CurrentModel.ReactivePower_B = ReactivePower_B;
+                        CurrentModel.ReactivePower_B = ReactivePower_B * 0.0001;
                     }
 
                     var Data_ReactivePower_C = ReadDataForCmd(Request_GetReactivePower_C, Response_GetReactivePower_C.Length);
                     if (DataDecode(Data_ReactivePower_C, Response_GetReactivePower_C, out int ReactivePower_C))
                     {
-                        CurrentModel.ReactivePower_C = ReactivePower_C;
+                        CurrentModel.ReactivePower_C = ReactivePower_C * 0.0001;
                     }
 
                     var Data_ReactivePower_Total = ReadDataForCmd(Request_GetReactivePower_Total, Response_GetReactivePower_Total.Length);
                     if (DataDecode(Data_ReactivePower_Total, Response_GetReactivePower_Total, out int ReactivePower_Total))
                     {
-                        CurrentModel.ReactivePower_Total = ReactivePower_Total;
+                        CurrentModel.ReactivePower_Total = ReactivePower_Total * 0.0001;
                     }
                     OnChangeData(this, CurrentModel.Clone());
                     Models.TryAdd(CurrentModel.Clone() as SmartMeterModel);
