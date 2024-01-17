@@ -262,7 +262,7 @@ namespace EMS.Service
             while (!IsConnected)
             {
                 Thread.Sleep(ReconnectIntervalLong);
-                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(ReconnectInterval))
+                if (_client.ConnectAsync(IPAddress.Parse(IP), Port).Wait(100))
                 {
                     _master = ModbusIpMaster.CreateIp(_client);
                     IsConnected = true;
