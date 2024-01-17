@@ -210,11 +210,30 @@ namespace EMS.ViewModel.NewEMSViewModel
         private void BatteryStrategyAddRow()
         {
             StrategyModel newStrategy = new StrategyModel();
-            
-            newStrategy.StrategyStartTime = StrategyStartTimeSet;
             newStrategy.StrategyMode = SelectedStrategyMode;
             newStrategy.StrategyValue = StrategyValueSet;
-            bool sameTimeCheck = TotalStrategies.ToList().Any(Item => Item.StrategyStartTime == StrategyStartTimeSet);
+            TimeSpan temp;
+            try {
+                if (TimeSpan.Parse(StrategyStartTimeSet) > TimeSpan.Parse("23:59:59"))
+                {
+                    MessageBox.Show("设置时间不合理");
+                    return;
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("设置时间不合理");
+                return;
+            }
+            
+            if (StrategyStartTimeSet.Length != 8)
+            {
+                temp = TimeSpan.Parse(StrategyStartTimeSet);
+                StrategyStartTimeSet = temp.ToString();
+            }
+
+            newStrategy.StrategyStartTime = StrategyStartTimeSet;            
+            bool sameTimeCheck = TotalStrategies.ToList().Any(Item => TimeSpan.Parse(Item.StrategyStartTime) == TimeSpan.Parse(StrategyStartTimeSet));
             bool stringValidityCheck = CheckTimeStringValidity(newStrategy.StrategyStartTime);
             switch (SelectedStrategyMode)
             {
