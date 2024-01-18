@@ -428,88 +428,328 @@
                 </Grid>
             </Border>
         </Grid>
-        <!--3、DC模块状态-->
+        
         <Grid Grid.Row="1"
               Grid.Column="0">
-            <Border Background="white"
-                    Margin="20,15,0,0"
-                    Padding="20,15"
-                    CornerRadius="15">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <localControl:TitleBorder Grid.ColumnSpan="4"
-                                              Text="DC模块状态" />
-                    <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <!--3、PCS开关机-->
+            <Grid Grid.Row="0">
+                <Border Background="white"
+                        Margin="20,15,0,0"
+                        Padding="20,15"
+                        CornerRadius="15">
+                    <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        
-                        <Border Background="LightGray" CornerRadius="5" Margin="0 10 0 0">
-                            <TextBlock Text="序号" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Border>
-                        <Border Background="LightGray" CornerRadius="5" Margin="0 10 0 0" Grid.Row="0" Grid.Column="1">
-                            <TextBlock Text="名称" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                        <Border Background="LightGray" CornerRadius="5" Margin="0 10 0 0" Grid.Row="0" Grid.Column="2">
-                            <TextBlock Text="状态" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                        
-                        <TextBlock Text="1" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
-                        <TextBlock Text="2" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0"/>
-                        <TextBlock Text="3" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="3" Grid.Column="0"/>
-                        <TextBlock Text="4" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="4" Grid.Column="0"/>
-                        <TextBlock Text="5" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="5" Grid.Column="0"/>
-                        <TextBlock Text="6" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="6" Grid.Column="0"/>
-                        <TextBlock Text="7" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="7" Grid.Column="0"/>
-                        <TextBlock Text="8" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="8" Grid.Column="0"/>
-                        <TextBlock Text="9" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="9" Grid.Column="0"/>
-                        <TextBlock Text="10" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="10" Grid.Column="0"/>
-
-                        <TextBlock Text="DC模块组：模块1"  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
-                        <TextBlock Text="DC模块组：模块2"  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
-                        <TextBlock Text="DC模块组：模块3"  Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
-                        <TextBlock Text="DC模块组：模块4"  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
-                        <TextBlock Text="DC模块组：模块5"  Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
-                        <TextBlock Text="DC模块组：模块6"  Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
-                        <TextBlock Text="DC模块组：模块7"  Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
-                        <TextBlock Text="DC模块组：模块8"  Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
-                        <TextBlock Text="DC模块组：模块9"  Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
-                        <TextBlock Text="DC模块组：模块10"  Grid.Row="10" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" FontSize="20"/>
-
-                        <TextBlock Text="{Binding Module1Status1}"  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor1}" FontSize="20"/>
-                        <TextBlock Text="{Binding Module1Status2}"  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor2}" FontSize="20"/>
-                        <TextBlock Text="{Binding Module1Status3}"  Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor3}" FontSize="20"/>
-                        <TextBlock Text="{Binding Module1Status4}"  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor4}" FontSize="20"/>
-                        <TextBlock Text="{Binding Module1Status5}"  Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor5}" FontSize="20"/>
-                        <TextBlock Text="{Binding Module1Status6}"  Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor6}" FontSize="20"/>
-                        <TextBlock Text="{Binding Module1Status7}"  Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor7}" FontSize="20"/>
-                        <TextBlock Text="{Binding Module1Status8}"  Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor8}" FontSize="20"/>
-                        <TextBlock Text="{Binding Module1Status9}"  Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor9}" FontSize="20"/>
-                        <TextBlock Text="{Binding Module1Status10}"  Grid.Row="10" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor10}" FontSize="20"/>
+                        <localControl:TitleBorder Grid.ColumnSpan="4"
+                                                  Text="PCS控制"
+                                                  Margin="0,0,0,15"/>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="开机：" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Button Content="开    机"
+                                        Width="80"
+                                        Height="30"
+                                        FontSize="12"
+                                        Foreground="white"
+                                        FontWeight="Bold"
+                                        Background="#1890FF"
+                                        BorderThickness="0,0,0,0"
+                                        Margin="10,0,0,0"
+                                        Command="{Binding CommandStart}"
+                                       />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2"
+                                        Orientation="Horizontal">
+                                <TextBlock Text="关机："
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
+                                <Button Content="关    机"
+                                        Width="80"
+                                        Height="30"
+                                        FontSize="12"
+                                        Foreground="white"
+                                        FontWeight="Bold"
+                                        Background="#1890FF"
+                                        BorderThickness="0,0,0,0"
+                                        Margin="10,0,0,0"
+                                        Command="{Binding CommandClose}" />
+                            </StackPanel>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Border>
+                </Border>
+            </Grid>
+            <!--4、DC模块状态-->
+            <Grid Grid.Row="1">
+                <Border Background="white"
+                        Margin="20,15,0,0"
+                        Padding="20,15"
+                        CornerRadius="15">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <localControl:TitleBorder Grid.ColumnSpan="4"
+                                                  Text="DC模块状态" />
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <Border Background="LightGray"
+                                    CornerRadius="5"
+                                    Margin="0 10 0 0">
+                                <TextBlock Text="序号"
+                                           FontSize="20"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
+                            </Border>
+                            <Border Background="LightGray"
+                                    CornerRadius="5"
+                                    Margin="0 10 0 0"
+                                    Grid.Row="0"
+                                    Grid.Column="1">
+                                <TextBlock Text="名称"
+                                           FontSize="20"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
+                            </Border>
+                            <Border Background="LightGray"
+                                    CornerRadius="5"
+                                    Margin="0 10 0 0"
+                                    Grid.Row="0"
+                                    Grid.Column="2">
+                                <TextBlock Text="状态"
+                                           FontSize="20"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
+                            </Border>
+
+                            <TextBlock Text="1"
+                                       FontSize="20"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Row="1"
+                                       Grid.Column="0" />
+                            <TextBlock Text="2"
+                                       FontSize="20"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Row="2"
+                                       Grid.Column="0" />
+                            <TextBlock Text="3"
+                                       FontSize="20"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Row="3"
+                                       Grid.Column="0" />
+                            <TextBlock Text="4"
+                                       FontSize="20"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Row="4"
+                                       Grid.Column="0" />
+                            <TextBlock Text="5"
+                                       FontSize="20"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Row="5"
+                                       Grid.Column="0" />
+                            <TextBlock Text="6"
+                                       FontSize="20"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Row="6"
+                                       Grid.Column="0" />
+                            <TextBlock Text="7"
+                                       FontSize="20"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Row="7"
+                                       Grid.Column="0" />
+                            <TextBlock Text="8"
+                                       FontSize="20"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Row="8"
+                                       Grid.Column="0" />
+                            <TextBlock Text="9"
+                                       FontSize="20"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Row="9"
+                                       Grid.Column="0" />
+                            <TextBlock Text="10"
+                                       FontSize="20"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Row="10"
+                                       Grid.Column="0" />
+
+                            <TextBlock Text="DC模块组：模块1"
+                                       Grid.Row="1"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="1"
+                                       FontSize="20" />
+                            <TextBlock Text="DC模块组：模块2"
+                                       Grid.Row="2"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="1"
+                                       FontSize="20" />
+                            <TextBlock Text="DC模块组：模块3"
+                                       Grid.Row="3"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="1"
+                                       FontSize="20" />
+                            <TextBlock Text="DC模块组：模块4"
+                                       Grid.Row="4"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="1"
+                                       FontSize="20" />
+                            <TextBlock Text="DC模块组：模块5"
+                                       Grid.Row="5"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="1"
+                                       FontSize="20" />
+                            <TextBlock Text="DC模块组：模块6"
+                                       Grid.Row="6"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="1"
+                                       FontSize="20" />
+                            <TextBlock Text="DC模块组：模块7"
+                                       Grid.Row="7"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="1"
+                                       FontSize="20" />
+                            <TextBlock Text="DC模块组：模块8"
+                                       Grid.Row="8"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="1"
+                                       FontSize="20" />
+                            <TextBlock Text="DC模块组：模块9"
+                                       Grid.Row="9"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="1"
+                                       FontSize="20" />
+                            <TextBlock Text="DC模块组：模块10"
+                                       Grid.Row="10"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="1"
+                                       FontSize="20" />
+
+                            <TextBlock Text="{Binding Module1Status1}"
+                                       Grid.Row="1"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="2"
+                                       Foreground="{Binding Module1StatusColor1}"
+                                       FontSize="20" />
+                            <TextBlock Text="{Binding Module1Status2}"
+                                       Grid.Row="2"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="2"
+                                       Foreground="{Binding Module1StatusColor2}"
+                                       FontSize="20" />
+                            <TextBlock Text="{Binding Module1Status3}"
+                                       Grid.Row="3"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="2"
+                                       Foreground="{Binding Module1StatusColor3}"
+                                       FontSize="20" />
+                            <TextBlock Text="{Binding Module1Status4}"
+                                       Grid.Row="4"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="2"
+                                       Foreground="{Binding Module1StatusColor4}"
+                                       FontSize="20" />
+                            <TextBlock Text="{Binding Module1Status5}"
+                                       Grid.Row="5"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="2"
+                                       Foreground="{Binding Module1StatusColor5}"
+                                       FontSize="20" />
+                            <TextBlock Text="{Binding Module1Status6}"
+                                       Grid.Row="6"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="2"
+                                       Foreground="{Binding Module1StatusColor6}"
+                                       FontSize="20" />
+                            <TextBlock Text="{Binding Module1Status7}"
+                                       Grid.Row="7"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="2"
+                                       Foreground="{Binding Module1StatusColor7}"
+                                       FontSize="20" />
+                            <TextBlock Text="{Binding Module1Status8}"
+                                       Grid.Row="8"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="2"
+                                       Foreground="{Binding Module1StatusColor8}"
+                                       FontSize="20" />
+                            <TextBlock Text="{Binding Module1Status9}"
+                                       Grid.Row="9"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="2"
+                                       Foreground="{Binding Module1StatusColor9}"
+                                       FontSize="20" />
+                            <TextBlock Text="{Binding Module1Status10}"
+                                       Grid.Row="10"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="2"
+                                       Foreground="{Binding Module1StatusColor10}"
+                                       FontSize="20" />
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
         </Grid>
-        <!--4、PCS故障-->
+        <!--5、PCS故障-->
         <Grid Grid.Row="1"
               Grid.Column="1">
             <Border Background="white"
