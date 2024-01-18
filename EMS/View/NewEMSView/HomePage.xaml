@@ -338,7 +338,28 @@
                                        Style="{StaticResource NormalTextblockstyle}"></TextBlock>
                             <TextBlock Text="%"
                                        Style="{StaticResource NormalTextblockstyle}"></TextBlock>
-                          
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    Margin="0,0,0,10">
+                            <TextBlock Text="当前功率："
+                                       Style="{StaticResource NormalTextblockstyle}"></TextBlock>
+                            <TextBlock Text="{Binding CurrentPower}"
+                                       Style="{StaticResource NormalTextblockstyle}"></TextBlock>
+                            <TextBlock Text="kW"
+                                       Style="{StaticResource NormalTextblockstyle}"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="2"
+                                    Orientation="Horizontal"
+                                    Margin="0,0,0,10">
+                            <TextBlock Text="剩余电量："
+                                       Style="{StaticResource NormalTextblockstyle}"></TextBlock>
+                            <TextBlock Text="{Binding RemainingPower}"
+                                       Style="{StaticResource NormalTextblockstyle}"></TextBlock>
+                            <TextBlock Text="kWh"
+                                       Style="{StaticResource NormalTextblockstyle}"></TextBlock>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -537,18 +558,18 @@
                                     </StackPanel>
                                     <TextBlock Grid.Row="0"
                                                Grid.Column="1"
-                                               Text="当前功率（kW）"
+                                               Text="经济效益（元）"
                                                Style="{StaticResource SystemTextblockstyle}" />
                                     <TextBlock Grid.Row="2"
                                                Grid.Column="1"
-                                               Text="{Binding CurrentPower}"
+                                               Text="{Binding EconomicBenefits}"
                                                Style="{StaticResource SystemTextblockstyle}"
                                                FontSize="18"
                                                FontWeight="Bold" />
                                 </Grid>
                             </Border>
                         </StackPanel>
-                        <!--电站功率-->
+                        <!--累计CO2排放量-->
                         <StackPanel Grid.Row="2"
                                     Grid.Column="2"
                                     Orientation="Horizontal"
@@ -574,11 +595,11 @@
                                     </StackPanel>
                                     <TextBlock Grid.Row="0"
                                                Grid.Column="1"
-                                               Text="电站功率（kW）"
+                                               Text="累计CO2排放量（kg）"
                                                Style="{StaticResource SystemTextblockstyle}" />
                                     <TextBlock Grid.Row="2"
                                                Grid.Column="1"
-                                               Text="{Binding StationPower}"
+                                               Text="{Binding CumulativeCO2Emission}"
                                                Style="{StaticResource SystemTextblockstyle}"
                                                FontSize="18"
                                                FontWeight="Bold" />

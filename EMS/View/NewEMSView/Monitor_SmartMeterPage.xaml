@@ -131,6 +131,13 @@
                                    Margin="10,0,10,0" />
                         <TextBlock Text="kW" />
                     </StackPanel>
+                    <StackPanel Grid.Row="3"
+                                Grid.Column="5"
+                                Style="{StaticResource ContentPanel}">
+                        <TextBlock Text="功率因素：" />
+                        <TextBlock Text="{Binding PowerFactor}"
+                                   Margin="10,0,10,0" />
+                    </StackPanel>
                     <!--无功功率-->
                     <StackPanel Grid.Row="4"
                                 Grid.Column="1"

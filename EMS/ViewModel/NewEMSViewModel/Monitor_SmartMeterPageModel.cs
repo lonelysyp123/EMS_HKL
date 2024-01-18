@@ -153,6 +153,19 @@ namespace EMS.ViewModel.NewEMSViewModel
                 SetProperty(ref wattlessPower_Total, value);
             }
         }
+
+       /// <summary>
+       /// 功率因素
+       /// </summary>
+        private double powerFactor;
+        public double PowerFactor
+        {
+            get { return powerFactor; }
+            set
+            {
+                SetProperty(ref powerFactor, value);
+            }
+        }
         #endregion
 
         #region 电量计量表

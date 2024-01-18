@@ -225,6 +225,32 @@ namespace EMS.ViewModel.NewEMSViewModel
         }
 
         /// <summary>
+        /// 当前功率
+        /// </summary>
+        private string currentPower;
+        public string CurrentPower
+        {
+            get { return currentPower; }
+            set
+            {
+                SetProperty(ref currentPower, value);
+            }
+        }
+        /// <summary>
+        /// 剩余电量
+        /// </summary>
+        private string remainingPower;
+        public string RemainingPower
+        {
+            get { return remainingPower; }
+            set
+            {
+                SetProperty(ref remainingPower, value);
+            }
+        }
+
+
+        /// <summary>
         /// 今日充电量
         /// </summary>
         private string chargingCapacity;
@@ -275,30 +301,26 @@ namespace EMS.ViewModel.NewEMSViewModel
                 SetProperty(ref dcBranch1DisChar, value);
             }
         }
-
-        /// <summary>
-        /// 当前功率
-        /// </summary>
-        private string currentPower;
-        public string CurrentPower
+        ///经济效益
+        private string economicBenefits;
+        public string EconomicBenefits
         {
-            get { return currentPower; }
+            get { return economicBenefits; }
             set
             {
-                SetProperty(ref currentPower, value);
+                SetProperty(ref economicBenefits, value);
             }
         }
-
         /// <summary>
-        /// 电站功率
+        /// 累计CO2排放量
         /// </summary>
-        private string stationPower;
-        public string StationPower
+        private string cumulativeCO2Emission;
+        public string CumulativeCO2Emission
         {
-            get { return stationPower; }
+            get { return cumulativeCO2Emission; }
             set
             {
-                SetProperty(ref stationPower, value);
+                SetProperty(ref cumulativeCO2Emission, value);
             }
         }
 
@@ -518,7 +540,6 @@ namespace EMS.ViewModel.NewEMSViewModel
             DcBranch1Char = model.TotalActiveEnergy.ToString();
             DcBranch1DisChar = model.TotalReverseActiveEnergy.ToString();
             CurrentPower = model.Power.ToString();
-            StationPower = model.Power.ToString();
         }
 
         //运行状态
