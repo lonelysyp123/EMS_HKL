@@ -88,16 +88,34 @@ namespace EMS.Api
             return data;
         }
 
+        //public static BatteryTotalModel[] GetNextBMSData()
+        //{
+        //    List<BMSDataService> services = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices;
+        //    List<BatteryTotalModel> models = new List<BatteryTotalModel>();
+        //    for (int i = 0; i < services.Count; i++)
+        //    {
+        //        var item = services[i].GetCurrentData();
+        //        if (item != null)
+        //        {
+        //            models.Add(item);
+        //        }
+        //    }
+        //    return models.ToArray();
+        //}
+
         public static BatteryTotalModel[] GetNextBMSData()
         {
             List<BMSDataService> services = EnergyManagementSystem.GlobalInstance.BMSManager.BMSDataServices;
             List<BatteryTotalModel> models = new List<BatteryTotalModel>();
             for (int i = 0; i < services.Count; i++)
             {
-                var item = services[i].GetCurrentData();
-                if (item != null)
+                if (services[i].IsConnected)
                 {
-                    models.Add(item);
+                    var item = services[i].GetCurrentData();
+                    if (item != null)
+                    {
+                        models.Add(item);
+                    }
                 }
             }
             return models.ToArray();
