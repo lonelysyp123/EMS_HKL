@@ -360,6 +360,76 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
 
+        public List<SerialPortSettingsModel> ElectricityCommPorts { get; set; }
+
+        private string selectedElectricityCommPort;
+        public string SelectedElectricityCommPort
+        {
+            get { return selectedElectricityCommPort; }
+            set
+            {
+                SetProperty(ref selectedElectricityCommPort, value);
+            }
+        }
+
+        public List<SerialPortSettingsModel> ElectricityBaudRates { get; set; }
+
+        private int selectedElectricityBaudRate;
+        public int SelectedElectricityBaudRate
+        {
+            get { return selectedElectricityBaudRate; }
+            set
+            {
+                SetProperty(ref selectedElectricityBaudRate, value);
+            }
+        }
+
+        public List<SerialPortSettingsModel> ElectricityParities { get; set; }
+
+        private Parity selectedElectricityParity;
+        public Parity SelectedElectricityParity
+        {
+            get { return selectedElectricityParity; }
+            set
+            {
+                SetProperty(ref selectedElectricityParity, value);
+            }
+        }
+
+        public List<SerialPortSettingsModel> ElectricityStopBitsList { get; set; }
+
+        private StopBits selectedElectricityStopBits;
+        public StopBits SelectedElectricityStopBits
+        {
+            get { return selectedElectricityStopBits; }
+            set
+            {
+                SetProperty(ref selectedElectricityStopBits, value);
+            }
+        }
+
+        public int[] ElectricityDataBits { get; set; }
+
+        private int selectedElectricityDataBits;
+        public int SelectedElectricityDataBits
+        {
+            get { return selectedElectricityDataBits; }
+            set
+            {
+                SetProperty(ref selectedElectricityDataBits, value);
+            }
+        }
+
+        private int acquisitionCycle_ElectricityAmmeter;
+        public int AcquisitionCycle_ElectricityAmmeter
+        {
+            get { return acquisitionCycle_ElectricityAmmeter; }
+            set
+            {
+                SetProperty(ref acquisitionCycle_ElectricityAmmeter, value);
+            }
+        }
+
         private bool _isEnabled_BMS;
 
         public bool IsEnabled_BMS
@@ -470,6 +540,11 @@ namespace EMS.ViewModel.NewEMSViewModel
             Parities = SerialPortSettingsModel.Instance.getParities();
             StopBitsList = SerialPortSettingsModel.Instance.getStopBits();
             DataBits = new int[] { 4, 5, 6, 7, 8 };
+            ElectricityCommPorts = SerialPortSettingsModel.Instance.getCommPorts();
+            ElectricityBaudRates = SerialPortSettingsModel.Instance.getBaudRates();
+            ElectricityParities = SerialPortSettingsModel.Instance.getParities();
+            ElectricityStopBitsList = SerialPortSettingsModel.Instance.getStopBits();
+            ElectricityDataBits = new int[] { 4, 5, 6, 7, 8 };
             InitBMS();
             InitPcs();
             InitSmartMeter();
