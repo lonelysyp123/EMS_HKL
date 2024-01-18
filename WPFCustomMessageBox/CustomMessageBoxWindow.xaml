@@ -115,8 +115,9 @@
                        Height="32"
                        HorizontalAlignment="Left"
                        DockPanel.Dock="Left"
-                       Margin="30,20,0,0"
+                       Margin="30,25,0,0"
                        Visibility="Visible"
+
                        VerticalAlignment="Top" />
                 <TextBlock Name="TextBlock_Message"
                            TextWrapping="Wrap"
@@ -133,7 +134,7 @@
 
                 <!-- Cancel Button -->
                 <Button Name="Button_Cancel"
-                        Visibility="Visible"
+                        Visibility="Collapsed"
                         IsCancel="True"
                         Style="{StaticResource NoStyle}"
                         DockPanel.Dock="Right"
@@ -147,7 +148,7 @@
 
                 <!-- No Button -->
                 <Button Name="Button_No"
-                        Visibility="Visible"
+                        Visibility="Collapsed"
                         Style="{StaticResource NoStyle}"
                         DockPanel.Dock="Right"
                         Click="Button_No_Click">
@@ -161,7 +162,7 @@
                 <!-- Yes Button -->
                 <Button Name="Button_Yes"
                         Style="{StaticResource YesStyle}"
-                        Visibility="Visible"
+                        Visibility="Collapsed"
                         DockPanel.Dock="Right"
                         Click="Button_Yes_Click">
                     <Label Name="Label_Yes"
