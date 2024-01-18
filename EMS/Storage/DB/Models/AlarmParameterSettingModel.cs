@@ -12,7 +12,6 @@ namespace EMS.Storage.DB.Models
     public class AlarmParameterSettingModel
     {
         [Key]
-        
         public string BCMUID { get; set; }
         public double ClusterVolUp1 {  get; set; }
         public double ClusterVolUp2 { get; set; }
@@ -51,10 +50,5 @@ namespace EMS.Storage.DB.Models
         public double SOCLow2 { get; set;}
         public double SOCLow3 { get; set;}
         public double IsoRLow {  get; set;} 
-       
-
-
-
-
     }
 }

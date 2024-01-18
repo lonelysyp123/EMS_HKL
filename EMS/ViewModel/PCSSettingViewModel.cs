@@ -436,7 +436,7 @@ namespace EMS.ViewModel
             ReversePowerSendCommand = new RelayCommand(SendReversePowerPara);
             BatteryStrategySendCommand = new RelayCommand(SendDailyPatern);
             StrategyApi.SetMode(IsAutoStrategy, IsDailyPatternBtnOpen, 
-                IsMaxDemandControlBtnOpen, IsReversePowerBtnOpen);//获取现在的策略控制状态
+            IsMaxDemandControlBtnOpen, IsReversePowerBtnOpen);//获取现在的策略控制状态
             BatteryStrategyArray = new List<BatteryStrategyModel>();          
             StrategyModeSet = new List<string>()
             {
