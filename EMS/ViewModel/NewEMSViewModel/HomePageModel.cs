@@ -369,15 +369,18 @@ namespace EMS.ViewModel.NewEMSViewModel
         /// <param name="model"></param>
         public void DataDisPlayBMS(List<BatteryTotalModel> models)
         {
-            List<double> SingleSOC = new List<double>();
-            List<double> SingleSOH = new List<double>();
-            foreach (BatteryTotalModel model in models)
+            if (models.Count > 0)
             {
-                SingleSOC.Add(model.TotalSOC);
-                SingleSOH.Add(model.TotalSOH);
+                List<double> SingleSOC = new List<double>();
+                List<double> SingleSOH = new List<double>();
+                foreach (BatteryTotalModel model in models)
+                {
+                    SingleSOC.Add(model.TotalSOC);
+                    SingleSOH.Add(model.TotalSOH);
+                }
+                TotalSOC = SingleSOC.Average().ToString();
+                TotalSOH = SingleSOH.Average().ToString();
             }
-            TotalSOC = SingleSOC.Average().ToString();
-            TotalSOH = SingleSOH.Average().ToString();
         }
 
         public void StateDisPlayBMS(List<BMSDataService> bMSDataService)
@@ -391,14 +394,17 @@ namespace EMS.ViewModel.NewEMSViewModel
                 }
 
             }
-            if (!bmsstateflag)
+            App.Current.Dispatcher.Invoke(() =>
             {
-                StateFill_BMSRun = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
-            }
-            else
-            {
-                StateFill_BMSRun = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
-            }
+                if (!bmsstateflag)
+                {
+                    StateFill_BMSRun = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D1D1D1"));
+                }
+                else
+                {
+                    StateFill_BMSRun = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33FF33"));
+                }
+            });
         }
 
         /// <summary>
@@ -455,48 +461,54 @@ namespace EMS.ViewModel.NewEMSViewModel
 
         public void StateDisPlayFault()
         {
-            // get fault state from strategy api
-            StrategyApi.GetFaultState();
-            switch (StrategyApi.GetFaultState())
+            App.Current.Dispatcher.Invoke(() =>
             {
-                case Common.StrategyManage.ContingencyStatusEnum.Normal:
-                    StateFill_Warn = new SolidColorBrush(LightColors.Close);
-                    StateFill_MinorFaults = new SolidColorBrush(LightColors.Close);
-                    StateFill_HeavyFaults = new SolidColorBrush(LightColors.Close);
-                    StateFill_CrisisFaults = new SolidColorBrush(LightColors.Close);
-                    break;
-                case Common.StrategyManage.ContingencyStatusEnum.Level1:
-                    StateFill_Warn = new SolidColorBrush(LightColors.Close);
-                    StateFill_MinorFaults = new SolidColorBrush(LightColors.Open_Red);
-                    StateFill_HeavyFaults = new SolidColorBrush(LightColors.Close);
-                    StateFill_CrisisFaults = new SolidColorBrush(LightColors.Close);
-                    break;
-                case Common.StrategyManage.ContingencyStatusEnum.Level2:
-                    StateFill_Warn = new SolidColorBrush(LightColors.Close);
-                    StateFill_MinorFaults = new SolidColorBrush(LightColors.Close);
-                    StateFill_HeavyFaults = new SolidColorBrush(LightColors.Open_Red);
-                    StateFill_CrisisFaults = new SolidColorBrush(LightColors.Close);
-                    break;
-                case Common.StrategyManage.ContingencyStatusEnum.Level3:
-                    StateFill_Warn = new SolidColorBrush(LightColors.Close);
-                    StateFill_MinorFaults = new SolidColorBrush(LightColors.Close);
-                    StateFill_HeavyFaults = new SolidColorBrush(LightColors.Close);
-                    StateFill_CrisisFaults = new SolidColorBrush(LightColors.Open_Red);
-                    break;
-            }
+                // get fault state from strategy api
+                StrategyApi.GetFaultState();
+                switch (StrategyApi.GetFaultState())
+                {
+                    case Common.StrategyManage.ContingencyStatusEnum.Normal:
+                        StateFill_Warn = new SolidColorBrush(LightColors.Close);
+                        StateFill_MinorFaults = new SolidColorBrush(LightColors.Close);
+                        StateFill_HeavyFaults = new SolidColorBrush(LightColors.Close);
+                        StateFill_CrisisFaults = new SolidColorBrush(LightColors.Close);
+                        break;
+                    case Common.StrategyManage.ContingencyStatusEnum.Level1:
+                        StateFill_Warn = new SolidColorBrush(LightColors.Close);
+                        StateFill_MinorFaults = new SolidColorBrush(LightColors.Open_Red);
+                        StateFill_HeavyFaults = new SolidColorBrush(LightColors.Close);
+                        StateFill_CrisisFaults = new SolidColorBrush(LightColors.Close);
+                        break;
+                    case Common.StrategyManage.ContingencyStatusEnum.Level2:
+                        StateFill_Warn = new SolidColorBrush(LightColors.Close);
+                        StateFill_MinorFaults = new SolidColorBrush(LightColors.Close);
+                        StateFill_HeavyFaults = new SolidColorBrush(LightColors.Open_Red);
+                        StateFill_CrisisFaults = new SolidColorBrush(LightColors.Close);
+                        break;
+                    case Common.StrategyManage.ContingencyStatusEnum.Level3:
+                        StateFill_Warn = new SolidColorBrush(LightColors.Close);
+                        StateFill_MinorFaults = new SolidColorBrush(LightColors.Close);
+                        StateFill_HeavyFaults = new SolidColorBrush(LightColors.Close);
+                        StateFill_CrisisFaults = new SolidColorBrush(LightColors.Open_Red);
+                        break;
+                }
+            });
         }
 
         public void StateDisPlayCloud()
         {
-            // get mqtt connected state from mqtt api
-            if (MqttClientApi.IsConnected())
+            App.Current.Dispatcher.Invoke(() =>
             {
-                StateFill_CloudTelecom = new SolidColorBrush(BCMUColors.IsConnect_T);
-            }
-            else
-            {
-                StateFill_CloudTelecom = new SolidColorBrush(BCMUColors.IsConnect_F);
-            }
+                // get mqtt connected state from mqtt api
+                if (MqttClientApi.IsConnected())
+                {
+                    StateFill_CloudTelecom = new SolidColorBrush(BCMUColors.IsConnect_T);
+                }
+                else
+                {
+                    StateFill_CloudTelecom = new SolidColorBrush(BCMUColors.IsConnect_F);
+                }
+            });
         }
 
         public void DataRefresh_SEM(SmartElectricityMeterModel model)

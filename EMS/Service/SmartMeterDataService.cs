@@ -189,6 +189,7 @@ namespace EMS.Service
                 {
                     Thread.Sleep(DaqTimeSpan * 1000 + 100);
                     // 采集数据
+                    CurrentModel = new SmartMeterModel();
                     var Data_Voltage_A = ReadDataForCmd(Request_GetVoltage_A, Response_GetVoltage_A.Length);
                     if(DataDecode(Data_Voltage_A, Response_GetVoltage_A, out int Voltage_A))
                     {
@@ -316,6 +317,7 @@ namespace EMS.Service
 
                 var readBytes = new byte[num];
                 SerialPortInstance.Write(Request, 0, Request.Length);
+                Thread.Sleep(500);
                 SerialPortInstance.Read(readBytes, 0, num);
                 return readBytes;
             }
@@ -427,7 +429,7 @@ namespace EMS.Service
             {
                 sum = sum + readBytes[l];
             }
-            if (sum != readBytes[readBytes.Length - 2])
+            if ((byte)sum != readBytes[readBytes.Length - 2])
             {
                 return false;
             }

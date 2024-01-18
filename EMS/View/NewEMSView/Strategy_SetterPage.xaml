@@ -264,6 +264,8 @@
                                 BorderThickness="0,0,0,0"
                                 Margin="20,0,0,0"
                                 Command="{Binding CommandManualApply}" />
+                        
+                       
                     </StackPanel>
                 </Grid>
             </Border>

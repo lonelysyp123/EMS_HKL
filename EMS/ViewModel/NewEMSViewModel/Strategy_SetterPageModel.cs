@@ -180,6 +180,9 @@ namespace EMS.ViewModel.NewEMSViewModel
             }
         }
         public RelayCommand ReversePowerSendCommand { get; set; }
+
+
+        
         #endregion
 
         #region AutoRunModePara
@@ -337,7 +340,11 @@ namespace EMS.ViewModel.NewEMSViewModel
             CommandManualApply = new RelayCommand(ManualApply);
             CommandAutoReset = new RelayCommand(AutoReset);
             ReversePowerSendCommand = new RelayCommand(ReversePowerSend);
+            
         }
+
+        
+
         private void SwitchAutoManual()
         {
             //模式切换
