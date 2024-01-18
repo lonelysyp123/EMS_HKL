@@ -117,7 +117,7 @@ namespace EMS.Service
                     Models.Add(CurrentModel.Clone() as SmartElectricityMeterModel);
                     if (IsSaveDaq)
                     {
-                        SaveData(CurrentModel);
+                        SaveModels.TryAdd(CurrentModel.Clone() as SmartElectricityMeterModel);
                     }
                 }
                 catch (Exception ex)
@@ -128,36 +128,43 @@ namespace EMS.Service
             }
         }
 
-        private void SaveData(SmartElectricityMeterModel model)
+        private void SaveData(SmartElectricityMeterModel[] models)
         {
-            //计量电表存储相关操作
-            SmartElectricityMeterInfoModel smartelectricitymeterInfoModel = new SmartElectricityMeterInfoModel();
-            smartelectricitymeterInfoModel.ID = int.Parse(ID);
-            smartelectricitymeterInfoModel.TotalForwardPrimaryEnergy = model.TotalForwardPrimaryEnergy;
-            smartelectricitymeterInfoModel.TotalReversePrimaryEnergy = model.TotalReversePrimaryEnergy;
-            smartelectricitymeterInfoModel.Voltage = model.Voltage;
-            smartelectricitymeterInfoModel.Current = model.Current;
-            smartelectricitymeterInfoModel.Power = model.Power;
-            smartelectricitymeterInfoModel.TotalActiveEnergy = model.TotalActiveEnergy;
-            smartelectricitymeterInfoModel.TotalSpikesActiveEnergy = model.TotalSpikesActiveEnergy;
-            smartelectricitymeterInfoModel.TotalPeakActiveEnergy = model.TotalPeakActiveEnergy;
-            smartelectricitymeterInfoModel.TotalFlatActiveEnergy = model.TotalFlatActiveEnergy;
-            smartelectricitymeterInfoModel.TotalValleyActiveEnergy = model.TotalValleyActiveEnergy;
-            smartelectricitymeterInfoModel.CurrMonthTotalActiveEnergy = model.CurrMonthTotalActiveEnergy;
-            smartelectricitymeterInfoModel.CurrMonthSpikesActiveEnergy = model.CurrMonthSpikesActiveEnergy;
-            smartelectricitymeterInfoModel.CurrMonthPeakActiveEnergy = model.CurrMonthPeakActiveEnergy;
-            smartelectricitymeterInfoModel.CurrMonthFlatRateActiveEnergy = model.CurrMonthFlatRateActiveEnergy;
-            smartelectricitymeterInfoModel.CurrMonthValleyActiveEnergy = model.CurrMonthValleyActiveEnergy;
-            smartelectricitymeterInfoModel.TotalReverseActiveEnergy = model.TotalReverseActiveEnergy;
-            smartelectricitymeterInfoModel.TotalSpikesReverseActiveEnergy = model.TotalSpikesReverseActiveEnergy;
-            smartelectricitymeterInfoModel.TotalPeakReverseActiveEnergy = model.TotalPeakReverseActiveEnergy;
-            smartelectricitymeterInfoModel.TotalFlatReverseActiveEnergy = model.TotalFlatReverseActiveEnergy;
-            smartelectricitymeterInfoModel.TotalValleyReverseActiveEnergy = model.TotalValleyReverseActiveEnergy;
-            smartelectricitymeterInfoModel.CurrMonthTotalReverseActiveEnergy = model.CurrMonthTotalReverseActiveEnergy;
-            smartelectricitymeterInfoModel.CurrMonthSpikesReverseActiveEnergy = model.CurrMonthSpikesReverseActiveEnergy;
-            smartelectricitymeterInfoModel.CurrMonthPeakReverseActiveEnergy = model.CurrMonthPeakReverseActiveEnergy;
-            smartelectricitymeterInfoModel.CurrMonthFlatReverseActiveEnergy = model.CurrMonthFlatReverseActiveEnergy;
-            smartelectricitymeterInfoModel.CurrMonthValleyReverseActiveEnergy = model.CurrMonthValleyReverseActiveEnergy;
+            List<SmartElectricityMeterInfoModel> smartelectricitymeterInfoModels = new List<SmartElectricityMeterInfoModel>();
+            for (int l = 0; l < models.Length; l++)
+            {
+                var model = models[l];
+                //计量电表存储相关操作
+                SmartElectricityMeterInfoModel smartelectricitymeterInfoModel = new SmartElectricityMeterInfoModel();
+                smartelectricitymeterInfoModel.ID = int.Parse(ID);
+                smartelectricitymeterInfoModel.TotalForwardPrimaryEnergy = model.TotalForwardPrimaryEnergy;
+                smartelectricitymeterInfoModel.TotalReversePrimaryEnergy = model.TotalReversePrimaryEnergy;
+                smartelectricitymeterInfoModel.Voltage = model.Voltage;
+                smartelectricitymeterInfoModel.Current = model.Current;
+                smartelectricitymeterInfoModel.Power = model.Power;
+                smartelectricitymeterInfoModel.TotalActiveEnergy = model.TotalActiveEnergy;
+                smartelectricitymeterInfoModel.TotalSpikesActiveEnergy = model.TotalSpikesActiveEnergy;
+                smartelectricitymeterInfoModel.TotalPeakActiveEnergy = model.TotalPeakActiveEnergy;
+                smartelectricitymeterInfoModel.TotalFlatActiveEnergy = model.TotalFlatActiveEnergy;
+                smartelectricitymeterInfoModel.TotalValleyActiveEnergy = model.TotalValleyActiveEnergy;
+                smartelectricitymeterInfoModel.CurrMonthTotalActiveEnergy = model.CurrMonthTotalActiveEnergy;
+                smartelectricitymeterInfoModel.CurrMonthSpikesActiveEnergy = model.CurrMonthSpikesActiveEnergy;
+                smartelectricitymeterInfoModel.CurrMonthPeakActiveEnergy = model.CurrMonthPeakActiveEnergy;
+                smartelectricitymeterInfoModel.CurrMonthFlatRateActiveEnergy = model.CurrMonthFlatRateActiveEnergy;
+                smartelectricitymeterInfoModel.CurrMonthValleyActiveEnergy = model.CurrMonthValleyActiveEnergy;
+                smartelectricitymeterInfoModel.TotalReverseActiveEnergy = model.TotalReverseActiveEnergy;
+                smartelectricitymeterInfoModel.TotalSpikesReverseActiveEnergy = model.TotalSpikesReverseActiveEnergy;
+                smartelectricitymeterInfoModel.TotalPeakReverseActiveEnergy = model.TotalPeakReverseActiveEnergy;
+                smartelectricitymeterInfoModel.TotalFlatReverseActiveEnergy = model.TotalFlatReverseActiveEnergy;
+                smartelectricitymeterInfoModel.TotalValleyReverseActiveEnergy = model.TotalValleyReverseActiveEnergy;
+                smartelectricitymeterInfoModel.CurrMonthTotalReverseActiveEnergy = model.CurrMonthTotalReverseActiveEnergy;
+                smartelectricitymeterInfoModel.CurrMonthSpikesReverseActiveEnergy = model.CurrMonthSpikesReverseActiveEnergy;
+                smartelectricitymeterInfoModel.CurrMonthPeakReverseActiveEnergy = model.CurrMonthPeakReverseActiveEnergy;
+                smartelectricitymeterInfoModel.CurrMonthFlatReverseActiveEnergy = model.CurrMonthFlatReverseActiveEnergy;
+                smartelectricitymeterInfoModel.CurrMonthValleyReverseActiveEnergy = model.CurrMonthValleyReverseActiveEnergy;
+            }
+            SmartElectricityMeterInfoManage smartelectricitymeterInfoManage = new SmartElectricityMeterInfoManage();
+            smartelectricitymeterInfoManage.Insert(smartelectricitymeterInfoModels.ToArray());
         }
 
         //数据解析
