@@ -115,9 +115,8 @@
                        Height="32"
                        HorizontalAlignment="Left"
                        DockPanel.Dock="Left"
-                       Margin="30,25,0,0"
-                       Visibility="Visible"
-
+                       Margin="30,18,0,0"
+                       Visibility="Collapsed"
                        VerticalAlignment="Top" />
                 <TextBlock Name="TextBlock_Message"
                            TextWrapping="Wrap"
