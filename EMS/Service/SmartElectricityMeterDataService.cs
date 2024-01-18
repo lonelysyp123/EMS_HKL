@@ -128,7 +128,7 @@ namespace EMS.Service
             }
         }
 
-        private void SaveData(SmartElectricityMeterModel[] models)
+        protected override void SaveData(SmartElectricityMeterModel[] models)
         {
             List<SmartElectricityMeterInfoModel> smartelectricitymeterInfoModels = new List<SmartElectricityMeterInfoModel>();
             for (int l = 0; l < models.Length; l++)
